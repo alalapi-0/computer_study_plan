@@ -1,0 +1,537 @@
+好，下面我把 Round 19：机器学习最小闭环 完整展开。
+
+这一轮的核心，不是立刻进入深度学习，而是先把一条最小机器学习工作流真正跑通：准备特征 X 和标签 y，切分训练集与测试集，训练一个最小分类器，做预测，用合适的指标评估，再理解过拟合、数据泄漏和泛化这几个最基本的问题。 scikit-learn 官方把这条线拆得很清楚：Getting Started 先讲 estimator 的 fit / predict / score，交叉验证文档再讲 train/test split 与 test leakage，metrics 文档讲如何选指标，Common Pitfalls 专门讲不一致预处理和数据泄漏。 ￼
+
+Round 19 的目标
+
+这轮结束时，你要做到这些：你能用自己的话解释“特征”和“标签”是什么，理解 scikit-learn 里通常用 X 表示样本矩阵、用 y 表示每个样本对应的目标；你能用 train_test_split 做最小训练集/测试集划分，并知道 random_state 用来控制可复现的随机划分；你能训练一个最简单的分类模型并在测试集上评估；你知道 accuracy、precision、F1 至少分别适合表达什么；你还能开始理解“测试集不能拿来反复调参”和“预处理不能先在全数据上 fit”这两条底线。 ￼
+
+这轮学什么，不学什么
+
+这轮要学的是：X / y 结构、最小分类任务、训练/测试划分、交叉验证的基本作用、常见分类指标、最小过拟合直觉、最小 preprocessing 规则、scikit-learn 的 estimator 工作流。scikit-learn 官方明确说，它不仅提供监督和无监督学习算法，也提供预处理、模型选择、模型评估等工具。 ￼
+
+这轮先不学：神经网络、PyTorch、Transformer、复杂特征工程、超参数搜索深水区、多模型系统比较。原因很简单：官方 Getting Started 本来就是先把 estimator 的最小工作流跑通，再逐步扩展；而交叉验证和常见陷阱章节已经足够让你先把“最小闭环”站稳。 ￼
+
+我对你这一轮的总体建议
+
+我建议你这一轮坚持一个原则：先用一个非常小、非常顺手的分类例子，把整条链打通，而不是一开始就研究很多模型。 scikit-learn 的 Getting Started 页面用 RandomForestClassifier 做了 estimator basics 示例，而交叉验证文档用 Iris 数据集演示了 train_test_split、训练、测试评分这条最小路线。对你来说，这一轮最重要的不是“模型先进”，而是“流程完整”。 ￼
+
+本轮推荐资源
+
+这一轮我建议你主要盯住这些官方资料：
+	•	scikit-learn Getting Started：看 estimator 的 fit、predict、score。 ￼
+	•	train_test_split 和 Cross-validation：看数据如何拆成训练集和测试集，以及为什么测试集不能被反复“偷看”。 ￼
+	•	Metrics and scoring：看评估指标应如何根据任务目标选。 ￼
+	•	accuracy_score / precision_score / f1_score：先把这三个指标的直觉建立起来。 ￼
+	•	Common pitfalls and recommended practices：重点看不一致预处理和数据泄漏。 ￼
+	•	Preprocessing data：先建立“fit 在训练集上，transform 用到测试集上”的最小规范。 ￼
+	•	Validation curves / learning curves：先理解 underfitting / overfitting 的最小判断方式。 ￼
+
+3 周安排
+
+第 1 周：把最小分类闭环跑通
+
+这一周只做一件事：准备 X 和 y，切分数据，训练一个最小分类器，并在测试集上拿到一个分数。 scikit-learn Getting Started 里明确说 estimator 通过 fit 拟合数据；fit 通常接收两个输入，其中 X 是样本的特征矩阵，y 是每个样本对应的类别或目标。交叉验证文档则直接给出用 train_test_split 拆分 Iris 数据集、训练 SVM 并在测试集上 score() 的例子。 ￼
+
+这一周你最少要做出一版像这样的流程：
+	1.	准备 X 和 y
+	2.	train_test_split(X, y, test_size=..., random_state=...)
+	3.	训练一个最简单分类器
+	4.	在测试集上预测
+	5.	先用最简单的 score() 或 accuracy_score() 看结果
+
+train_test_split 官方文档明确说，它会把输入数组或矩阵拆成随机训练集和测试集；如果你传 random_state=int，可以获得可复现的切分。 ￼
+
+这一周结束时，你应该已经有一种明确感觉：机器学习最小闭环其实就是“把 X/y 喂给 estimator，先训练，再在没见过的测试集上看表现”。 这一步的重点不在模型，而在流程。 ￼
+
+第 2 周：把评估指标和“泛化”讲清楚
+
+这一周主题是：不要只看一个分数，要开始理解分数代表什么。 scikit-learn 的 metrics 文档明确说，指标选择要回到最终目标和应用场景上；accuracy_score 是最直接的分类正确率指标；precision_score 是 tp / (tp + fp)，强调“预测为正的样本里有多少是真的正”；f1_score 是 precision 和 recall 的调和平均，适合你至少先建立“单看 accuracy 不一定够”的直觉。 ￼
+
+这一周你最少要做三件事：
+	1.	在同一个测试集上同时算 accuracy、precision、F1
+	2.	试着用自己的话解释这三个指标分别更在意什么
+	3.	开始理解“训练分数高、测试分数低”意味着泛化不好
+
+Validation curves 文档给出了一个非常直白的判断：如果训练分数和验证分数都低，通常是 underfitting；如果训练分数高而验证分数低，通常是 overfitting。 ￼
+
+这一周结束时，你应该已经能说出：模型评估不是只看一个数字，而是要看这个数字为什么高、为什么低、以及它是不是对应真实目标。 scikit-learn 的 metrics 文档本来就是在强调“指标要和任务目标对齐”。 ￼
+
+第 3 周：过拟合、预处理、数据泄漏与最小规范
+
+这一周主题是：建立机器学习里最值得早一点养成的两个规范：不泄漏测试集，不在全数据上先做预处理。 scikit-learn 的 Common Pitfalls 文档明确说，数据泄漏是把预测时本不应可用的信息用于建模，会导致过于乐观的性能估计；它还明确给出通用规则：先切 train/test，再做预处理；永远不要在测试集上调用 fit。 ￼
+
+同时，Preprocessing 文档明确展示了 StandardScaler 和 Pipeline 的最小正确用法：先在训练集上 fit 预处理器，再把同样的变换应用到测试集；而 pipeline 能帮助你把这条规则固化下来，避免泄漏。 ￼
+
+这一周你最少要做两件事：
+	1.	故意写一个“先对全数据做缩放再切分”的错误版本，观察这是一种坏习惯
+	2.	再写一个“先切分，再在训练集上 fit scaler，再 transform 训练集和测试集”的正确版本，最好进一步用 Pipeline 跑通
+
+这一周结束时，你应该已经开始具备真正做实验时最重要的底线意识：测试集是拿来最后评估泛化的，不是拿来反复调模型和预处理的。 这条底线，scikit-learn 官方写得非常明确。 ￼
+
+这轮建议的最小实践任务
+
+我建议你这一轮至少做一个“最小分类实验”。用一份小的结构化数据，整理成 X 和 y，然后：
+	•	拆 train/test
+	•	训练一个分类器
+	•	在测试集上预测
+	•	输出 accuracy、precision、F1
+	•	写一段简短结论：这个模型有没有明显过拟合迹象，下一步你最想改哪里
+
+这一轮不要求你同时比较很多模型，但如果你愿意多做一点，可以在同一份数据上比较两个很简单的估计器，观察测试分数是否差很多。scikit-learn Getting Started 把 estimator 统一成 fit / predict / score 接口，本来就是为了让这种“最小可比实验”变得容易。 ￼
+
+本轮产出
+
+Round 19 结束时，你应该至少拿到这些东西：
+	•	一个最小机器学习实验脚本
+	•	一份清楚的 X/y 说明
+	•	一次 train/test split 结果
+	•	至少三个指标：accuracy、precision、F1
+	•	一份简短结论：训练/测试表现、是否疑似过拟合、下一步改进方向
+	•	一份你自己写的“数据泄漏和预处理规范”笔记
+
+这些产出看起来很朴素，但它们会直接决定你后面进 PyTorch 和 NLP 时，是“真的在做实验”，还是只是把模型跑起来却不知道分数到底该怎么理解。 ￼
+
+这一轮最容易踩的坑
+
+第一个坑，是把 X 和 y 还没分清，就急着跑模型。scikit-learn Getting Started 明确把 X 当样本特征矩阵、把 y 当样本目标来解释，这一步一定要先站稳。 ￼
+
+第二个坑，是反复看测试集分数来改模型。交叉验证文档明确说，反复根据测试集结果去调模型会让测试集知识“泄漏”进建模过程，从而让评估不再反映真实泛化能力。 ￼
+
+第三个坑，是先对全数据做预处理，再切分数据。Common Pitfalls 明确把这归为数据泄漏，并强调应该先切 train/test，再在训练集上 fit 预处理器。 ￼
+
+第四个坑，是只看 accuracy。metrics 文档明确说指标选择要回到任务目标；precision 和 F1 提供了和 accuracy 不同的视角。 ￼
+
+Round 19 的验收标准
+
+你可以用下面这些标准判断自己有没有完成：
+	•	你能解释 X 和 y 分别是什么。 ￼
+	•	你能用 train_test_split 做最小训练/测试划分，并知道 random_state 为什么有用。 ￼
+	•	你能训练一个最小分类器，并在测试集上评估。 ￼
+	•	你能至少解释 accuracy、precision、F1 各自的直觉。 ￼
+	•	你能说明什么是数据泄漏，以及为什么不能在测试集上 fit 预处理器。 ￼
+	•	你能用自己的话说出 underfitting 和 overfitting 最粗的判断方式。 ￼
+
+如果你确认这版 Round 19 没问题，我下一条就继续给你出 Round 19 专用练习清单。
+
+可以。下面是 Round 19 专用练习清单。
+
+这一轮只做一件大事：把一条 最小机器学习闭环 真正跑通，也就是把数据整理成 X 和 y，做训练集/测试集划分，训练一个最小分类器，做预测，算指标，再开始理解过拟合、数据泄漏和预处理规范。scikit-learn 官方把这条主线拆得很清楚：fit 接收样本矩阵 X 和目标 y，train_test_split 用来划分训练/测试数据，metrics 用来量化预测质量，Common Pitfalls 专门讲数据泄漏和预处理顺序，Pipeline 则可以把预处理和模型串起来，降低泄漏风险。 ￼
+
+这一轮要练到什么程度
+
+Round 19 结束时，你至少要做到这些：你能解释 X 是样本矩阵、通常形状是 (n_samples, n_features)，y 是每个样本对应的目标；你能用 train_test_split 划分训练集和测试集，并知道传入整数 random_state 可以得到可复现的划分；你能训练一个最小分类器，并在测试集上算出 accuracy、precision、F1；你还知道如果训练分数高但验证分数低，通常是过拟合，而如果训练和验证分数都低，通常是欠拟合。 ￼
+
+先准备工作区
+
+先建一个固定练习目录：
+
+mkdir -p ~/cli-lab/round19
+cd ~/cli-lab/round19
+mkdir week1 week2 week3
+
+然后装好这一轮要用的包。你这一轮主力就是 scikit-learn、numpy、pandas。scikit-learn 官方 Getting Started 直接围绕 estimator、预处理、pipeline、评估和交叉验证展开，所以这三个包足够支撑这一轮。 ￼
+
+pip install scikit-learn numpy pandas
+
+
+⸻
+
+第 1 周：把最小分类闭环跑通
+
+这一周只做一件事：先别纠结模型先进不先进，先把完整流程跑起来。 scikit-learn 官方明确说，估计器通过 fit 训练，之后可以用 predict 做预测；X 通常是 (n_samples, n_features) 的样本矩阵，y 是一维目标数组。 ￼
+
+练习 1：先准备一份小 CSV
+
+进入目录：
+
+cd ~/cli-lab/round19/week1
+
+创建一份很小的二分类练习数据：
+
+cat > samples.csv <<'EOF'
+score,length,is_manual,label
+0.91,120,1,1
+0.12,95,1,0
+0.88,150,0,1
+0.45,80,0,0
+0.93,140,1,1
+0.20,60,0,0
+0.51,110,1,1
+0.33,70,1,0
+0.78,130,0,1
+0.18,55,0,0
+EOF
+
+这里的 label 就是最小目标列，其他列先当特征。你这一轮最重要的是先把“监督学习里的特征和标签”这层关系练顺。 ￼
+
+练习 2：读表并拆出 X 和 y
+
+新建脚本：
+
+touch ml_basics.py
+
+写入：
+
+import pandas as pd
+
+df = pd.read_csv("samples.csv")
+
+X = df[["score", "length", "is_manual"]]
+y = df["label"]
+
+print("X.shape =", X.shape)
+print("y.shape =", y.shape)
+print(X.head())
+print(y.head())
+
+这一步的核心就是把表格变成 scikit-learn 风格的 X 和 y。官方 Getting Started 对 X 和 y 的解释正是这样。 ￼
+
+练习 3：做训练集/测试集划分
+
+继续补：
+
+import pandas as pd
+from sklearn.model_selection import train_test_split
+
+df = pd.read_csv("samples.csv")
+
+X = df[["score", "length", "is_manual"]]
+y = df["label"]
+
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.3, random_state=42
+)
+
+print("X_train.shape =", X_train.shape)
+print("X_test.shape =", X_test.shape)
+print("y_train.shape =", y_train.shape)
+print("y_test.shape =", y_test.shape)
+
+train_test_split 官方文档明确说，它会把输入拆成随机训练集和测试集，而 random_state=int 可以让结果可复现。 ￼
+
+练习 4：训练一个最小分类器
+
+我建议你这一周先选一个最朴素、上手快的分类器。例如逻辑回归。继续补：
+
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LogisticRegression
+
+df = pd.read_csv("samples.csv")
+
+X = df[["score", "length", "is_manual"]]
+y = df["label"]
+
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.3, random_state=42
+)
+
+clf = LogisticRegression()
+clf.fit(X_train, y_train)
+
+pred = clf.predict(X_test)
+
+print("pred =", pred)
+print("truth =", y_test.to_numpy())
+print("score =", clf.score(X_test, y_test))
+
+scikit-learn 的 estimator 基本工作流就是这样：fit 训练，predict 预测，很多分类器还支持 score。 ￼
+
+练习 5：补 accuracy
+
+继续补：
+
+from sklearn.metrics import accuracy_score
+
+print("accuracy =", accuracy_score(y_test, pred))
+
+accuracy_score 官方文档明确说，默认返回“正确分类样本所占比例”。 ￼
+
+第 1 周周末小任务
+
+这一周结束时，你至少要做到：
+	•	能把表拆成 X 和 y
+	•	能用 train_test_split
+	•	能训练一个最小分类器
+	•	能在测试集上拿到一个 accuracy
+
+如果这几件事你都做到了，第 1 周就过关了。相关工作流都来自 scikit-learn 官方 Getting Started 和 train_test_split 文档。 ￼
+
+⸻
+
+第 2 周：指标、泛化和过拟合直觉
+
+这一周主题是：别只看一个分数，要开始理解分数是什么意思。 scikit-learn 的 metrics 文档明确说，指标要和任务目标对齐；accuracy_score 是正确率，precision_score 是 tp / (tp + fp)，f1_score 是 precision 和 recall 的调和平均。 ￼
+
+练习 6：同时算三个指标
+
+进入目录：
+
+cd ~/cli-lab/round19/week2
+cp ../week1/samples.csv .
+touch metrics_lab.py
+
+写入：
+
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import accuracy_score, precision_score, f1_score
+
+df = pd.read_csv("samples.csv")
+
+X = df[["score", "length", "is_manual"]]
+y = df["label"]
+
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.3, random_state=42
+)
+
+clf = LogisticRegression()
+clf.fit(X_train, y_train)
+pred = clf.predict(X_test)
+
+print("accuracy =", accuracy_score(y_test, pred))
+print("precision =", precision_score(y_test, pred))
+print("f1 =", f1_score(y_test, pred))
+
+accuracy、precision、F1 的含义你这一周一定要开始区分开。官方文档明确说 precision 关注“被预测为正的样本里有多少是真的正”，F1 则平衡了 precision 和 recall。 ￼
+
+练习 7：写一段自己的指标解释
+
+新建：
+
+touch metric_notes.md
+
+至少写三句：
+	•	accuracy 更像“总体对了多少”
+	•	precision 更像“判成正的里面有多少真的是正”
+	•	F1 更像“同时兼顾 precision 和 recall 的折中指标”
+
+这一步虽然是你自己的总结，但总结内容要建立在官方定义之上。 ￼
+
+练习 8：比较训练集和测试集分数
+
+继续补代码：
+
+train_pred = clf.predict(X_train)
+
+print("train accuracy =", accuracy_score(y_train, train_pred))
+print("test accuracy =", accuracy_score(y_test, pred))
+
+然后观察：
+	•	训练分数是不是明显高于测试分数
+	•	如果是，这可能意味着什么
+
+Validation curves 文档明确说：如果训练分数高而验证分数低，通常是过拟合；如果训练分数和验证分数都低，通常是欠拟合。 ￼
+
+练习 9：故意换一个更容易过拟合的模型
+
+这一题不是为了让你学很多模型，而是为了让你更直观地看到“训练好看，测试不一定好看”。你可以选一个更容易把训练数据记得更死的模型，或者把参数调得更激进，然后继续比较训练/测试分数。
+
+这一步的目的，是让你真正意识到“高训练分数”不等于“好泛化”。这个判断建立在 scikit-learn 官方关于 validation curve 和 overfitting 的说明上。 ￼
+
+练习 10：写一段最小实验结论
+
+新建：
+
+touch experiment_notes.md
+
+至少写清：
+	•	你用了什么特征
+	•	你用了什么模型
+	•	测试集 accuracy / precision / F1 分别是多少
+	•	训练集和测试集有没有明显差距
+	•	你怀疑有没有过拟合
+
+第 2 周周末小任务
+
+这一周结束时，你至少要做到：
+	•	同时算 accuracy、precision、F1
+	•	比较训练分数和测试分数
+	•	写出一段自己的实验结论
+
+这些动作都直接建立在 scikit-learn 的 metrics 和 validation curve 官方说明上。 ￼
+
+⸻
+
+第 3 周：预处理、数据泄漏与 Pipeline 最小规范
+
+这一周主题是：开始养成真正做实验时最重要的两个规范：先切分，再预处理；不要把测试集信息泄漏进训练过程。 scikit-learn 的 Common Pitfalls 文档明确说，数据泄漏是在构建模型时使用了预测时本不应可用的信息，会导致过于乐观的性能估计；它还直接给出两条底线：先切 train/test，再做预处理；不要在测试集上调用 fit 或 fit_transform。 ￼
+
+练习 11：先写一个“错误示范”
+
+进入目录：
+
+cd ~/cli-lab/round19/week3
+cp ../week1/samples.csv .
+touch leakage_lab.py
+
+先故意写一个不规范版本：
+
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import accuracy_score
+
+df = pd.read_csv("samples.csv")
+X = df[["score", "length", "is_manual"]]
+y = df["label"]
+
+# 错误示范：先在全数据上 fit 再切分
+scaler = StandardScaler()
+X_scaled = scaler.fit_transform(X)
+
+X_train, X_test, y_train, y_test = train_test_split(
+    X_scaled, y, test_size=0.3, random_state=42
+)
+
+clf = LogisticRegression()
+clf.fit(X_train, y_train)
+pred = clf.predict(X_test)
+
+print("accuracy =", accuracy_score(y_test, pred))
+
+这一步不是为了教你“这么做”，而是为了让你明确知道这就是 scikit-learn 官方所说的数据泄漏风险之一。官方文档明确说，永远不要在使用测试数据时调用 fit 和 fit_transform。 ￼
+
+练习 12：再写一个正确版本
+
+继续在同一个文件里写正确版：
+
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import accuracy_score
+
+df = pd.read_csv("samples.csv")
+X = df[["score", "length", "is_manual"]]
+y = df["label"]
+
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.3, random_state=42
+)
+
+scaler = StandardScaler()
+X_train_scaled = scaler.fit_transform(X_train)
+X_test_scaled = scaler.transform(X_test)
+
+clf = LogisticRegression()
+clf.fit(X_train_scaled, y_train)
+pred = clf.predict(X_test_scaled)
+
+print("accuracy =", accuracy_score(y_test, pred))
+
+scikit-learn 官方明确说，正确做法是：在训练集上 fit_transform，在测试集上只 transform。 ￼
+
+练习 13：再用 Pipeline 跑一遍
+
+继续补第三版，也是这一周最推荐的写法：
+
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import StandardScaler
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import accuracy_score
+
+df = pd.read_csv("samples.csv")
+X = df[["score", "length", "is_manual"]]
+y = df["label"]
+
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.3, random_state=42
+)
+
+pipe = Pipeline([
+    ("scaler", StandardScaler()),
+    ("clf", LogisticRegression())
+])
+
+pipe.fit(X_train, y_train)
+pred = pipe.predict(X_test)
+
+print("accuracy =", accuracy_score(y_test, pred))
+
+scikit-learn 官方对 Pipeline 的定义就是：一串数据转换器，后面可接一个最终预测器；Getting Started 还明确说 pipeline 有助于避免数据泄漏。 ￼
+
+练习 14：写一份“最小实验规范”
+
+新建：
+
+touch ml_rules.md
+
+至少写这四句：
+	•	先切训练集和测试集，再做预处理
+	•	不要在测试集上 fit
+	•	测试集是最后评估泛化能力用的
+	•	Pipeline 是防止预处理泄漏的好工具
+
+这几条都直接来自 scikit-learn 官方的 common pitfalls 和 pipeline 文档。 ￼
+
+第 3 周周末小任务
+
+这一周结束时，你至少要做到：
+	•	亲手写一次“错误预处理顺序”
+	•	再写一次“正确预处理顺序”
+	•	用 Pipeline 把标准化和模型串起来
+	•	写一份自己的最小实验规范
+
+⸻
+
+Round 19 综合演练
+
+把这一轮收口成一次完整演练。你从头做到尾：
+
+第一步，在 week1 里完成一个最小分类脚本，确保你能解释：
+	•	X
+	•	y
+	•	train_test_split
+	•	random_state
+
+第二步，在 week2 里完成一个最小指标脚本，确保你能输出：
+	•	accuracy
+	•	precision
+	•	F1
+	•	train/test accuracy 对比
+
+第三步，在 week3 里完成一个预处理规范脚本，确保你至少有：
+	•	一个错误示范
+	•	一个正确示范
+	•	一个 Pipeline 版本
+
+第四步，把这一轮成果整理成这个结构：
+
+round19/
+├─ week1/
+│  ├─ samples.csv
+│  └─ ml_basics.py
+├─ week2/
+│  ├─ samples.csv
+│  ├─ metrics_lab.py
+│  ├─ metric_notes.md
+│  └─ experiment_notes.md
+├─ week3/
+│  ├─ samples.csv
+│  ├─ leakage_lab.py
+│  └─ ml_rules.md
+
+如果这一整套你能独立做完，Round 19 就算真正跑通了。
+
+⸻
+
+Round 19 最终自测清单
+
+做完以后，你自己检查下面这些：
+	•	你能不能解释 X 和 y 分别是什么。 ￼
+	•	你能不能用 train_test_split 做最小训练/测试划分，并知道 random_state 为什么有用。 ￼
+	•	你能不能训练一个最小分类器，并在测试集上评估。 ￼
+	•	你能不能至少解释 accuracy、precision、F1 的直觉。 ￼
+	•	你能不能说明什么是数据泄漏，以及为什么不能在测试集上 fit 预处理器。 ￼
+	•	你能不能用自己的话说出 underfitting 和 overfitting 的最粗判断方式。 ￼
+
+这些都做到，Round 19 就算过关了。
+
+你继续的话，我下一步就给你展开 Round 20：PyTorch 入门。

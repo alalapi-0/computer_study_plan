@@ -1,0 +1,577 @@
+好，下面继续 Round 6：Linux 进阶与自动化。
+
+这一轮的核心，不再是“会用几个命令”，而是开始形成真正的工程手感：能批量找文件、能做文本处理、能管理长任务、能看日志、能远程连机器、能做最基础的定时自动化。 MIT Missing Semester 2026 把这一段能力拆成了 Command-line Environment 和 Development Environment and Tools 两讲，里面明确把 SSH、环境变量、tmux、终端工作流这些放进核心工具能力里。 
+
+Round 6 的定位
+
+这轮仍然建议按 3 周、每周约 8 小时 来走。你的目标不是把 Linux 系统管理学全，而是先掌握最常用的一组“工程动作”：
+	•	批量找文件：find、xargs
+	•	文本流处理：sed、awk
+	•	进程观察与控制：ps、top、kill
+	•	长任务保活：nohup、tmux
+	•	日志查看：journalctl
+	•	远程与传输：ssh、scp、rsync
+	•	定时任务：crontab。这些工具各自的官方文档都把它们定位得很清楚：GNU Findutils 负责查找文件并执行动作，GNU sed/awk 负责流式文本处理，OpenSSH 负责远程登录与安全传输，rsync 负责增量同步，tmux 负责终端复用与断开重连，cron 负责按时间执行命令。 
+
+这一轮学什么，不学什么
+
+这轮学的是“能干活”的 Linux，而不是系统底层原理。你先不碰 systemd 服务编写、复杂 shell 脚本框架、网络防火墙配置、Docker 编排、复杂权限模型。先把下面这条主线打通：批量处理文件 → 看进程和日志 → 保住长任务 → 远程连接 → 做最小自动化。 这条顺序也和 Missing Semester 的课程组织很一致：先命令行环境，再开发环境和工具。 
+
+本轮资源包
+
+这轮主线资源我建议固定成 8 个，尽量不扩散。
+	1.	MIT Missing Semester 2026 – Command-line Environment
+这一讲适合建立整体感，官方摘要直接写了会讲输入输出流、环境变量、远程机器与 SSH。 
+	2.	GNU Findutils Manual
+官方手册明确说 find、locate、xargs 这组工具用于“找到符合条件的文件，并对这些文件执行动作”。这就是你第一周的主教材。 
+	3.	GNU sed Manual / GNU Awk User’s Guide
+sed 被 GNU 定义为“stream editor”，适合在输入流或管道上做基本文本变换；awk 的官方说明则是“按模式选取记录并执行操作”。这两个工具正好对应“简单替换”和“按列统计”两种最常见文本处理场景。 
+	4.	tmux 官方 Wiki
+官方 wiki 把 tmux 定义为 terminal multiplexer，支持在一个终端里跑多个程序，并且可以 detach 后再 reattach。这个能力对远程机器和长任务非常关键。 
+	5.	OpenSSH 官方手册页
+OpenSSH 官方首页明确写了它是远程登录的核心工具，套件包含 ssh、scp、sftp 等，并且加密所有流量。 
+	6.	rsync 官方文档
+rsync 官方 manpage 把它定义为“快速而且非常灵活的文件复制工具”，支持本地、远程 shell、rsync daemon 多种方式，并且以增量传输著称。 
+	7.	man7 的 crontab(5) 和 journalctl(1)
+crontab(5) 说明了 crontab 文件就是“在某个时间执行某个命令”的表；journalctl(1) 说明它用于读取 systemd-journald 保存的日志。你要注意，journalctl 是 systemd/Linux 这边的工具，不是你在 macOS 本地一定能练到的内容，更适合在 Linux 服务器上练。 
+	8.	GNU Coreutils 的 nohup 文档
+Coreutils 把 nohup 定义为“忽略 hangup 信号，让命令在你退出登录后继续运行”。这正是你第二周要建立的长任务直觉。 
+
+⸻
+
+第 1 周：文件查找与文本处理
+
+这一周的主题是：别再手动翻文件夹，学会批量找和批量筛。
+
+GNU Findutils 官方说明，find 用来查找满足条件的文件，xargs 用来把标准输入中的参数组装成命令行再执行。GNU 还特别强调 xargs -0/--null 可以用 NUL 分隔输入，避免文件名里的空格和特殊字符带来的问题。 
+
+GNU sed 官方把 sed 定义为“stream editor”，特别强调它擅长在管道里做一趟式文本变换；GNU awk 官方则把 awk 定义为“选中符合模式的记录，并在这些记录上执行动作”。对你来说，最实用的理解是：sed 更像批量替换，awk 更像按列取值和做统计。  
+
+这周你要练的命令
+
+find、xargs、sed、awk，再加上前一轮已经接触过的 grep、sort、uniq、wc 作为辅助。GNU Findutils 和 GNU sed/awk 文档都把这些工具定位成“可以串起来处理文本流”的组合。 
+
+这周练习清单
+
+先建目录：
+
+mkdir -p ~/cli-lab/round6/week1/logs
+cd ~/cli-lab/round6/week1
+
+造几个测试文件：
+
+echo "error user_01 timeout" > logs/a.log
+echo "info user_02 start" >> logs/a.log
+echo "error user_03 missing_file" >> logs/a.log
+
+echo "info user_04 start" > logs/b.log
+echo "error user_04 timeout" >> logs/b.log
+echo "warn user_05 retry" >> logs/b.log
+
+练习 1：用 find 找文件
+
+find logs -name "*.log"
+
+练习 2：用 find + xargs 批量统计错误行
+
+find logs -name "*.log" | xargs grep "error"
+
+如果以后要处理可能带空格的文件名，优先养成 -print0 和 xargs -0 的习惯。GNU 文档明确说明这是更稳妥的组合。 
+
+练习 3：用 sed 做简单替换
+
+echo "error user_03 missing_file" | sed 's/error/ERR/'
+
+GNU sed 手册说明 s/regexp/replacement/flags 是最重要的命令形式。 
+
+练习 4：用 awk 按列取值
+
+awk '{print $1, $2}' logs/a.log
+
+GNU awk 官方“Getting Started”明确说 awk 会按模式处理输入记录，非常适合这种按列取字段的任务。 
+
+练习 5：做一个最小统计
+
+find logs -name "*.log" | xargs cat | awk '{print $1}' | sort | uniq -c
+
+这个练习的目的，是让你第一次体会“文本流处理链”。这对 AI 项目前期的数据检查、日志清洗、标注结果粗统计非常有用。这个结论是基于这些工具在官方文档中的定位做出的工程延伸判断。 
+
+⸻
+
+第 2 周：进程、后台任务、日志、tmux
+
+这一周的主题是：别让长任务把你绑死。
+
+ps 的 man page 说明它用于显示当前活动进程的信息；top 提供实时动态视图；kill 用来给进程发送信号，而且文档明确建议优先使用默认的 TERM，让进程有机会做清理，而不是一上来就 KILL -9。 
+
+GNU Coreutils 对 nohup 的定义很直接：让命令忽略 hangup 信号，这样在你退出登录后仍可继续运行。tmux 官方 wiki 则强调它支持 detach/reattach，也就是把会话从当前终端“摘下来”，稍后再接回去。两者的区别，你先简单理解成：nohup 更轻，tmux 更完整。  
+
+journalctl 的 man page 说明它是用来读取 systemd-journald 存储的日志的。如果你本地主要是 macOS，那这部分更适合你在 Linux 服务器、云主机、WSL 或虚拟机里练。 
+
+这周你要练的命令
+
+ps、top、kill、nohup、tmux、journalctl。Missing Semester 2026 的 development-environment 讲义也明确把 tmux 归入终端工作流核心工具。 
+
+这周练习清单
+
+先建目录：
+
+mkdir -p ~/cli-lab/round6/week2
+cd ~/cli-lab/round6/week2
+
+练习 1：起一个长一点的测试任务
+
+python3 -c "import time; [print(i) or time.sleep(1) for i in range(30)]"
+
+运行时开另一个终端，试：
+
+ps
+top
+
+ps 和 top 的官方说明正对应这两种使用方式：一个是静态查看，一个是动态实时看。 
+
+练习 2：先温和结束任务
+
+找到对应 PID 后：
+
+kill PID
+
+kill 的 man page 明确说，默认发送的是 TERM，应优先于 KILL 使用。 
+
+练习 3：用 nohup 放后台
+
+nohup python3 -c "import time; [print(i) or time.sleep(1) for i in range(20)]" > run.log 2>&1 &
+
+这里的重点不是语法细节，而是体会：关掉当前连接后，任务仍可能继续。 这正是 nohup 的官方用途。 
+
+练习 4：学会最小 tmux 工作流
+
+安装并启动 tmux 后，先做这 4 个动作：
+	•	tmux
+	•	在里面跑一个长任务
+	•	Ctrl-b d detach
+	•	tmux attach 重新接回
+
+tmux 官方 getting started 明确把 detach / attach 作为最核心能力。 
+
+练习 5：如果你有 Linux 环境，练 journalctl
+
+journalctl
+journalctl -n 50
+journalctl -f
+
+journalctl(1) 说明无参数时会显示可访问日志，从最旧记录开始；-f 是常见的“跟随新日志”用法。 
+
+⸻
+
+第 3 周：SSH、SCP、rsync、cron
+
+这一周的主题是：把“本地干活”升级到“跨机器和定时干活”。
+
+OpenSSH 官方首页明确写了，OpenSSH 是远程登录和安全连接的核心工具，套件包含 ssh、scp、sftp 等，而且所有流量都会被加密。 
+
+rsync 官方 manpage 说明它既可以本地复制，也可以经由 remote shell 在主机之间同步，而且是增量传输，这就是它比简单拷贝更适合备份和同步的原因。 
+
+crontab(5) 的 man page 说明，crontab 文件本质上就是“在某个时间执行某个命令”的表。对你来说，这一周不用学复杂调度，只学会“每天某时跑一次脚本”就够了。 
+
+这周你要练的命令
+
+ssh、scp、rsync、crontab。Missing Semester 的 command-line environment 页面也直接提到了远程机器与 SSH。 
+
+这周练习清单
+
+练习 1：最小 SSH 连接
+
+如果你有 Linux 主机或云服务器：
+
+ssh user@host
+
+先做到能连上、能退出就够。OpenSSH 官方把这正是定义为 remote login 的核心场景。 
+
+练习 2：用 scp 传一个文件
+
+scp local.txt user@host:/home/user/
+
+你这一周不用深究密钥管理，只先体会“命令行安全传文件”这件事。OpenSSH 官方把 scp 列在核心套件中。 
+
+练习 3：用 rsync 同步目录
+
+rsync -av source_dir/ backup_dir/
+
+再试远程形式时，官方 manpage 说明 rsync 可以通过 remote shell 同步。 
+
+练习 4：做一个最小 crontab
+
+先看当前表：
+
+crontab -l
+
+编辑：
+
+crontab -e
+
+加一条最小任务，例如每天 9 点把某个目录的统计结果输出到文件。crontab(1) 和 crontab(5) 都说明了用户可以安装、列出和编辑自己的 crontab。 
+
+⸻
+
+Round 6 综合小项目
+
+这一轮我建议你做一个贴近 AI 前置工作的综合小项目，名字可以叫：
+
+ops_automation_lab
+
+目录结构：
+
+ops_automation_lab/
+├─ raw_logs/
+├─ reports/
+├─ backups/
+└─ scripts/
+
+做 3 个功能：
+
+功能 1：日志筛选脚本
+
+用 find + xargs + awk/sed，从 raw_logs/ 里找出所有 .log 文件，统计 error / warn / info 各出现多少次，输出到 reports/summary.txt。这一步对应你未来做批量日志检查、数据清洗前置统计。它基于这些工具官方定义的文本流处理能力。 
+
+功能 2：长任务运行方案
+
+把统计脚本用 nohup 或 tmux 跑起来，至少完整经历一次“启动、离开终端、再回来查看结果”的流程。nohup 和 tmux 的官方文档正是围绕这个用途设计的。 
+
+功能 3：备份与定时
+
+用 rsync 把 reports/ 同步到 backups/，再用 crontab 做一个最小的每日定时执行。rsync 官方强调增量同步，cron 官方强调按表定时运行命令，这两者合在一起就是最小自动化闭环。 
+
+⸻
+
+Round 6 验收标准
+
+这一轮结束时，你做到下面这些，就算过关：
+	•	能用 find 找文件，并知道 xargs 是把输入组装成命令再执行。 
+	•	能区分 sed 和 awk 的典型用途：一个偏替换变形，一个偏按记录/字段处理。 
+	•	能用 ps、top 观察进程，用 kill 先发 TERM 结束任务。 
+	•	能用 nohup 或 tmux 让一个长任务不被当前会话绑死。 
+	•	能用 ssh 连远程机器，能用 scp 或 rsync 传文件或同步目录。 
+	•	能写出一个最小 crontab 任务。 
+
+⸻
+
+这一轮最容易踩的坑
+
+第一个坑，是把 find | xargs 用得很随意，忽略空格文件名。GNU Findutils 明确提供了 -print0 和 xargs -0 来处理这类情况，你最好尽早养成习惯。 
+
+第二个坑，是一上来就 kill -9。kill(1) 的 man page 明确建议优先用 TERM，因为程序可能需要清理资源。 
+
+第三个坑，是把普通 list.pop(0) 式思维带到日志和任务处理中，最后又慢又乱。这一点虽然是前面 Python 轮次里的知识，但到了 Round 6，你应该开始把“工具选择”放到实际工作流里。这个是基于你前面学习路径的承接判断。
+
+第四个坑，是在 macOS 本地死磕 journalctl。它是 systemd 日志工具，更适合 Linux 环境。man page 本身已经把它和 systemd-journald 绑定得很明确。 
+
+如果你继续，我下一条就给你补 Round 6 专用练习清单，做成和前几轮一样、可以直接照着一步一步练的版本。
+
+好，下面是 Round 6 专用练习清单。这一轮的主线是：先学会 找文件和处理文本，再学 看进程、保住长任务，最后学 远程连接、同步和定时任务。这些练习直接对应官方文档里的工具定位：xargs 会从标准输入读取参数并组装命令行，sed 是流编辑器，awk 是按模式匹配并对命中的行执行动作；ps 用来查看当前进程快照，top 适合反复动态查看，kill 默认发送 TERM，应优先于 KILL；nohup 会忽略 hangup 信号，tmux 可以 detach/reattach；OpenSSH 提供 ssh 和 scp，rsync 支持本地和远程同步；crontab 的一行由时间字段和命令组成；journalctl 用来打印 systemd journal 日志。 
+
+第 1 周：find / xargs / sed / awk
+
+先建练习目录：
+
+mkdir -p ~/cli-lab/round6/week1/logs
+cd ~/cli-lab/round6/week1
+
+造测试文件：
+
+cat > logs/a.log <<'EOF'
+error user_01 timeout
+info user_02 start
+error user_03 missing_file
+EOF
+
+cat > logs/b.log <<'EOF'
+info user_04 start
+error user_04 timeout
+warn user_05 retry
+EOF
+
+cat > logs/c.log <<'EOF'
+info user_06 start
+info user_06 finish
+warn user_07 slow
+EOF
+
+这一周你要建立两个感觉：find + xargs 更像“批量找并批量交给下一个命令”，sed 更像“流式替换/变形”，awk 更像“按行、按列、按模式处理文本”。GNU 文档对它们就是这么定义的。 
+
+练习 1：找出所有日志文件
+
+find logs -name "*.log"
+
+练习 2：批量找出所有 error 行
+
+find logs -name "*.log" | xargs grep "error"
+
+练习 3：更稳的写法，养成 -print0 / -0 习惯
+
+find logs -name "*.log" -print0 | xargs -0 grep "error"
+
+GNU Findutils 明确给出了 find -print0 | xargs -0 ... 这种组合，用来更稳地处理文件名。 
+
+练习 4：用 sed 做简单替换
+
+echo "error user_03 missing_file" | sed 's/error/ERR/'
+echo "warn user_05 retry" | sed 's/retry/retrying/'
+
+练习 5：用 awk 取列
+
+awk '{print $1, $2}' logs/a.log
+awk '{print $2}' logs/b.log
+
+练习 6：统计不同级别日志各出现几次
+
+find logs -name "*.log" | xargs cat | awk '{print $1}' | sort | uniq -c
+
+练习 7：统计每个用户出现次数
+
+find logs -name "*.log" | xargs cat | awk '{print $2}' | sort | uniq -c
+
+练习 8：把 error 行导出到单独文件
+
+find logs -name "*.log" | xargs cat | grep "error" > error_only.txt
+cat error_only.txt
+
+第 1 周小任务
+
+把下面这条命令自己解释一遍：
+
+find logs -name "*.log" | xargs cat | awk '{print $1}' | sort | uniq -c > level_summary.txt
+
+如果你能说清楚每一段在干什么，第 1 周就过关了。
+
+⸻
+
+第 2 周：ps / top / kill / nohup / tmux
+
+先建目录：
+
+mkdir -p ~/cli-lab/round6/week2
+cd ~/cli-lab/round6/week2
+
+这一周的目标是：别让长任务把你绑在当前终端里。官方文档里，ps 是“当前进程快照”，top 适合反复更新查看，kill 默认发 TERM，应先于 KILL 使用；nohup 会让命令忽略 hangup，tmux 则允许会话 detach 后再 attach。 
+
+练习 1：起一个长一点的测试任务
+
+python3 -c "import time; [print(i) or time.sleep(1) for i in range(60)]"
+
+开另一个终端窗口，试：
+
+ps
+top
+
+ps 文档明确建议，如果你想反复更新看进程信息，用 top。 
+
+练习 2：找到 Python 进程
+
+ps | grep python
+
+练习 3：先用默认 TERM 结束任务
+
+kill <PID>
+
+kill 的手册明确说，不指定信号时发送的是 TERM，并且应优先于 KILL，因为进程可能需要做清理。 
+
+练习 4：再起一个后台任务，用 nohup
+
+nohup python3 -c "import time; [print(i) or time.sleep(1) for i in range(20)]" > run.log 2>&1 &
+
+看结果：
+
+cat run.log
+ps | grep python
+
+nohup 官方说明它会忽略 hangup 信号，所以命令在你退出后仍可继续运行；同时它不会自动把任务放到后台，通常要自己在结尾加 &。 
+
+练习 5：最小 tmux 工作流
+
+先进入 tmux：
+
+tmux
+
+在 tmux 里跑一个长任务：
+
+python3 -c "import time; [print(i) or time.sleep(1) for i in range(30)]"
+
+然后按：
+
+Ctrl-b d
+
+退出后查看会话：
+
+tmux ls
+
+重新接回：
+
+tmux attach
+
+tmux 官方 wiki 把它定义为 terminal multiplexer，并明确说它可以 detach 后再 reattach，主要用途之一就是保护远程服务器上的运行程序不受连接中断影响。 
+
+练习 6：只在 Linux + systemd 环境下练 journalctl
+
+如果你有 Linux 机器或 WSL/systemd 环境，再练：
+
+journalctl
+journalctl -n 20
+journalctl -f
+
+journalctl 的手册说明它打印的是 systemd journal 里的日志；无参数时会从最旧记录开始显示。 
+
+第 2 周小任务
+
+做一个最小“长任务保活”实验：
+	1.	用 nohup 跑一个任务并重定向到 run.log
+	2.	再用 tmux 跑一个任务并 detach
+	3.	自己总结一句：nohup 和 tmux 的使用感差别是什么
+
+⸻
+
+第 3 周：ssh / scp / rsync / crontab
+
+这一周的主题是“跨机器”和“按时间自动跑”。OpenSSH 官方说明 ssh/scp 都属于其工具套件；rsync 官方说明它既能本地复制，也能通过 remote shell 做远程同步；crontab(5) 说明一条 cron 记录由时间字段和命令组成。 
+
+练习 1：最小 SSH 连接
+
+如果你有远程 Linux 主机：
+
+ssh user@host
+
+退出：
+
+exit
+
+练习 2：用 scp 传一个文件
+
+先准备文件：
+
+mkdir -p ~/cli-lab/round6/week3
+cd ~/cli-lab/round6/week3
+echo "hello remote" > local.txt
+
+传到远程：
+
+scp local.txt user@host:/home/user/
+
+OpenSSH 官方站明确把 ssh、scp、sftp 列为远程操作工具。 
+
+练习 3：本地 rsync
+
+mkdir source_dir backup_dir
+echo "file a" > source_dir/a.txt
+echo "file b" > source_dir/b.txt
+
+rsync -av source_dir/ backup_dir/
+
+看结果：
+
+find backup_dir -type f
+
+练习 4：远程 rsync
+
+rsync -av source_dir/ user@host:/home/user/backup_dir/
+
+rsync 的手册把它定义为 “a fast, versatile, remote (and local) file-copying tool”，并且 SYNOPSIS 明确给了本地和 remote shell 两种写法。 
+
+练习 5：最小 crontab
+
+先看现有任务：
+
+crontab -l
+
+编辑：
+
+crontab -e
+
+加一条最简单的测试任务，例如每天下午 9:30 写一行到文件：
+
+30 21 * * * echo "cron works" >> /tmp/round6_cron_test.log
+
+crontab(5) 说明 cron 行由五个时间字段和一个命令组成。 
+
+练习 6：做一个本地定时统计脚本
+
+先建脚本：
+
+mkdir -p ~/cli-lab/round6/week3/scripts
+cat > ~/cli-lab/round6/week3/scripts/report.sh <<'EOF'
+#!/bin/sh
+date >> /tmp/round6_report.log
+echo "report generated" >> /tmp/round6_report.log
+EOF
+chmod +x ~/cli-lab/round6/week3/scripts/report.sh
+
+然后在 crontab -e 里加：
+
+*/10 * * * * /bin/sh /Users/你的用户名/cli-lab/round6/week3/scripts/report.sh
+
+你可以把路径换成自己的真实路径。
+
+第 3 周小任务
+
+完成一个最小闭环：
+	1.	ssh 连一次远程机
+	2.	scp 传一个文件
+	3.	rsync 同步一个目录
+	4.	crontab 配一个定时命令
+
+⸻
+
+Round 6 综合练习
+
+做一个小目录：
+
+mkdir -p ~/cli-lab/round6/final_lab/{raw_logs,reports,backups,scripts}
+cd ~/cli-lab/round6/final_lab
+
+造测试日志：
+
+cat > raw_logs/1.log <<'EOF'
+error user_01 timeout
+info user_02 start
+warn user_02 retry
+EOF
+
+cat > raw_logs/2.log <<'EOF'
+info user_03 start
+error user_04 missing_file
+error user_03 timeout
+EOF
+
+做统计脚本：
+
+cat > scripts/make_report.sh <<'EOF'
+#!/bin/sh
+find raw_logs -name "*.log" | xargs cat | awk '{print $1}' | sort | uniq -c > reports/summary.txt
+EOF
+chmod +x scripts/make_report.sh
+
+运行：
+
+./scripts/make_report.sh
+cat reports/summary.txt
+
+再备份：
+
+rsync -av reports/ backups/
+
+这套练习把 Round 6 最关键的东西串起来了：找文件、处理文本、生成报告、同步备份。前面这些动作都直接对应官方工具文档里的典型用途。 
+
+⸻
+
+Round 6 最终自测清单
+
+你做完后，自己检查下面这些：
+	•	你能不能用 find 找到目标文件
+	•	你能不能用 xargs 把这些文件交给下一个命令处理
+	•	你能不能说清 sed 和 awk 的常见分工
+	•	你能不能用 ps、top、kill 找并结束一个进程
+	•	你能不能用 nohup 或 tmux 保住一个长任务
+	•	你能不能用 ssh、scp、rsync 做最小远程操作
+	•	你能不能写一条最小 crontab
+
+你说“继续”，我就接着给你展开 Round 7：面向 AI 项目的综合练习。
+

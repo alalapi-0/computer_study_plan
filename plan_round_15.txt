@@ -1,0 +1,478 @@
+好，下面我把 Round 15：FastAPI 基础 完整展开。
+
+这一轮是在 Round 14 的基础上继续往前走，但重点从“先理解 HTTP 和接口草图”切到“把接口真正做成一个能接收路径参数、查询参数、请求体，并且有清晰数据模型和自动文档的最小 API”。FastAPI 官方教程本身就是按这个顺序展开的：First Steps 之后紧接着是 Path Parameters、Query Parameters、Request Body、示例数据、响应模型等内容。 
+
+Round 15 的目标
+
+这轮结束时，你要做到这些：你能把 GET /runs/{id} 这种路径参数接口写稳；你能把 skip、limit、keyword 这类查询参数接进接口；你能用请求体接收一次处理任务的参数；你能用 Pydantic 模型把输入输出结构固定下来；你能在 /docs 里看到更清楚的接口说明和示例数据。FastAPI 官方明确说明：非路径参数会自动被解释为 query parameters；请求体是客户端发给 API 的数据；而所有这类数据校验都由 Pydantic 在底层完成。 
+
+这轮学什么，不学什么
+
+这轮要学的是：FastAPI 的 path parameters、query parameters、request body、Pydantic BaseModel、最小响应结构、示例数据、Uvicorn 的最小运行方式。FastAPI 的教程明确把这些内容分成独立章节；Uvicorn 官网也明确说，命令行工具是运行应用最简单的方式。 
+
+这轮先不学：依赖注入深水区、认证授权、数据库会话管理、文件上传、后台任务、复杂错误处理、自定义响应类。FastAPI 官方教程把这些都放在更后面的章节里，说明它们天然属于下一层。 
+
+我对你这一轮的总体建议
+
+你这一轮不要急着把现有 CLI 所有功能一次性搬成 API。更稳的顺序是：先把 读取历史记录的接口 和 提交一次处理任务的接口 做清楚，再逐步补更复杂的行为。原因很简单：读取类接口主要练 GET + 路径参数 + 查询参数，提交类接口主要练 POST + 请求体 + Pydantic 模型，这两类已经覆盖了 FastAPI 基础里最核心的部分。GET 和 POST 的语义在 MDN 里也说得很明确：GET 用来请求资源表示，应该只用于取数据；POST 用来向服务器发送数据。 
+
+我建议你这一轮先做到的接口集合
+
+这一轮我建议你把接口先整理成下面这几类：
+
+GET /health
+GET /runs
+GET /runs/{run_id}
+POST /run
+
+这样安排的好处是很实际。GET /health 继续保留最小可观察性；GET /runs 和 GET /runs/{run_id} 可以直接复用你 Round 11 里已经有的 SQLite 查询；POST /run 则是你第一次真正把“CLI 任务参数”变成“API 请求体”。FastAPI 官方教程对路径参数、查询参数和请求体的划分，正好支持这样分层推进。 
+
+本轮推荐资源
+
+这一轮我建议你固定只看这几类官方资源。第一类是 FastAPI 的 Path Parameters、Query Parameters、Request Body。第二类是 FastAPI 的 Declare Request Example Data，用来给 /docs 增加示例。第三类是 Pydantic 官方首页，先建立“类型提示驱动验证和 JSON Schema”的直觉。第四类是 Uvicorn 官网，知道最小启动方式。 
+
+3 周安排
+
+第 1 周：路径参数和查询参数
+
+这一周只做一件事：把 读接口 写稳。
+
+FastAPI 的路径参数章节明确说明：路径参数会做类型转换和校验；如果你把参数声明成 int，传入 "foo" 这类非法值时，FastAPI 会返回清楚的校验错误信息。查询参数章节则明确说明：不是路径参数的函数参数，会自动被解释成 query parameters；而且如果声明了 Python 类型，它们会自动转换并校验。 
+
+这意味着你这一周应该先做这两个接口：
+
+GET /runs
+支持 skip、limit 这类最小分页参数
+
+GET /runs/{run_id}
+要求 run_id 是整数
+
+这周的重点不是“功能复杂”，而是把两个最常见的参数来源练顺：
+路径参数决定你“要哪一个资源”，查询参数决定你“怎样筛、怎样分页”。这正是 FastAPI 官方教程对 path 和 query 的最基本分工。 
+
+这一周结束时，你应该已经能在 /docs 里看到：run_id 被标成 path parameter，skip / limit 被标成 query parameters，而且错误输入会得到自动校验反馈。FastAPI 的 path parameters 章节明确把这种自动校验列为核心收益。 
+
+第 2 周：请求体和 Pydantic 模型
+
+这一周的主题是：把 POST /run 做出来。
+
+FastAPI 的 Request Body 章节明确说，请求体是客户端发送给 API 的数据；而这类数据通常通过 Pydantic 模型来声明。Pydantic 官方也明确强调，它以类型注解为核心，验证和序列化都受类型提示控制，并且模型可以生成 JSON Schema。 
+
+这一周你最少应该定义一个请求模型，例如：
+	•	input
+	•	output
+	•	format
+	•	keyword
+	•	dedup
+
+然后让 POST /run 接收这个模型。
+
+这样做的好处是三层同时成立：
+第一，接口参数不再散乱；第二，FastAPI 会自动做验证；第三，文档页会自动长出更清楚的 schema。FastAPI 和 Pydantic 的这套配合，本质上就是它们最重要的开发体验来源之一。 
+
+这一周你还要开始形成一个很关键的习惯：
+请求体适合放结构化任务参数，查询参数更适合放筛选、分页、开关之类的轻量参数。
+这个区分不是死规则，但它和 FastAPI 教程对 query parameters 与 request body 的组织方式是一致的。 
+
+第 3 周：示例数据、文档体验、最小响应结构
+
+这一周的主题是：让接口不只是“能跑”，还要“更容易看懂、调试和演示”。
+
+FastAPI 的 Declare Request Example Data 章节明确说明，你可以为应用接收的数据声明 examples，这些示例会进入生成的 JSON Schema，并体现在文档 UI 里。FastAPI First Steps 也明确说 /docs 会显示自动交互式文档，/openapi.json 会暴露 OpenAPI schema。 
+
+这一周你最少要做两件事：
+
+第一，给 POST /run 的请求模型加一个 example。
+第二，把 GET /runs、GET /runs/{run_id}、POST /run 的返回结构尽量收敛成更稳定的样子，例如统一包成：
+	•	{"runs": [...]}
+	•	{"run": {...}}
+	•	{"summary": {...}}
+
+这样做的价值，不在于形式好看，而在于后面你做前端、测试或继续扩 API 时，不会每个接口都随手返回不同形状的数据。这是工程建议，但完全顺着 FastAPI 自动文档和 schema 的思路。 
+
+这一周结束时，你应该已经能做到：
+打开 /docs，看到更像样的接口文档，里面有路径参数、查询参数、请求体 schema、示例数据，而且接口真能点通。FastAPI 官方 first steps 对自动文档和 OpenAPI 的支持，本来就是这一轮最重要的正反馈来源。 
+
+这轮建议的代码结构
+
+我建议你这一轮先把 api.py 组织成这个程度：
+	•	app 初始化
+	•	请求模型定义
+	•	GET /health
+	•	GET /runs
+	•	GET /runs/{run_id}
+	•	POST /run
+
+如果你愿意再稳一点，可以额外新建一个 schemas.py，专门放 Pydantic 模型。这样做的好处是接口文件不会越来越乱，而且 Pydantic 模型会更容易继续增长。Pydantic 官方对“模型 + JSON Schema”的定位，也支持你这样拆。 
+
+本轮产出
+
+Round 15 结束时，你应该至少拿到这些东西：
+	•	一个比 Round 14 更完整的 api.py
+	•	至少一个请求体模型
+	•	至少两个使用参数的读接口
+	•	一个能真正提交任务参数的 POST /run
+	•	一份更清楚的 /docs
+	•	至少一个带 example 的请求模型
+
+这些产出看起来还不算“复杂后端”，但已经足够把你的项目从“最小服务壳子”推进到“真正开始有接口设计感的服务”。FastAPI 官方教程对 path、query、body、examples 的编排，本来就是为了走到这一步。 
+
+这一轮最容易踩的坑
+
+第一个坑，是把所有参数都塞进 query string。FastAPI 官方很明确：非路径参数会自动当 query parameters，但当你需要发送一组结构化数据时，request body 更合适。 
+
+第二个坑，是路径参数不写类型。路径参数章节明确展示了：一旦你声明成 int，FastAPI 就会自动做转换和验证；这正是它很大的价值。 
+
+第三个坑，是有了 Pydantic 模型，却不利用它来定义更清楚的输入结构和 example。Pydantic 模型本来就能生成 JSON Schema，而 FastAPI 也能把 example 暴露到文档里。 
+
+第四个坑，是接口能跑就算了，不去 /docs 看文档体验。FastAPI 的一个核心优势就是自动交互式文档，这一轮一定要把它真正用起来。 
+
+Round 15 的验收标准
+
+你可以用下面这些标准判断自己有没有完成：
+	•	你能解释 path parameter 和 query parameter 的区别。 
+	•	你能用 Pydantic 模型定义一次处理任务的请求体。 
+	•	你能跑起一个至少包含 GET /health、GET /runs、GET /runs/{run_id}、POST /run 的 FastAPI 服务。 
+	•	你能在 /docs 里看到更完整的 schema 和示例。 
+	•	你能说清 GET 适合取数据，POST 适合提交数据。 
+
+如果你确认这版 Round 15 没问题，我下一条就继续给你出 Round 15 专用练习清单。
+
+
+可以。下面是 Round 15 专用练习清单。
+
+这一轮只做一件大事：把你上一轮的最小 FastAPI 服务，从“能跑两个 GET 接口”推进到“会处理路径参数、查询参数、请求体，并且有更清楚的输入输出模型和文档”的状态。FastAPI 官方教程对这一轮最关键的几块分别是：Path Parameters、Query Parameters、Request Body、Declare Request Example Data、Response Model。Pydantic 这边最关键的是 BaseModel，因为模型就是通过继承 BaseModel 并用类型注解声明字段来定义的。 
+
+⸻
+
+这一轮要练到什么程度
+
+Round 15 结束时，你至少要做到这些：
+
+你能把 GET /runs/{run_id} 这种接口写稳，让 run_id 真正作为路径参数参与校验和转换。FastAPI 的路径参数教程明确说明，路径参数可以按声明的 Python 类型自动解析和校验。 
+
+你能给 GET /runs 接上 skip、limit、keyword 这类查询参数。FastAPI 明确说明：不是路径参数的函数参数，会自动被当成查询参数，而且按声明类型进行转换和校验。 
+
+你能给 POST /run 定义一个请求体模型。FastAPI 的 request body 教程明确说：当客户端需要向 API 发送数据时，通常通过请求体发送，而这类数据会通过 Pydantic 模型来声明。 
+
+你能给请求模型补一个example，并在 /docs 里看到它。FastAPI 的 example 数据教程明确说明，给 Pydantic 模型声明 examples 会把这些例子加入生成的 JSON Schema。 
+
+你能开始用 response_model 让返回结构更稳定。FastAPI 的 response model 教程明确说，response_model 会参与文档生成、验证以及输出过滤。 
+
+⸻
+
+先准备工作区
+
+先进入项目目录：
+
+cd ~/cli-lab/round7/final_lab/ai_prep_tool
+pwd
+ls
+
+如果你上一轮已经有 api.py，这一轮继续在它上面扩展。为了让输入输出模型更清楚，我建议你新增一个文件：
+
+touch schemas.py
+
+这一步不是 FastAPI 的硬性要求，但很适合让 api.py 不至于越来越乱；而且 Pydantic 模型本来就是独立类，单独放一个模块很自然。Pydantic 官方对模型的定义就是：继承 BaseModel 的类，字段通过带注解的属性来声明。 
+
+⸻
+
+第 1 周：路径参数和查询参数
+
+这一周只做一件事：把 读接口 写稳。
+
+FastAPI 明确区分了路径参数和查询参数：路径参数是 URL 路径的一部分，查询参数通常出现在 ? 后面；非路径参数的函数参数会自动被当成 query parameters。它们都会按你声明的 Python 类型做解析和校验。 
+
+练习 1：先把 GET /runs/{run_id} 写成真正的路径参数接口
+
+在 api.py 里保留或补成这样：
+
+from fastapi import FastAPI, HTTPException
+from db import init_db, get_run_by_id
+
+app = FastAPI()
+
+@app.get("/runs/{run_id}")
+async def run_detail(run_id: int):
+    init_db()
+    row = get_run_by_id(run_id)
+    if row is None:
+        raise HTTPException(status_code=404, detail="run not found")
+    return {"run": row}
+
+这里最重要的不是代码量，而是你要真正看到：
+如果 run_id 声明成 int，FastAPI 会按整数处理它，并在非法输入时给出校验错误。路径参数教程就是围绕这个能力展开的。 
+
+练习 2：给 GET /runs 加最小分页参数
+
+把 GET /runs 改成类似这样：
+
+from db import init_db, list_runs
+
+@app.get("/runs")
+async def runs(skip: int = 0, limit: int = 10):
+    init_db()
+    rows = list_runs()
+    return {"runs": rows[skip: skip + limit]}
+
+然后在浏览器或 /docs 里测试：
+	•	/runs
+	•	/runs?skip=0&limit=2
+	•	/runs?skip=2&limit=2
+
+FastAPI 查询参数教程明确说：你可以同时声明路径参数和查询参数，而且不需要特意按顺序写；查询参数会按名字识别并自动转换类型。 
+
+练习 3：给 GET /runs 再加一个筛选参数
+
+继续改：
+
+@app.get("/runs")
+async def runs(skip: int = 0, limit: int = 10, keyword: str | None = None):
+    init_db()
+    rows = list_runs()
+
+    if keyword:
+        rows = [r for r in rows if keyword in str(r)]
+
+    return {"runs": rows[skip: skip + limit]}
+
+你这一题是在练一个很重要的直觉：
+	•	路径参数更像“我想要哪个资源”
+	•	查询参数更像“我想怎样筛、怎样分页、怎样控制结果”
+
+这和 FastAPI 对 path / query 的分工完全一致。 
+
+练习 4：观察非法输入
+
+请你故意在 /docs 里或地址栏里试一次错误输入，比如：
+	•	GET /runs/foo
+	•	GET /runs?skip=abc
+
+你要亲自看一次 FastAPI 自动返回的验证错误。FastAPI 的路径参数和查询参数教程都强调了这一点：类型声明不仅是编辑器提示，也是运行时解析和验证的一部分。 
+
+第 1 周周末小任务
+
+这一周结束时，你至少要做到：
+	•	GET /runs/{run_id} 能正常取详情
+	•	不存在的 run_id 返回 404
+	•	GET /runs 支持 skip / limit
+	•	至少再支持一个 keyword 查询参数
+	•	你已经亲手看过一次 FastAPI 的参数校验错误
+
+⸻
+
+第 2 周：请求体与 Pydantic 模型
+
+这一周主题是：把 POST /run 做出来。
+
+FastAPI 的 request body 教程明确说：客户端发送给 API 的数据通常放在请求体里；而这类数据通过 Pydantic 模型声明。Pydantic 官方则明确说明，模型就是继承 BaseModel 的类，字段通过注解属性定义。 
+
+练习 5：在 schemas.py 里定义请求模型
+
+先写最小版本：
+
+from pydantic import BaseModel
+
+class RunRequest(BaseModel):
+    input: str
+    output: str
+    format: str
+    keyword: str | None = None
+    dedup: bool = False
+
+这一步你已经用上了 Pydantic 的最核心能力：模型 + 字段类型。Pydantic 官方就是这么定义模型的。 
+
+练习 6：让 POST /run 接收请求体
+
+在 api.py 里补：
+
+from schemas import RunRequest
+
+@app.post("/run")
+async def run_job(payload: RunRequest):
+    return {
+        "summary": {
+            "input": payload.input,
+            "output": payload.output,
+            "format": payload.format,
+            "keyword": payload.keyword,
+            "dedup": payload.dedup
+        }
+    }
+
+现在先别急着真的触发你的 CLI 逻辑。
+这一题的目的只是先把“请求体 + 模型 + 自动文档”这条链路跑通。
+
+FastAPI request body 教程明确说明：请求体用模型声明后，FastAPI 会自动读取、验证并在文档里展示 schema。 
+
+练习 7：在 /docs 里实际提交一次 JSON
+
+去 /docs 里点开 POST /run，输入一份最小 JSON，例如：
+
+{
+  "input": "input/sample.jsonl",
+  "output": "output/clean.jsonl",
+  "format": "jsonl",
+  "keyword": "ok",
+  "dedup": true
+}
+
+提交后，确认你能看到服务端返回的 summary。
+
+这一题的核心，不是业务逻辑，而是让你第一次真正体验“结构化请求体 → 自动验证 → 自动文档”。
+
+练习 8：故意传错一个字段类型
+
+例如把：
+
+{
+  "input": "input/sample.jsonl",
+  "output": "output/clean.jsonl",
+  "format": "jsonl",
+  "keyword": "ok",
+  "dedup": "yes"
+}
+
+提交进去，观察 FastAPI / Pydantic 的验证反馈。
+
+这一题的意义，是让你真正感受到：
+Pydantic 模型不是“写着好看”，而是在做输入数据验证。Pydantic 官方首页也明确强调，它是一个数据验证库，并且验证和序列化都受类型注解驱动。 
+
+练习 9：给格式字段加最小约束
+
+你可以先不写复杂 validator，只做最小约束。例如把 format 改成更受控的取值。最简单的方式之一是继续在代码里手动判断并抛错；如果你愿意再往前走一点，也可以用 Pydantic 的字段约束思路继续收紧。Pydantic 官方文档明确支持基于模型字段和验证器做验证。 
+
+第 2 周周末小任务
+
+这一周结束时，你至少要做到：
+	•	schemas.py 里有一个 RunRequest
+	•	POST /run 已经能接收 JSON 请求体
+	•	/docs 里能看到请求体 schema
+	•	你已经亲手试过至少一次合法请求和一次非法请求
+
+⸻
+
+第 3 周：示例数据、响应模型、文档体验优化
+
+这一周主题是：让 API 不只是“能跑”，而是“更清楚、更稳定”。
+
+FastAPI 的 example 数据教程明确说，可以给接收数据声明 examples，这些例子会进入生成的 JSON Schema；response model 教程则说明，response_model 不只是做文档，还会做输出验证和过滤。 
+
+练习 10：给请求模型加 example
+
+你可以把 RunRequest 稍微补成更完整一点的版本。按你当前使用的 Pydantic / FastAPI 版本，写法可能略有差异，但目标是一致的：让 /docs 里出现更清楚的示例请求。
+
+如果你先不想折腾太多细节，也可以先在接口文档备注中保留一份标准 JSON 示例。
+这一步的关键是：你要让“别人怎么调这个接口”更清楚。FastAPI 官方文档明确说 example 会进 schema 和文档。 
+
+练习 11：定义最小响应模型
+
+在 schemas.py 里再补一个最简单的响应模型，例如：
+
+from pydantic import BaseModel
+
+class RunSummary(BaseModel):
+    input: str
+    output: str
+    format: str
+    keyword: str | None = None
+    dedup: bool
+
+然后在接口上加 response_model：
+
+@app.post("/run", response_model=dict)
+async def run_job(payload: RunRequest):
+    ...
+
+或者进一步把外层包成更稳定的结构。FastAPI response model 教程明确说，response_model 会用于文档、验证和输出过滤。 
+
+练习 12：统一返回结构
+
+把接口尽量统一成这种感觉：
+	•	GET /health → {"status": "ok"}
+	•	GET /runs → {"runs": [...]}
+	•	GET /runs/{id} → {"run": {...}}
+	•	POST /run → {"summary": {...}}
+
+这一步不是硬规则，但会让你的 API 更容易维护、测试和接前端。
+
+练习 13：再回 /docs 看一遍体验
+
+现在重新启动服务，去 /docs 里逐个看：
+	•	查询参数是不是更清楚了
+	•	请求体是不是更清楚了
+	•	示例是不是更清楚了
+	•	返回结构是不是更一致了
+
+FastAPI 官方把自动文档作为最直接的反馈入口，这一轮一定要把它用起来。 
+
+练习 14：补一条最小 API 测试说明
+
+这一轮你先不一定要正式写 API 测试代码，但至少在 README 或 api_design.md 里补一段：
+	•	服务怎么启动
+	•	/docs 地址是什么
+	•	哪几个接口已经可用
+	•	一个最小 POST 请求样例是什么
+
+这样你未来再回来看，不会忘记“这个服务现在能做到哪一步”。
+
+第 3 周周末小任务
+
+这一周结束时，你至少要做到：
+	•	POST /run 有明确请求体模型
+	•	至少一个模型有 example 或等价的清晰示例
+	•	至少一个接口开始使用更稳定的响应结构
+	•	/docs 里看起来比 Round 14 更像样
+
+⸻
+
+Round 15 综合演练
+
+把这一轮收口成一次完整演练。你从头做到尾：
+
+第一步，确认项目里有：
+
+api.py
+schemas.py
+api_design.md
+
+第二步，启动服务：
+
+fastapi dev api.py
+
+第三步，在 /docs 里依次测试：
+	•	GET /health
+	•	GET /runs
+	•	GET /runs/{run_id}
+	•	POST /run
+
+第四步，至少试一次非法路径参数，例如：
+	•	/runs/foo
+
+第五步，至少试一次非法请求体，例如：
+	•	dedup 传不合适的值
+	•	缺少必须字段
+
+第六步，把这一轮改动提交到 Git：
+
+git status
+git add .
+git commit -m "add request body models and improve FastAPI docs"
+
+如果这一整条你能独立做完，Round 15 就算真正跑通了。
+
+⸻
+
+Round 15 最终自测清单
+
+做完以后，你自己检查下面这些：
+	•	你能不能说清 path parameter 和 query parameter 的区别。 
+	•	你能不能用 BaseModel 定义一次处理任务的请求体。 
+	•	你能不能让 POST /run 真正接收 JSON 请求体。 
+	•	你能不能在 /docs 里看到更清楚的 schema 和示例。 
+	•	你能不能说清 response_model 为什么值得开始用。 
+	•	你能不能让 FastAPI 服务至少稳定包含 4 个接口：/health、/runs、/runs/{id}、/run。 
+
+这些都做到，Round 15 就算过关了。
+
+你继续的话，我下一步就给你展开 Round 16：API 与数据层结合。

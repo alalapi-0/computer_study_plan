@@ -1,0 +1,931 @@
+https://missing.csail.mit.edu/2026/
+
+好，下面我把 Round 2：Shell、管道、Git 最小工作流 完整展开。
+
+这一轮的核心不是把 Bash 或 Git 学深，而是先建立两个非常有价值的直觉：
+	1.	把几个小命令串起来干活
+	2.	把自己的改动留下一份可追溯的历史
+
+MIT 的 Missing Semester 专门把这类“学校里常被默认你会、但实际非常重要的工具能力”单独拿出来教；其中 2020 版明确把 Shell Tools and Scripting 和 Version Control (Git) 拆成独立讲次，2026 版也继续把命令行环境和 Git 列为核心内容。 
+
+这一轮学什么
+
+这一轮只学到“能用”这一层：
+	•	echo
+	•	>
+	•	>>
+	•	|
+	•	grep
+	•	wc
+	•	sort
+	•	uniq
+	•	一个非常小的 shell 脚本
+	•	Git 最小闭环：git init、git status、git add、git commit、git log
+
+Bash 官方文档把 redirection 定义为把命令的输入输出改到别的地方，把 pipeline 定义为用 | 或 |& 连接的一串命令，前一个命令的输出会接到下一个命令的输入上。Missing Semester 的 shell tools 讲义也强调：shell scripting 的优势就在于创建命令流水线、把结果写入文件、从标准输入读数据这些事情非常自然。 
+
+这一轮先不学什么
+
+为了不超纲，这一轮先不碰：
+	•	if / for / while
+	•	sed / awk
+	•	find / xargs
+	•	Git 分支冲突
+	•	rebase
+	•	stash
+	•	远程仓库协作细节
+
+这不是因为它们不重要，而是因为你现在最需要的，是先把 “命令行自动化感” 和 “版本记录感” 建起来。Missing Semester 也专门提醒过：bash 很适合短小、简单、一次性的脚本，但更复杂的脚本更推荐用 Python 之类更成熟的脚本语言，这和你“以后要接 AI 项目”的目标是吻合的。 
+
+⸻
+
+一、Round 2 资源包
+
+主视频 1
+
+MIT Missing Semester – Lecture 2: Shell Tools and Scripting (2020)
+这讲就是你这一轮的主线视频。官方讲义明确写了，这一讲会讲 bash 作为脚本语言的基础，以及一批会在命令行里反复使用的 shell tools。 
+
+主视频 2
+
+MIT Missing Semester – Lecture 6: Version Control (git) (2020)
+这一讲对应 Git。Missing Semester 的 Git 讲义不是只教命令，而是先讲 Git 的数据模型：Git 跟踪的是一系列“快照”，提交之间构成 DAG，这样你后面学命令时不容易把 Git 当成魔法咒语背。 
+
+主文档 1
+
+GNU Bash Manual – Redirections / Pipelines
+这一份当“字典”查，不用整本读。你这轮只要看懂：
+	•	>
+	•	>>
+	•	|
+	•	输入输出到底被改到哪里去了
+GNU Bash 手册对这两块的定义最权威。 
+
+主文档 2
+
+Pro Git – 第 1 章和第 2 章
+官方在线版把内容拆得很清楚：第 1 章是 Getting Started，第 2 章是 Git Basics，包括建仓库、记录改动、查看历史等。Missing Semester 的 Git 讲义也直接把 Pro Git 列为“高度推荐”，并建议先读前几章。 
+
+官方操作文档
+
+GitHub Docs – Set up Git
+GitHub 官方文档把最小起步动作写得很清楚：先安装 Git，再设置用户名和提交邮箱；如果将来连 GitHub，后面还会涉及 HTTPS 或 SSH 认证。你这轮先只做本地部分。 
+
+交互练习 1
+
+Learn Git Branching
+Missing Semester 直接把它列进资源区，称它是一个基于浏览器的 Git 教学游戏。这个非常适合你，因为它反馈快，不容易学得太干。 
+
+交互练习 2
+
+GitHub Skills – Introduction to GitHub
+这是 GitHub 官方模板仓库，定位就是“新开发者、新 GitHub 用户和学生”，目标是在一小时内带你练仓库、分支、提交和 pull request。它更偏 GitHub Flow，不是这轮主线，但很适合作为奖励关。 
+
+⸻
+
+二、这 3 周的安排
+
+这轮还是按 3 周、每周约 8 小时 来走。
+
+第 1 周：重定向和管道
+
+本周目标
+
+你要真正理解三件事：
+	•	>：把输出写进文件
+	•	>>：把输出追加到文件末尾
+	•	|：把左边命令的输出接给右边命令
+
+Yale 的 Linux 入门材料讲得很清楚：> 会把输出重定向到文件，不存在就创建，存在就覆盖；| 是把左边命令的输出作为右边命令的输入；>> 是追加；而且 uniq 只会去掉相邻重复项，所以常见搭配是 sort | uniq。 
+
+本周只练这些命令
+
+echo
+cat
+>
+>>
+|
+grep
+wc
+sort
+uniq
+
+第 1 周练习目录
+
+mkdir -p ~/cli-lab/round2/week1
+cd ~/cli-lab/round2/week1
+pwd
+ls
+
+练习 1：认识 > 和 >>
+
+echo "apple" > fruits.txt
+cat fruits.txt
+
+echo "banana" >> fruits.txt
+cat fruits.txt
+
+echo "orange" >> fruits.txt
+cat fruits.txt
+
+你现在要体会到：
+	•	第一次 > 是创建并写入
+	•	后面的 >> 是继续往后加
+	•	cat 是把内容直接打印出来
+
+这些行为和 Bash 手册、Yale 的 pipe/filter 教程是一致的。 
+
+练习 2：感受覆盖
+
+echo "new line" > fruits.txt
+cat fruits.txt
+
+现在你会看到前面的内容没了，只剩一行。
+这一步很重要，因为以后写日志和生成中间文件时，很多人最容易在这里误覆盖。Yale 的教程也专门提醒了 > 会静默覆盖已存在文件。 
+
+练习 3：把几个命令串起来
+
+echo "cat" > animals.txt
+echo "dog" >> animals.txt
+echo "cat" >> animals.txt
+echo "bird" >> animals.txt
+echo "dog" >> animals.txt
+echo "cat" >> animals.txt
+
+cat animals.txt
+sort animals.txt
+sort animals.txt | uniq
+sort animals.txt | uniq | wc -l
+
+这里你要体会的是：
+	•	sort 先把相同内容排到一起
+	•	uniq 去掉相邻重复
+	•	wc -l 统计行数
+
+Yale 的示例正是这种“把简单工具用管道串起来”的思路；它还明确解释了 uniq 为什么只处理相邻重复，以及为什么常搭配 sort。 
+
+练习 4：过滤
+
+echo "error: login failed" > app.log
+echo "info: job started" >> app.log
+echo "error: file missing" >> app.log
+echo "info: job finished" >> app.log
+
+cat app.log
+grep "error" app.log
+cat app.log | grep "error"
+cat app.log | grep "info" | wc -l
+
+这一步你先别追求正则表达式，只要把 grep 理解成“筛出包含某段文字的行”就够了。
+
+第 1 周小成果
+
+做一个 label_stats.txt：
+
+echo "ok" > labels.txt
+echo "blur" >> labels.txt
+echo "ok" >> labels.txt
+echo "bad" >> labels.txt
+echo "blur" >> labels.txt
+echo "ok" >> labels.txt
+
+sort labels.txt | uniq > label_stats.txt
+cat label_stats.txt
+
+这个小成果已经开始接近 AI 数据项目里的“粗统计”和“预检查”了。
+
+⸻
+
+第 2 周：最小 shell 脚本和命令组合感
+
+本周目标
+
+这一周不追求 Bash 语法大全，只做两件事：
+	•	会写一个最简单的 .sh 文件
+	•	会让脚本帮你串一组固定命令
+
+Missing Semester 的 shell tools 讲义明确说，shell script 是在 shell 命令和管道基础上的下一步；它擅长做 shell 相关任务，比如创建命令流水线、保存结果、读标准输入。 
+
+练习 5：你的第一个脚本
+
+先建目录：
+
+mkdir -p ~/cli-lab/round2/week2
+cd ~/cli-lab/round2/week2
+
+创建脚本文件：
+
+touch count_errors.sh
+
+把下面内容写进去。你可以用文本编辑器打开写，也可以直接复制粘贴。
+
+#!/bin/bash
+cat app.log | grep "error" | wc -l > error_count.txt
+cat error_count.txt
+
+然后准备测试文件：
+
+echo "error: login failed" > app.log
+echo "info: job started" >> app.log
+echo "error: file missing" >> app.log
+echo "info: job finished" >> app.log
+
+执行脚本：
+
+bash count_errors.sh
+
+你只要能跑通，就够了。
+这一轮先不要求你理解 shebang、权限、参数、变量那些细节。
+
+练习 6：再做一个“标签统计脚本”
+
+新建文件：
+
+touch count_labels.sh
+
+内容写成：
+
+#!/bin/bash
+sort labels.txt | uniq > unique_labels.txt
+cat unique_labels.txt
+
+再准备数据：
+
+echo "ok" > labels.txt
+echo "blur" >> labels.txt
+echo "ok" >> labels.txt
+echo "bad" >> labels.txt
+echo "blur" >> labels.txt
+echo "ok" >> labels.txt
+
+执行：
+
+bash count_labels.sh
+
+第 2 周的关键理解
+
+这一周你只要形成这个感觉就行：
+
+脚本不是高深程序，它只是把你本来要手敲的一串命令，保存成一个可重复执行的文件。
+
+这正是 bash 在简单任务上最有价值的地方。Missing Semester 也明确建议：bash 适合短小、简单、一次性的脚本；再复杂就切 Python。 
+
+第 2 周小成果
+
+做一个自己的小目录：
+
+mkdir pipeline_lab
+cd pipeline_lab
+
+里面放三个东西：
+	•	raw_labels.txt
+	•	make_unique.sh
+	•	notes.txt
+
+目标是让你跑一次脚本，就生成一个去重后的结果文件。
+这已经是在模拟最简单的数据预处理流水线了。
+
+⸻
+
+第 3 周：Git 最小工作流
+
+本周目标
+
+你这周只建立一个闭环：
+
+初始化仓库 → 看状态 → 添加文件 → 提交 → 看历史
+
+GitHub 官方文档要求最小起步动作是安装 Git 并设置用户名和邮箱；Pro Git 的前两章和 GitHub Quickstart 也都把“建仓库、记录改动、查看历史”列为最前面的基础内容。 
+
+先检查 Git
+
+git --version
+
+如果没装，再按 GitHub Docs 的 Set up Git 走。装完后配置身份：
+
+git config --global user.name "你的名字"
+git config --global user.email "你的邮箱"
+
+这两个步骤正是 GitHub 官方 setup 文档列出的最小配置。 
+
+Git 练习目录
+
+mkdir -p ~/cli-lab/round2/week3
+cd ~/cli-lab/round2/week3
+mkdir git_lab
+cd git_lab
+
+练习 7：初始化仓库
+
+git init
+git status
+
+Git 是版本控制系统，Missing Semester 把它定义为跟踪文件夹及其内容变化的一系列“快照”的工具；即使一个人工作，它也能让你回看旧版本、记录每次改动原因。 
+
+练习 8：第一次提交
+
+echo "# round2 git lab" > README.md
+git status
+git add README.md
+git status
+git commit -m "init repository"
+git log --oneline
+
+你要观察三个状态变化：
+	•	创建后是 untracked
+	•	git add 后进入 staged
+	•	git commit 后进入历史
+
+GitHub Docs 的 quickstart 示例也使用了同样的最小流：git status，然后 git add README.md && git commit -m "Add README"。 
+
+练习 9：第二次提交
+
+echo "this repo is for round2 practice" >> README.md
+git status
+git diff
+git add README.md
+git commit -m "update readme"
+git log --oneline
+
+这里你会第一次看到：
+	•	文件改了但还没提交
+	•	git diff 能看当前改动
+	•	git log --oneline 能看到两次提交历史
+
+练习 10：再加一个文件
+
+echo "pipeline practice notes" > notes.txt
+git status
+git add notes.txt
+git commit -m "add notes"
+git log --oneline
+
+第 3 周的关键理解
+
+你不用现在就掌握 Git 的全貌，但至少要先形成这个印象：
+
+Git 记录的不是“最终文件夹长什么样”，而是“一连串可追溯的快照”。
+
+Missing Semester 的 Git 讲义就是从这个模型出发讲的：commit 是快照，历史不是简单列表，而是 DAG；先有这个理解，后面学分支和合并会轻松很多。 
+
+⸻
+
+三、Round 2 的微型项目
+
+这一轮建议你做两个超小项目。
+
+项目 A：迷你日志统计器
+
+目录：
+
+mkdir -p ~/cli-lab/round2/final_pipeline_lab
+cd ~/cli-lab/round2/final_pipeline_lab
+
+准备数据：
+
+echo "error: login failed" > app.log
+echo "info: job started" >> app.log
+echo "warning: timeout" >> app.log
+echo "error: file missing" >> app.log
+echo "info: job finished" >> app.log
+
+生成几个结果：
+
+cat app.log | grep "error" > errors_only.txt
+cat app.log | grep "info" > info_only.txt
+cat app.log | grep "error" | wc -l > error_count.txt
+cat error_count.txt
+
+这个项目的意义是：
+你已经开始在做“从原始文本中过滤出我关心的信息”这件事了。后面做 AI 数据、日志、批处理、标注结果检查，思路会完全一样。
+
+项目 B：迷你 Git 仓库
+
+目录：
+
+mkdir -p ~/cli-lab/round2/final_git_lab
+cd ~/cli-lab/round2/final_git_lab
+git init
+
+做三次提交：
+
+echo "# final git lab" > README.md
+git add README.md
+git commit -m "init"
+
+echo "round2 practice repo" >> README.md
+git add README.md
+git commit -m "add description"
+
+echo "todo: learn git branch later" > todo.txt
+git add todo.txt
+git commit -m "add todo"
+
+最后看历史：
+
+git log --oneline
+git status
+
+这个项目的意义是：
+你第一次拥有了一个有历史的项目目录。以后你写 Python 小工具、AI 数据处理脚本、实验代码，最起码都应该被这样管理。
+
+⸻
+
+四、这一轮和 AI 项目的连接点
+
+这一轮和 AI 项目的关系其实比 Round 1 更直接。
+
+你以后做 AI 项目时，会经常遇到这些场景：
+	•	从日志里筛错误行
+	•	对一堆标签结果做去重或计数
+	•	把一串固定命令保存成脚本重复运行
+	•	给自己的数据处理脚本留版本历史
+	•	回看“上周我到底改了什么”
+
+Missing Semester 对 data wrangling 的描述就是：直接在命令行里快速修改、查看、解析、统计数据和文件，不再靠手动复制粘贴；而版本控制则能让你保留快照、解释改动、并在以后协作。 
+
+⸻
+
+五、本轮验收标准
+
+Round 2 结束时，你做到下面这些就算过关：
+	1.	你能解释：
+	•	> 是覆盖写入
+	•	>> 是追加
+	•	| 是把左边输出接给右边输入
+
+	2.	你能自己写出这种简单流水线：
+	•	sort xxx | uniq
+	•	grep "xxx" file | wc -l
+
+	3.	你能跑一个最简单的 .sh 脚本
+	4.	你能完成 Git 最小闭环：
+	•	git init
+	•	git status
+	•	git add
+	•	git commit
+	•	git log --oneline
+
+	5.	你已经做出：
+	•	一个小型文本过滤/统计实验
+	•	一个有 2 到 3 次提交记录的小仓库
+
+⸻
+
+六、这一轮最容易踩的坑
+
+第一，不要把 Bash 当成下一门“完整编程语言”来学。
+你现在只把它当成“把命令串起来干活”的工具就够了。Missing Semester 也明确说过，bash 适合短简单脚本，复杂逻辑更建议换 Python。 
+
+第二，不要太早学高级 Git。
+Git 的分支、合并、stash、rebase 确实重要，但现在学太多，你很容易只剩下一堆口令。Missing Semester 的 Git 讲义甚至特意先从数据模型和快照讲起，就是为了避免这种情况。 
+
+第三，不要只看视频不敲。
+这轮的关键不是“听懂”，而是手上真的敲出：
+	•	一个管道
+	•	一个脚本
+	•	两三次提交
+
+⸻
+
+七、给你的最简执行版
+
+如果你这轮只想跑一个最小闭环，就按这个来：
+
+第 1 周只练：
+
+echo
+>
+>>
+|
+grep
+wc
+sort
+uniq
+
+第 2 周只做一个脚本：
+
+bash count_errors.sh
+
+第 3 周只做一个 Git 仓库：
+
+git init
+git status
+git add
+git commit
+git log --oneline
+
+再加一个浏览器练习：
+	•	Learn Git Branching
+	•	或 GitHub Skills 的 Introduction to GitHub
+
+
+你要的话，我下一条可以直接继续给你补一个 Round 2 专用命令练习清单，做成和 Round 1 一样能照着一步一步敲的版本。
+
+
+可以。下面是 Round 2 专用练习清单，我按你现在这套节奏重新整理成了能直接照着做的版本。
+
+这一轮的主线很明确：
+先把 重定向、管道、最小 shell 脚本 跑顺，再把 Git 最小工作流 跑通。Bash 手册把重定向定义为在命令执行前改变输入输出去向，把 pipeline 定义为用 | 或 |& 连接的一串命令，前一个命令的输出会接到下一个命令的输入。Missing Semester 也把 shell tools and scripting 定位成“把命令串起来、把结果写进文件、从标准输入读取”的一组高频命令行能力。 
+
+Git 这部分，你先只建立最小闭环就够：git init、git status、git add、git commit、git log。Missing Semester 把 Git 解释为一系列快照，历史不是简单线性列表，而是快照组成的 DAG；Pro Git 也明确给出了本地仓库的两种起点：在已有目录里 git init，或者从远程仓库 git clone。GitHub Docs 则建议先安装 Git，再配置用户名和提交邮箱。 
+
+⸻
+
+Round 2 要练到什么程度
+
+这一轮结束时，你只需要做到这些：
+	•	看懂 >、>>、| 在干什么
+	•	会用 grep、wc、sort、uniq 做最小文本处理链
+	•	会写一个非常短的 .sh 文件并执行
+	•	会初始化一个本地 Git 仓库
+	•	会把改动加入暂存区并提交
+	•	会看最基础的提交历史
+
+Bash 手册明确说明 > 会把输出重定向到文件，文件已存在时会被截断为 0 大小；>> 是追加输出；| 会把前一个命令的输出接给后一个命令。 
+
+⸻
+
+先建总练习目录
+
+先在终端里创建这一轮总目录：
+
+mkdir -p ~/cli-lab/round2
+cd ~/cli-lab/round2
+mkdir week1 week2 week3
+
+
+⸻
+
+第 1 周：重定向、管道、基础文本处理
+
+这一周只练一个核心能力：
+
+把小命令串起来，做出一个最小文本处理流水线。
+
+第 1 周目录
+
+cd ~/cli-lab/round2/week1
+
+练习 1：先看 > 和 >>
+
+创建文件：
+
+echo "apple" > fruits.txt
+cat fruits.txt
+
+echo "banana" >> fruits.txt
+cat fruits.txt
+
+echo "orange" >> fruits.txt
+cat fruits.txt
+
+这里你要体会两件事：
+	•	> 是写入，如果文件已经存在，会覆盖原内容
+	•	>> 是追加，在原内容后面继续写
+
+这正是 Bash 手册对重定向和追加输出的定义。 
+
+练习 2：刻意感受覆盖
+
+echo "new line" > fruits.txt
+cat fruits.txt
+
+现在你应该只能看到一行。
+这一步一定要亲手做，因为很多人后面写日志或结果文件时，就是在这里误覆盖了旧内容。Bash 手册明确说 > 对已存在文件会截断到 0 大小。 
+
+练习 3：造一份重复数据
+
+echo "cat" > animals.txt
+echo "dog" >> animals.txt
+echo "cat" >> animals.txt
+echo "bird" >> animals.txt
+echo "dog" >> animals.txt
+echo "cat" >> animals.txt
+cat animals.txt
+
+练习 4：练 sort、uniq、wc
+
+sort animals.txt
+sort animals.txt | uniq
+sort animals.txt | uniq | wc -l
+
+你现在要开始形成一个感觉：
+	•	sort 把相同内容排到一起
+	•	uniq 去掉相邻重复项
+	•	wc -l 统计行数
+
+这一组是非常典型的“命令行文本流处理”起点。Missing Semester 也把这类 shell tools 视为高频命令行工作流的一部分。 
+
+练习 5：练 grep
+
+echo "error: login failed" > app.log
+echo "info: job started" >> app.log
+echo "error: file missing" >> app.log
+echo "info: job finished" >> app.log
+
+cat app.log
+grep "error" app.log
+cat app.log | grep "error"
+cat app.log | grep "info" | wc -l
+
+第 1 周周末小任务
+
+自己完成一条“日志统计链”：
+
+cat app.log | grep "error" | wc -l
+
+然后再自己写一句解释：
+	•	cat 在干什么
+	•	grep 在干什么
+	•	wc -l 在干什么
+
+如果你能自己讲明白，第 1 周就过关了。
+
+⸻
+
+第 2 周：最小 shell 脚本
+
+这一周的目标不是学 Bash 全部语法，而是先建立一个感觉：
+
+脚本就是把你本来要手敲的一串命令，保存成可重复执行的文件。
+
+Missing Semester 明确说，shell 脚本适合 shell 相关任务，比如创建 command pipelines、把结果写入文件、从标准输入读取数据。 
+
+第 2 周目录
+
+cd ~/cli-lab/round2/week2
+
+练习 6：你的第一个脚本
+
+先造测试日志：
+
+echo "error: login failed" > app.log
+echo "info: job started" >> app.log
+echo "error: file missing" >> app.log
+echo "info: job finished" >> app.log
+
+新建脚本：
+
+touch count_errors.sh
+
+把下面内容写进去：
+
+#!/bin/bash
+cat app.log | grep "error" | wc -l > error_count.txt
+cat error_count.txt
+
+运行：
+
+bash count_errors.sh
+
+如果能输出 2，说明你已经完成了一个最小可重复脚本。
+
+练习 7：再做一个标签去重脚本
+
+先造数据：
+
+echo "ok" > labels.txt
+echo "blur" >> labels.txt
+echo "ok" >> labels.txt
+echo "bad" >> labels.txt
+echo "blur" >> labels.txt
+echo "ok" >> labels.txt
+
+新建脚本：
+
+touch count_labels.sh
+
+写入：
+
+#!/bin/bash
+sort labels.txt | uniq > unique_labels.txt
+cat unique_labels.txt
+
+运行：
+
+bash count_labels.sh
+
+练习 8：给脚本传最简单参数
+
+新建脚本：
+
+touch show_args.sh
+
+写入：
+
+#!/bin/bash
+echo "script name: $0"
+echo "first arg: $1"
+echo "second arg: $2"
+echo "all args: $@"
+echo "arg count: $#"
+
+运行：
+
+bash show_args.sh aaa bbb ccc
+
+Missing Semester 对 Bash 特殊变量的介绍里，明确列出了 $0、$1 到 $9、$@、$# 等参数变量。 
+
+练习 9：练最简单条件判断
+
+新建：
+
+touch check_file.sh
+
+写入：
+
+#!/bin/bash
+
+if grep "error" app.log > /dev/null 2> /dev/null
+then
+  echo "has error"
+else
+  echo "no error"
+fi
+
+运行：
+
+bash check_file.sh
+
+Missing Semester 也专门展示了用 grep ... > /dev/null 2> /dev/null 配合退出状态做判断的写法。 
+
+第 2 周周末小任务
+
+把下面三个脚本都跑通：
+	•	count_errors.sh
+	•	count_labels.sh
+	•	show_args.sh
+
+然后自己总结一句：
+	•	重定向解决什么问题
+	•	脚本比手敲命令多了什么价值
+
+⸻
+
+第 3 周：Git 最小工作流
+
+这一周你只建立一个非常小但完整的 Git 闭环：
+
+初始化仓库 → 看状态 → 暂存 → 提交 → 看历史
+
+Missing Semester 解释了 Git 的核心模型：Git 把项目历史看成一系列快照，提交历史是 DAG；同时它也列出了最基本的一组命令：git init、git status、git add、git commit、git log。Pro Git 说明如果你要在已有目录里开始版本管理，就进入目录后执行 git init；如果要从现有仓库开始，则用 git clone。 
+
+第 3 周先做 Git 基础配置
+
+GitHub Docs 建议先下载并安装 Git，然后设置用户名和提交邮箱。对应命令可以这样做：
+
+git config --global user.name "你的名字"
+git config --global user.email "你的邮箱"
+
+GitHub Docs 也给出了查看配置值的方式。 
+
+你可以顺手确认一下：
+
+git config --global user.name
+git config --global user.email
+
+第 3 周目录
+
+cd ~/cli-lab/round2/week3
+mkdir git_lab
+cd git_lab
+
+练习 10：初始化仓库
+
+git init
+git status
+
+git init 会在当前目录初始化一个新仓库；Missing Semester 也明确说仓库数据会保存在 .git 目录里。 
+
+练习 11：第一次提交
+
+echo "# round2 git lab" > README.md
+git status
+git add README.md
+git status
+git commit -m "init repository"
+git log --oneline
+
+这一套动作里，你要观察三个状态变化：
+	•	文件刚创建时是未跟踪
+	•	git add 之后进入暂存区
+	•	git commit 之后变成历史快照
+
+Missing Semester 把 staging area 也明确列为 Git 工作流的一部分。 
+
+练习 12：第二次提交
+
+echo "this repo is for round2 practice" >> README.md
+git status
+git diff
+git add README.md
+git commit -m "update readme"
+git log --oneline
+
+练习 13：再加一个新文件
+
+echo "pipeline practice notes" > notes.txt
+git status
+git add notes.txt
+git commit -m "add notes"
+git log --oneline
+
+练习 14：感受 git clone 是什么
+
+这一步你不一定要真的去克隆大型仓库，但要先知道：
+	•	git init 是在本地已有目录里开始版本管理
+	•	git clone <url> 是拿到一个现有仓库的完整本地副本
+
+Pro Git 明确说 git clone 默认会把项目完整历史拉下来，而不仅仅是工作区。 
+
+如果你想试一次，可以找一个公开小仓库练习。
+
+练习 15：浏览器里补 Git 手感
+
+你可以拿 Learn Git Branching 当额外练习。这个网站就是浏览器里的 Git 仓库模拟器。 
+
+⸻
+
+Round 2 综合小项目
+
+这一轮建议你做两个最小项目。
+
+项目 A：迷你文本处理流水线
+
+目录：
+
+mkdir -p ~/cli-lab/round2/final_pipeline_lab
+cd ~/cli-lab/round2/final_pipeline_lab
+
+造数据：
+
+echo "error: login failed" > app.log
+echo "info: job started" >> app.log
+echo "warning: timeout" >> app.log
+echo "error: file missing" >> app.log
+echo "info: job finished" >> app.log
+
+做输出：
+
+cat app.log | grep "error" > errors_only.txt
+cat app.log | grep "info" > info_only.txt
+cat app.log | grep "error" | wc -l > error_count.txt
+cat error_count.txt
+
+再把它封装成一个脚本 make_report.sh。
+
+项目 B：迷你 Git 仓库
+
+目录：
+
+mkdir -p ~/cli-lab/round2/final_git_lab
+cd ~/cli-lab/round2/final_git_lab
+git init
+
+做三次提交：
+
+echo "# final git lab" > README.md
+git add README.md
+git commit -m "init"
+
+echo "round2 practice repo" >> README.md
+git add README.md
+git commit -m "add description"
+
+echo "todo: learn git branch later" > todo.txt
+git add todo.txt
+git commit -m "add todo"
+
+git log --oneline
+
+
+⸻
+
+Round 2 最终自测清单
+
+你做完以后，自己检查下面这些：
+	•	你能不能解释 > 和 >> 的区别
+	•	你能不能解释 | 为什么能把两个命令串起来
+	•	你能不能独立写一条 grep | wc -l 这样的处理链
+	•	你能不能写一个最小 .sh 文件并用 bash xxx.sh 执行
+	•	你能不能说出 $1、$@、$# 大概是什么意思
+	•	你能不能独立完成一次 git init → git add → git commit → git log
+	•	你能不能看懂 git status 在说什么
+
+这几项都能做到，Round 2 就算过关了。 
+
+⸻
+
+这一轮最容易踩的坑
+
+第一个坑，是把 > 当成“总是安全的写文件”。
+它会覆盖原文件内容，不是追加。Bash 手册对这一点写得很明确。 
+
+第二个坑，是只会手敲命令，不会把命令存成脚本。
+Missing Semester 明确把 shell scripting 视为“下一步复杂度”，因为它让命令链可以重复执行。 
+
+第三个坑，是太早陷进 Git 的高级概念。
+你现在最重要的是先理解 Git 记录的是快照历史，先把最小工作流跑通，而不是一上来就学 rebase、冲突解决和复杂分支模型。Missing Semester 也是先从快照和 DAG 讲起的。 
+
+如果你愿意，我下一步可以继续把 Round 2 参考答案骨架 也补给你，方便你练完后对照。

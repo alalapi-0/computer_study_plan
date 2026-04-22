@@ -1,0 +1,683 @@
+好，下面我把 Round 12：自动化流水线与批处理 完整展开。
+
+这一轮的核心，是把你前面已经做出来的 CLI 工具，推进成一个 能批量跑、能定时跑、能保住长任务、能归档结果 的小型自动化流水线。Python 这边最适合继续用标准库：pathlib 负责路径与目录遍历，shutil 负责高层文件复制与归档，subprocess 负责调用外部命令并拿到返回码；Linux 这边则重点接 cron/crontab、nohup、tmux 和日志轮转。pathlib 文档明确说 concrete path 既有路径语义，也带 I/O 操作；shutil 提供高层文件与目录操作；subprocess 允许你启动子进程、连接它们的输入输出并取得返回码。 
+
+Round 12 的目标
+
+这轮结束时，你要做到这些：你的工具不再只会“处理一个文件”，而是能 遍历一个输入目录、批量处理一批文件、把结果写到固定输出目录、把运行摘要归档，并且可以通过 cron 或 shell 包装脚本定时执行。crontab(5) 明确说明 crontab 文件本质上是在告诉 cron 守护进程“在某个时间执行某个命令”；crontab(1) 说明用户可以安装、列出和编辑自己的 crontab 表；GNU nohup 文档说明它会忽略 hangup 信号，使得命令在你退出后仍可继续；tmux 官方 wiki 说明 tmux 是终端复用器，支持 detach 后再 attach。 
+
+你还要建立两个很重要的工程直觉。第一，批处理不是把“单文件脚本”简单 for 一下就结束，而是要考虑输入扫描、输出命名、失败记录、日志、归档和可重复运行。第二，自动化不等于后台乱跑，而是要有基本的运行入口、可检查的输出、可追踪的日志和最小恢复能力。logging.handlers.RotatingFileHandler 文档明确说明它支持磁盘日志轮转；journalctl(1) 说明它用于读取 systemd-journald 存储的日志；而 cron(8) 说明 cron 会定期检查 crontab 并在当前分钟需要执行时运行命令。 
+
+这轮学什么，不学什么
+
+这轮要学的是：目录遍历与批处理入口、最小任务流水线设计、批量复制与归档、调用外部命令、长任务保活、定时执行、日志轮转和结果汇总。argparse 仍然会继续用，因为它让 CLI 更适合做“scan / run / report / archive”这类模式；官方文档明确说它会自动生成 help 和 usage，并在参数非法时给出错误。 
+
+这轮先不学：并发队列、Celery、Airflow、复杂 systemd service、云调度平台、复杂重试框架。你现在最重要的是把 本地自动化闭环 做通。后面如果这套东西真的开始变大，再引入更重的调度框架才有意义。这个取舍是工程建议，但它建立在本轮所用官方工具已经足够覆盖“本地批处理 + 定时 + 保活 + 日志”的事实之上。 
+
+我对你这一轮的结构建议
+
+我建议你把项目先整理到这个程度：
+
+ai_prep_tool/
+├─ cli.py
+├─ core.py
+├─ io_utils.py
+├─ config.py
+├─ log_utils.py
+├─ db.py
+├─ pipeline.py
+├─ scripts/
+│  ├─ run_batch.sh
+│  └─ archive_reports.sh
+├─ input/
+├─ output/
+├─ archive/
+├─ logs/
+└─ runs.db
+
+关键新增是 pipeline.py 和 scripts/。pipeline.py 负责“扫描输入目录、逐个处理、收集 summary、记录失败”；scripts/ 负责把最常用的整套动作包装成一条 shell 入口。这样做的目的，是把“Python 内的批处理编排”和“Linux 侧的定时/后台执行”分开。这个结构不是某份官方文档的模板，但它和 pathlib、subprocess、shutil、crontab、nohup、tmux 这些工具各自的职责是匹配的。 
+
+本轮推荐资源
+
+这一轮我建议你固定用这些资源：
+
+第一，pathlib 官方文档，用来处理目录遍历、路径拼接、输出目录创建。官方明确说 Path 是 concrete path，既继承路径语义，也提供 I/O 操作。 
+
+第二，shutil 官方文档，用来做复制、归档、目录级操作。它提供高层文件与文件集合操作。 
+
+第三，subprocess 官方文档。它允许你启动外部进程、连接标准输入输出并拿返回码，这对“批处理里调用额外命令”很有用。 
+
+第四，logging HOWTO 和 logging.handlers。前者解释日志基本思路，后者里的 RotatingFileHandler 适合你这一轮做日志轮转。 
+
+第五，crontab(5) / crontab(1) / cron(8)。这三份文档足够支撑你做最小定时任务。 
+
+第六，GNU nohup 和 tmux 官方 wiki。一个适合轻量后台跑，一个适合交互式长任务会话保活。 
+
+⸻
+
+第 1 周：批量扫描、批处理入口、结果汇总
+
+这一周只做一件事：把“单文件处理”升级成“目录批处理”。
+
+这周要学到什么程度
+
+你不需要一开始就做很复杂的流水线，只要先做到：
+	•	扫描某个输入目录
+	•	找出符合条件的一批文件
+	•	对每个文件调用一次现有处理逻辑
+	•	收集每个文件的结果
+	•	最后产出一份总 summary
+
+pathlib 很适合这一层，因为它本来就是为文件系统路径对象化而设计的；而 shutil 适合后续做输出文件复制和归档。 
+
+这周建议你做什么
+
+先新建 pipeline.py，里面先只做 4 个函数：
+	•	scan_input_dir(input_dir, pattern)
+	•	run_one_file(input_path, output_dir, ...)
+	•	run_batch(input_dir, output_dir, ...)
+	•	write_batch_summary(...)
+
+scan_input_dir() 建议先用 Path.glob() 或 Path.rglob()；run_batch() 里先只做最简单的 for 循环，逐个调用你已经在 core.py / io_utils.py 里整理好的处理逻辑。这样你是在复用上一轮的工程化成果，而不是推倒重来。这里的做法建立在 pathlib 提供路径遍历与 I/O 能力之上。 
+
+这周的输出建议
+
+我建议你让每次批处理至少产出：
+	•	output/ 下的处理后文件
+	•	一份 batch_summary.json
+	•	一份失败列表，例如 failed_items.txt
+	•	一组数据库里的 runs 记录
+
+这样你以后就可以回答这几个问题：
+	•	这次一共扫到了多少个文件
+	•	成功了多少个
+	•	失败了哪些
+	•	失败原因大概是什么
+
+“数据库保留结构化历史 + summary 文件保留本次概要 + 输出目录保留实际结果”这个三层结构，会让你的批处理第一次有“可回看”的感觉。这是工程设计建议，建立在你前面已经有 SQLite、summary、文件输出三条线的基础上。 
+
+这周产出
+
+这一周结束时，你应该已经有一个最小批处理入口：给它一个目录，它能扫文件、逐个处理、最后写一份总 summary。
+
+⸻
+
+第 2 周：shell 包装、后台运行、日志轮转
+
+这一周的主题是：让这套批处理可以被“整条命令”执行，并且不怕长时间运行。
+
+为什么要加 shell 包装
+
+即使你已经有 Python CLI，shell 包装脚本仍然很有价值，因为它能把一整条“切目录 → 激活环境 → 运行批处理 → 归档日志”固定成一条命令。你前面 Round 2 已经做过很小的 shell 脚本，这一轮只是把它提升到项目级。subprocess 继续保留在 Python 里做必要的外部命令调用，但“整条工作流入口”更适合用 shell 脚本封起来。subprocess 文档明确说它允许你启动子进程并获得返回码；而 shell 脚本则更适合项目外层的流程胶水。 
+
+后台运行：nohup 和 tmux 的边界
+
+GNU nohup 文档明确说，它会让命令忽略 hangup 信号，从而在你退出后继续运行。tmux wiki 则说明 tmux 可以在一个终端里运行多个程序，并且整个会话可以 detach 后 later reattach。对你来说，这一轮的使用边界可以先记成：
+	•	nohup：适合“我就想把这条批处理丢后台跑”
+	•	tmux：适合“我想保留一个可回来的交互式工作台”
+
+这两者都能解决长任务问题，但手感不同。 
+
+日志轮转为什么这一轮就要碰
+
+如果你开始批量跑任务，logs/run.log 很快就会变大。logging.handlers.RotatingFileHandler 官方文档明确说它支持磁盘日志轮转。也就是说，你可以在日志文件达到某个大小后自动切新文件，并保留若干旧文件。这个能力非常适合“批处理工具”，因为你不想一个日志一直长到难以查看。 
+
+这周建议你做什么
+
+先在 scripts/ 下新建一个最小 shell 脚本，比如 run_batch.sh。这个脚本只做最简单几件事：
+	•	切到仓库根目录
+	•	运行 python3 cli.py ... 或 python3 pipeline.py ...
+	•	把输出重定向到日志
+	•	返回退出状态
+
+然后，给 log_utils.py 里的日志初始化从普通 FileHandler 升级成 RotatingFileHandler。最后，再分别用：
+	•	前台直接跑一次
+	•	nohup ... & 跑一次
+	•	tmux 里跑一次
+
+这周的重点不是写很多代码，而是把“长任务怎么稳定跑”这件事做通。nohup、tmux、RotatingFileHandler 都各自有非常明确的官方定位。 
+
+这周产出
+
+这一周结束时，你应该已经有：
+	•	一个能一键跑批处理的 shell 入口
+	•	一套更稳的日志文件
+	•	一次 nohup 背景运行体验
+	•	一次 tmux 会话保活体验
+
+⸻
+
+第 3 周：定时任务、归档、最小恢复能力
+
+这一周的主题是：让批处理不只是“我手动点一次”，而是“可以按计划跑，并且结果有归档”。
+
+为什么要接 cron
+
+crontab(5) 明确说明 crontab 文件是在告诉 cron 守护进程“在这个时间跑这条命令”；cron(8) 说明 cron 会按分钟检查各个 crontab 中的任务。对你来说，这就足够了：你不用学复杂调度系统，先学会“每天某个时间点自动跑一次你的批处理脚本”即可。 
+
+为什么这一周顺手做归档
+
+批处理跑久了以后，output/ 和 logs/ 会越来越乱。shutil 正好适合做高层复制、移动和归档动作。你这一周完全可以加一个最小归档脚本，例如把本次运行的 summary、日志和输出结果按时间戳归档到 archive/2026-.../ 目录。shutil 官方文档明确说它提供文件和文件集合的高层操作，尤其适合复制与删除。 
+
+这周建议你做什么
+
+先做一个最小归档流程：
+	•	每次批处理结束后，生成一个以时间命名的子目录
+	•	把本次 batch_summary.json
+	•	本次日志
+	•	可选的一部分输出结果
+
+复制到归档目录
+
+然后，再用 crontab -e 配一条最小定时任务，让它定时执行你的 scripts/run_batch.sh。crontab(1) 文档说明它就是用来安装、移除和列出现有 crontab 表的程序。 
+
+最后，如果你有 Linux + systemd 环境，还可以用 journalctl 观察系统日志；journalctl(1) 明确说明它用来打印 systemd journal 中的日志。如果你主要在 macOS 本地练，这一块可以放在 Linux 机器上再练，不必硬碰。 
+
+这周产出
+
+这一周结束时，你应该已经有：
+	•	一条最小 cron 任务
+	•	一套结果归档目录
+	•	一份“最近一次批处理”的可追踪产物
+	•	一条更像正式工具链的自动化入口
+
+⸻
+
+本轮产出
+
+Round 12 结束时，你应该至少拿到这些东西：
+	•	pipeline.py
+	•	scripts/run_batch.sh
+	•	一套可轮转的日志
+	•	一条可执行的 cron 任务
+	•	一套按时间归档的结果目录
+	•	一条“扫描目录 → 批量处理 → 写 summary → 写数据库 → 归档”的最小闭环
+
+这些东西会直接支撑你后面的 Round 13 环境复现与发布基础。现在你的项目不只是“能处理一份输入”，而是开始具备“像工作流一样跑起来”的感觉。
+
+这一轮最容易踩的坑
+
+第一个坑，是把批处理理解成“for 文件 in 目录”。
+真正的批处理还要考虑命名、失败、日志、可重复运行和结果收集。你这一轮做的 summary、failed list、数据库记录和归档，正是为了补上这些东西。这个判断属于工程经验，但它是建立在本轮官方工具足够支持这些环节的基础上。 
+
+第二个坑，是长任务一律靠 nohup，但不看日志、不记输出位置。GNU nohup 只是让命令免于 hangup，它不是自动化管理器；tmux 也只是会话保活工具，不会替你做归档和状态管理。 
+
+第三个坑，是 cron 跑起来了，但环境和路径不稳定。crontab(5) 只是定义“在某个时间跑某条命令”，所以你最好把命令写完整、路径写清楚，并通过 shell 包装脚本固定工作目录和日志输出。这是工程建议，但和 cron 的“按表执行命令”职责是一致的。 
+
+第四个坑，是日志只增不收。RotatingFileHandler 就是为这种场景准备的，你这一轮碰它是有实际意义的。 
+
+Round 12 的验收标准
+
+你可以用下面这些标准判断自己有没有完成：
+	•	你能让一个目录批处理入口扫到一批输入文件并逐个处理。 
+	•	你能产出一份批处理总 summary 和失败列表。
+	•	你能用 shell 脚本把整套流程包起来，并通过 nohup 或 tmux 稳定运行长任务。 
+	•	你能让日志轮转，而不是无限长大。 
+	•	你能配置一条最小 cron 任务，让这套流程按计划跑起来。 
+	•	你能说清 output/、archive/、数据库记录、日志各自分别保存什么。
+
+如果你确认这版 Round 12 没问题，我下一条就继续给你出 Round 12 专用练习清单。
+
+可以。下面是 Round 12 专用练习清单。
+
+这一轮只做一件大事：把你现在的 CLI 工具，升级成一个 能批量处理、能后台跑、能定时跑、能归档结果 的最小自动化流水线。Python 这边继续以标准库为主：pathlib 处理路径和目录，shutil 处理复制与归档，subprocess 用来启动外部命令；日志这边可以用 logging.handlers.RotatingFileHandler 做轮转；Linux 侧则重点练 nohup、tmux 和 cron。pathlib 是面向对象的文件系统路径模块，shutil 提供高层文件操作，subprocess.run() 会等待命令执行完成并返回 CompletedProcess，RotatingFileHandler 支持磁盘日志轮转，nohup 会忽略 hangup 信号，tmux 支持 attach / detach，crontab(5) 使用标准的 5 个时间字段加命令格式。  
+
+⸻
+
+这一轮要练到什么程度
+
+Round 12 结束时，你要做到这些：
+
+你能给一个输入目录，自动扫出一批目标文件，逐个调用现有处理逻辑，输出处理结果、失败列表和总 summary。你还能用 shell 脚本把整条流程包起来，用 nohup 或 tmux 保住长任务，再用 cron 按时间跑起来。日志不会无限长大，而是开始做最小轮转。以上这些动作，分别建立在 Path 的目录操作、shutil 的高层复制、subprocess 的子进程调用、RotatingFileHandler 的日志轮转、nohup 的后台保活、tmux 的会话 detach/attach，以及 cron 的定时执行语义上。  
+
+⸻
+
+先准备工作区
+
+先进入你的项目目录：
+
+cd ~/cli-lab/round7/final_lab/ai_prep_tool
+pwd
+ls
+
+然后补齐这轮要用的文件和目录：
+
+mkdir -p scripts archive
+touch pipeline.py scripts/run_batch.sh scripts/archive_reports.sh
+
+建议你这轮至少整理到这个结构：
+
+ai_prep_tool/
+├─ cli.py
+├─ core.py
+├─ io_utils.py
+├─ config.py
+├─ log_utils.py
+├─ db.py
+├─ pipeline.py
+├─ scripts/
+│  ├─ run_batch.sh
+│  └─ archive_reports.sh
+├─ input/
+├─ output/
+├─ archive/
+├─ logs/
+└─ runs.db
+
+这里新增 pipeline.py 和 scripts/，目的是把“Python 内部的批处理逻辑”和“外部运行入口”分开。pathlib 适合管理这些目录路径，shutil 后面会用来做归档复制。  
+
+⸻
+
+第 1 周：目录扫描、批处理入口、总 summary
+
+这一周只做一件事：从单文件处理升级成目录批处理。pathlib 的 Path 适合做目录遍历和路径拼接，标准库 glob 也说明了 Unix 风格路径模式匹配规则；你这一周可以优先继续用 Path.glob() 或 Path.rglob() 这种思路来找目标文件。  
+
+练习 1：准备一批测试输入
+
+先在 input/ 下放几份小样本，名字可以这样：
+
+mkdir -p input/batch1
+
+cat > input/batch1/a.jsonl <<'EOF'
+{"id": 1, "label": "ok"}
+{"id": 2, "label": "bad"}
+{"id": 3, "label": "ok"}
+EOF
+
+cat > input/batch1/b.jsonl <<'EOF'
+{"id": 4, "label": "ok"}
+{"id": 5, "label": "blur"}
+{"id": 6, "label": "ok"}
+EOF
+
+cat > input/batch1/c.jsonl <<'EOF'
+{"id": 7, "label": "bad"}
+{"id": 8, "label": "ok"}
+EOF
+
+练习 2：在 pipeline.py 里先写扫描函数
+
+先写最小版本：
+
+from pathlib import Path
+
+def scan_input_dir(input_dir, pattern="*.jsonl"):
+    input_dir = Path(input_dir)
+    return sorted(input_dir.rglob(pattern))
+
+然后新建一个最小测试入口：
+
+if __name__ == "__main__":
+    files = scan_input_dir("input/batch1")
+    for f in files:
+        print(f)
+
+运行：
+
+python3 pipeline.py
+
+你现在的目标不是复杂，而是先确认：能不能把一批文件稳定扫出来。
+
+练习 3：写 run_one_file(...)
+
+这一层不要重写处理逻辑，直接复用你已有的函数。先做最小骨架：
+
+from pathlib import Path
+from core import filter_records, dedup_records, build_summary
+from io_utils import read_records, write_records
+
+def run_one_file(input_path, output_dir, fmt="jsonl", keyword=None, dedup=False):
+    input_path = Path(input_path)
+    output_dir = Path(output_dir)
+    output_dir.mkdir(parents=True, exist_ok=True)
+
+    records = read_records(input_path, fmt)
+    raw_count = len(records)
+
+    filtered = filter_records(records, keyword)
+    filtered_count = len(filtered)
+
+    final_records = dedup_records(filtered, fmt) if dedup else filtered
+    final_count = len(final_records)
+
+    output_path = output_dir / input_path.name
+    write_records(final_records, output_path, fmt)
+
+    summary = build_summary(
+        str(input_path),
+        str(output_path),
+        raw_count,
+        filtered_count,
+        final_count
+    )
+    return summary
+
+练习 4：写 run_batch(...)
+
+再补一个最小批处理函数：
+
+import json
+from pathlib import Path
+
+def run_batch(input_dir, output_dir, fmt="jsonl", keyword=None, dedup=False):
+    files = scan_input_dir(input_dir, f"*.{fmt}")
+    all_summaries = []
+    failed = []
+
+    for f in files:
+        try:
+            summary = run_one_file(f, output_dir, fmt=fmt, keyword=keyword, dedup=dedup)
+            all_summaries.append(summary)
+        except Exception as e:
+            failed.append({"file": str(f), "error": str(e)})
+
+    batch_summary = {
+        "input_dir": str(input_dir),
+        "output_dir": str(output_dir),
+        "total_files": len(files),
+        "success_count": len(all_summaries),
+        "failed_count": len(failed),
+        "failed_items": failed,
+    }
+
+    output_dir = Path(output_dir)
+    output_dir.mkdir(parents=True, exist_ok=True)
+
+    with (output_dir / "batch_summary.json").open("w", encoding="utf-8") as f:
+        json.dump(batch_summary, f, ensure_ascii=False, indent=2)
+
+    with (output_dir / "failed_items.txt").open("w", encoding="utf-8") as f:
+        for item in failed:
+            f.write(f"{item['file']} | {item['error']}\n")
+
+    return batch_summary
+
+运行可以临时在 pipeline.py 末尾加：
+
+if __name__ == "__main__":
+    result = run_batch("input/batch1", "output/batch1", fmt="jsonl", keyword="ok", dedup=True)
+    print(result)
+
+执行：
+
+python3 pipeline.py
+
+练习 5：检查输出
+
+至少检查这三个东西：
+
+find output/batch1 -type f
+cat output/batch1/batch_summary.json
+cat output/batch1/failed_items.txt
+
+第 1 周周末小任务
+
+这一周结束时，你至少要拿到：
+	•	一个能扫描目录的 scan_input_dir
+	•	一个能处理单文件的 run_one_file
+	•	一个能批处理一整个目录的 run_batch
+	•	一份 batch_summary.json
+	•	一份 failed_items.txt
+
+⸻
+
+第 2 周：shell 包装、后台运行、日志轮转
+
+这一周主题是：把批处理流程包成一条命令，并且能稳定跑长任务。GNU nohup 会让命令忽略 hangup 信号；tmux 支持 detach 后再 attach；RotatingFileHandler 支持磁盘日志文件轮转。  
+
+练习 6：把日志升级成 RotatingFileHandler
+
+打开你的 log_utils.py，把文件日志部分改成类似这样：
+
+import logging
+from pathlib import Path
+from logging.handlers import RotatingFileHandler
+
+def setup_logging(level="INFO"):
+    log_dir = Path("logs")
+    log_dir.mkdir(exist_ok=True)
+
+    logger = logging.getLogger()
+    logger.setLevel(getattr(logging, level.upper(), logging.INFO))
+    logger.handlers.clear()
+
+    formatter = logging.Formatter("%(asctime)s [%(levelname)s] %(message)s")
+
+    file_handler = RotatingFileHandler(
+        log_dir / "run.log",
+        maxBytes=50_000,
+        backupCount=3,
+        encoding="utf-8"
+    )
+    file_handler.setFormatter(formatter)
+
+    stream_handler = logging.StreamHandler()
+    stream_handler.setFormatter(formatter)
+
+    logger.addHandler(file_handler)
+    logger.addHandler(stream_handler)
+
+RotatingFileHandler 的官方说明就是“支持磁盘日志轮转”。  
+
+练习 7：给 pipeline.py 接上日志
+
+在 run_batch() 里补几条最小日志：
+
+import logging
+
+logging.info("batch start: input_dir=%s output_dir=%s", input_dir, output_dir)
+logging.info("scanned %s files", len(files))
+logging.info("batch end: success=%s failed=%s", len(all_summaries), len(failed))
+
+目的很简单：让批处理不仅产出结果，还留下运行痕迹。
+
+练习 8：写最小 shell 包装脚本
+
+打开 scripts/run_batch.sh，写成这样：
+
+#!/bin/sh
+
+cd "$(dirname "$0")/.."
+
+python3 pipeline.py
+
+给执行权限：
+
+chmod +x scripts/run_batch.sh
+
+先前台跑一次：
+
+./scripts/run_batch.sh
+
+练习 9：用 nohup 跑一次
+
+GNU nohup 官方说明：它会忽略 hangup 信号，这样你退出后命令还能继续运行。 
+
+实际练习：
+
+nohup ./scripts/run_batch.sh > logs/nohup_batch.log 2>&1 &
+
+然后检查：
+
+cat logs/nohup_batch.log
+
+练习 10：用 tmux 跑一次
+
+tmux 的官方 wiki 明确说明可以 attach 到现有 session，也支持 detach/reattach。 
+
+练法：
+
+tmux
+./scripts/run_batch.sh
+
+然后按：
+
+Ctrl-b d
+
+查看当前会话：
+
+tmux ls
+
+重新接回：
+
+tmux attach
+
+第 2 周周末小任务
+
+这一周结束时，你至少要做到：
+	•	日志已经改成轮转版
+	•	批处理可以通过 scripts/run_batch.sh 跑
+	•	你分别体验过一次前台执行、nohup 执行、tmux 执行
+	•	至少知道什么时候该用 nohup，什么时候更适合 tmux
+
+⸻
+
+第 3 周：定时任务与归档
+
+这一周主题是：让批处理能按计划跑，并把本次结果归档起来。crontab(5) 说明 cron 行由 5 个时间字段和一个命令组成；crontab(1) 说明用户可以安装、列出和编辑自己的 crontab；cron(8) 说明 cron 会定期检查各个 crontab，并在需要的分钟执行对应命令。shutil 则很适合做高层复制和归档。  
+
+练习 11：写最小归档脚本
+
+打开 scripts/archive_reports.sh，先写一个最小版：
+
+#!/bin/sh
+
+cd "$(dirname "$0")/.."
+
+STAMP=$(date +"%Y%m%d_%H%M%S")
+ARCHIVE_DIR="archive/$STAMP"
+
+mkdir -p "$ARCHIVE_DIR"
+
+cp -r output "$ARCHIVE_DIR"/output_snapshot
+cp -r logs "$ARCHIVE_DIR"/logs_snapshot
+cp runs.db "$ARCHIVE_DIR"/ 2>/dev/null || true
+
+给权限：
+
+chmod +x scripts/archive_reports.sh
+
+先手动跑一次：
+
+./scripts/archive_reports.sh
+find archive -maxdepth 2 -type d
+
+如果你想更 Python 化，也可以把归档写进 pipeline.py，用 shutil.copy2() 或 shutil.copytree()。shutil 官方文档就是为这类高层文件操作准备的。  
+
+练习 12：把归档接到批处理后面
+
+你可以选择两种方式之一：
+
+第一种，在 run_batch.sh 里顺手接一行：
+
+./scripts/archive_reports.sh
+
+第二种，在 pipeline.py 结束后用 subprocess.run() 调 shell 脚本。subprocess.run() 会等待命令完成并返回 CompletedProcess。  
+
+例如：
+
+import subprocess
+
+subprocess.run(["./scripts/archive_reports.sh"], check=True)
+
+练习 13：配置最小 cron 任务
+
+先看当前表：
+
+crontab -l
+
+然后编辑：
+
+crontab -e
+
+加一条最小任务。这里我用标准的 5 个时间字段格式：
+
+30 21 * * * /bin/sh /Users/你的用户名/cli-lab/round7/final_lab/ai_prep_tool/scripts/run_batch.sh
+
+crontab(5) 说明一条记录由 5 个时间字段和一个命令组成。 
+
+为了更稳一点，你也可以让 cron 直接执行归档版流程，例如：
+
+35 21 * * * /bin/sh /Users/你的用户名/cli-lab/round7/final_lab/ai_prep_tool/scripts/archive_reports.sh
+
+练习 14：写清楚 cron 的工作目录问题
+
+这一条很重要：cron 只是在某个时间执行命令，它不会自动帮你切到项目目录，所以你最好在 shell 脚本里显式 cd 到仓库根目录。crontab(5) 只负责时间与命令匹配，不负责帮你“进入正确目录”。 
+
+练习 15：补一个最小“恢复说明”
+
+新建一个文件，例如：
+
+touch RECOVERY_NOTES.md
+
+至少写清 3 件事：
+	•	如果最近一次跑坏了，先看哪里：logs/、output/、archive/
+	•	如何重新手动跑一次：./scripts/run_batch.sh
+	•	如何查运行历史：数据库或 batch_summary.json
+
+这一步不是某个官方文档要求的，但它能让你的自动化开始具备最小恢复能力。
+
+第 3 周周末小任务
+
+这一周结束时，你至少要做到：
+	•	能手动归档一次结果
+	•	能写一条最小 cron 任务
+	•	知道 cron 跑的是哪条命令、工作目录在哪里
+	•	有一份自己的恢复说明
+
+⸻
+
+Round 12 综合演练
+
+把这一轮收口成一次完整演练。你从头到尾做一遍：
+
+第一步，准备一批测试输入放进 input/batch1/。
+
+第二步，运行：
+
+python3 pipeline.py
+
+第三步，检查：
+
+cat output/batch1/batch_summary.json
+cat output/batch1/failed_items.txt
+
+第四步，用 shell 包装脚本跑：
+
+./scripts/run_batch.sh
+
+第五步，用 nohup 跑：
+
+nohup ./scripts/run_batch.sh > logs/nohup_batch.log 2>&1 &
+
+第六步，归档：
+
+./scripts/archive_reports.sh
+find archive -maxdepth 2
+
+第七步，配置一条最小 cron 任务并保存。
+
+第八步，把这轮改动提交到 Git：
+
+git status
+git add .
+git commit -m "add batch pipeline, log rotation, and automation scripts"
+
+如果这整条你能独立做完，Round 12 就算真正跑通了。
+
+⸻
+
+Round 12 最终自测清单
+
+做完以后，你自己检查下面这些：
+	•	你能不能让一个目录批处理入口扫到一批文件并逐个处理。  
+	•	你能不能产出总 summary 和失败列表。
+	•	你能不能用 shell 脚本把整条流程包起来。
+	•	你能不能用 nohup 或 tmux 保住长任务。  
+	•	你能不能让日志轮转，而不是无限长大。  
+	•	你能不能配置一条最小 cron 任务。  
+	•	你能不能说清 output/、archive/、logs/、数据库记录分别保存什么。
+
+这些都做到，Round 12 就算过关了。
+
+你继续的话，我下一步就给你展开 Round 13：环境复现与发布基础。

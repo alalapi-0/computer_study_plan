@@ -1,0 +1,784 @@
+好，下面我把 Round 20：PyTorch 入门 完整展开。
+
+这一轮是路线 C 里第一次正式进入深度学习框架，但目标仍然不是“做复杂模型”，而是把 PyTorch 的最小训练工作流真正跑通：tensor、Dataset / DataLoader、nn.Module、前向传播、loss、optimizer、训练循环、测试循环、保存与加载模型。PyTorch 官方的 Learn the Basics 路线本身就是按这个顺序展开的，而且明确说这一组教程覆盖了一个完整的机器学习工作流：处理数据、创建模型、优化参数、保存训练好的模型。 ￼
+
+Round 20 的目标
+
+这轮结束时，你要做到这些：
+
+你能用自己的话解释 tensor 是什么，知道它和 NumPy ndarray 很像，但张量还能跑在 GPU 或其他加速器上，而且对自动微分做了优化。PyTorch 官方教程就是这样定义 tensor 的。 ￼
+
+你能理解为什么 PyTorch 训练通常会绕着 Dataset 和 DataLoader 展开。官方文档明确说，Dataset 负责存样本和标签，DataLoader 则包一层可迭代接口，方便按 batch 取数据。 ￼
+
+你能自己写一个最小的 nn.Module，知道模型类一般继承 nn.Module，在 __init__ 里定义层，在 forward 里定义输入如何流过这些层。PyTorch 官方 Build the Neural Network 教程就是按这个结构讲的。 ￼
+
+你还能把训练循环和测试循环写出来，知道训练至少要有 loss function 和 optimizer，并且训练步骤通常是：
+	•	前向计算 prediction 和 loss
+	•	loss.backward()
+	•	optimizer.step()
+	•	optimizer.zero_grad()
+
+PyTorch 官方优化教程明确把这几步列成训练循环里的核心动作。 ￼
+
+最后，你要开始养成两个很重要的习惯：
+	•	测试/推理时要切到 model.eval()
+	•	只做推理时通常配合 torch.no_grad()
+
+官方优化教程明确说，测试时使用 torch.no_grad() 可以避免计算梯度并减少不必要的计算和内存开销；保存/加载模型教程也特别提醒，推理前要调用 model.eval()，否则像 dropout 和 batch normalization 这类层会导致结果不稳定。 ￼
+
+这轮学什么，不学什么
+
+这轮要学的是：
+	•	tensor 基础
+	•	Dataset / DataLoader
+	•	最小 nn.Module
+	•	最小训练循环
+	•	loss / optimizer
+	•	train / eval 区分
+	•	保存与加载模型
+
+这轮先不学：
+	•	CNN 深挖
+	•	RNN / Transformer
+	•	分布式训练
+	•	混合精度
+	•	TensorBoard
+	•	复杂实验管理
+
+原因很简单：PyTorch 官方的 Learn the Basics 路线本来就是先把 tensor、数据、模型、优化、保存这条最小路径讲清楚，再进入更复杂主题。 ￼
+
+我对你这一轮的总体建议
+
+我建议你这一轮坚持一个原则：
+
+先把一个最小训练闭环跑通，不要一上来追求复杂数据集和模型。
+
+PyTorch 官方 quickstart 就是这样安排的：先用 FashionMNIST 这样的现成数据集，配合 TorchVision 的 Dataset、DataLoader、一个简单的全连接网络、交叉熵损失和 SGD 优化器，先把训练和测试整条线打通。官方还明确说明，TorchVision 数据集支持 transform 和 target_transform，而 FashionMNIST 的样本是 28×28 灰度图、10 个类别。 ￼
+
+如果你当前机器环境装 TorchVision 比较顺，那就优先用官方同款的小图像例子；如果你暂时更想轻一点，也可以先用你自己做的小表格数据转 tensor，目标都是一样的：先让 PyTorch 训练循环在你手里真正动起来。 这个建议是基于官方路线给你的实践排序。
+
+本轮推荐资源
+
+这一轮我建议你主要盯住这些官方资料：
+	•	Learn the Basics / Intro：看 PyTorch 的最小工作流全貌。 ￼
+	•	Tensors：看 tensor、NumPy 关系、初始化方式。 ￼
+	•	Datasets & DataLoaders：看数据如何喂进训练循环。 ￼
+	•	Build the Neural Network：看 nn.Module、forward、设备选择。 ￼
+	•	Optimizing Model Parameters：看 loss、optimizer、训练/测试循环。 ￼
+	•	Save and Load the Model：看保存权重、加载权重、model.eval()。 ￼
+
+⸻
+
+3 周安排
+
+第 1 周：tensor、数据和 DataLoader
+
+这一周只做一件事：把 PyTorch 的数据层直觉建立起来。
+
+PyTorch 官方 tensor 教程明确说，tensor 是一种和数组、矩阵非常相似的专用数据结构，PyTorch 用它来表示模型输入、输出和参数；它和 NumPy 数组经常能共享底层内存，而且 tensor 对自动微分做了优化。 ￼
+
+这一周你最少要做这些：
+	•	用 torch.tensor(...) 建最小 tensor
+	•	看 shape、dtype、device
+	•	体验从 NumPy 转 tensor
+	•	体验最小张量运算
+
+然后，把注意力转到数据加载。官方文档明确说：
+	•	Dataset 存样本和标签
+	•	DataLoader 把 Dataset 包成可迭代对象，方便取 batch
+
+这意味着你这一周要至少用一次：
+	•	现成数据集 + DataLoader
+或者
+	•	自己做一个最小 Dataset 类 + DataLoader
+
+如果你按官方最小路线走，最顺的就是 FashionMNIST。官方 quickstart 和数据教程都用它做例子，而且它已经被做成标准 Dataset 对象。 ￼
+
+这一周结束时，你应该已经有一个明确感觉：
+
+PyTorch 训练不是“直接把整个表丢进去”，而是围着 tensor 和 batch 组织的。 这一步的关键不在模型，而在“数据到底如何进入训练循环”。 ￼
+
+第 2 周：最小模型、loss 和 optimizer
+
+这一周主题是：把一个最小 nn.Module 写出来，并让它开始训练。
+
+官方 Build the Neural Network 教程明确说：要在 PyTorch 里定义神经网络，就创建一个继承自 nn.Module 的类，在 __init__ 里定义层，在 forward 里定义输入如何流过网络。教程里的示例模型先 Flatten，再堆几层 Linear + ReLU。 ￼
+
+你这一周最少要做这些：
+	•	写一个最小模型类
+	•	打印模型结构
+	•	把一个 batch 喂进去看输出 shape
+	•	接上 loss function 和 optimizer
+
+官方 quickstart 和优化教程明确说：
+	•	分类任务常见的 loss 是 nn.CrossEntropyLoss
+	•	优化器可以从 torch.optim.SGD(model.parameters(), lr=...) 开始
+
+而且官方也明确列出训练步的三件核心事：
+	•	optimizer.zero_grad()
+	•	loss.backward()
+	•	optimizer.step() ￼
+
+这一周结束时，你应该已经能自己写一个最小训练循环骨架，并理解为什么参数更新需要 loss 和 optimizer 两块一起配合。 ￼
+
+第 3 周：完整训练 / 测试循环，保存与加载
+
+这一周主题是：把模型真正训起来、测起来、再保存起来。
+
+PyTorch 官方优化教程直接给出了 train_loop 和 test_loop 的结构：训练时 model.train()，测试时 model.eval()，并在测试阶段使用 torch.no_grad()。这两步不是可有可无的“仪式”，而是会直接影响像 dropout、batch normalization 这类层的行为，以及推理时是否还会构建梯度计算图。 ￼
+
+这一周你最少要做这些：
+	•	写一个完整 train_loop
+	•	写一个完整 test_loop
+	•	至少训练几轮 epoch
+	•	输出 train/test 结果
+	•	保存模型权重
+	•	再加载权重并做一次推理
+
+保存/加载这一块，官方文档明确演示了：
+	•	先实例化模型类
+	•	再 load_state_dict(...)
+	•	然后调用 model.eval()
+
+官方还说明，保存 state_dict 被认为是 best practice。 ￼
+
+这一周结束时，你应该已经拿到一个真正的、端到端的 PyTorch 最小实验：数据 → DataLoader → 模型 → 训练 → 测试 → 保存 → 加载 → 推理。这就是路线 C 真正开始的标志。 ￼
+
+这轮建议的最小实践任务
+
+我建议你这一轮至少完成一个“最小图像分类实验”或者“最小表格数据分类实验”。
+
+如果你走官方默认路线，优先做 FashionMNIST：
+	•	Dataset / DataLoader
+	•	一个最小全连接网络
+	•	CrossEntropyLoss
+	•	SGD
+	•	train/test loop
+	•	save/load
+
+如果你当前更想轻一点，也可以拿你 Round 19 里做过的小表格数据，手动转成 tensor 和 Dataset，再跑同样流程。两条路都行，但只选一条，重点是闭环完整。这个建议是基于 PyTorch 官方 quickstart 和 basics 路线给出的。 ￼
+
+本轮产出
+
+Round 20 结束时，你应该至少拿到这些东西：
+	•	一个最小 tensor 练习脚本
+	•	一个最小数据加载脚本
+	•	一个最小 nn.Module 模型文件
+	•	一个最小训练/测试脚本
+	•	一份模型权重文件
+	•	一份你自己写的“PyTorch 最小训练流程说明”
+
+这些产出会直接支撑你后面的 Round 21，因为你一旦进入 NLP 前置基础，就会把“张量 + DataLoader + 模型 + 训练循环”这套骨架继续复用到文本任务里。这个判断是基于 PyTorch 官方教程的基本工作流做出的。 ￼
+
+这一轮最容易踩的坑
+
+第一个坑，是把 tensor 当成“只是换了个名字的 NumPy 数组”。PyTorch 官方虽然明确说 tensor 和 NumPy ndarray 很像，但也强调 tensor 可以跑在 GPU 或其他加速器上，而且对自动微分做了优化。 ￼
+
+第二个坑，是还没理解 Dataset / DataLoader，就急着写复杂模型。官方数据教程和 quickstart 都把数据层放得很靠前，说明这一步本来就比模型细节更先。 ￼
+
+第三个坑，是训练循环里漏掉 zero_grad() 或者不理解为什么要 backward() 和 step()。官方优化教程明确把这三步列为训练核心。 ￼
+
+第四个坑，是测试时忘记 model.eval() 和 torch.no_grad()。官方保存/加载和优化教程都明确提醒，这会影响推理稳定性和内存开销。 ￼
+
+Round 20 的验收标准
+
+你可以用下面这些标准判断自己有没有完成：
+	•	你能解释 tensor 和 NumPy 数组的关系，以及 tensor 为什么对 PyTorch 重要。 ￼
+	•	你能解释 Dataset 和 DataLoader 各自解决什么问题。 ￼
+	•	你能自己写一个继承 nn.Module 的最小模型。 ￼
+	•	你能写出最小训练循环，并解释 loss.backward()、optimizer.step()、optimizer.zero_grad()。 ￼
+	•	你能在测试/推理前使用 model.eval()，并理解 torch.no_grad() 的作用。 ￼
+	•	你能保存和加载最小模型权重，并重新做一次推理。 ￼
+
+如果你确认这版 Round 20 没问题，我下一条就继续给你出 Round 20 专用练习清单。
+
+可以。下面是 Round 20 专用练习清单。
+
+这一轮只做一件大事：把一条 最小 PyTorch 训练闭环 真正跑通。你要练的主线只有这几个环节：tensor、Dataset / DataLoader、最小 nn.Module、loss、optimizer、训练循环、测试循环、保存与加载模型。PyTorch 官方的 Learn the Basics 路线本身就是按这条顺序展开的，而且明确说这套教程覆盖了一个完整的机器学习工作流：处理数据、创建模型、优化模型参数、保存训练好的模型。 ￼
+
+这一轮要练到什么程度
+
+Round 20 结束时，你至少要做到这些：你能解释 tensor 和 NumPy 数组很像，但 tensor 还能跑在 GPU 或其他加速器上，并且针对自动微分做了优化；你能解释 Dataset 负责存样本和标签，DataLoader 负责把数据包成可迭代的 batch；你能写一个继承 nn.Module 的最小网络；你能写出训练循环里最关键的三步：loss.backward()、optimizer.step()、optimizer.zero_grad()；你还知道推理前要 model.eval()，推理时常配合 torch.no_grad()。这些都是 PyTorch 官方教程直接强调的基础。 ￼
+
+先准备工作区
+
+先建一个固定练习目录，再进入其中：
+
+mkdir -p ~/cli-lab/round20
+cd ~/cli-lab/round20
+mkdir week1 week2 week3
+
+然后确保当前环境里已经安装了 torch 和 torchvision。这一轮我建议优先沿着 PyTorch 官方同款路线练，也就是用 TorchVision 里的 FashionMNIST 数据集走最小闭环。官方文档明确说明 torchvision.datasets.FashionMNIST 是内置数据集，PyTorch 的基础教程也明确说后面会用 FashionMNIST 训练一个图像分类网络。 ￼
+
+pip install torch torchvision
+
+
+⸻
+
+第 1 周：tensor、Dataset、DataLoader
+
+这一周只做一件事：把“数据如何进入训练循环”这件事搞清楚。PyTorch 官方明确说，tensor 是表示模型输入、输出和参数的核心数据结构；Dataset 存样本和对应标签，DataLoader 把 Dataset 包成可迭代对象，便于按 mini-batch 取数据。 ￼
+
+练习 1：先做 tensor 热身
+
+进入目录：
+
+cd ~/cli-lab/round20/week1
+touch tensor_lab.py
+
+写入：
+
+import torch
+import numpy as np
+
+# 直接创建 tensor
+a = torch.tensor([[1, 2], [3, 4]])
+print("a =", a)
+print("shape =", a.shape)
+print("dtype =", a.dtype)
+print("device =", a.device)
+
+# 从 NumPy 创建 tensor
+arr = np.array([[10, 20], [30, 40]])
+b = torch.from_numpy(arr)
+print("b =", b)
+
+# 最基础运算
+print("a + 1 =", a + 1)
+print("a * 2 =", a * 2)
+print("a @ a =", a @ a)
+
+PyTorch 官方 tensor 教程明确说，tensor 和 NumPy ndarray 很像，而且两者经常可以共享底层内存；tensor 还针对加速器和自动微分做了优化。 ￼
+
+练习 2：练最小设备判断
+
+继续补一段：
+
+import torch
+
+device = (
+    "cuda"
+    if torch.cuda.is_available()
+    else "cpu"
+)
+print("device =", device)
+
+PyTorch 官方 Build the Neural Network 教程明确说，训练时会优先使用可用的加速器，否则回退到 CPU。 ￼
+
+练习 3：用官方路线加载 FashionMNIST
+
+新建：
+
+touch dataloader_lab.py
+
+写入：
+
+import torch
+from torch.utils.data import DataLoader
+from torchvision import datasets, transforms
+
+training_data = datasets.FashionMNIST(
+    root="data",
+    train=True,
+    download=True,
+    transform=transforms.ToTensor()
+)
+
+test_data = datasets.FashionMNIST(
+    root="data",
+    train=False,
+    download=True,
+    transform=transforms.ToTensor()
+)
+
+train_dataloader = DataLoader(training_data, batch_size=64, shuffle=True)
+test_dataloader = DataLoader(test_data, batch_size=64, shuffle=False)
+
+for X, y in train_dataloader:
+    print("X shape:", X.shape)
+    print("y shape:", y.shape)
+    break
+
+官方数据教程就是这样组织的：先拿 FashionMNIST，再用 DataLoader 包成批量可迭代对象。DataLoader 的作用之一是按 mini-batch 取数据并在每个 epoch 重新洗牌，这也是官方明确提到的。 ￼
+
+练习 4：看一个 batch 到底长什么样
+
+把 print 结果真正看一遍，并回答这几个问题：
+	•	X 为什么会是四维
+	•	第一个维度为什么是 batch size
+	•	y 为什么是一维
+
+你不用现在背卷积知识，只要先知道：PyTorch 的训练输入大多是按 batch 组织的，而不是一次一个样本。这个结论直接来自官方对 DataLoader mini-batch 角色的说明。 ￼
+
+练习 5：再做一个“自己造 Dataset”小练习
+
+新建：
+
+touch custom_dataset_lab.py
+
+写入一个极小版本：
+
+import torch
+from torch.utils.data import Dataset, DataLoader
+
+class TinyDataset(Dataset):
+    def __init__(self):
+        self.X = torch.tensor([
+            [0.9, 120.0, 1.0],
+            [0.1, 90.0, 0.0],
+            [0.8, 140.0, 1.0],
+            [0.2, 70.0, 0.0],
+        ], dtype=torch.float32)
+        self.y = torch.tensor([1, 0, 1, 0], dtype=torch.long)
+
+    def __len__(self):
+        return len(self.y)
+
+    def __getitem__(self, idx):
+        return self.X[idx], self.y[idx]
+
+dataset = TinyDataset()
+loader = DataLoader(dataset, batch_size=2, shuffle=True)
+
+for X, y in loader:
+    print(X)
+    print(y)
+    break
+
+这一题的目标是让你意识到：即使将来不用图像数据，PyTorch 仍然希望你把样本和标签包装成 Dataset / DataLoader 这套结构。官方教程对 Dataset 和 DataLoader 的职责划分非常明确。 ￼
+
+第 1 周周末小任务
+
+这一周结束时，你至少要做到：
+	•	自己创建最小 tensor
+	•	知道 tensor 和 NumPy 的关系
+	•	用 FashionMNIST 跑出一个 batch
+	•	自己写一个最小 Dataset
+	•	能解释 Dataset 和 DataLoader 各自解决什么问题
+
+这些要求都直接对应 PyTorch 官方 tensor 和数据教程。 ￼
+
+⸻
+
+第 2 周：最小模型、loss、optimizer
+
+这一周主题是：把一个最小网络真正写出来，并让它开始学习。PyTorch 官方明确说，神经网络类通常继承 nn.Module，在 __init__ 中定义层，在 forward 中定义输入如何经过这些层；所有模块最终也都是 nn.Module。 ￼
+
+练习 6：写一个最小全连接网络
+
+进入目录：
+
+cd ~/cli-lab/round20/week2
+touch model_lab.py
+
+写入：
+
+import torch
+from torch import nn
+
+class NeuralNetwork(nn.Module):
+    def __init__(self):
+        super().__init__()
+        self.flatten = nn.Flatten()
+        self.linear_relu_stack = nn.Sequential(
+            nn.Linear(28 * 28, 512),
+            nn.ReLU(),
+            nn.Linear(512, 512),
+            nn.ReLU(),
+            nn.Linear(512, 10)
+        )
+
+    def forward(self, x):
+        x = self.flatten(x)
+        logits = self.linear_relu_stack(x)
+        return logits
+
+model = NeuralNetwork()
+print(model)
+
+这和官方 Build the Neural Network 教程的最小路线是一致的：先 Flatten，再堆几层 Linear + ReLU，最后输出 10 类 logits。 ￼
+
+练习 7：把一个 batch 喂进模型
+
+继续补：
+
+import torch
+from torch import nn
+from torch.utils.data import DataLoader
+from torchvision import datasets, transforms
+
+class NeuralNetwork(nn.Module):
+    def __init__(self):
+        super().__init__()
+        self.flatten = nn.Flatten()
+        self.linear_relu_stack = nn.Sequential(
+            nn.Linear(28 * 28, 512),
+            nn.ReLU(),
+            nn.Linear(512, 512),
+            nn.ReLU(),
+            nn.Linear(512, 10)
+        )
+
+    def forward(self, x):
+        return self.linear_relu_stack(self.flatten(x))
+
+test_data = datasets.FashionMNIST(
+    root="data",
+    train=False,
+    download=True,
+    transform=transforms.ToTensor()
+)
+
+test_loader = DataLoader(test_data, batch_size=64)
+
+model = NeuralNetwork()
+
+for X, y in test_loader:
+    logits = model(X)
+    print("logits shape:", logits.shape)
+    break
+
+这一题的核心是看清楚：输入 batch 经过网络后，输出是 (batch_size, num_classes) 这种二维张量。官方模型教程就是围绕这层结构讲的。 ￼
+
+练习 8：接上 loss 和 optimizer
+
+新建：
+
+touch loss_optim_lab.py
+
+写入：
+
+import torch
+from torch import nn
+from torchvision import datasets, transforms
+from torch.utils.data import DataLoader
+
+class NeuralNetwork(nn.Module):
+    def __init__(self):
+        super().__init__()
+        self.flatten = nn.Flatten()
+        self.linear_relu_stack = nn.Sequential(
+            nn.Linear(28 * 28, 512),
+            nn.ReLU(),
+            nn.Linear(512, 512),
+            nn.ReLU(),
+            nn.Linear(512, 10)
+        )
+
+    def forward(self, x):
+        return self.linear_relu_stack(self.flatten(x))
+
+training_data = datasets.FashionMNIST(
+    root="data",
+    train=True,
+    download=True,
+    transform=transforms.ToTensor()
+)
+
+train_loader = DataLoader(training_data, batch_size=64, shuffle=True)
+
+model = NeuralNetwork()
+loss_fn = nn.CrossEntropyLoss()
+optimizer = torch.optim.SGD(model.parameters(), lr=1e-3)
+
+for X, y in train_loader:
+    pred = model(X)
+    loss = loss_fn(pred, y)
+    print("loss =", loss.item())
+    break
+
+PyTorch 官方优化教程明确把 loss function 和 optimizer 放在训练的核心位置，而且示例里就是 CrossEntropyLoss 配合 torch.optim.SGD。 ￼
+
+练习 9：手动跑一轮参数更新
+
+继续补：
+
+for X, y in train_loader:
+    pred = model(X)
+    loss = loss_fn(pred, y)
+
+    loss.backward()
+    optimizer.step()
+    optimizer.zero_grad()
+
+    print("loss =", loss.item())
+    break
+
+这一题必须自己敲一遍，因为官方优化教程明确说训练中的三步就是：
+	•	loss.backward()
+	•	optimizer.step()
+	•	optimizer.zero_grad()
+
+并解释了为什么要清零梯度：梯度默认会累加。 ￼
+
+第 2 周周末小任务
+
+这一周结束时，你至少要做到：
+	•	自己写一个继承 nn.Module 的模型
+	•	知道 forward 在做什么
+	•	能把 batch 喂进模型
+	•	能定义 CrossEntropyLoss
+	•	能定义 SGD
+	•	能手动跑一轮 backward → step → zero_grad
+
+这些都是 PyTorch 官方 Build the Neural Network 和 Optimizing Model Parameters 的核心内容。 ￼
+
+⸻
+
+第 3 周：完整训练/测试循环，保存与加载
+
+这一周主题是：把完整训练闭环真正跑起来。官方优化教程直接给出了 train loop 和 test loop 的结构：训练时 model.train()，测试时 model.eval()，并在测试阶段用 torch.no_grad()；保存/加载教程又明确建议保存 state_dict，加载后在推理前调用 model.eval()。 ￼
+
+练习 10：写完整训练脚本
+
+进入目录：
+
+cd ~/cli-lab/round20/week3
+touch train_fashion_mnist.py
+
+写入一版完整最小训练脚本：
+
+import torch
+from torch import nn
+from torch.utils.data import DataLoader
+from torchvision import datasets, transforms
+
+device = "cuda" if torch.cuda.is_available() else "cpu"
+
+training_data = datasets.FashionMNIST(
+    root="data",
+    train=True,
+    download=True,
+    transform=transforms.ToTensor()
+)
+test_data = datasets.FashionMNIST(
+    root="data",
+    train=False,
+    download=True,
+    transform=transforms.ToTensor()
+)
+
+train_loader = DataLoader(training_data, batch_size=64, shuffle=True)
+test_loader = DataLoader(test_data, batch_size=64, shuffle=False)
+
+class NeuralNetwork(nn.Module):
+    def __init__(self):
+        super().__init__()
+        self.flatten = nn.Flatten()
+        self.linear_relu_stack = nn.Sequential(
+            nn.Linear(28 * 28, 512),
+            nn.ReLU(),
+            nn.Linear(512, 512),
+            nn.ReLU(),
+            nn.Linear(512, 10)
+        )
+
+    def forward(self, x):
+        return self.linear_relu_stack(self.flatten(x))
+
+model = NeuralNetwork().to(device)
+loss_fn = nn.CrossEntropyLoss()
+optimizer = torch.optim.SGD(model.parameters(), lr=1e-3)
+
+def train_loop(dataloader, model, loss_fn, optimizer):
+    size = len(dataloader.dataset)
+    model.train()
+    for batch, (X, y) in enumerate(dataloader):
+        X, y = X.to(device), y.to(device)
+
+        pred = model(X)
+        loss = loss_fn(pred, y)
+
+        loss.backward()
+        optimizer.step()
+        optimizer.zero_grad()
+
+        if batch % 100 == 0:
+            print(f"loss: {loss.item():>7f}  [{batch * len(X):>5d}/{size:>5d}]")
+
+def test_loop(dataloader, model, loss_fn):
+    model.eval()
+    size = len(dataloader.dataset)
+    num_batches = len(dataloader)
+    test_loss, correct = 0, 0
+
+    with torch.no_grad():
+        for X, y in dataloader:
+            X, y = X.to(device), y.to(device)
+            pred = model(X)
+            test_loss += loss_fn(pred, y).item()
+            correct += (pred.argmax(1) == y).type(torch.float).sum().item()
+
+    test_loss /= num_batches
+    correct /= size
+    print(f"Test Error: \n Accuracy: {(100*correct):>0.1f}%, Avg loss: {test_loss:>8f}\n")
+
+epochs = 3
+for t in range(epochs):
+    print(f"Epoch {t+1}\n-------------------------------")
+    train_loop(train_loader, model, loss_fn, optimizer)
+    test_loop(test_loader, model, loss_fn)
+
+print("Done!")
+
+这基本就是官方 quickstart / optimization 路线的最小闭环版本。官方明确说训练阶段要 model.train()，测试阶段要 model.eval()，而且测试阶段使用 torch.no_grad() 可以避免不必要的梯度跟踪。 ￼
+
+练习 11：观察训练输出
+
+把输出真正看一遍，并回答这几个问题：
+	•	loss 是不是在下降
+	•	测试 accuracy 有没有变高
+	•	一个 epoch 大致在干什么
+
+这一题没有新语法，重点是让你第一次真正“看见训练”。
+
+练习 12：保存模型权重
+
+在训练脚本最后补：
+
+torch.save(model.state_dict(), "fashion_mnist_weights.pth")
+print("Saved PyTorch Model State to fashion_mnist_weights.pth")
+
+PyTorch 官方保存/加载教程明确说，保存 state_dict 被认为是最好的实践。 ￼
+
+练习 13：单独写一个加载与推理脚本
+
+新建：
+
+touch infer_fashion_mnist.py
+
+写入：
+
+import torch
+from torch import nn
+from torchvision import datasets, transforms
+
+device = "cuda" if torch.cuda.is_available() else "cpu"
+
+class NeuralNetwork(nn.Module):
+    def __init__(self):
+        super().__init__()
+        self.flatten = nn.Flatten()
+        self.linear_relu_stack = nn.Sequential(
+            nn.Linear(28 * 28, 512),
+            nn.ReLU(),
+            nn.Linear(512, 512),
+            nn.ReLU(),
+            nn.Linear(512, 10)
+        )
+
+    def forward(self, x):
+        return self.linear_relu_stack(self.flatten(x))
+
+model = NeuralNetwork().to(device)
+model.load_state_dict(torch.load("fashion_mnist_weights.pth", weights_only=True))
+model.eval()
+
+test_data = datasets.FashionMNIST(
+    root="data",
+    train=False,
+    download=True,
+    transform=transforms.ToTensor()
+)
+
+x, y = test_data[0]
+with torch.no_grad():
+    pred = model(x.unsqueeze(0).to(device))
+    predicted_class = pred[0].argmax(0).item()
+
+print("predicted =", predicted_class)
+print("true =", y)
+
+官方保存/加载教程明确说明，加载 state_dict 后要调用 model.eval()，否则像 dropout 和 batch normalization 这样的层会让推理结果不稳定。 ￼
+
+练习 14：故意去掉 model.eval() 读说明
+
+这一步不用改代码做实验，也可以。重点是你要读懂官方提醒的那句话：
+	•	推理前一定要 model.eval()
+
+因为这不是“代码风格”，而是会影响结果一致性。官方保存/加载教程已经明确给出了原因。 ￼
+
+练习 15：写一份最小流程总结
+
+新建：
+
+touch pytorch_notes.md
+
+至少写清：
+	•	tensor 是什么
+	•	Dataset 和 DataLoader 分别做什么
+	•	模型为什么要继承 nn.Module
+	•	训练时最关键的三步是什么
+	•	推理前为什么要 model.eval()
+
+这一题的答案都可以直接对应到官方基础教程。 ￼
+
+第 3 周周末小任务
+
+这一周结束时，你至少要做到：
+	•	真正跑通一个最小训练脚本
+	•	看到训练和测试输出
+	•	保存一份权重文件
+	•	单独加载权重再做一次推理
+	•	写一份你自己的 PyTorch 最小流程总结
+
+⸻
+
+Round 20 综合演练
+
+把这一轮收口成一次完整演练。你从头做到尾：
+
+第一步，在 week1 里完成 tensor 和 DataLoader 练习，确认你能解释：
+	•	tensor
+	•	shape
+	•	device
+	•	Dataset
+	•	DataLoader
+
+第二步，在 week2 里完成模型、loss、optimizer 练习，确认你能解释：
+	•	nn.Module
+	•	forward
+	•	CrossEntropyLoss
+	•	loss.backward()
+	•	optimizer.step()
+	•	optimizer.zero_grad()
+
+第三步，在 week3 里完成训练、测试、保存、加载，确认你至少有：
+	•	train_fashion_mnist.py
+	•	infer_fashion_mnist.py
+	•	fashion_mnist_weights.pth
+	•	pytorch_notes.md
+
+第四步，把这一轮成果整理成这个结构：
+
+round20/
+├─ week1/
+│  ├─ tensor_lab.py
+│  ├─ dataloader_lab.py
+│  └─ custom_dataset_lab.py
+├─ week2/
+│  ├─ model_lab.py
+│  └─ loss_optim_lab.py
+├─ week3/
+│  ├─ train_fashion_mnist.py
+│  ├─ infer_fashion_mnist.py
+│  ├─ fashion_mnist_weights.pth
+│  └─ pytorch_notes.md
+
+如果这一整套你能独立做完，Round 20 就算真正跑通了。
+
+⸻
+
+Round 20 最终自测清单
+
+做完以后，你自己检查下面这些：
+	•	你能不能解释 tensor 和 NumPy 数组的关系，以及 tensor 为什么对 PyTorch 重要。 ￼
+	•	你能不能解释 Dataset 和 DataLoader 各自解决什么问题。 ￼
+	•	你能不能自己写一个继承 nn.Module 的最小模型。 ￼
+	•	你能不能写出最小训练循环，并解释 loss.backward()、optimizer.step()、optimizer.zero_grad()。 ￼
+	•	你能不能在测试/推理前使用 model.eval()，并理解 torch.no_grad() 的作用。 ￼
+	•	你能不能保存和加载最小模型权重，并重新做一次推理。 ￼
+
+这些都做到，Round 20 就算过关了。
+
+你继续的话，我下一步就给你展开 Round 21：NLP 前置基础。

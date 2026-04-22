@@ -1,0 +1,662 @@
+好，下面我把 Round 21：NLP 前置基础 完整展开。
+
+这一轮的核心，是把你前面已经有的 PyTorch 最小训练闭环，正式接到 文本任务 上，但还不直接上 Transformer 微调。目标只有一个：先把 文本预处理 → tokenization → 词表/编号 → embedding 直觉 → 最小文本分类流程 这条线跑顺。Hugging Face 课程明确说，tokenizer 的核心职责就是把文本转换成模型能处理的数值；PyTorch 的 nn.Embedding 文档说明它本质上是一个“按索引查向量”的查表层，常用于词向量；scikit-learn 的文本教程则从另一个角度展示了文本分类的最小闭环：把文本变成数值特征，再训练分类器。 ￼
+
+Round 21 的目标
+
+这轮结束时，你要做到这些：你能用自己的话解释，为什么模型不能直接吃原始文本，必须先经过 tokenization 和数值化；你能理解“词表”其实就是 token ↔ id 的映射；你能解释 embedding 为什么常被说成“把 token id 变成稠密向量表示”；你能做一个最小文本分类任务，哪怕模型很简单。Hugging Face 课程明确说，tokenizer 的目的就是把文本翻译成模型能处理的数字；PyTorch Embedding 文档明确说，输入是索引列表，输出是对应 embedding 向量；scikit-learn 的文本教程明确说，文本要先被提取成可供机器学习算法使用的数值特征。 ￼
+
+你还要开始建立两个非常关键的直觉。第一，tokenization 并不等于“按空格分词”；不同模型会用不同策略，比如 BPE 或 WordPiece。Hugging Face 课程专门把 BPE 和 WordPiece 单独拿出来讲，而且明确说 WordPiece 是 BERT 系列常用的分词算法之一，BPE 被 GPT、RoBERTa、BART 等很多模型使用。第二，embedding 不是“词典解释”，而是可学习的数值表示。PyTorch 官方 NLP 词向量教程明确说 nn.Embedding 需要词表大小和 embedding 维度两个参数，而且索引输入必须是整数张量。 ￼
+
+这轮学什么，不学什么
+
+这轮要学的是：文本预处理最小动作、tokenization、词表和编号、embedding 直觉、最小文本分类流程、以及“传统文本特征”和“深度学习 embedding 输入”这两条路线的关系。scikit-learn 的文本教程展示了传统路线：从原始文本提取数值特征再分类；Hugging Face 和 PyTorch 则支撑你理解现代 NLP 路线：tokenizer 把文本变成 token id，embedding 把 token id 变成向量。 ￼
+
+这轮先不学：Transformer 微调、预训练语言模型内部结构、注意力机制细节、命名实体识别、序列标注对齐、长文本建模。原因很简单：你现在最需要的是先把 “文本怎样进入模型” 这层搞清楚。Hugging Face 的课程结构本身也是先讲 tokenizer 和输入管线，再进入更复杂的模型与任务。 ￼
+
+我对你这一轮的总体建议
+
+我建议你这一轮采用“两条线并行理解，但只做一条主线实操”的方式。理解上，你要同时知道：
+
+一条是 传统文本特征路线：例如 bag-of-words / count vectorization / TF-IDF，再接一个线性分类器。scikit-learn 的文本教程就是这样组织的。另一条是 深度学习输入路线：文本先 tokenizer，再变成 token ids，再过 embedding，最后送进模型。Hugging Face 的 tokenizer 资料和 PyTorch Embedding 文档正好支撑这条路线。 ￼
+
+实操上，我建议你这一轮 主线优先走深度学习输入路线，因为它和你上一轮的 PyTorch 闭环衔接最顺。但你同时要知道，scikit-learn 的文本特征路线非常适合做对照，也非常适合帮助你理解“文本必须先数值化”这件事。 ￼
+
+本轮推荐资源
+
+这一轮我建议你主要盯住这些资料：
+
+Hugging Face 课程里的 Tokenizers，它最适合建立“文本为什么必须先变成数字”的直觉。Hugging Face 官方文档还给了 tokenizers 的 quicktour，明确说 special tokens 的顺序会决定它们的 id。 ￼
+
+PyTorch 的 nn.Embedding 文档 和 Word Embeddings 教程，它们最适合建立 embedding 的最小直觉。官方明确说 Embedding 是固定词典大小和向量维度的查表层，经常用来存词向量。 ￼
+
+scikit-learn 的 Working With Text Data，它最适合让你知道传统文本分类闭环长什么样。官方明确说目标是把文档转成特征向量，再训练文本分类器。 ￼
+
+如果你想再往后看一点点，可以浏览 Hugging Face 的 Text classification 任务页，它展示了现代预训练模型路线的文本分类做法，但这一轮先不需要直接上微调。 ￼
+
+⸻
+
+3 周安排
+
+第 1 周：文本预处理、tokenization、词表与编号
+
+这一周只做一件事：把“文本如何变成数字”讲清楚。
+
+Hugging Face 课程明确说，tokenizer 的职责是把文本翻译成模型可以处理的数字数据；Tokenizers quicktour 明确展示了 special tokens 会被插入词表，而且顺序会影响它们的 id；预分词资料还说明，tokenizer 训练前通常会有一个 pre-tokenization 阶段，先把文本切成更小的片段边界。 ￼
+
+这一周你最少要做这些：
+
+先手动做一遍最朴素流程：
+一句文本 → 分成 token → 建一个最小词表 → 把 token 映射成 id 列表。
+这一题的目的是让你亲手体会：所谓“词表”，本质就是一个映射表。
+
+然后，再用 Hugging Face tokenizer 的现成工具看一遍自动流程。你不需要现在就训练自己的 tokenizer，但你要知道：真实模型的 tokenizer 不是随便分词，而是和模型预训练时的规则绑定在一起。Transformers quicktour 明确说，最重要的一点是：tokenizer 要和模型名对应起来，因为模型预训练时就绑定了那套 tokenization 规则。 ￼
+
+这一周结束时，你应该已经有一种很明确的感觉：文本本身不是模型输入，token ids 才是。 这件事是 Hugging Face tokenizer 教程在反复强调的。 ￼
+
+第 2 周：embedding 直觉与最小 PyTorch 文本输入
+
+这一周主题是：把 token id 真正接到 embedding 层上。
+
+PyTorch 的 nn.Embedding 文档明确说，它是一个查表层，输入是一串索引，输出是对应 embedding 向量；官方 NLP 词向量教程也明确说，embedding 层最重要的两个参数是 词表大小 和 embedding 维度，而索引输入必须是整数张量。 ￼
+
+这一周你最少要做这些：
+
+先手动造一份最小词表，例如：
+	•	<PAD>
+	•	<UNK>
+	•	hello
+	•	world
+	•	good
+	•	bad
+
+然后把一句话编码成 id 列表，再转成 torch.LongTensor。
+接着，定义一个最小 nn.Embedding(vocab_size, embedding_dim)，把这些 id 喂进去，观察输出 shape。
+
+这一周最重要的不是“embedding 向量长得多高级”，而是你要真正看见：token id 序列经过 embedding 层之后，变成了形如 (sequence_length, embedding_dim) 或 (batch_size, sequence_length, embedding_dim) 的张量。 PyTorch 官方文档对 Embedding 的输入输出定义就是这样的。 ￼
+
+这一周结束时，你应该能用自己的话解释一句非常重要的话：
+embedding 不是“把词解释出来”，而是“把离散 id 映射成可学习的稠密向量表示”。 这件事正是 nn.Embedding 作为查表层的意义。 ￼
+
+第 3 周：最小文本分类流程
+
+这一周主题是：把文本任务最小闭环真正跑起来。
+
+这里我建议你做一个非常小的文本分类任务，例如情感二分类或简单标签分类。你可以用自己造的小数据，也可以参考 scikit-learn 的文本教程那种“文档 → 特征 → 分类”的闭环；如果你想继续沿 PyTorch 走，就做一个最小版本：
+	•	文本
+	•	tokenizer / 手工编号
+	•	padding
+	•	embedding
+	•	最简单的池化或平均
+	•	一个线性分类头
+	•	loss / optimizer
+	•	训练与测试
+
+这条路线和你上一轮 PyTorch 闭环是完全连上的。你现在不需要复杂 RNN 或 Transformer，只要先做出一个 embedding + 简单分类头 的最小文本分类器就够了。PyTorch 官方 nn.Embedding 和上一轮的训练循环已经足够支撑这一层；scikit-learn 的文本教程则可以作为“传统方法”对照，帮助你理解同一个任务可以有不同输入表示方式。 ￼
+
+这一周结束时，你应该已经拿到一个真正的、端到端的最小文本分类实验：文本 → token ids → embedding → 分类输出 → loss → 训练 → 测试。这就是 Round 21 最重要的产出。
+
+⸻
+
+这轮建议的最小实践任务
+
+我建议你这一轮至少完成一个“最小文本分类实验”。
+
+如果你想沿 PyTorch 主线走，最推荐的版本是：
+	•	准备一小份文本分类 CSV
+	•	写最小 tokenizer / 编号逻辑
+	•	建一个最小 Dataset
+	•	DataLoader
+	•	Embedding
+	•	对序列做平均池化
+	•	接一个 Linear
+	•	用交叉熵训练
+
+如果你想要一条更轻的对照线，可以额外做一个 scikit-learn 文本分类小实验，例如 CountVectorizer + 线性分类器。scikit-learn 的文本教程正是这样组织文本分类主线的。这样做的价值，不在于模型更强，而在于你会更清楚：NLP 的第一步永远是把文本变成数值表示。  ￼
+
+本轮产出
+
+Round 21 结束时，你应该至少拿到这些东西：
+	•	一个最小 tokenizer / 编号脚本
+	•	一个最小 embedding 练习脚本
+	•	一个最小文本分类 Dataset / DataLoader
+	•	一个最小文本分类训练脚本
+	•	一份你自己写的“tokenizer / vocab / embedding 各自负责什么”的笔记
+	•	一份最小实验结论：当前模型能不能区分标签、你下一步最想优化哪一块
+
+这些产出会直接支撑你后面的 Round 22，因为一旦你进入 Hugging Face 工具链，你会发现 tokenizer、词表、embedding 和文本分类 schema 这些东西并没有消失，只是被封装得更好了。Hugging Face 的课程结构本身就在强调这一点。 ￼
+
+这一轮最容易踩的坑
+
+第一个坑，是把 tokenization 理解成“按空格 split 一下”。Hugging Face 课程明确说明，真实 tokenizer 是 NLP 流水线的核心部件，而且不同模型会用不同算法，比如 BPE 和 WordPiece。 ￼
+
+第二个坑，是还没理解词表和编号，就急着上预训练模型。你现在最重要的是先搞懂“为什么模型吃的是 ids，不是原始字符串”。这正是 Hugging Face tokenizer 教程反复强调的。 ￼
+
+第三个坑，是把 embedding 当成“词典解释器”。PyTorch 官方文档对 nn.Embedding 的定义非常直接：它就是索引到向量的查表层。 ￼
+
+第四个坑，是文本分类一上来就追求复杂网络。你这一轮更重要的是先把最小闭环打通，而不是复杂模型。这个建议建立在你上一轮已经拿到的 PyTorch 最小训练闭环基础上。
+
+Round 21 的验收标准
+
+你可以用下面这些标准判断自己有没有完成：
+	•	你能解释 tokenizer 为什么是 NLP 流水线的核心部件。 ￼
+	•	你能解释词表和 token id 的关系。 ￼
+	•	你能用 nn.Embedding 把 token id 变成向量，并解释 embedding 的最小直觉。 ￼
+	•	你能把一份小文本数据做成最小分类输入。 ￼
+	•	你能完成一个最小文本分类实验，不管模型多简单。 ￼
+
+如果你确认这版 Round 21 没问题，我下一条就继续给你出 Round 21 专用练习清单。
+
+可以。下面是 Round 21 专用练习清单。
+
+这一轮只做一件大事：把你上一轮已经有的 PyTorch 最小训练闭环，正式接到 文本任务 上，但还不直接上 Transformer 微调。你要先把这条线跑顺：文本 → tokenization → 词表/id → embedding → 最小文本分类。Hugging Face 课程明确说，tokenizer 的核心职责就是把文本转成模型能处理的数字；而这个过程可以拆成两步：先 tokenization，再把 token 转成 input IDs。PyTorch 的 nn.Embedding 则明确是一个“按索引查向量”的查表层，经常用来存词向量。(huggingface.co￼  ￼)
+
+你这一轮会同时看到两条路线。第一条是传统文本特征路线：scikit-learn 的文本教程把文本变成 bag-of-words 特征，先给词一个固定整数 id，再把每篇文档转成特征向量；这类数据通常是高维稀疏的。第二条是深度学习输入路线：tokenizer 产出 token ids，embedding 再把这些 ids 映射成稠密向量。你这轮主线实操优先走第二条，但最好知道第一条在做什么。(scikit-learn.org￼  ￼)
+
+⸻
+
+先准备工作区
+
+先建目录：
+
+mkdir -p ~/cli-lab/round21
+cd ~/cli-lab/round21
+mkdir week1 week2 week3
+
+这一轮建议你在现有 PyTorch 环境里补上 Hugging Face 相关包。Transformers quick tour 官方给出的最小安装就是 transformers，并单独提示还需要安装你要用的机器学习框架，比如 torch。(huggingface.co￼  ￼)
+
+pip install transformers tokenizers torch
+
+
+⸻
+
+第 1 周：手工做一遍 tokenization、词表和编号
+
+这一周只做一件事：把“文本为什么必须先变成数字”亲手做一遍。Hugging Face 课程明确说，模型只能处理数字，所以 tokenizer 需要把文本输入转换成数值数据；而这个编码过程可以拆成两步：先把文本切成 token，再把 token 转成 input IDs。(huggingface.co￼  ￼)
+
+练习 1：准备一份最小文本分类数据
+
+进入目录：
+
+cd ~/cli-lab/round21/week1
+
+创建一个很小的 CSV：
+
+cat > texts.csv <<'EOF'
+text,label
+i love this movie,1
+this film is great,1
+what a wonderful story,1
+i hate this movie,0
+this film is terrible,0
+what a boring story,0
+EOF
+
+这一步的目标只是先有一份最小监督数据：text 是输入，label 是目标。
+
+练习 2：手工 tokenization
+
+新建：
+
+touch manual_tokenizer.py
+
+写入：
+
+import csv
+
+def simple_tokenize(text: str):
+    return text.lower().split()
+
+with open("texts.csv", "r", encoding="utf-8") as f:
+    reader = csv.DictReader(f)
+    for row in reader:
+        tokens = simple_tokenize(row["text"])
+        print(row["text"], "->", tokens)
+
+这一步故意用最朴素的 split()，不是因为真实 tokenizer 就这么简单，而是为了让你先看清“原始文本 → token 列表”这件事。Hugging Face 课程明确说，按空格拆词只是最直观的起点，真实 tokenizer 还会有更复杂的规则。(huggingface.co￼  ￼)
+
+练习 3：自己造一个最小词表
+
+继续改成：
+
+import csv
+
+def simple_tokenize(text: str):
+    return text.lower().split()
+
+special_tokens = ["<PAD>", "<UNK>"]
+vocab = {tok: i for i, tok in enumerate(special_tokens)}
+
+with open("texts.csv", "r", encoding="utf-8") as f:
+    reader = csv.DictReader(f)
+    for row in reader:
+        for token in simple_tokenize(row["text"]):
+            if token not in vocab:
+                vocab[token] = len(vocab)
+
+print(vocab)
+
+这一步的目标是让你自己亲手体会：词表就是 token 到 id 的映射表。Hugging Face tokenizers quicktour 也明确展示了 special tokens 会被插入词表，而且顺序会影响它们的 id。(huggingface.co￼  ￼)
+
+练习 4：把 token 转成 id 列表
+
+继续改：
+
+import csv
+
+def simple_tokenize(text: str):
+    return text.lower().split()
+
+special_tokens = ["<PAD>", "<UNK>"]
+vocab = {tok: i for i, tok in enumerate(special_tokens)}
+
+rows = []
+with open("texts.csv", "r", encoding="utf-8") as f:
+    reader = csv.DictReader(f)
+    for row in reader:
+        rows.append(row)
+        for token in simple_tokenize(row["text"]):
+            if token not in vocab:
+                vocab[token] = len(vocab)
+
+def encode(text: str):
+    return [vocab.get(tok, vocab["<UNK>"]) for tok in simple_tokenize(text)]
+
+for row in rows:
+    print(row["text"], "->", encode(row["text"]))
+
+Hugging Face 课程明确说，tokenization 之后的第二步就是把 token 转成 input IDs；convert_tokens_to_ids() 做的正是这件事。(huggingface.co￼  ￼)
+
+练习 5：再看一遍预训练 tokenizer 的做法
+
+新建：
+
+touch hf_tokenizer_demo.py
+
+写入：
+
+from transformers import AutoTokenizer
+
+tokenizer = AutoTokenizer.from_pretrained("bert-base-cased")
+
+text = "Using a Transformer network is simple"
+tokens = tokenizer.tokenize(text)
+ids = tokenizer.convert_tokens_to_ids(tokens)
+
+print(tokens)
+print(ids)
+
+这一步的目的不是让你立刻依赖预训练模型，而是让你看到：真实 tokenizer 和模型是绑在一起的，不能随便换。Hugging Face 课程明确说，实例化 tokenizer 时要用对应模型名，确保使用了模型预训练时同样的规则和词表。(huggingface.co￼  ￼)
+
+第 1 周周末小任务
+
+这一周结束时，你至少要做到：
+	•	自己手工做一次 tokenization
+	•	自己造一次最小词表
+	•	自己把文本转成 id 列表
+	•	再用一个预训练 tokenizer 看一遍自动流程
+
+如果这些都做到了，第 1 周就过关了。核心标准就是：你已经真正理解“文本不是模型输入，ids 才是”。(huggingface.co￼  ￼)
+
+⸻
+
+第 2 周：把 token ids 接到 embedding 上
+
+这一周主题是：真正看见 embedding 在干什么。PyTorch 官方明确说，nn.Embedding 是一个固定词典大小和向量维度的查表层；输入是一串索引，输出是对应的 embedding 向量。它经常用来存词向量。(pytorch.org￼  ￼)
+
+练习 6：先做一个最小 embedding 演示
+
+进入目录：
+
+cd ~/cli-lab/round21/week2
+touch embedding_lab.py
+
+写入：
+
+import torch
+from torch import nn
+
+vocab = {
+    "<PAD>": 0,
+    "<UNK>": 1,
+    "i": 2,
+    "love": 3,
+    "hate": 4,
+    "movie": 5,
+}
+
+encoded = torch.tensor([2, 3, 5], dtype=torch.long)  # i love movie
+
+embedding = nn.Embedding(num_embeddings=len(vocab), embedding_dim=4)
+
+out = embedding(encoded)
+
+print("encoded shape:", encoded.shape)
+print("embedding output shape:", out.shape)
+print(out)
+
+你要真正看一次 shape：输入是 (sequence_length,) 的索引张量，输出会变成 (sequence_length, embedding_dim)。这正是 nn.Embedding 官方定义的行为。(pytorch.org￼  ￼)
+
+练习 7：做 padding
+
+继续补：
+
+import torch
+from torch import nn
+
+vocab = {
+    "<PAD>": 0,
+    "<UNK>": 1,
+    "i": 2,
+    "love": 3,
+    "hate": 4,
+    "movie": 5,
+}
+
+sentences = [
+    [2, 3, 5],      # i love movie
+    [2, 4, 5],      # i hate movie
+    [3, 5, 0],      # love movie <PAD>
+]
+
+x = torch.tensor(sentences, dtype=torch.long)
+embedding = nn.Embedding(num_embeddings=len(vocab), embedding_dim=4, padding_idx=0)
+
+out = embedding(x)
+
+print("x shape:", x.shape)
+print("out shape:", out.shape)
+
+这一题你要看见：当输入变成 (batch_size, sequence_length)，输出就会变成 (batch_size, sequence_length, embedding_dim)。这依然符合官方对 Embedding 的输入输出定义。(pytorch.org￼  ￼)
+
+练习 8：用 Dataset 和 DataLoader 包装文本样本
+
+新建：
+
+touch text_dataset_lab.py
+
+写入：
+
+import csv
+import torch
+from torch.utils.data import Dataset, DataLoader
+
+def simple_tokenize(text: str):
+    return text.lower().split()
+
+special_tokens = ["<PAD>", "<UNK>"]
+vocab = {tok: i for i, tok in enumerate(special_tokens)}
+
+rows = []
+with open("../week1/texts.csv", "r", encoding="utf-8") as f:
+    reader = csv.DictReader(f)
+    for row in reader:
+        rows.append(row)
+        for token in simple_tokenize(row["text"]):
+            if token not in vocab:
+                vocab[token] = len(vocab)
+
+def encode(text: str, max_len=6):
+    ids = [vocab.get(tok, vocab["<UNK>"]) for tok in simple_tokenize(text)]
+    ids = ids[:max_len]
+    ids += [vocab["<PAD>"]] * (max_len - len(ids))
+    return ids
+
+class TextDataset(Dataset):
+    def __init__(self, rows):
+        self.rows = rows
+
+    def __len__(self):
+        return len(self.rows)
+
+    def __getitem__(self, idx):
+        row = self.rows[idx]
+        x = torch.tensor(encode(row["text"]), dtype=torch.long)
+        y = torch.tensor(int(row["label"]), dtype=torch.long)
+        return x, y
+
+dataset = TextDataset(rows)
+loader = DataLoader(dataset, batch_size=2, shuffle=True)
+
+for X, y in loader:
+    print("X shape:", X.shape)
+    print("y shape:", y.shape)
+    print(X)
+    print(y)
+    break
+
+PyTorch 官方数据教程明确说，Dataset 存样本和标签，DataLoader 包一层可迭代接口，方便按 batch 访问样本。(pytorch.org￼  ￼)
+
+练习 9：写一段自己的 embedding 笔记
+
+新建：
+
+touch embedding_notes.md
+
+至少写清三句话：
+	•	token id 是离散编号
+	•	embedding 是把 id 查成向量
+	•	embedding 输出不是“解释文字”，而是模型可学习的数值表示
+
+这一题虽然是你自己的总结，但要建立在 nn.Embedding 的官方定义之上。(pytorch.org￼  ￼)
+
+第 2 周周末小任务
+
+这一周结束时，你至少要做到：
+	•	自己跑通一个最小 nn.Embedding
+	•	看懂输入 ids 和输出向量的 shape
+	•	用 Dataset / DataLoader 包装一份小文本分类数据
+	•	写清自己对 embedding 的最小理解
+
+⸻
+
+第 3 周：最小文本分类闭环
+
+这一周主题是：把文本任务的最小训练闭环真正跑通。你现在还不需要上 RNN 或 Transformer，只要先做一个最简单的：embedding → 平均池化 → 线性分类头。这条路线和你 Round 20 的 PyTorch 最小训练闭环是直接接上的。nn.Embedding 负责把 id 变成向量，后面的平均池化和线性层是你这一轮的最小分类头。(pytorch.org￼  ￼)
+
+同时，你最好知道传统路线长什么样。scikit-learn 的文本教程明确说，最直观的方法之一是 bag-of-words：先给训练集中的每个词一个整数 id，再把每篇文档转成特征向量；CountVectorizer 会构建词典并把文档变成特征向量，这类表示通常是高维稀疏的。(scikit-learn.org￼  ￼)
+
+练习 10：准备一份稍微大一点的数据
+
+进入目录：
+
+cd ~/cli-lab/round21/week3
+
+创建一个稍微多一点的文本分类 CSV：
+
+cat > sentiment.csv <<'EOF'
+text,label
+i love this movie,1
+this film is great,1
+what a wonderful story,1
+i really enjoyed this,1
+this was amazing,1
+i hate this movie,0
+this film is terrible,0
+what a boring story,0
+i really disliked this,0
+this was awful,0
+EOF
+
+练习 11：写最小文本分类训练脚本
+
+新建：
+
+touch train_text_classifier.py
+
+写一个最小版：
+
+import csv
+import torch
+from torch import nn
+from torch.utils.data import Dataset, DataLoader
+
+def simple_tokenize(text: str):
+    return text.lower().split()
+
+special_tokens = ["<PAD>", "<UNK>"]
+vocab = {tok: i for i, tok in enumerate(special_tokens)}
+
+rows = []
+with open("sentiment.csv", "r", encoding="utf-8") as f:
+    reader = csv.DictReader(f)
+    for row in reader:
+        rows.append(row)
+        for token in simple_tokenize(row["text"]):
+            if token not in vocab:
+                vocab[token] = len(vocab)
+
+max_len = 6
+
+def encode(text: str):
+    ids = [vocab.get(tok, vocab["<UNK>"]) for tok in simple_tokenize(text)]
+    ids = ids[:max_len]
+    ids += [vocab["<PAD>"]] * (max_len - len(ids))
+    return ids
+
+class TextDataset(Dataset):
+    def __init__(self, rows):
+        self.rows = rows
+
+    def __len__(self):
+        return len(self.rows)
+
+    def __getitem__(self, idx):
+        row = self.rows[idx]
+        x = torch.tensor(encode(row["text"]), dtype=torch.long)
+        y = torch.tensor(int(row["label"]), dtype=torch.long)
+        return x, y
+
+dataset = TextDataset(rows)
+loader = DataLoader(dataset, batch_size=2, shuffle=True)
+
+class TextClassifier(nn.Module):
+    def __init__(self, vocab_size, embed_dim, num_classes):
+        super().__init__()
+        self.embedding = nn.Embedding(vocab_size, embed_dim, padding_idx=0)
+        self.fc = nn.Linear(embed_dim, num_classes)
+
+    def forward(self, x):
+        emb = self.embedding(x)           # [B, T, D]
+        pooled = emb.mean(dim=1)          # [B, D]
+        logits = self.fc(pooled)          # [B, C]
+        return logits
+
+model = TextClassifier(len(vocab), 8, 2)
+loss_fn = nn.CrossEntropyLoss()
+optimizer = torch.optim.SGD(model.parameters(), lr=0.1)
+
+for epoch in range(10):
+    model.train()
+    total_loss = 0.0
+    for X, y in loader:
+        pred = model(X)
+        loss = loss_fn(pred, y)
+
+        loss.backward()
+        optimizer.step()
+        optimizer.zero_grad()
+
+        total_loss += loss.item()
+
+    print(f"epoch={epoch+1}, loss={total_loss:.4f}")
+
+这里最重要的不是模型“高级”，而是你第一次真正拿文本任务跑通了 PyTorch 训练循环。训练循环里的 loss.backward()、optimizer.step()、optimizer.zero_grad()，依然是 PyTorch 官方上一轮已经强调过的核心三步。(pytorch.org￼  ￼)
+
+练习 12：做一个最小预测脚本
+
+继续新建：
+
+touch infer_text_classifier.py
+
+先做一个不保存权重的极简版：训练完后，在同一个脚本里或另一个脚本里手动喂几句话，看输出类别。
+如果你愿意更完整一点，也可以仿照 Round 20 那样补保存/加载权重，这一轮不是必须，但很推荐。
+
+练习 13：再做一个传统路线对照实验
+
+这一题是可选加分项，但很有价值。你可以再写一个最小 scikit-learn 版本：
+	•	CountVectorizer
+	•	一个线性分类器
+	•	在同一份 sentiment.csv 上训练
+
+目的不是比谁更强，而是帮助你真正看清：
+	•	传统路线：文本 → 稀疏特征
+	•	深度学习路线：文本 → token ids → embedding
+
+scikit-learn 文本教程就是围绕 bag-of-words、CountVectorizer 和文本分类展开的。(scikit-learn.org￼  ￼)
+
+练习 14：写一份最小实验结论
+
+新建：
+
+touch nlp_experiment_notes.md
+
+至少写清：
+	•	你的词表有多大
+	•	最大序列长度设成了多少
+	•	embedding 维度是多少
+	•	模型大致能不能分开正负样本
+	•	你下一步最想优化哪一块
+
+第 3 周周末小任务
+
+这一周结束时，你至少要做到：
+	•	跑通一个最小文本分类训练脚本
+	•	看见 loss 的变化
+	•	至少做一次文本推理
+	•	写一份自己的实验结论
+
+⸻
+
+Round 21 综合演练
+
+把这一轮收口成一次完整演练。你从头做到尾：
+
+第一步，在 week1 里完成手工 tokenizer / vocab / ids 练习，确认你能解释：
+	•	token 是什么
+	•	vocab 是什么
+	•	id 是什么
+
+第二步，在 week2 里完成 embedding 和 Dataset / DataLoader 练习，确认你能解释：
+	•	nn.Embedding
+	•	(batch_size, sequence_length) 到 (batch_size, sequence_length, embedding_dim) 的变化
+	•	为什么文本任务也需要 Dataset / DataLoader
+
+第三步，在 week3 里完成最小文本分类实验，确认你至少有：
+	•	train_text_classifier.py
+	•	infer_text_classifier.py
+	•	nlp_experiment_notes.md
+
+第四步，把这一轮成果整理成这个结构：
+
+round21/
+├─ week1/
+│  ├─ texts.csv
+│  ├─ manual_tokenizer.py
+│  └─ hf_tokenizer_demo.py
+├─ week2/
+│  ├─ embedding_lab.py
+│  ├─ text_dataset_lab.py
+│  └─ embedding_notes.md
+├─ week3/
+│  ├─ sentiment.csv
+│  ├─ train_text_classifier.py
+│  ├─ infer_text_classifier.py
+│  └─ nlp_experiment_notes.md
+
+如果这一整套你能独立做完，Round 21 就算真正跑通了。
+
+⸻
+
+Round 21 最终自测清单
+
+做完以后，你自己检查下面这些：
+	•	你能不能解释 tokenizer 为什么是 NLP 流水线的核心。(huggingface.co￼  ￼)
+	•	你能不能解释词表和 token id 的关系。(huggingface.co￼  ￼)
+	•	你能不能用 nn.Embedding 把 token id 变成向量，并解释 embedding 的最小直觉。(pytorch.org￼  ￼)
+	•	你能不能把一份小文本数据做成最小分类输入。(pytorch.org￼  ￼)
+	•	你能不能完成一个最小文本分类实验，不管模型多简单。(scikit-learn.org￼  ￼)
+
+这些都做到，Round 21 就算过关了。
+
+你继续的话，我下一步就给你展开 Round 22：Hugging Face 工具链入门。

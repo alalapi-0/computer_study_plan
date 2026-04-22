@@ -1,0 +1,547 @@
+好，继续 Round 4：核心数据结构。
+
+这一轮的目标，不是把所有数据结构一次学完，而是先把你后面做 AI 项目最常会碰到的那一批打牢：数组 / 字符串 / 列表思维、链表、栈、队列、哈希表。Hello Algo 把常见数据结构列为 arrays、linked lists、stacks、queues、hash tables、trees、heaps、graphs；其中第 4 章到第 6 章正好就是数组与链表、栈与队列、哈希。也就是说，这一轮学完后，你会把“最核心的线性结构 + 哈希”先吃透，树、堆、图放到下一轮更合理。 
+
+这轮仍然建议按 3 周 走，每周大约 8 小时。你的重点不是刷很多题，而是建立一个很实用的判断力：遇到一个场景时，我大概该用哪种结构，为什么。 Hello Algo 本身就是一本面向初学者、带动画和可运行代码示例的开源免费教材；VisuAlgo 则是 NUS 背景下做出来的交互式可视化工具，很适合你这种需要“看得见结构怎么动”的学习方式。 
+
+这一轮学什么
+
+这轮你主要学 6 类东西：
+	•	数组 / 列表 / 字符串的顺序存储思维
+	•	链表的“节点 + 引用”思维
+	•	栈的 LIFO
+	•	队列的 FIFO
+	•	哈希表的 key-value 映射
+	•	Python 里对应的常用容器：list、dict、set、collections.deque。Python 官方文档把 list、dict、set 列为内置数据类型；同时明确建议做队列时优先使用 collections.deque，因为它就是为两端快速 append/pop 设计的，而把 list 当队列、尤其在头部插入或弹出会更慢。 
+
+这轮先不学树、堆、图，也不把重点放在手写所有底层实现上。因为从你的目标看，当前更高收益的是先搞清楚“为什么列表适合顺序遍历，为什么哈希表适合计数与查找，为什么队列更适合任务排队”。树、堆、图下一轮接更顺。Hello Algo 的章节编排本身也是先 4-6 章，再进入 7-9 章。 
+
+本轮资源
+
+主教材我建议还是用 Hello Algo。它对初学者友好，而且正好把这一轮内容拆成了你需要的几个块：第 4 章讲 Array and Linked List，第 5 章讲 Stack and Queue，第 6 章讲 Hashing。你这一轮主看这些章节就够，不要继续往树和堆跳。 
+
+辅助可视化工具用 VisuAlgo。它提供数组、链表、栈、队列、BST、图等结构的交互式动画，还带训练模块。对你来说，这一轮重点用它看 linked list、stack/queue、sorting 的过程，不用全站乱逛。 
+
+视频资源建议用 William Fiset。他 YouTube 频道本身就有 data structures playlist，也有完整的 “Data Structures Easy to Advanced Course - Full Tutorial” 以及单独的 queue 等讲解。你这一轮不需要看完整大课，只挑数组、链表、栈、队列、哈希相关片段。 
+
+Python 对照文档用官方文档就够。你这一轮最值得看的其实不是“算法教程”，而是 Python 官方关于 list、dict、set、deque 的说明。官方教程明确说：列表可以实现栈；队列更推荐 collections.deque；而 deque 文档进一步说明它在两端 append/pop 上都大致是 O(1)。 
+
+GitHub 参考仓库我建议只当“对照代码库”来用，不当主教材。TheAlgorithms/Python 官方 README 明确写了：这些实现主要用于学习，可能不如 Python 标准库高效；williamfiset/Algorithms 则说明它的目标是用尽量简单优雅的方式演示常见数据结构和算法。也就是说，这两个仓库很适合你“学会概念以后去看别人怎么写”，但不适合你一开始拿来硬啃。 
+
+第 1 周：数组、字符串、列表思维
+
+这一周只抓一个核心：顺序存储。
+
+Hello Algo 对数组的定义是：数组是在连续内存空间中存储同类型元素的线性结构；它的优势是随机访问。Hello Algo 还专门总结了数组和链表的差异：数组支持随机访问、内存占用更省，但插入和删除不高效，且初始化后长度不可变。 
+
+这一周你需要形成的直觉是：
+	•	顺序扫一遍列表很自然
+	•	按索引取某个位置很自然
+	•	在中间频繁插入删除就不那么自然
+	•	字符串很多时候也可以按“顺序结构”来思考。Python 官方教程把数据结构章节的入口直接放在 list 上，说明对 Python 学习者来说，列表就是最基础的容器起点。 
+
+这周建议你做 3 类练习：
+	1.	顺序遍历列表，求和、找最大值、统计满足条件的元素个数
+	2.	处理字符串，做字符计数、去空格、简单分词
+	3.	比较“追加到末尾”和“插到最前面”的使用感。Python 官方日文教程明确提到：列表末尾 append/pop 很快，但头部 insert/pop 会慢，因为后面的元素都要移动。 
+
+如果你想看动画，这周可以配合 VisuAlgo 的 array 页面和 sorting 页面，用来直观看“顺序存储”和“元素移动”。 
+
+第 2 周：链表、栈、队列
+
+这一周重点是把“顺序存储”切换成“节点连接”的脑子。
+
+Hello Algo 对链表的解释很适合初学者：链表的元素是节点，节点之间通过引用连接；它的优势在于不要求像数组那样占用一整块连续内存。Hello Algo 还特别指出，单链表常被用来实现栈、队列、哈希表和图。 
+
+你这一周不用沉迷手写各种花式链表实现。真正要抓住的是：
+	•	为什么链表插入删除可以更灵活
+	•	为什么它不擅长按下标随便跳着访问
+	•	为什么栈和队列都可以建立在数组或链表上。Hello Algo 总结里明确说：栈遵循 LIFO，可以用数组或链表实现；队列遵循 FIFO，也可以用数组或链表实现。 
+
+这周建议的理解顺序是：
+
+先看链表动画，再看栈，再看队列。
+因为链表是“结构思维”，栈和队列是“受限操作规则”。Hello Algo 对栈的定义是 LIFO，对队列的定义是 FIFO，这一层你必须非常清楚。 
+
+Python 里的实践建议也很明确：
+	•	栈：先直接用 list.append() / list.pop() 理解
+	•	队列：优先用 collections.deque，不要养成 list.pop(0) 的习惯。Python 官方教程和 collections 文档都给了这个建议。 
+
+这周建议做 3 类练习：
+	1.	用列表模拟“后进先出”的撤销记录
+	2.	用 deque 模拟任务排队
+	3.	自己画出一个 3 到 5 个节点的单链表，把“插入一个节点”和“删除一个节点”画清楚。VisuAlgo 的 list 页面很适合你做这件事，因为它把 singly / doubly linked list、stack、queue、deque 放在同一套可视化里。 
+
+第 3 周：哈希表、集合、综合运用
+
+这一周是这轮最关键的一周，因为哈希表和集合会直接影响你以后做 AI 项目时的“统计、去重、映射”能力。
+
+Hello Algo 把哈希表定义为 key-value 映射，并强调根据 key 获取 value 可以达到 O(1) 级别的检索效率；同时它也解释了哈希函数和碰撞问题。 
+
+你这一周最需要形成的直觉是：
+	•	需要“某个标签出现了几次”时，优先想到哈希表 / dict
+	•	需要“这个元素见过没有”时，优先想到集合 / set
+	•	需要“值和附加信息绑定”时，优先想到字典 / dict。Python 官方 built-in types 文档把 dict 归在 mappings，把 set 归在内置容器类型里；这正好和你这一周的学习重点一致。 
+
+这周建议做 3 类练习：
+	1.	读取一个标签列表，统计每个标签出现次数
+	2.	对一个字符串数组做去重
+	3.	给一组文件名建立“文件名 -> 次数”或“标签 -> 样本列表”的映射
+
+这一步和你以后做 AI 项目非常接近，因为最常见的数据预处理动作之一，就是“统计”“去重”“查找是否存在”。
+
+本轮微型项目
+
+这轮我建议你做一个非常贴近 AI 前置工作的微型项目：
+
+data_structure_lab.py
+
+把它拆成 3 个小功能：
+	1.	最近操作记录：用栈保存最近几次操作，支持“撤销上一步”
+	2.	待处理任务队列：用 deque 保存待处理样本
+	3.	标签计数器：用 dict 统计标签数量，用 set 做去重
+
+这个设计的好处是，它不是为了炫技，而是把这轮 4 个最重要的数据结构都串起来了。
+而且它和真实 AI 项目很像：最近操作记录像撤销，任务队列像待处理样本池，标签计数像数据统计，去重像清洗逻辑。
+
+本轮验收标准
+
+Round 4 结束时，你做到下面这些就算过关：
+	•	你能说清楚数组和链表的主要差别，尤其是“连续存储 vs 引用连接”“随机访问强 vs 插删灵活”这两个核心点。 
+	•	你能解释栈是 LIFO、队列是 FIFO，并能举出各自适合的场景。 
+	•	你知道 Python 里做队列优先用 collections.deque，而不是把 list 当作头部频繁进出的队列。 
+	•	你能用 dict 做计数、用 set 做去重、用 list 做顺序处理。 
+	•	你已经做出一个包含“栈 / 队列 / 哈希计数”三部分的小脚本。这个不需要很长，哪怕只有 50 到 100 行，也够。这个要求是我结合你的目标给出的工程标准，不是某个网站的硬性门槛。
+
+这一轮最容易踩的坑
+
+第一个坑，是把“会背定义”误认为“会用”。
+你真正要学会的不是背“链表由节点组成”，而是看到“频繁头部出队”的场景时，知道别用普通列表硬顶。Python 官方文档已经明确提醒了这一点。 
+
+第二个坑，是一上来就沉迷手写底层实现。
+这轮当然可以看实现，但你的主目标不是面试炫技，而是形成数据结构选择能力。所以像 TheAlgorithms/Python 这种仓库，只适合当参考。它自己都说明了：这些实现主要用于学习，未必比标准库高效。 
+
+第三个坑，是把“哈希表查找快”理解成“永远无敌”。
+Hello Algo 也专门单开了 hash collision 一节，说明哈希冲突、哈希函数、底层桶结构都是真实存在的问题。你现在不用深挖，但至少要知道哈希表不是魔法。 
+
+如果你愿意，我下一条就继续给你补 Round 4 专用练习清单，做成和前几轮一样可以直接照着练的版本。
+
+好，下面我把 Round 4 专用练习清单 直接补出来，做成你可以照着练的版本。
+
+这一版仍然按 3 周 走，核心围绕这 6 个主题：
+	•	数组 / 列表
+	•	字符串
+	•	链表
+	•	栈
+	•	队列
+	•	哈希表 / 集合
+
+这样安排是因为 Hello Algo 把数组与链表、栈与队列、哈希分别放在相邻章节里，正好构成一条很自然的学习主线；Python 官方教程则明确把 list、dict、set 作为基础数据结构来讲，并特别建议“做队列优先用 collections.deque”，因为列表在头部插入和弹出会更慢。 
+
+⸻
+
+Round 4 你这一轮到底要练到什么程度
+
+这轮结束时，你不需要手写特别复杂的底层实现，但你要做到这几件事：
+	1.	看到“顺序处理一批数据”，能想到列表 / 数组
+	2.	看到“最近操作记录”，能想到栈
+	3.	看到“排队处理任务”，能想到队列
+	4.	看到“计数、去重、映射”，能想到 dict / set
+	5.	知道 Python 里队列先用 deque，不要用 list.pop(0) 当常规方案。 
+
+⸻
+
+本轮资源怎么用
+
+你这轮只固定用这几样：
+	•	主教材：Hello Algo 第 4、5、6 章。 
+	•	可视化：VisuAlgo 的 list 页面，里面把 linked list、stack、queue、deque 放在同一页。 
+	•	Python 对照：官方数据结构教程和 collections.deque 文档。 
+	•	视频补充：William Fiset 的 data structures playlist，只挑你当前正在学的结构看。 
+
+建议顺序是：
+先看 Hello Algo 概念，再去 VisuAlgo 看动画，再用 Python 写小练习。
+这样最容易形成正反馈。 
+
+⸻
+
+第 1 周：数组 / 列表 / 字符串
+
+这一周只练“顺序结构”。
+
+Hello Algo 把数组描述为连续内存上的线性结构，优势是随机访问；同时它把数组、链表、栈、队列归在“线性结构”这一类里。 
+
+这周你要形成的直觉
+	•	顺序遍历很自然
+	•	按下标取值很自然
+	•	中间频繁插删不自然
+	•	字符串也可以按“顺序元素序列”来处理
+
+Python 官方教程把 list 作为数据结构章节的起点，这本身就说明：对 Python 学习者来说，列表是最重要的基础容器之一。 
+
+这周练习清单
+
+先建目录：
+
+mkdir -p ~/cli-lab/round4/week1
+cd ~/cli-lab/round4/week1
+
+新建文件：
+
+touch week1_array_string.py
+
+把下面代码写进去：
+
+nums = [3, 8, 2, 10, 5]
+
+# 1. 求和
+total = 0
+for n in nums:
+    total += n
+print("sum =", total)
+
+# 2. 找最大值
+max_num = nums[0]
+for n in nums:
+    if n > max_num:
+        max_num = n
+print("max =", max_num)
+
+# 3. 统计偶数个数
+even_count = 0
+for n in nums:
+    if n % 2 == 0:
+        even_count += 1
+print("even_count =", even_count)
+
+# 4. 字符串字符统计
+text = "ai project"
+char_count = 0
+for ch in text:
+    if ch != " ":
+        char_count += 1
+print("char_count_without_space =", char_count)
+
+运行：
+
+python3 week1_array_string.py
+
+这周加练
+
+再做 3 个小任务：
+	1.	自己写一个程序，统计列表里大于 5 的元素有几个
+	2.	自己写一个程序，把字符串中的空格去掉后输出
+	3.	自己写一个程序，找出列表中的最小值
+
+这周的关键观察
+
+Python 官方教程提到，list.append() 很适合在末尾追加；而头部插入或头部弹出会牵动后续元素移动，所以不适合当高频队列操作。你这周虽然还没正式学队列，但可以先记住这个感觉。 
+
+⸻
+
+第 2 周：链表、栈、队列
+
+这一周重心是“结构和规则”。
+
+Hello Algo 对链表的核心描述是：节点通过引用连接，不要求像数组那样占据整块连续内存；对栈和队列的定义则分别是 LIFO 和 FIFO。 
+
+这周你要形成的直觉
+	•	链表擅长局部插删
+	•	链表不擅长按下标乱跳
+	•	栈是后进先出
+	•	队列是先进先出
+
+VisuAlgo 的 list 页面把 singly linked list、stack、queue、deque 放在同一个可视化页里，很适合你连着看。 
+
+练习 A：先画链表，不急着写复杂代码
+
+先在纸上画：
+
+A -> B -> C -> None
+
+然后自己画两件事：
+	1.	在 B 和 C 中间插入 X
+	2.	删除 B
+
+你要把“指针 / 引用改向”这个动作画出来。
+
+练习 B：用列表模拟栈
+
+新建：
+
+touch week2_stack.py
+
+写入：
+
+stack = []
+
+stack.append("open_file")
+stack.append("edit_text")
+stack.append("save_file")
+
+print("current stack:", stack)
+
+last_action = stack.pop()
+print("undo:", last_action)
+print("stack after undo:", stack)
+
+运行：
+
+python3 week2_stack.py
+
+Hello Algo 明确说栈遵循 LIFO，而且可以看作“受限的数组或链表”。 
+
+练习 C：用 deque 模拟队列
+
+新建：
+
+touch week2_queue.py
+
+写入：
+
+from collections import deque
+
+queue = deque()
+
+queue.append("task_1")
+queue.append("task_2")
+queue.append("task_3")
+
+print("queue:", queue)
+
+first_task = queue.popleft()
+print("handle:", first_task)
+print("queue after handle:", queue)
+
+运行：
+
+python3 week2_queue.py
+
+Python 官方教程和 collections 文档都建议：做队列优先用 deque，因为它在两端 append/pop 上大致都是 O(1)，并且比把 list 当头部进出的队列更合适。 
+
+这周自测
+
+你要能自己回答：
+	•	为什么栈适合“撤销”
+	•	为什么队列适合“排队处理任务”
+	•	为什么普通列表不适合做高频头部出队
+
+如果这三句能讲清楚，这周就算达标。 
+
+⸻
+
+第 3 周：哈希表 / 集合 / 综合应用
+
+这一周是这轮最关键的一周。
+
+Hello Algo 把哈希表定义为 key-value 映射，并强调它在按 key 检索时效率很高；Python 官方文档则把 dict 归为 mapping，把 set 归为内置容器类型。 
+
+这周你要形成的直觉
+	•	计数：dict
+	•	去重：set
+	•	映射：dict
+	•	“见过没有”：set
+
+练习 A：标签计数
+
+新建：
+
+touch week3_dict_counter.py
+
+写入：
+
+labels = ["ok", "blur", "ok", "bad", "blur", "ok"]
+
+counter = {}
+
+for label in labels:
+    if label in counter:
+        counter[label] += 1
+    else:
+        counter[label] = 1
+
+print(counter)
+
+运行：
+
+python3 week3_dict_counter.py
+
+练习 B：去重
+
+新建：
+
+touch week3_set_dedup.py
+
+写入：
+
+names = ["a.txt", "b.txt", "a.txt", "c.txt", "b.txt"]
+
+unique_names = set(names)
+
+print("original:", names)
+print("unique:", unique_names)
+print("unique_count:", len(unique_names))
+
+运行：
+
+python3 week3_set_dedup.py
+
+练习 C：综合一点
+
+新建：
+
+touch week3_mapping.py
+
+写入：
+
+samples = [
+    ("001", "ok"),
+    ("002", "blur"),
+    ("003", "ok"),
+]
+
+sample_to_label = {}
+
+for sid, label in samples:
+    sample_to_label[sid] = label
+
+print(sample_to_label)
+print("label of 002 =", sample_to_label["002"])
+
+运行：
+
+python3 week3_mapping.py
+
+这周的关键理解
+
+这一周其实已经非常接近 AI 项目里的日常工作了。
+因为“标签统计、文件去重、样本 ID 到标签映射”这些动作，本质上就是 dict 和 set 的典型应用。这个判断和 Hello Algo 对哈希表的定位，以及 Python 对 dict / set 的容器分类是完全一致的。 
+
+⸻
+
+Round 4 综合小项目
+
+这一轮建议你做一个小脚本，名字就叫：
+
+data_structure_lab.py
+
+要求只做 3 个功能。
+
+功能 1：最近操作记录（栈）
+
+例如：
+	•	load_file
+	•	filter_data
+	•	save_result
+
+然后支持“撤销一步”。
+
+功能 2：待处理任务队列（deque）
+
+例如：
+	•	sample_001
+	•	sample_002
+	•	sample_003
+
+按顺序取出处理。
+
+功能 3：标签统计（dict）+ 去重（set）
+
+例如一组标签：
+
+["ok", "blur", "ok", "bad", "blur"]
+
+输出：
+	•	每个标签次数
+	•	去重后的标签集合
+
+一个可直接起步的版本
+
+from collections import deque
+
+# 1. stack
+actions = []
+actions.append("load_file")
+actions.append("filter_data")
+actions.append("save_result")
+print("actions:", actions)
+
+undo_action = actions.pop()
+print("undo:", undo_action)
+print("actions now:", actions)
+
+# 2. queue
+tasks = deque()
+tasks.append("sample_001")
+tasks.append("sample_002")
+tasks.append("sample_003")
+
+print("tasks:", tasks)
+
+current_task = tasks.popleft()
+print("handle:", current_task)
+print("tasks now:", tasks)
+
+# 3. dict + set
+labels = ["ok", "blur", "ok", "bad", "blur", "ok"]
+
+counter = {}
+for label in labels:
+    if label in counter:
+        counter[label] += 1
+    else:
+        counter[label] = 1
+
+unique_labels = set(labels)
+
+print("label counter:", counter)
+print("unique labels:", unique_labels)
+
+运行：
+
+python3 data_structure_lab.py
+
+这个小项目已经把这轮最重要的 4 个结构串起来了，而且和你以后做 AI 数据预处理的感觉非常接近。Python 官方文档对 deque 的推荐，以及 Hello Algo 对栈、队列、哈希的分类，正好支持你这样练。 
+
+⸻
+
+Round 4 最终自测清单
+
+你做完后，自己检查下面这些是否能独立回答或完成。
+
+概念
+	•	数组 / 列表适合什么
+	•	链表适合什么
+	•	栈和队列分别是什么规则
+	•	dict 和 set 分别最常拿来干什么
+
+Python 选择
+	•	为什么队列优先用 deque
+	•	为什么计数优先想到 dict
+	•	为什么去重优先想到 set
+
+实操
+	•	能写出一个列表遍历程序
+	•	能写出一个栈示例
+	•	能写出一个 deque 队列示例
+	•	能写出一个字典计数程序
+	•	能写出一个集合去重程序
+
+只要这些都没问题，Round 4 就算过关。 
+
+⸻
+
+你这一轮最容易踩的坑
+
+第一个坑，是把“背定义”当成“会用了”。
+真正重要的是：你看到场景，能选结构。比如高频头部出队，就不要本能地写 list.pop(0)。Python 官方教程已经明确提醒了这一点。 
+
+第二个坑，是一上来就沉迷手写底层实现。
+你现在的目标不是面试表演，而是先建立工程里的结构选择感。所以这轮先把 Python 内置容器和 deque 用顺。Python 官方文档已经给了很清楚的建议路径。 
+
+第三个坑，是把哈希表理解成“万能快表”。
+Hello Algo 也专门把 hash collision 单独列出来，这就说明哈希并不是魔法，只是非常高频、非常实用的工具。 
+
+⸻
+
+如果你要继续，我下一步就给你展开 Round 5：高频算法模式。

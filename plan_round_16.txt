@@ -1,0 +1,685 @@
+好，下面我把 Round 16：API 与数据层结合 完整展开。
+
+这一轮的核心，是把你前面已经分别做出来的两部分真正接起来：
+	•	一边是 FastAPI 接口层
+	•	一边是 SQLite + 本地文件处理的数据层
+
+做到这一步之后，你的项目就不再只是“有个 CLI”和“有个最小 API 壳子”，而是开始变成一个真正能接请求、调逻辑、写数据库、返回结果的小服务。FastAPI 官方教程已经分别把这几块拆开讲了：请求体、错误处理、文件上传、测试；Python 官方 sqlite3 也提供了标准库级别的数据库接口。 
+
+Round 16 的目标
+
+这轮结束时，你要做到这几件事：
+
+你现有的 API 不只是返回固定字符串，而是能真正调用你之前做好的核心处理逻辑。
+你能把一次 API 请求产生的运行结果写入 SQLite。
+你能同时支持两类输入方式：传入本地路径，以及直接上传文件。
+你能对常见错误给出更清楚的 HTTP 错误响应。
+你能写最基础的 API 测试，而不是只靠手点 /docs。FastAPI 官方文档对这几块都有直接支持：文件上传用 File/UploadFile，错误处理用 HTTPException，测试用 TestClient。 
+
+这轮学什么，不学什么
+
+这轮要学的是：
+	•	FastAPI 复用现有核心逻辑
+	•	API 接 SQLite
+	•	路径输入与上传文件两种入口
+	•	返回更稳定的结果结构
+	•	最小错误处理
+	•	最小 API 测试
+
+这轮先不学：
+	•	认证授权
+	•	异步任务队列
+	•	复杂数据库抽象层
+	•	大规模文件流式处理
+	•	生产级部署
+
+这样安排是因为 FastAPI 官方教程本身就是先把请求体、错误处理、文件上传、测试这些“第一层后端能力”讲清楚，再进入更高级话题。你现在最需要的是把服务真正跑通，而不是过早引入更多层。 
+
+我对你这一轮的总体建议
+
+这轮最稳的推进顺序是：
+
+先把 POST /run 真正接到核心处理逻辑，
+再把 运行记录写进 SQLite，
+再补 上传文件接口，
+最后加 API 测试。
+
+原因很简单。你现在最重要的是先把“接口请求 → 核心逻辑 → 数据库记录 → 响应返回”这条主链打通。文件上传和测试都很重要，但应该建立在主链已经稳定的前提上。FastAPI 的 request body、request files、testing 三块也正好支持这种顺序。 
+
+本轮推荐资源
+
+这一轮我建议你固定看这几类：
+
+第一类是 FastAPI 的 Handling Errors。这里最关键的是 HTTPException，它允许你在接口中返回明确的 HTTP 错误状态，而不是让服务端直接抛裸异常。 
+
+第二类是 FastAPI 的 Request Files。这一页明确展示了如何用 File 和 UploadFile 接收上传文件，并说明 UploadFile 适合大文件和流式场景。 
+
+第三类是 FastAPI 的 Testing。官方给的最小路线就是 TestClient，并且说明测试可以像普通 pytest 测试一样写。 
+
+第四类是 Python 官方 sqlite3。你这一轮继续复用它来保存运行记录。 
+
+第五类是 Python 官方 pathlib。因为你在 API 里处理本地输入路径、输出路径、临时保存上传文件时，继续用 Path 会更稳。 
+
+⸻
+
+第 1 周：把 POST /run 真正接到核心逻辑
+
+这一周只做一件事：让 API 真正调用你的工具逻辑，而不是只回显请求体。
+
+Round 15 的 POST /run 很可能还只是返回了一份模拟 summary。这一周要把它接到你已经有的 core.py、io_utils.py、db.py。FastAPI 的 request body 教程已经说明，请求体里的结构化数据会通过模型传进路径操作函数，所以这一步的关键不是再学新语法，而是把已有函数真正串起来。 
+
+这周建议你做什么
+
+先把接口主流程整理成这条链：
+	1.	接收 RunRequest
+	2.	调用现有 reader / filter / dedup / summary 逻辑
+	3.	写输出文件
+	4.	写数据库记录
+	5.	返回 summary
+
+也就是说，你这一周最好把 POST /run 做到“和 CLI 在做同一件事，只是入口换成 HTTP”。这一步没有新框架，只是服务层对核心层的真正复用。 
+
+这一周的关键注意点
+
+第一，不要把所有业务逻辑都重新写进 api.py。
+第二，尽量让 API 只是“接请求、调函数、回结果”。
+第三，如果某个输入路径不存在或格式不支持，不要直接爆 traceback，而是开始用 HTTPException。FastAPI 的错误处理文档明确用 HTTPException 来表达像 “item not found” 这类 API 层错误。 
+
+这周产出
+
+这一周结束时，你应该已经有一个真正可用的 POST /run：
+	•	发请求会触发处理
+	•	会写输出
+	•	会写数据库
+	•	会返回 summary
+
+⸻
+
+第 2 周：API 接 SQLite，补详情和查询能力
+
+这一周的主题是：把 API 和你已经有的 SQLite 运行记录真正连起来。
+
+你前面应该已经有：
+	•	list_runs()
+	•	get_run_by_id(run_id)
+	•	也许还有按输入文件查记录的函数
+
+这周要做的，是把这些函数稳定挂到 API 层。Python 官方 sqlite3 文档支持标准的连接、执行、查询、取结果流程；FastAPI 路径参数和查询参数又非常适合承接“按 id 查、按条件查、做简单分页”。 
+
+这周建议你做的接口
+
+我建议至少把这些接口做稳：
+	•	GET /runs
+	•	GET /runs/{run_id}
+	•	GET /runs?skip=...&limit=...
+	•	GET /runs?keyword=...
+
+这一步的意义，是让你的服务第一次开始具备“能查历史”的能力，而不是每次只能点一次处理任务。HTTP 语义上，这类只读查询都很适合 GET。 
+
+这一周的关键注意点
+
+第一，查不到某条记录时，返回 404，而不是 500。
+第二，参数非法时，优先让 FastAPI 的类型系统和验证机制先处理。
+第三，返回结构尽量保持稳定，例如统一用：
+	•	{"runs": [...]}
+	•	{"run": {...}}
+
+状态码语义和 FastAPI 的自动验证都足够支撑这种做法。 
+
+这周产出
+
+这一周结束时，你应该已经有：
+	•	一个能看全部历史的接口
+	•	一个能看单条历史详情的接口
+	•	至少一个带查询参数的列表接口
+	•	更稳定的返回结构
+
+⸻
+
+第 3 周：文件上传、错误处理、最小 API 测试
+
+这一周的主题是：让接口更接近真正能被别人用的状态。
+
+先说文件上传
+
+FastAPI 的 Request Files 文档明确提供了两种方式：
+	•	用 bytes 直接拿文件内容
+	•	用 UploadFile 处理上传文件
+
+文档也明确指出，UploadFile 更适合大文件和文件元数据场景，因为它基于“spooled”文件对象，避免一次把所有内容都塞进内存。对你来说，这一轮更建议用 UploadFile。 
+
+这一周建议你做的上传接口
+
+可以先做一个最小接口，例如：
+	•	POST /run-upload
+
+它接收：
+	•	一个上传文件
+	•	一个 format
+	•	一个可选 keyword
+	•	一个 dedup
+
+然后把上传文件先暂存到本地临时目录，再复用你已经写好的处理逻辑。这里 pathlib 继续很有用，因为你要处理临时路径、输出路径和最终存档路径。 
+
+再说错误处理
+
+FastAPI 的 Handling Errors 教程明确说，可以通过 HTTPException 返回清楚的错误响应，例如 404。你这一周至少要把这些错误边界处理清楚：
+	•	上传文件为空或格式不对
+	•	输入路径不存在
+	•	数据格式不支持
+	•	指定记录不存在
+
+这一步的目标，是让错误从“Python 异常”变成“HTTP 层可理解的错误结果”。 
+
+最后说 API 测试
+
+FastAPI 的 Testing 教程明确给出了最小测试路径：用 TestClient 创建客户端，然后像普通 HTTP 客户端一样调用你的 app，最后用普通 assert 断言状态码和 JSON。因为底层兼容 pytest，所以这非常适合你当前阶段。 
+
+这一周建议你至少写 3 条 API 测试
+
+我建议你最少写：
+	1.	GET /health 返回 200 和正确 JSON
+	2.	GET /runs/{不存在id} 返回 404
+	3.	POST /run 用一份最小合法请求，返回 200 或 201，且响应里有 summary
+
+如果你再多写一条，我建议写上传接口测试。FastAPI 的 Testing 文档已经足够支撑这些最小测试。 
+
+这周产出
+
+这一周结束时，你应该已经有：
+	•	一个最小上传接口
+	•	更清楚的错误响应
+	•	一组最小 API 测试
+	•	一个比 Round 15 更完整的后端雏形
+
+⸻
+
+本轮建议的接口集合
+
+Round 16 做完以后，我建议你的服务至少稳定具备：
+	•	GET /health
+	•	GET /runs
+	•	GET /runs/{run_id}
+	•	POST /run
+	•	POST /run-upload
+
+这样一来，你的服务就已经同时具备：
+	•	可观察性
+	•	历史查询
+	•	任务提交
+	•	文件直传处理
+
+这套接口集合已经足够支撑后面路线 B 的继续扩展。 
+
+本轮产出
+
+Round 16 结束时，你应该至少拿到这些东西：
+	•	一个真正接核心逻辑的 POST /run
+	•	一个真正接 SQLite 的 GET /runs
+	•	一个详情接口 GET /runs/{run_id}
+	•	一个最小上传接口 POST /run-upload
+	•	一组最小 API 测试
+	•	一份更像样的 /docs
+
+这些产出意味着：你的项目已经从“本地 CLI 工具”明显迈向了“可调用的小服务”。FastAPI 对请求体、文件上传、错误处理和测试的支持，正好让你能在这一轮把这件事做出来。 
+
+这一轮最容易踩的坑
+
+第一个坑，是把核心逻辑重新复制一份到 API 层。
+这一轮最重要的是复用，不是重写。API 应该尽量薄。这个是工程建议，但它直接关系到你后面能不能继续维护同一套逻辑。
+
+第二个坑，是上传接口一上来就用最重的方式处理大文件。
+FastAPI 文档已经明确指出 UploadFile 更适合文件场景，优先用它比直接全量读进内存更稳。 
+
+第三个坑，是所有错误都变成 500。
+HTTP 状态码语义和 FastAPI 的 HTTPException 已经足够让你把“客户端请求不对”和“服务端真的炸了”区分开。 
+
+第四个坑，是只在 /docs 里手点，不写测试。
+FastAPI 的 Testing 教程就是为了解决这个问题。你现在至少要开始让接口有最小自动化验证。 
+
+Round 16 的验收标准
+
+你可以用下面这些标准判断自己有没有完成：
+	•	你能让 POST /run 真正触发核心处理逻辑，而不是只回显请求体。
+	•	你能让 API 查询 SQLite 历史记录。 
+	•	你能做一个最小上传接口，并优先使用 UploadFile。 
+	•	你能对常见错误返回更合适的状态码，而不是都给 500。 
+	•	你能写并跑最小 API 测试。 
+
+如果你确认这版 Round 16 没问题，我下一条就继续给你出 Round 16 专用练习清单。
+
+可以。下面是 Round 16 专用练习清单。
+
+这一轮只做一件大事：把你前面已经有的 FastAPI 接口层 和 SQLite + 本地文件处理的数据层 真正接起来，做成一个能接请求、调逻辑、写数据库、回结果的小服务。FastAPI 官方教程已经把这一轮最关键的几块分开讲了：请求体、错误处理、文件上传、测试；Python 官方 sqlite3 文档也明确说它是 SQLite 的 DB-API 2.0 接口，并给了教程和占位符绑定的安全写法。 
+
+⸻
+
+这一轮要练到什么程度
+
+Round 16 结束时，你要做到这些：
+
+你现有的 POST /run 不再只是回显请求体，而是会真正调用已有核心逻辑。
+你能把一次运行结果写进 SQLite。
+你能提供两种输入方式：传本地路径，或者上传文件。FastAPI 文档明确说，请求体通常用 Pydantic 模型声明，而且发送 body 一般应使用 POST、PUT、DELETE 或 PATCH，而不是 GET。 
+
+你还能对常见错误给出清楚的 HTTP 错误响应。FastAPI 的错误处理文档明确说，可以用 HTTPException 返回带状态码的错误，比如 404。 
+
+最后，你要开始写最小 API 测试。FastAPI 官方测试文档说明，用 TestClient 测试时，先安装 httpx，然后像用 httpx 一样去调你的应用。 
+
+⸻
+
+先准备工作区
+
+进入项目目录：
+
+cd ~/cli-lab/round7/final_lab/ai_prep_tool
+pwd
+ls
+
+如果你上一轮已经有这些文件，先确认一下：
+
+api.py
+schemas.py
+db.py
+core.py
+io_utils.py
+tests/
+
+如果没有 tests/，补一个：
+
+mkdir -p tests
+
+
+⸻
+
+第 1 周：把 POST /run 真正接到核心逻辑
+
+这一周只做一件事：
+
+让 API 真正调用已有处理逻辑，而不是只回显请求体。
+
+FastAPI 的 request body 文档明确说，请求体数据通常通过 Pydantic 模型声明；也就是说，这一周你不需要再学新语法，重点是把已有函数真正串起来。 
+
+练习 1：先确认你已有的核心函数
+
+打开你的代码，确认至少已经有这些可单独调用的东西：
+	•	read_records(...)
+	•	filter_records(...)
+	•	dedup_records(...)
+	•	build_summary(...)
+	•	save_run(...)
+
+如果名字不一样没关系，但你必须先有“API 可调用的核心函数”，而不是所有逻辑都塞在 CLI 入口里。
+
+练习 2：让 POST /run 从“回显”改成“真处理”
+
+在 api.py 里把 POST /run 改造成这种结构：
+
+from fastapi import FastAPI, HTTPException
+from schemas import RunRequest
+from io_utils import read_records, write_records
+from core import filter_records, dedup_records, build_summary
+from db import init_db, save_run
+from datetime import datetime
+
+app = FastAPI()
+
+@app.post("/run")
+async def run_job(payload: RunRequest):
+    try:
+        records = read_records(payload.input, payload.format)
+    except FileNotFoundError:
+        raise HTTPException(status_code=404, detail="input file not found")
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+    raw_count = len(records)
+    filtered = filter_records(records, payload.keyword)
+    filtered_count = len(filtered)
+    final_records = dedup_records(filtered, payload.format) if payload.dedup else filtered
+    final_count = len(final_records)
+
+    write_records(final_records, payload.output, payload.format)
+
+    summary = build_summary(
+        payload.input,
+        payload.output,
+        raw_count,
+        filtered_count,
+        final_count
+    )
+
+    init_db()
+    save_run(
+        payload.input,
+        payload.output,
+        raw_count,
+        filtered_count,
+        final_count,
+        datetime.now().isoformat()
+    )
+
+    return {"summary": summary}
+
+这一题的关键不是代码长短，而是你要真正完成这条链：
+
+请求体 → 核心逻辑 → 输出文件 → SQLite → 响应
+
+FastAPI 官方对请求体和错误处理的说明，正好支持这种写法；Python sqlite3 官方文档也明确建议对 SQL 使用占位符参数绑定，而不是字符串拼接。 
+
+练习 3：在 /docs 里真正提交一次任务
+
+启动服务：
+
+fastapi dev api.py
+
+然后去：
+
+http://127.0.0.1:8000/docs
+
+给 POST /run 提交一份最小 JSON，例如：
+
+{
+  "input": "input/sample.jsonl",
+  "output": "output/clean.jsonl",
+  "format": "jsonl",
+  "keyword": "ok",
+  "dedup": true
+}
+
+检查三件事：
+	•	接口返回了 summary
+	•	output/clean.jsonl 真的生成了
+	•	数据库里多了一条记录
+
+练习 4：故意触发一个错误路径
+
+试一个不存在的输入文件，例如：
+
+{
+  "input": "input/not_exists.jsonl",
+  "output": "output/clean.jsonl",
+  "format": "jsonl",
+  "keyword": "ok",
+  "dedup": true
+}
+
+确认返回不是 500，而是你自己定义的更清楚的错误。FastAPI 的 HTTPException 正是用来做这件事的。 
+
+第 1 周周末小任务
+
+这一周结束时，你至少要做到：
+	•	POST /run 真正调用核心逻辑
+	•	跑一次合法请求，能生成输出和数据库记录
+	•	跑一次非法请求，能得到更清楚的 HTTP 错误
+
+⸻
+
+第 2 周：API 接 SQLite，补查询接口
+
+这一周主题是：
+
+把 API 和你已有的 SQLite 运行记录完全接起来。
+
+sqlite3 官方文档给了标准的连接、执行、查询、取结果方式；同时也明确说明参数绑定要用占位符。你这周主要是在 API 层复用这些已有查询函数。 
+
+练习 5：把 GET /runs 做成真正的历史列表
+
+如果你上一轮只是简单返回列表，这一周把它稳定下来：
+
+@app.get("/runs")
+async def runs(skip: int = 0, limit: int = 10, keyword: str | None = None):
+    init_db()
+    rows = list_runs()
+
+    if keyword:
+        rows = [r for r in rows if keyword in str(r)]
+
+    return {"runs": rows[skip: skip + limit]}
+
+这一步是在练三件事：
+	•	查询参数
+	•	简单分页
+	•	结果过滤
+
+FastAPI 官方明确说，非路径参数会自动作为 query parameters 处理，并按类型做解析和验证。 
+
+练习 6：把 GET /runs/{run_id} 做成真正的详情接口
+
+@app.get("/runs/{run_id}")
+async def run_detail(run_id: int):
+    init_db()
+    row = get_run_by_id(run_id)
+    if row is None:
+        raise HTTPException(status_code=404, detail="run not found")
+    return {"run": row}
+
+这里最重要的是：
+找不到时返回 404，而不是 500。FastAPI 的错误处理文档和状态码语义都支持这种做法。 
+
+练习 7：再补一个按输入文件查询的接口
+
+如果你上一轮已经写了 find_runs_by_input(...)，这周可以再加一个接口：
+
+@app.get("/runs/by-input")
+async def runs_by_input(input_file: str):
+    init_db()
+    rows = find_runs_by_input(input_file)
+    return {"runs": rows}
+
+这个接口不是必须，但它会让你更明显感受到：
+	•	数据库层已经有结构化查询能力
+	•	API 层是在把这种能力暴露出来
+
+练习 8：在 /docs 里把这几个读接口都点一遍
+
+至少点：
+	•	GET /runs
+	•	GET /runs?skip=0&limit=2
+	•	GET /runs/{id}
+	•	一个不存在的 run_id
+
+你这一周的重点不是写更多接口，而是把“读历史”这一层彻底跑顺。
+
+第 2 周周末小任务
+
+这一周结束时，你至少要做到：
+	•	GET /runs 稳定返回历史列表
+	•	GET /runs/{run_id} 稳定返回详情
+	•	至少一个查询参数能正常工作
+	•	找不到资源时返回 404
+
+⸻
+
+第 3 周：文件上传、错误处理、最小 API 测试
+
+这一周主题是：
+
+让服务更接近真实使用状态。
+
+FastAPI 的文件上传文档明确展示了 File 和 UploadFile 两种方式，并指出 UploadFile 相比直接用 bytes 有几个优势。 
+
+FastAPI 的测试文档说明：使用 TestClient 前先安装 httpx，然后像用 httpx 一样去调应用；测试函数按 pytest 约定命名为 test_*。 
+
+练习 9：先做最小上传接口
+
+在 api.py 里加一个新接口：
+
+from fastapi import UploadFile, File, Form
+from pathlib import Path
+
+@app.post("/run-upload")
+async def run_upload(
+    file: UploadFile,
+    format: str = Form(...),
+    keyword: str | None = Form(None),
+    dedup: bool = Form(False)
+):
+    temp_dir = Path("input/uploads")
+    temp_dir.mkdir(parents=True, exist_ok=True)
+
+    temp_path = temp_dir / file.filename
+    content = await file.read()
+    temp_path.write_bytes(content)
+
+    output_path = Path("output") / f"uploaded_{file.filename}"
+
+    records = read_records(temp_path, format)
+    raw_count = len(records)
+    filtered = filter_records(records, keyword)
+    filtered_count = len(filtered)
+    final_records = dedup_records(filtered, format) if dedup else filtered
+    final_count = len(final_records)
+
+    write_records(final_records, output_path, format)
+
+    summary = build_summary(
+        str(temp_path),
+        str(output_path),
+        raw_count,
+        filtered_count,
+        final_count
+    )
+
+    init_db()
+    save_run(
+        str(temp_path),
+        str(output_path),
+        raw_count,
+        filtered_count,
+        final_count,
+        datetime.now().isoformat()
+    )
+
+    return {"summary": summary}
+
+这里先用最朴素的方式把上传文件落到本地临时目录，再复用现有逻辑。pathlib 非常适合这种临时路径管理；FastAPI 官方文件上传文档也明确表明 UploadFile 是文件接口的核心入口之一。 
+
+练习 10：故意触发一个上传错误
+
+例如：
+	•	上传空文件
+	•	format 写错
+	•	上传内容和 format 不匹配
+
+然后给这些情况补最小错误处理。
+目标不是把所有边界全做完，而是先把常见错误从“裸异常”变成更可理解的 HTTP 响应。FastAPI 官方建议用 HTTPException 来处理这类错误响应。 
+
+练习 11：安装 API 测试依赖
+
+如果你还没装：
+
+pip install httpx
+
+FastAPI 官方测试文档明确说，使用 TestClient 前先安装 httpx。 
+
+练习 12：写最小 API 测试文件
+
+新建：
+
+touch tests/test_api.py
+
+先写最小三条：
+
+from fastapi.testclient import TestClient
+from api import app
+
+client = TestClient(app)
+
+def test_health():
+    response = client.get("/health")
+    assert response.status_code == 200
+    assert response.json() == {"status": "ok"}
+
+def test_run_detail_not_found():
+    response = client.get("/runs/999999")
+    assert response.status_code == 404
+
+def test_run_post_minimal():
+    payload = {
+        "input": "input/sample.jsonl",
+        "output": "output/test_api_clean.jsonl",
+        "format": "jsonl",
+        "keyword": "ok",
+        "dedup": True
+    }
+    response = client.post("/run", json=payload)
+    assert response.status_code == 200
+    assert "summary" in response.json()
+
+然后运行：
+
+pytest -q
+
+FastAPI 官方测试文档明确说，TestClient 的用法和 httpx 很像，而测试函数按 pytest 约定命名。 
+
+练习 13：如果你还有余力，再补一个上传接口测试
+
+这一条不是本轮必须，但如果你做，优先测：
+	•	上传一个很小的合法文件
+	•	返回状态码 200
+	•	返回里有 summary
+
+第 3 周周末小任务
+
+这一周结束时，你至少要做到：
+	•	POST /run-upload 跑通一次
+	•	至少一类上传错误会被更清楚地处理
+	•	tests/test_api.py 能跑起来
+	•	至少 3 条 API 测试通过
+
+⸻
+
+Round 16 综合演练
+
+把这一轮收口成一次完整演练。你从头做到尾：
+
+第一步，确认项目里有：
+
+api.py
+schemas.py
+db.py
+tests/test_api.py
+
+第二步，启动服务：
+
+fastapi dev api.py
+
+第三步，在 /docs 里实际完成下面这些动作：
+	•	GET /health
+	•	GET /runs
+	•	GET /runs/{id}
+	•	POST /run
+	•	POST /run-upload
+
+第四步，检查：
+	•	数据库里是否多了一条记录
+	•	输出目录里是否有新结果文件
+
+第五步，跑测试：
+
+pytest -q
+
+第六步，把这一轮改动提交到 Git：
+
+git status
+git add .
+git commit -m "connect FastAPI with core logic, sqlite, upload, and tests"
+
+如果这一整套你能独立做完，Round 16 就算真正跑通了。
+
+⸻
+
+Round 16 最终自测清单
+
+做完以后，你自己检查下面这些：
+	•	你能不能让 POST /run 真正触发核心处理逻辑，而不是只回显请求体。
+	•	你能不能让 API 层复用 SQLite 历史查询。 
+	•	你能不能做一个最小上传接口，并优先使用 UploadFile。 
+	•	你能不能对常见错误返回更合适的 HTTP 状态，而不是都给 500。 
+	•	你能不能写并跑最小 API 测试。 
+	•	你能不能把这轮改动正常提交进 Git。
+
+这些都做到，Round 16 就算过关了。
+
+你继续的话，我下一步就给你展开 Round 17：服务化收口。

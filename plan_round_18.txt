@@ -1,0 +1,643 @@
+好，下面我把 Round 18：数值计算与数据分析前置 完整展开。
+
+这一轮是路线 C 的起点，但还不是正式进入模型训练。它的任务只有一个：把你后面做机器学习、深度学习、NLP 时一定会反复用到的那层“数据感觉”先打牢。核心工具是 NumPy + pandas，再补一点点 csv 标准库直觉。NumPy 官方把 ndarray 定义为同质元素组成的多维数组，核心概念是 shape、dtype、axis；pandas 官方把 read_csv() 和 DataFrame 作为表格数据处理主线，并把“读数据、选列、做统计、组合表、处理文本列”组织成一整套入门教程。 
+
+Round 18 的目标
+
+这轮结束时，你要做到这些：
+
+你能用 NumPy 处理一维、二维数组，理解 shape、dtype、axis、切片、广播这些概念，并知道为什么 NumPy 的很多操作比 Python for 循环更适合数值计算。NumPy 官方明确说明，ndarray 是同类型元素的多维数组；广播则是在满足形状约束时，把较小数组“扩展”到较大数组上做运算，而且这种向量化通常让循环发生在 C 层而不是 Python 层。 
+
+你能用 pandas 读取 CSV，查看数据基本形状，选列、筛行、做最基础统计，并开始理解 groupby 这种“按条件聚合”的分析方式。pandas 官方教程把“读写表格数据”“选择子集”“计算 summary statistics”“groupby split-apply-combine”都列成入门主线。 
+
+你还要建立一个很关键的项目直觉：
+模型前的数据准备，很多时候不是“高深 AI”，而是“读表、筛数据、看分布、查缺失、做分组统计、导出干净数据”。 这一步虽然是工程判断，但它和 pandas 官方教程的内容结构高度一致，因为官方入门本身就在围绕这些动作展开。 
+
+这轮学什么，不学什么
+
+这轮要学的是：
+	•	NumPy 基础数组操作
+	•	shape / dtype / axis
+	•	广播和向量化直觉
+	•	pandas DataFrame 基础
+	•	read_csv()
+	•	选列、筛行、基础统计
+	•	groupby
+	•	用这些能力做最小数据分析
+
+这轮先不学：
+	•	神经网络
+	•	PyTorch
+	•	Hugging Face
+	•	特征工程深水区
+	•	复杂可视化
+	•	大规模数据管线
+
+这样安排是因为 scikit-learn 官方“Getting Started”虽然已经开始讲完整机器学习流程，但它也明确说自己除了监督/无监督学习外，还提供数据预处理、模型选择、评估等工具。对你现在来说，更稳的顺序是先把“数据进入模型前”的这一层做顺。 
+
+我对你这一轮的总体建议
+
+我建议你这一轮坚持一个原则：
+
+先在小数据上把动作做顺，不追求一次接真实大项目。
+
+也就是说，优先用小 CSV、小表格、小数组，把“读、看、筛、统计、导出”练熟。pandas 官方教程本身就是用 Titanic 这类教学数据，按“读取、选子集、做统计、组合、文本处理”的顺序推进；NumPy 官方 quickstart 也是先从数组对象和基本运算讲起，而不是一上来就讲复杂线性代数。 
+
+本轮推荐资源
+
+这一轮我建议你主要盯住这些官方材料：
+
+第一类是 NumPy Quickstart 和 NumPy Absolute Basics。前者强调 ndarray、形状、轴和常见数组操作；后者更适合入门者理解数组维度变化、基础切片和广播。 
+
+第二类是 pandas Getting Started Tutorials。重点看：
+	•	How do I read and write tabular data?
+	•	How do I select a subset of a DataFrame?
+	•	How to calculate summary statistics
+	•	Group by: split-apply-combine。 
+
+第三类是 Python csv 标准库文档。虽然这一轮主力是 pandas，但你最好知道 CSV 在标准库里是什么样，尤其是 DictReader / DictWriter 这种最基础表格读写能力。官方文档明确说 csv 模块实现了读写 CSV 表格数据的类。 
+
+⸻
+
+第 1 周：NumPy 基础与数组直觉
+
+这一周只做一件事：把“数组”真正当成对象来理解。
+
+NumPy 官方 quickstart 明确说，它的核心对象是同质的多维数组；NumPy ndarray 参考文档也说明，数组由 shape 定义尺寸，由 dtype 定义元素类型。也就是说，这一周你要真正把“列表思维”切换到“数组思维”。 
+
+这周要学到什么程度
+
+你至少要能做这些事：
+	•	创建一维和二维数组
+	•	看 shape
+	•	看 dtype
+	•	做切片
+	•	做最基础的元素级运算
+	•	理解一维、二维和更高维的区别
+
+NumPy 官方 beginner 文档还专门讲了如何把 1D 数组变成 2D 数组，例如用 np.newaxis 或 np.expand_dims 增加维度。 
+
+这周最重要的概念
+
+第一，shape 决定“这个数组长什么样”。
+第二，dtype 决定“里面装的是什么类型的元素”。
+第三，广播让不同形状的数组在满足规则时还能一起运算。NumPy 官方对广播的描述很明确：它会在形状兼容时把较小数组扩展到较大数组上，而且通常能避免不必要拷贝。 
+
+这周产出
+
+这一周结束时，你应该已经有一种明确感觉：
+	•	Python 列表更像通用容器
+	•	NumPy 数组更像数值计算对象
+
+这一步非常关键，因为后面无论是 scikit-learn 还是 PyTorch，本质上都在处理更严格的数值对象。scikit-learn 官方首页也明确说它建立在 NumPy、SciPy 和 matplotlib 之上。 
+
+⸻
+
+第 2 周：pandas 读表、选子集、看统计
+
+这一周的主题是：把“数组直觉”推进到“表格直觉”。
+
+pandas 官方教程把 read_csv() 放在非常靠前的位置，而且明确说它会把 CSV 读成 DataFrame；同一套教程接着就讲如何选列、如何筛选子集、如何做 summary statistics。 
+
+这周要学到什么程度
+
+你至少要能做这些事：
+	•	read_csv() 读入一个 CSV
+	•	看 head()
+	•	看列名和基本形状
+	•	选单列、选多列
+	•	根据条件筛选一部分行
+	•	对数值列做最基础统计
+
+pandas DataFrame.describe() 文档明确说，它会生成描述性统计，包括中心趋势、离散程度和分布形状的一部分摘要；官方教程里的“calculate summary statistics”也直接展示了 median() 和 describe() 这类操作。 
+
+这周最重要的概念
+
+第一，DataFrame 是带列名、行索引的二维表格对象。
+第二，你要开始习惯“先看数据长什么样，再决定处理动作”。
+第三，基础统计不是可有可无，而是你判断数据质量和分布的第一步。这一步的内容结构本身就和 pandas 官方入门教程一致。 
+
+这周产出
+
+这一周结束时，你应该已经能拿一份小 CSV，自行完成：
+	•	读入
+	•	看头几行
+	•	选列
+	•	筛行
+	•	做统计
+
+这组动作以后会在任何训练数据准备、标注结果检查、特征探索里反复出现。
+
+⸻
+
+第 3 周：groupby、数据清洗前置、最小分析流程
+
+这一周的主题是：让表格分析开始有“数据项目味道”。
+
+pandas 官方 groupby 文档明确说，groupby 操作本质上是 split-apply-combine，可以用来按组聚合大量数据并对各组执行操作。也就是说，你终于开始接触“不同类别分别统计”这种真实数据分析动作了。 
+
+这周要学到什么程度
+
+你至少要能做这些事：
+	•	按某一列分组
+	•	做组内计数、均值或其他简单聚合
+	•	看缺失值、异常值或明显不合理值
+	•	导出一份更干净的数据子集
+
+如果你现在还没有真实项目数据，可以继续用教学 CSV 练手。关键不是数据本身，而是把这套动作练熟。
+
+这周最重要的概念
+
+第一，groupby 是“按类分别看”的入口。
+第二，清洗不是高深技巧，很多时候就是找缺失、找重复、找不合理值。
+第三，分析结果最好能重新导出，而不是只停留在 notebook 或控制台里。pandas 官方教程本身就把“读写表格数据”和“如何组合/统计/处理文本”放在一条连贯主线里。 
+
+这周产出
+
+这一周结束时，你应该已经有一个最小“数据分析前置流程”：
+	•	读表
+	•	看结构
+	•	做筛选
+	•	做统计
+	•	按类别分组
+	•	导出处理后的结果
+
+这就是后面你进入 scikit-learn、PyTorch、NLP 数据集准备之前，最应该先站稳的一层。scikit-learn 官方 getting started 也明确把数据预处理和模型评估列为同等重要的部分。 
+
+⸻
+
+本轮产出
+
+Round 18 结束时，你应该至少拿到这些东西：
+	•	一个最小 NumPy 练习脚本
+	•	一个最小 pandas 读表与统计脚本
+	•	一个最小 groupby 分析脚本
+	•	一份你自己写的“NumPy / pandas 各自负责什么”的笔记
+	•	一份处理后导出的干净 CSV 或 JSONL
+
+这些产出看起来还没有“模型味”，但它们会直接决定你后面 Round 19 进入最小机器学习闭环时顺不顺。因为训练前的数据准备质量，往往比“选哪个模型”更早决定实验是否可用。这一判断建立在 scikit-learn 官方把数据预处理和模型流程并列呈现这一事实之上。 
+
+这一轮最容易踩的坑
+
+第一个坑，是把 NumPy 当成“更快的 list”。
+NumPy 官方定义的是同质多维数组，重点在 shape、dtype、axis 和向量化，不只是“容器换皮”。 
+
+第二个坑，是学 pandas 时只会 read_csv() 和 head()，却不练筛选和统计。pandas 官方教程并不是只教读表，而是紧接着就讲 subset 和 summary statistics。 
+
+第三个坑，是过早追求 notebook 里的花哨分析，而忽视最基础的表结构检查。你现在最重要的是把“读、看、筛、统、导”这条线练顺。
+
+第四个坑，是还没把 NumPy / pandas 练顺，就急着进 PyTorch。PyTorch 的 beginner basics 确实从张量开始，但如果你对数组、表格和数据分布还没有感觉，后面会很容易卡在“模型以外”的地方。这一点我这次没有专门展开 PyTorch 文档，只作为路线上的提醒。
+
+Round 18 的验收标准
+
+你可以用下面这些标准判断自己有没有完成：
+	•	你能说清 ndarray 大概是什么，shape 和 dtype 分别表示什么。 
+	•	你能解释广播为什么重要。 
+	•	你能用 pandas 读一份 CSV，并做最基础的选列、筛行和统计。 
+	•	你能做一个最基础的 groupby 聚合。 
+	•	你能把一份小数据从“原始表”处理成“更适合后续建模或分析的表”。
+
+如果你确认这版 Round 18 没问题，我下一条就继续给你出 Round 18 专用练习清单。
+
+可以。下面是 Round 18 专用练习清单。
+
+这一轮只做一件大事：把你后面做机器学习、深度学习、NLP 时一定会反复用到的那层“数据感觉”先打牢。主力工具就是 NumPy + pandas。NumPy 的核心对象是同质元素组成的多维数组 ndarray，关键概念是 ndim、shape、dtype 和按轴操作；pandas 的入门主线则是 read_csv() 读表、选子集、做统计、再做 groupby 聚合。scikit-learn 也明确把训练输入写成样本矩阵 X 和目标 y，并说明它们通常是 NumPy 数组或等价的 array-like 数据。 ￼
+
+这一轮要练到什么程度
+
+Round 18 结束时，你至少要做到这些：
+
+你能用 NumPy 创建一维和二维数组，读懂 shape 和 dtype，做切片、基础运算，并开始理解为什么很多数值操作更适合“直接对数组做运算”，而不是自己写 Python for 循环。NumPy 官方 quickstart 就是围绕“多维数组如何表示、如何在不写 for 循环的情况下处理它们、以及如何理解 axis 和 shape”展开的。 ￼
+
+你能用 pandas 读入 CSV，查看表头、选列、筛行、做最基础统计，并开始用 groupby 做按类别聚合。pandas 官方教程明确把 read_csv()、子集选择、统计和 groupby 放在入门主线里。 ￼
+
+你还要开始形成一个很关键的项目直觉：模型前的数据准备，很多时候不是“高深 AI”，而是“读表、筛数据、看分布、查缺失、做分组统计、导出干净数据”。这个判断和 pandas 官方入门教程的内容结构是一致的。 ￼
+
+⸻
+
+先准备工作区
+
+先进入你固定的练习区：
+
+mkdir -p ~/cli-lab/round18
+cd ~/cli-lab/round18
+mkdir week1 week2 week3
+
+本轮主力就是 NumPy 和 pandas，你最好在当前虚拟环境里安装它们，然后始终在同一个环境里练。NumPy 入门以 ndarray/shape/dtype/axis 为核心，pandas 入门从 read_csv()、子集选择、统计和 groupby 开始。 ￼
+
+你可以先准备一个最小环境：
+
+pip install numpy pandas
+
+
+⸻
+
+第 1 周：NumPy 基础与数组直觉
+
+这一周只做一件事：把“列表思维”切到“数组思维”。NumPy 官方明确说，ndarray 是同质元素组成的多维数组，重点在维度、形状和类型；它也特别强调“如何在不写 for 循环的情况下处理多维数组”。 ￼
+
+练习 1：创建一维和二维数组
+
+进入目录：
+
+cd ~/cli-lab/round18/week1
+touch numpy_basics.py
+
+写入：
+
+import numpy as np
+
+a = np.array([1, 2, 3, 4])
+b = np.array([[1, 2, 3], [4, 5, 6]])
+
+print("a =", a)
+print("a.shape =", a.shape)
+print("a.dtype =", a.dtype)
+
+print("b =\n", b)
+print("b.shape =", b.shape)
+print("b.dtype =", b.dtype)
+
+NumPy 官方文档把 shape 解释为每个维度的大小，dtype 解释为数组元素类型，ndim 是维度数。 ￼
+
+练习 2：练 ndim、size、reshape
+
+继续补代码：
+
+import numpy as np
+
+x = np.arange(12)
+print("x =", x)
+print("x.ndim =", x.ndim)
+print("x.shape =", x.shape)
+print("x.size =", x.size)
+
+y = x.reshape(3, 4)
+print("y =\n", y)
+print("y.ndim =", y.ndim)
+print("y.shape =", y.shape)
+
+NumPy quickstart 直接用 arange(...).reshape(...) 展示二维数组、ndim、shape、size 这些属性。 ￼
+
+练习 3：练切片和选子数组
+
+继续补：
+
+import numpy as np
+
+arr = np.array([[10, 20, 30], [40, 50, 60], [70, 80, 90]])
+
+print(arr[0])        # 第一行
+print(arr[:, 1])     # 第二列
+print(arr[1:, :2])   # 后两行、前两列
+
+这一步的目标是让你开始习惯“按维度切片”，而不是只按一维列表处理。NumPy 初学者文档就是通过一维、二维数组和形状变化来建立这种直觉。 ￼
+
+练习 4：练数组加减乘和“无 for 循环”运算
+
+继续补：
+
+import numpy as np
+
+a = np.array([1, 2, 3])
+b = np.array([10, 20, 30])
+
+print("a + b =", a + b)
+print("a * 2 =", a * 2)
+print("a ** 2 =", a ** 2)
+
+NumPy quickstart 明确强调：这类数组操作的重点就是不写 Python for 循环，而直接对整块数组做运算。 ￼
+
+练习 5：练广播的最小感觉
+
+新建一个更小例子：
+
+import numpy as np
+
+m = np.array([[1, 2, 3], [4, 5, 6]])
+v = np.array([10, 20, 30])
+
+print(m + v)
+
+NumPy 的广播规则里，大小为 1 的维度可以像被“扩展”到更大形状那样参与运算；官方 quickstart 也明确把 broadcasting 作为需要理解的重要概念之一。 ￼
+
+练习 6：用数组做最小数据处理
+
+做一个和后面机器学习更接近的例子：
+
+import numpy as np
+
+scores = np.array([0.1, 0.8, 0.55, 0.93, 0.21])
+
+print("mean =", scores.mean())
+print("max =", scores.max())
+print("min =", scores.min())
+print("threshold > 0.5 =", scores[scores > 0.5])
+
+这里你是在练“把一组数当成数值对象做处理”，而不是只把它当普通 Python 列表。scikit-learn 之后的很多输入，本质上都是这种数组思维。 ￼
+
+第 1 周周末小任务
+
+这一周结束时，你至少要做到：
+	•	自己创建 1D 和 2D 数组
+	•	能看懂 shape、dtype、ndim
+	•	能做切片
+	•	能做最基础的数组运算
+	•	能解释“为什么 NumPy 不只是更快的 list”
+
+⸻
+
+第 2 周：pandas 读表、选列、筛行、统计
+
+这一周主题是：把数组直觉推进到表格直觉。pandas 官方明确说，read_csv() 会把 CSV 读成 DataFrame；同一套入门教程马上就接“选 DataFrame 子集”和“做 summary statistics”。 ￼
+
+先准备一份练习数据
+
+进入目录：
+
+cd ~/cli-lab/round18/week2
+
+创建一个最小 CSV：
+
+cat > samples.csv <<'EOF'
+id,label,score,length,source
+1,ok,0.91,120,manual
+2,bad,0.12,95,manual
+3,ok,0.88,150,model
+4,blur,0.45,80,model
+5,ok,0.93,140,manual
+6,bad,0.20,60,model
+7,blur,0.51,110,manual
+EOF
+
+你也可以用 Python 标准库 csv 来读写 CSV；官方文档说明 csv.reader 读出来的每一行默认都是字符串列表，不会自动做类型转换。现在我们主力用 pandas，是因为这一轮更重点是表格分析。 ￼
+
+练习 7：读表并看头部
+
+新建：
+
+touch pandas_basics.py
+
+写入：
+
+import pandas as pd
+
+df = pd.read_csv("samples.csv")
+print(df.head())
+print(df.shape)
+print(df.columns)
+
+pandas 官方教程明确说，read_csv() 把 CSV 读成 DataFrame。 ￼
+
+练习 8：选单列和多列
+
+继续补：
+
+import pandas as pd
+
+df = pd.read_csv("samples.csv")
+
+print(df["label"])
+print(df[["label", "score"]])
+
+pandas 官方“选择 DataFrame 子集”教程明确展示了：单列选择返回 Series，多列选择返回 DataFrame。 ￼
+
+练习 9：筛行
+
+继续补：
+
+import pandas as pd
+
+df = pd.read_csv("samples.csv")
+
+high_score = df[df["score"] > 0.5]
+print(high_score)
+
+only_ok = df[df["label"] == "ok"]
+print(only_ok)
+
+pandas 官方子集教程直接演示了按条件筛选行，例如 titanic[titanic["Age"] > 35] 这种写法。 ￼
+
+练习 10：最小统计
+
+继续补：
+
+import pandas as pd
+
+df = pd.read_csv("samples.csv")
+
+print(df["score"].mean())
+print(df["length"].max())
+print(df[["score", "length"]].describe())
+
+pandas 官方统计教程明确展示了像 median()、agg()、describe() 这类基础统计动作。 ￼
+
+练习 11：做一个最小清洗版本
+
+继续补：
+
+import pandas as pd
+
+df = pd.read_csv("samples.csv")
+
+clean = df[df["score"] >= 0.5]
+clean = clean[["id", "label", "score", "source"]]
+
+print(clean)
+clean.to_csv("samples_clean.csv", index=False)
+
+这一题是在练后面做机器学习数据前最常见的动作：先过滤，再保留需要的列，再导出干净数据。pandas 官方入门本来就把“读表”和“写表”放在同一条教程线上。 ￼
+
+第 2 周周末小任务
+
+这一周结束时，你至少要做到：
+	•	read_csv() 读入一份表
+	•	选单列、选多列
+	•	按条件筛行
+	•	做一个最基础统计
+	•	导出一份清洗后的 CSV
+
+⸻
+
+第 3 周：groupby、缺失值检查、最小分析流程
+
+这一周主题是：让数据分析开始有“项目味道”。pandas 官方 groupby 文档明确说，groupby 会把对象分组、应用函数、再组合结果，可用于对大量数据按组执行操作和聚合。官方统计教程也直接示范了 groupby("Sex").mean() 这种按类别统计。 ￼
+
+先准备第二份练习数据
+
+进入目录：
+
+cd ~/cli-lab/round18/week3
+
+创建一个更像“标注结果分析”的 CSV：
+
+cat > runs.csv <<'EOF'
+run_id,label,score,source,length
+1,ok,0.91,manual,120
+2,bad,0.12,manual,95
+3,ok,0.88,model,150
+4,blur,0.45,model,80
+5,ok,0.93,manual,140
+6,bad,0.20,model,60
+7,blur,0.51,manual,110
+8,ok,,model,130
+9,bad,0.33,manual,70
+EOF
+
+这里故意放了一个缺失值，方便你练“看缺失”。
+
+练习 12：看缺失值和基本结构
+
+新建：
+
+touch groupby_lab.py
+
+写入：
+
+import pandas as pd
+
+df = pd.read_csv("runs.csv")
+
+print(df.head())
+print(df.shape)
+print(df.isna().sum())
+
+groupby 参考页里同时能看到 isna()、dropna() 等相关 DataFrame 操作；这也说明缺失值检查本来就是表格处理的第一层动作。 ￼
+
+练习 13：按 label 分组计数
+
+继续补：
+
+import pandas as pd
+
+df = pd.read_csv("runs.csv")
+
+print(df.groupby("label").size())
+
+这一步是在练“不同类别分别有多少条”。groupby 官方文档说明，它就是用来按列分组并对这些组做操作的。 ￼
+
+练习 14：按 source 分组看平均分
+
+继续补：
+
+import pandas as pd
+
+df = pd.read_csv("runs.csv")
+
+print(df.groupby("source")["score"].mean())
+
+pandas 统计教程展示了按类别做均值这种非常典型的分析方式。 ￼
+
+练习 15：组合条件做最小分析
+
+继续补：
+
+import pandas as pd
+
+df = pd.read_csv("runs.csv")
+
+filtered = df[df["score"] >= 0.5]
+print(filtered.groupby("label").size())
+print(filtered.groupby("source")["length"].mean())
+
+这一题是在练“先筛、再分组、再聚合”，这是后面做数据集分析时非常常见的一条小链路。
+
+练习 16：导出更干净的数据
+
+继续补：
+
+import pandas as pd
+
+df = pd.read_csv("runs.csv")
+
+clean = df.dropna(subset=["score"])
+clean = clean[clean["score"] >= 0.3]
+clean.to_csv("runs_clean.csv", index=False)
+print(clean)
+
+这里你练到了：
+	•	缺失值过滤
+	•	阈值过滤
+	•	导出清洗后结果
+
+这就是最小的数据分析前置流程。
+
+练习 17：把结果写成小结
+
+新建一个文件：
+
+touch analysis_notes.md
+
+用自己的话写 4 句话：
+	•	这份数据一共有多少行
+	•	缺失值在哪里
+	•	哪个 label 最多
+	•	哪个 source 的平均 score 更高
+
+这一题看起来简单，但它很重要，因为它在训练你把“代码结果”翻译成“分析结论”。
+
+第 3 周周末小任务
+
+这一周结束时，你至少要做到：
+	•	检查缺失值
+	•	用 groupby 做至少两种聚合
+	•	导出清洗后的结果表
+	•	写一份自己的最小分析结论
+
+⸻
+
+Round 18 综合演练
+
+把这一轮收口成一次完整演练。你从头做到尾：
+
+第一步，在 week1 里完成 NumPy 练习，确认你能解释：
+	•	shape
+	•	dtype
+	•	ndim
+	•	广播
+
+第二步，在 week2 里完成 pandas 练习，确认你能：
+	•	读表
+	•	选列
+	•	筛行
+	•	做统计
+	•	导出清洗表
+
+第三步，在 week3 里完成 groupby 练习，确认你能：
+	•	看缺失值
+	•	按类别统计
+	•	按来源做均值
+	•	导出清洗表
+	•	写分析小结
+
+第四步，把这一轮成果整理成这个结构：
+
+round18/
+├─ week1/
+│  └─ numpy_basics.py
+├─ week2/
+│  ├─ samples.csv
+│  ├─ pandas_basics.py
+│  └─ samples_clean.csv
+├─ week3/
+│  ├─ runs.csv
+│  ├─ groupby_lab.py
+│  ├─ runs_clean.csv
+│  └─ analysis_notes.md
+
+如果这一整套你能独立做完，Round 18 就算真正跑通了。
+
+⸻
+
+Round 18 最终自测清单
+
+做完以后，你自己检查下面这些：
+	•	你能不能说清 ndarray 大概是什么，shape 和 dtype 分别表示什么。 ￼
+	•	你能不能解释广播为什么重要。 ￼
+	•	你能不能用 pandas 读一份 CSV，并做最基础的选列、筛行和统计。 ￼
+	•	你能不能做一个最基础的 groupby 聚合。 ￼
+	•	你能不能把一份小数据从“原始表”处理成“更适合后续建模或分析的表”。
+
+这些都做到，Round 18 就算过关了。
+
+你继续的话，我下一步就给你展开 Round 19：机器学习最小闭环。

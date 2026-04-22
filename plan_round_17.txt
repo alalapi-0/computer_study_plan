@@ -1,0 +1,523 @@
+好，下面我把 Round 17：服务化收口 完整展开。
+
+这一轮是路线 B 的收口轮。核心不是再加很多新接口，而是把你前面已经做出来的 API，整理成一个更像正式服务的形态：项目结构更清楚，配置管理更稳，日志更规范，文档更像样，能跑在容器里，且你开始理解“最小认证”和“部署前检查项”到底是什么。FastAPI 官方在教程里已经把这条路线拆得很清楚：从 Bigger Applications - Multiple Files、Settings and Environment Variables、Metadata and Docs URLs、Security - First Steps，再到 Deployment Concepts，基本就是这一轮该收口的内容。 
+
+Round 17 的目标
+
+这轮结束时，你要做到这些：你的 FastAPI 服务不再把所有路由都塞在一个文件里，而是开始按模块组织；配置不再只靠硬编码，而是能从环境变量读取；日志至少有统一入口和清晰级别；你知道最小认证通常从 Bearer token 这种模式开始；你能把服务用 Uvicorn 和 Docker 跑起来，并正确发布端口；你也能列出一份“上线前我至少该检查什么”的清单。FastAPI 官方明确说，大一些的应用很少还能全部放在一个文件里，APIRouter 就是用来把路径操作分组并拆到多个文件中的；Pydantic Settings 则明确说可以从环境变量或 secrets 文件加载设置；FastAPI 的 Security - First Steps 用的是 OAuth2 Password flow + Bearer token；FastAPI Deployment Concepts 列出的重点包括 HTTPS、启动方式、重启、进程副本数、内存和“启动前需要做的事”；Docker 官方说明容器端口要通过 -p/--publish 才能对外可见。 
+
+这轮学什么，不学什么
+
+这轮要学的是：用 APIRouter 做多文件结构，做最小配置管理，整理日志和 API 元数据，补一个“认证概念级”入口，理解最小 CORS 场景，补部署前检查项，以及用 Uvicorn 和 Docker 把服务跑起来。FastAPI 官方文档分别对 Bigger Applications、Metadata、Security、CORS 和 Deployment 做了独立章节，说明这些正好构成了“从能跑到更像服务”的这一层能力。 
+
+这轮先不学：完整 JWT 登录系统、复杂 RBAC、反向代理、HTTPS 证书配置、生产级多实例集群、监控告警平台。FastAPI 和 Uvicorn 的官方文档都说明了更完整的生产部署会涉及 workers、反向代理等更大的话题，但你这一轮更适合先把“服务化骨架”收住。 
+
+我对你这一轮的总体建议
+
+我建议你这一轮按“先整理结构，再补配置和文档，再做最小认证概念，最后跑容器”的顺序来。原因很简单：如果项目结构还是乱的，配置和认证很快就会继续长成一团；而如果 Docker 先上，但服务本身没有清晰入口和配置分层，容器化也只是把混乱打包。FastAPI 官方把多文件结构、设置管理、元数据文档、安全和部署概念分开讲，实际上就已经暗示了这种收口顺序。 
+
+我建议你这一轮的项目结构
+
+这一轮我建议你把项目整理到这个程度：
+
+ai_prep_tool/
+├─ api/
+│  ├─ main.py
+│  ├─ routers/
+│  │  ├─ health.py
+│  │  ├─ runs.py
+│  │  └─ jobs.py
+│  ├─ schemas.py
+│  ├─ config.py
+│  └─ log_utils.py
+├─ core.py
+├─ io_utils.py
+├─ db.py
+├─ tests/
+├─ Dockerfile
+├─ requirements.txt
+├─ pyproject.toml
+└─ README.md
+
+这里的关键不是目录名字本身，而是开始用 APIRouter 把接口按职责分组，例如 health、runs、jobs。FastAPI 官方明确说 APIRouter 用来把路径操作分组，并把它们包含进应用里；Bigger Applications 这一章本质上就是在教你把应用拆成多个文件。 
+
+本轮推荐资源
+
+这一轮我建议你主要盯住这几类官方资料：FastAPI 的 Bigger Applications - Multiple Files，Settings and Environment Variables，Metadata and Docs URLs，Security - First Steps，CORS，Deployment Concepts；Uvicorn 的 Settings 和 Deployment；Docker 的 Publishing ports。这些几乎就是服务化收口的完整地图。 
+
+3 周安排
+
+第 1 周：结构化服务，把单文件 API 拆开
+
+这一周只做一件事：把 api.py 从“一个文件堆所有路由”，整理成“主入口 + routers”。FastAPI 官方明确说，大一点的应用很少还能只放在一个文件里，APIRouter 就是用来做这件事的；而且它会被自动加入 OpenAPI，所以拆分后文档能力不会丢。 
+
+你这一周最少要把这些路由拆出去：
+	•	health.py：GET /health
+	•	runs.py：GET /runs、GET /runs/{id}
+	•	jobs.py：POST /run、POST /run-upload
+
+然后在 main.py 里统一 include_router(...)。这样一来，你的服务层第一次真正有了“模块边界”。这一步的意义不只是好看，而是后面配置、认证、测试和日志都更容易分层。FastAPI 的 Bigger Applications 章节就是围绕这种模块化组织展开的。 
+
+第 2 周：配置管理、日志规范、文档元信息
+
+这一周主题是：把服务的“外部可变项”和“运行痕迹”整理干净。FastAPI 的 Settings and Environment Variables 章节直接展示了如何用 pydantic-settings 的 BaseSettings 从环境变量读取配置；Pydantic Settings 官方也明确说，这个基类允许值被环境变量覆盖，而且对不想写进代码的 secrets 很有用。 
+
+我建议你这一周至少把这些配置抽出来：
+	•	app_name
+	•	api_version
+	•	debug
+	•	database_path
+	•	log_level
+	•	可选的 docs_url / openapi_url
+
+FastAPI 的 Metadata and Docs URLs 章节明确说，你可以自定义 API 的 title、summary、description、version，也可以自定义 OpenAPI URL 和 docs URLs。也就是说，这一周你可以让 /docs 不再是“默认壳子”，而是开始像你自己的服务。 
+
+日志这边，这一轮你不需要引入新框架，但至少要做到：主入口统一初始化日志；路由里不随手 print()；错误路径和成功路径都有清楚日志。Uvicorn 的 settings 和 deployment 文档都显示，服务运行本身就有自己的 host、port、log-level 这类配置项，这也意味着“服务运行”和“应用日志”最好都开始有统一入口。 
+
+第 3 周：最小认证概念、部署前检查项、Docker 运行 API
+
+这一周主题是：让服务更像“准备对外暴露”的状态。
+
+先说最小认证概念。FastAPI 的 Security - First Steps 不是让你马上做完整登录系统，而是先让你理解：OAuth2 Password flow + Bearer token 是很常见的一条路；OAuth2PasswordBearer 需要一个 tokenUrl，客户端会把用户名和密码发到那个地址换 token，然后后续请求带着 token 来访问受保护的接口。FastAPI 还特别说明 Bearer token 往往是大多数用例的合适起点。 
+
+这一轮我建议你先不真正做完整 token 颁发，而是只做两件事：第一，理解“哪些接口未来可能需要保护”，例如 POST /run；第二，给自己留一个简单的认证扩展点。这样你就不会在下一轮之前把安全完全忽略掉，但也不会一下子跳进认证深水区。这个建议是基于 FastAPI Security First Steps 的定位做出的。 
+
+然后是部署前检查项。FastAPI 的 Deployment Concepts 章节把上线前要考虑的事总结得很清楚：HTTPS、启动方式、自动重启、进程副本数、内存、以及“启动前需要做的事”。你这一周至少要给自己写一份 checklist，里面包括：
+	•	配置是否都能从环境变量读
+	•	数据库路径是否正确
+	•	docs 和 metadata 是否清楚
+	•	错误接口返回是否合理
+	•	Docker 能否正常跑起来
+	•	端口是否正确发布
+
+这些检查项不是“可有可无”，而是服务从本地实验往外迈一步前必须想清楚的东西。 
+
+最后是 Docker 运行 API。Uvicorn 的 settings 文档明确给出了最小命令，比如 uvicorn main:app --host 0.0.0.0 --port 8000；Docker 官方则明确说明，要让容器端口对外可见，需要 -p/--publish。这意味着你这一轮最好至少能做到：
+	•	容器里启动 FastAPI / Uvicorn
+	•	用 docker run -p 8000:8000 ... 把端口映射出来
+	•	在宿主机访问服务和 /docs
+
+Docker 文档还特别说明，默认桥接网络下容器端口不会自动对外可见，必须 publish。 
+
+这轮建议的最小运行方式
+
+我建议你这一轮的服务入口先统一到类似：
+
+uvicorn api.main:app --host 0.0.0.0 --port 8000
+
+Uvicorn 官方 settings 文档直接给出了这种配置方式，而且说明命令行、程序化调用和环境变量都是可选配置方式；同时它还提醒，如果你用 reload=True 或 workers=NUM 的程序化方式，应该放在 if __name__ == "__main__" 保护下。 
+
+如果你用 Docker 跑，最小命令可以是类似：
+
+docker run --rm -p 8000:8000 ai-prep-tool:demo
+
+端口发布这一点，Docker 官方文档说得很明确。 
+
+本轮产出
+
+Round 17 结束时，你应该至少拿到这些东西：一个多文件结构的 FastAPI 服务；一个最小设置模块；更清楚的 API 元信息和文档页；一份“将来要加认证”的最小设计说明；一份部署前检查清单；一个能在 Docker 里跑起来并通过端口映射访问的 API。FastAPI Bigger Applications、Settings、Metadata、Security、Deployment，以及 Docker 端口发布文档，正好共同支撑这些产出。 
+
+这一轮最容易踩的坑
+
+第一个坑，是只把文件拆开，却没有真正按职责拆。APIRouter 的意义不是“多几个文件”，而是按资源或领域分组路径操作。FastAPI 官方 Bigger Applications 讲的就是这一点。 
+
+第二个坑，是继续把配置硬编码在代码里。FastAPI 的 Settings and Environment Variables 已经明确展示了把设置放进单独模块并通过环境变量覆盖的方式；Pydantic Settings 也明确说它对生产里的 secrets 和环境变量很友好。 
+
+第三个坑，是一提安全就直接冲向完整 JWT 系统。FastAPI 的 Security - First Steps 更适合你现在这一步：先理解 Bearer token 和 tokenUrl 的角色，先知道服务哪些端点未来需要保护。 
+
+第四个坑，是 Docker 里服务起了，但端口没 publish，结果宿主机访问不到。Docker 官方对 -p/--publish 的说明已经足够明确了。 
+
+第五个坑，是直接把 uvicorn --reload 当作“部署方式”。Uvicorn 的 deployment 文档明确区分了本地开发和生产部署：本地开发常用 uvicorn --reload，而生产会考虑 worker、反向代理等。你这一轮先理解这个边界就够了。 
+
+Round 17 的验收标准
+
+你可以用下面这些标准判断自己有没有完成：
+	•	你能把 FastAPI 服务拆成多个 router 文件，并在主入口里统一注册。 
+	•	你能把至少一部分设置改成环境变量驱动，而不是硬编码。 
+	•	你能让 /docs 显示更清楚的 title、description 或 version。 
+	•	你能说清 FastAPI 的最小 Bearer token 认证思路是怎么回事。 
+	•	你能列出至少一份自己的部署前检查清单。 
+	•	你能把服务用 Uvicorn 和 Docker 跑起来，并正确发布端口。 
+
+如果你确认这版 Round 17 没问题，我下一条就继续给你出 Round 17 专用练习清单。
+可以。下面是 Round 17 专用练习清单。
+
+这一轮只做一件大事：把你现在这个“能跑的 FastAPI 小服务”，收口成一个更像正式服务的形态。重点不再是加新接口，而是把服务结构、配置、日志、文档、最小安全意识和容器运行方式整理清楚。FastAPI 官方把这条路线拆成了多个正好对应本轮的章节，包括 Bigger Applications - Multiple Files、Settings and Environment Variables、Metadata and Docs URLs、Security - First Steps、Deployment Concepts；Uvicorn 官方文档则说明了服务启动配置；Docker 官方文档说明了端口发布需要用 -p/--publish。  
+
+⸻
+
+这一轮要练到什么程度
+
+Round 17 结束时，你要做到这些：
+
+你能把单文件 API 拆成多个 router 文件，并在主入口统一注册。FastAPI 官方明确说，大一些的应用很少还能全部放在一个文件里，APIRouter 就是为此准备的。  
+
+你能把至少一部分配置改成环境变量驱动，而不是全写死在代码里。FastAPI 的 settings 文档明确推荐用 Pydantic Settings 处理配置，并说明可以结合 .env 文件和 @lru_cache。  
+
+你能让 /docs 和 OpenAPI 元信息更像你自己的服务，而不是默认壳子。FastAPI 的 metadata/docs 相关文档支持自定义 title、description、version 以及 docs/openapi 地址。  
+
+你能用自己的话说明“最小 Bearer token 认证”是怎么回事，知道未来哪些接口更适合保护起来。FastAPI 的 Security - First Steps 用的就是 OAuth2 Password flow + Bearer token，并明确说这对当前场景是一个合适起点。  
+
+你能把服务用 Uvicorn 和 Docker 跑起来，并正确发布端口。Uvicorn 官方有 settings/deployment 文档；Docker 官方明确说，容器端口默认不会对外暴露，要用 -p/--publish。  
+
+⸻
+
+先准备工作区
+
+进入你的项目目录：
+
+cd ~/cli-lab/round7/final_lab/ai_prep_tool
+pwd
+ls
+
+这一轮建议你整理成接近下面这种结构：
+
+ai_prep_tool/
+├─ api/
+│  ├─ main.py
+│  ├─ routers/
+│  │  ├─ health.py
+│  │  ├─ runs.py
+│  │  └─ jobs.py
+│  ├─ schemas.py
+│  ├─ config.py
+│  └─ log_utils.py
+├─ core.py
+├─ io_utils.py
+├─ db.py
+├─ tests/
+├─ Dockerfile
+├─ requirements.txt
+├─ pyproject.toml
+└─ README.md
+
+这样做的目的，是让“主入口、路由、配置、模式模型”开始分层，而不是继续堆在一个 api.py 里。FastAPI 的 Bigger Applications 章节就是围绕这种多文件结构展开的。  
+
+⸻
+
+第 1 周：多文件结构与路由拆分
+
+这一周只做一件事：把单文件 API 拆成主入口 + routers。FastAPI 官方明确说明，APIRouter 用来按功能分组路径操作，再统一包含进应用。  
+
+练习 1：创建目录和文件
+
+在项目根目录执行：
+
+mkdir -p api/routers
+touch api/main.py api/routers/health.py api/routers/runs.py api/routers/jobs.py api/schemas.py api/config.py api/log_utils.py
+
+练习 2：把健康检查拆到 health.py
+
+写最小版：
+
+from fastapi import APIRouter
+
+router = APIRouter(prefix="", tags=["health"])
+
+@router.get("/health")
+async def health():
+    return {"status": "ok"}
+
+练习 3：把运行记录接口拆到 runs.py
+
+你可以把上一轮已经有的接口移进来，例如：
+
+from fastapi import APIRouter, HTTPException
+from db import init_db, list_runs, get_run_by_id
+
+router = APIRouter(prefix="/runs", tags=["runs"])
+
+@router.get("")
+async def runs(skip: int = 0, limit: int = 10):
+    init_db()
+    rows = list_runs()
+    return {"runs": rows[skip: skip + limit]}
+
+@router.get("/{run_id}")
+async def run_detail(run_id: int):
+    init_db()
+    row = get_run_by_id(run_id)
+    if row is None:
+        raise HTTPException(status_code=404, detail="run not found")
+    return {"run": row}
+
+练习 4：把任务接口拆到 jobs.py
+
+先放你现有的：
+	•	POST /run
+	•	POST /run-upload
+
+练习 5：在 main.py 统一注册路由
+
+from fastapi import FastAPI
+from api.routers import health, runs, jobs
+
+app = FastAPI()
+
+app.include_router(health.router)
+app.include_router(runs.router)
+app.include_router(jobs.router)
+
+FastAPI 的 Bigger Applications 章节就是这样演示把多个 router 合并到主应用里。  
+
+练习 6：启动并检查
+
+运行：
+
+fastapi dev api/main.py
+
+然后打开：
+
+http://127.0.0.1:8000/docs
+
+检查这些接口是不是还都在：
+	•	GET /health
+	•	GET /runs
+	•	GET /runs/{run_id}
+	•	POST /run
+	•	POST /run-upload
+
+第 1 周周末小任务
+
+这一周结束时，你至少要做到：
+	•	所有现有接口都已经拆进 router 文件
+	•	main.py 只负责创建 app 和注册 router
+	•	/docs 里接口还能正常显示
+
+⸻
+
+第 2 周：配置管理、日志入口、元数据文档
+
+这一周主题是：把服务的“可变项”和“对外形象”整理清楚。FastAPI 的 settings 文档明确推荐用 Pydantic Settings 处理配置，并支持 .env；Metadata and Docs URLs 支持自定义 title、description、version、docs/openapi 地址。  
+
+练习 7：定义最小配置类
+
+先安装你需要的配置依赖，如果你还没装相关包，就按你当前环境补齐。然后在 api/config.py 写最小版本，例如：
+
+from functools import lru_cache
+from pydantic_settings import BaseSettings
+
+class Settings(BaseSettings):
+    app_name: str = "AI Prep Tool API"
+    api_version: str = "0.1.0"
+    debug: bool = True
+    database_path: str = "runs.db"
+    log_level: str = "INFO"
+
+    class Config:
+        env_file = ".env"
+
+@lru_cache
+def get_settings():
+    return Settings()
+
+FastAPI settings 文档明确展示了 BaseSettings、.env 和 @lru_cache 的组合。  
+
+练习 8：给主应用接元数据
+
+在 api/main.py 里改成：
+
+from fastapi import FastAPI
+from api.config import get_settings
+from api.routers import health, runs, jobs
+
+settings = get_settings()
+
+app = FastAPI(
+    title=settings.app_name,
+    version=settings.api_version,
+    description="Small service for AI data preparation tasks"
+)
+
+app.include_router(health.router)
+app.include_router(runs.router)
+app.include_router(jobs.router)
+
+这一题的目的，是让 /docs 不再只是默认标题。FastAPI 的 metadata/docs 能力本来就是为这类场景准备的。  
+
+练习 9：补一个最小 .env
+
+在项目根目录新建：
+
+touch .env
+
+内容先写得最小：
+
+APP_NAME=AI Prep Tool API
+API_VERSION=0.1.0
+DEBUG=true
+DATABASE_PATH=runs.db
+LOG_LEVEL=INFO
+
+FastAPI 的 settings 文档明确说明可以用 .env 文件。  
+
+练习 10：整理日志入口
+
+把日志初始化放进 api/log_utils.py，确保主入口统一调用，而不是每个 router 里各自乱写。
+这一条没有特定官方模板，但这是让服务层日志规范化的最自然做法。
+
+练习 11：检查 /docs 和 /openapi.json
+
+现在重新启动服务，去看：
+
+http://127.0.0.1:8000/docs
+http://127.0.0.1:8000/openapi.json
+
+确认：
+	•	title 已变化
+	•	version 已变化
+	•	description 已出现
+
+FastAPI First Steps 和 metadata 相关内容都明确说明了自动文档与 OpenAPI 输出。  
+
+第 2 周周末小任务
+
+这一周结束时，你至少要做到：
+	•	配置类能从环境变量读取设置
+	•	main.py 会用配置生成更清楚的 API 元数据
+	•	/docs 看起来已经更像你的服务，而不是默认壳子
+
+⸻
+
+第 3 周：最小安全意识、部署前检查项、Docker 跑服务
+
+这一周主题是：让服务更接近“准备对外暴露”的状态。FastAPI 的 Security - First Steps 用的是 OAuth2 Password flow + Bearer token，并明确说 Bearer token 对当前场景是一个合适起点。Deployment Concepts 列出了一系列上线前需要考虑的点，比如 HTTPS、启动方式、重启、进程复制、内存和启动前步骤。Docker 端口发布文档明确说，容器端口默认不会暴露给宿主机，要通过 -p/--publish 发布。  
+
+练习 12：写一份最小安全说明
+
+新建一个文件，例如：
+
+touch SECURITY_NOTES.md
+
+先只写这些：
+	•	未来哪些接口更适合保护起来，例如 POST /run、POST /run-upload
+	•	Bearer token 是通过 Authorization: Bearer <token> 这种形式传递的
+	•	当前阶段还没有真正实现认证，但已经预留了要保护的接口范围
+
+FastAPI 的 Security - First Steps 已经把 Bearer token 的最小语义讲清楚了。  
+
+练习 13：写部署前检查清单
+
+新建：
+
+touch DEPLOY_CHECKLIST.md
+
+至少写这些：
+	•	配置是否都能从环境变量读取
+	•	数据库路径是否正确
+	•	日志是否写到固定位置
+	•	/docs 和 /openapi.json 是否正常
+	•	Dockerfile 是否可 build
+	•	运行时端口是否明确
+	•	启动命令是否清楚
+
+FastAPI 的 Deployment Concepts 就是在提醒你：上线前需要想清楚的不只是“怎么启动”。  
+
+练习 14：用 Uvicorn 直接启动服务
+
+先本地直接跑一次：
+
+uvicorn api.main:app --host 0.0.0.0 --port 8000
+
+Uvicorn 官方 settings 文档明确说明了 host、port 这些参数。  
+
+练习 15：调整 Dockerfile 让它跑服务
+
+把 Dockerfile 默认命令改成更贴近服务运行，例如：
+
+CMD ["uvicorn", "api.main:app", "--host", "0.0.0.0", "--port", "8000"]
+
+然后 build：
+
+docker build -t ai-prep-tool:demo .
+
+练习 16：发布端口并运行容器
+
+运行：
+
+docker run --rm -p 8000:8000 ai-prep-tool:demo
+
+然后在宿主机浏览器访问：
+
+http://127.0.0.1:8000/docs
+
+Docker 官方明确说明，必须 publish 端口，否则容器里的服务默认不能直接从宿主机访问。  
+
+练习 17：确认服务在容器里也能工作
+
+至少检查：
+	•	/health
+	•	/runs
+	•	/docs
+
+能打开、能返回、能看文档，就说明你这一轮已经把“服务化收口”的最小闭环跑起来了。
+
+第 3 周周末小任务
+
+这一周结束时，你至少要做到：
+	•	有一份最小安全说明
+	•	有一份部署前检查清单
+	•	能用 Uvicorn 启动服务
+	•	能用 Docker 运行服务并通过 -p 暴露端口
+	•	宿主机能访问到容器里的 /docs
+
+⸻
+
+Round 17 综合演练
+
+把这一轮收口成一次完整演练。你从头做到尾：
+
+第一步，确认项目里至少有：
+
+api/main.py
+api/routers/health.py
+api/routers/runs.py
+api/routers/jobs.py
+api/config.py
+api/log_utils.py
+SECURITY_NOTES.md
+DEPLOY_CHECKLIST.md
+
+第二步，本地直接跑：
+
+uvicorn api.main:app --host 0.0.0.0 --port 8000
+
+第三步，访问：
+	•	http://127.0.0.1:8000/health
+	•	http://127.0.0.1:8000/docs
+
+第四步，build Docker 镜像：
+
+docker build -t ai-prep-tool:demo .
+
+第五步，发布端口运行：
+
+docker run --rm -p 8000:8000 ai-prep-tool:demo
+
+第六步，再次访问：
+	•	http://127.0.0.1:8000/docs
+
+第七步，把这一轮改动提交到 Git：
+
+git status
+git add .
+git commit -m "refactor FastAPI service structure and prepare for deployment"
+
+如果这一整条你能独立做完，Round 17 就算真正跑通了。
+
+⸻
+
+Round 17 最终自测清单
+
+做完以后，你自己检查下面这些：
+	•	你能不能把服务拆成多个 router 文件，并在主入口统一注册。  
+	•	你能不能让至少一部分设置来自环境变量。  
+	•	你能不能让 /docs 显示更清楚的 title、description、version。  
+	•	你能不能用自己的话说清 Bearer token 的最小概念。  
+	•	你能不能列出自己的部署前检查清单。  
+	•	你能不能把服务用 Uvicorn 和 Docker 跑起来，并正确发布端口。  
+
+这些都做到，Round 17 就算过关了。
+
+你继续的话，我下一步就按之前的路线，开始给你展开 路线 C 的 Round 18：数值计算与数据分析前置。
+

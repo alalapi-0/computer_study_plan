@@ -1,0 +1,521 @@
+好，下面我把 Round 9：仓库规范化与测试入门 完整展开。
+
+这一轮是路线 A 的第一步，核心不是学新框架，而是把你前面做出来的 ai_prep_tool 从“能跑的脚本”提升成“更像样的小项目”。我建议这轮继续按 3 周 来走，重点放在四件事上：仓库结构整理、README 和 .gitignore、Git 分支基础、pytest 最小测试。Pro Git 把 Basic Branching and Merging 放在 Git 基础之后的直接下一步；pytest 官方把 Install pytest / Create your first test / Run multiple tests / Assert that a certain exception is raised 放在入门主线里；GitHub Docs 也明确建议仓库应该有 README，并在根目录放 .gitignore 来共享忽略规则。  
+
+Round 9 的目标
+
+这轮结束时，你要做到这些：
+
+你有一个结构清晰的项目目录，而不是把逻辑全塞在一个脚本里。你有一份真正能给别人看的 README，里面至少说明项目做什么、怎么运行。你有一个合适的 .gitignore，不会把日志、缓存、临时文件乱提交进仓库。你会切一个功能分支做小改动，再合并回主分支。你会写并运行最小的 pytest 测试。GitHub Docs 说明 README 用来告诉别人项目为什么有用、能做什么、怎么使用；同样，.gitignore 放在仓库根目录可以告诉 Git 在提交时忽略哪些文件和目录，并且把这些规则共享给克隆这个仓库的其他人。  
+
+这轮学什么，不学什么
+
+这轮要学的是：
+	•	仓库目录整理
+	•	README 和 .gitignore
+	•	Git 分支的最小工作流
+	•	pytest 最小测试
+	•	让核心逻辑变得“可测试”
+
+这轮先不学：
+	•	Git rebase
+	•	复杂冲突处理
+	•	pytest fixture 深水区
+	•	CI/CD
+	•	Docker 打包
+	•	数据库和 API
+
+这样安排是因为 Pro Git 的主线本来就是先从 Basic Branching and Merging 开始，而 pytest 的官方入门也先从最简单的测试写法和运行方式开始。你这一轮的目标不是“会很多”，而是“让现有项目更稳”。  
+
+本轮推荐资源
+
+这一轮我建议你固定只看四类资源。
+
+第一类是 Pro Git 的 Branches in a Nutshell 和 Basic Branching and Merging。前者明确解释了分支的意义是“偏离主线开发而不影响主线”，后者直接给出了一套真实工作流：做网站开发、切新功能分支、处理中途 hotfix、再回到原来的工作。  
+
+第二类是 pytest 官方 Get Started 和 How to invoke pytest。前者把安装、写第一个测试、运行多个测试、断言异常都列出来了；后者明确说明直接运行 pytest 会在当前目录及其子目录中发现 test_*.py 或 *_test.py 这类文件。  
+
+第三类是 GitHub Docs 关于 README 和忽略文件。README 文档明确说它是向别人说明项目用途和使用方式的地方；忽略文件文档明确说把 .gitignore 放在仓库根目录，可以告诉 Git 在提交时忽略哪些文件，并把规则共享出去。  
+
+第四类是你自己上一轮已经做出来的 ai_prep_tool。Round 9 不是新开项目，而是用你现有项目来做工程化加固。
+
+建议的仓库结构
+
+这一轮我建议你把仓库先整理到这个程度：
+
+ai_prep_tool/
+├─ ai_prep_tool.py
+├─ README.md
+├─ .gitignore
+├─ tests/
+│  └─ test_basic.py
+├─ input/
+├─ output/
+└─ logs/
+
+之所以先只要求到这个程度，是因为 GitHub Docs 对 README 和 .gitignore 的要求都围绕“仓库根目录可读、可共享”展开，而 pytest 默认也会在当前目录和子目录里发现 tests/ 下面的测试文件。这个结构已经足够支撑你的最小工程化闭环。  
+
+README 这一轮要写到什么程度
+
+README 不需要写成长文，但至少要有这四段：
+	1.	这个项目做什么
+	2.	支持哪些输入格式
+	3.	怎么运行
+	4.	一个最小示例
+
+GitHub Docs 对 README 的定义就是：告诉别人项目为什么有用、能做什么、怎么使用它。也就是说，README 最重要的不是“写得多正式”，而是别人打开仓库后能立刻知道怎么上手。  
+
+.gitignore 这一轮要做到什么程度
+
+你至少要把这些类型的内容排除出去：
+	•	__pycache__/
+	•	*.pyc
+	•	logs/
+	•	output/
+	•	本地虚拟环境目录
+	•	数据库临时文件或 IDE 文件
+
+GitHub Docs 明确说，.gitignore 的作用就是告诉 Git 在提交时忽略哪些文件和目录，而且把这个文件提交进仓库后，其他克隆仓库的人也会共享同样的忽略规则。  
+
+Git 这一轮要学到什么程度
+
+这一轮你只学一个最小分支流程：
+	•	查看当前分支
+	•	新建功能分支
+	•	在功能分支上改动
+	•	提交
+	•	切回主分支
+	•	合并功能分支
+
+Pro Git 的 Basic Branching and Merging 本身就是围绕这种工作流展开的；Branches in a Nutshell 也明确说分支的意义就是在不干扰主线的情况下继续工作。  
+
+建议你这一轮固定用这种模式：
+
+git checkout -b feature/something
+# 做小改动
+git add .
+git commit -m "..."
+git checkout main   # 或你的主分支名
+git merge feature/something
+
+这不是因为命令本身多重要，而是你要开始建立“主线稳定、功能分支做实验”的习惯。这个习惯正是 Pro Git 这一章想传达的核心。  
+
+pytest 这一轮要学到什么程度
+
+你这一轮不需要 fixture、mock、参数化，也不需要覆盖率。只要先会这三件事：
+	•	安装 pytest
+	•	写 test_*.py
+	•	运行 pytest
+
+pytest 官方 Get Started 明确把这些作为第一步；How to invoke pytest 还说明了测试发现规则。也就是说，这一轮你最重要的是让测试真正跑起来，而不是先学复杂写法。  
+
+建议你先只测 3 类东西：
+	•	过滤函数
+	•	去重函数
+	•	summary 构造函数
+
+比如：
+	•	输入几条记录，过滤后数量对不对
+	•	去重后顺序和结果对不对
+	•	summary 里的计数字段对不对
+
+再加一条异常测试，例如对不支持的格式抛 ValueError。pytest 的入门页本来就把“断言某个异常被抛出”列为前几项内容之一。  
+
+3 周安排
+
+第 1 周：整理仓库和文档
+
+这一周只做结构整理，不急着写很多代码。
+
+你要完成：
+	•	把项目目录整理出来
+	•	新建或重写 README
+	•	新建 .gitignore
+	•	运行一遍当前工具，确认它还正常工作
+	•	用 Git 提交一次“结构整理”版本
+
+这一周的重点不是技术，而是把仓库变干净。GitHub Docs 对 README 和 .gitignore 的说明已经足够支撑这件事。  
+
+第 2 周：分支练习和函数可测试化
+
+这一周开始切功能分支。
+
+你要完成：
+	•	从主分支切出一个 feature/... 分支
+	•	把核心逻辑从 main() 里再拆清楚一点
+	•	保证过滤、去重、summary 这些逻辑可以单独调用
+	•	提交这个功能分支
+	•	合并回主分支
+
+这一周的重点是把“项目能跑”推进到“项目核心逻辑能被单独调用”，因为这正是后面写测试的前提。这个安排虽然是工程建议，但和 Pro Git 的分支工作流完全兼容。  
+
+第 3 周：补最小测试并跑通
+
+这一周你只围绕 pytest 工作。
+
+你要完成：
+	•	安装 pytest
+	•	建 tests/test_basic.py
+	•	写至少 3 条通过的测试
+	•	再加 1 条异常测试
+	•	跑 pytest -q
+	•	修掉至少一个你在测试中发现的小问题
+
+pytest 官方文档的最小路线就是这样设计的：先安装，再写第一条测试，再运行，再测试异常。  
+
+本轮产出
+
+Round 9 结束时，你应该至少拿到这些东西：
+	•	一个结构更清晰的仓库
+	•	一份能让别人看懂的 README
+	•	一个有用的 .gitignore
+	•	一次真实的分支开发与合并记录
+	•	一个 tests/ 目录
+	•	至少 3 到 4 条能跑过的 pytest 测试
+
+这些产出看起来不华丽，但它们会直接决定你后面 Round 10 和 Round 11 能不能稳稳接上。README、.gitignore、分支和最小测试，正是这轮官方资源都在强调的基础层。  
+
+这一轮最容易踩的坑
+
+第一个坑，是 README 写成“流水账”，却不写怎么运行。GitHub Docs 明确说 README 最重要的是说明项目有何用途、别人能做什么、怎么使用它。  
+
+第二个坑，是 .gitignore 不写，结果把日志、输出、缓存都提交进仓库。GitHub Docs 明确说 .gitignore 就是为了解决这个问题。  
+
+第三个坑，是 Git 这轮就去学 rebase、复杂冲突和远程协作。Pro Git 的顺序已经说明了：先把基本分支和合并跑通，比提前学高级动作更重要。  
+
+第四个坑，是 pytest 还没跑起来，就急着学 fixture 和插件。官方 Get Started 先讲的不是这些，而是最小可运行测试。  
+
+Round 9 的验收标准
+
+你可以用下面这组标准判断自己有没有完成：
+	•	你能解释 README 和 .gitignore 各解决什么问题。  
+	•	你能独立做一次 git checkout -b ... → 提交 → merge。  
+	•	你能让 pytest -q 跑通至少 3 条测试。  
+	•	你的项目目录比 Round 7 更清晰，别人打开后能看懂怎么运行。  
+
+如果你确认这版 Round 9 没问题，我下一条就继续给你出 Round 9 专用练习清单。
+可以。下面是 Round 9 专用练习清单。这一轮只做四件事：整理仓库、补 README 和 .gitignore、练一次分支开发再合并、跑通最小 pytest。Pro Git 把“Basic Branching and Merging”放在 Git 基础之后的直接下一步；pytest 官方把“安装、写第一个测试、运行多个测试、断言异常”放在入门主线；GitHub Docs 也明确说明 README 用来告诉别人项目有什么用、怎么使用，而 .gitignore 用来告诉 Git 提交时忽略哪些文件并把规则共享给仓库协作者。  
+
+先准备这轮工作区
+
+先进入你上一轮的项目目录。下面默认你沿用了这个路径：
+
+cd ~/cli-lab/round7/final_lab/ai_prep_tool
+pwd
+ls
+
+如果你不在这个目录，先自己切过去就行。Round 9 不新开项目，而是直接拿你上一轮做出来的 ai_prep_tool 继续加工。README 和 .gitignore 都建议放在仓库根目录，pytest 也会从当前目录及其子目录发现测试文件。  
+
+⸻
+
+第 1 周：整理仓库和文档
+
+这一周目标很简单：让仓库“像个仓库”。GitHub Docs 明确说 README 应该说明项目为什么有用、能做什么、怎么使用；忽略文件文档则说明 .gitignore 放在仓库根目录，可以告诉 Git 在提交时忽略哪些文件和目录，并且把规则共享出去。  
+
+练习 1：把目录补整齐
+
+先把目录补到这个程度：
+
+mkdir -p tests input output logs
+ls
+
+现在你的仓库至少应该看起来像这样：
+
+ai_prep_tool/
+├─ ai_prep_tool.py
+├─ README.md
+├─ .gitignore
+├─ tests/
+├─ input/
+├─ output/
+└─ logs/
+
+这一步的重点不是形式，而是给后面的测试、日志和输入输出留固定位置。README 和 .gitignore 之所以建议放根目录，也是为了让仓库入口清楚。  
+
+练习 2：写最小 README
+
+新建或重写：
+
+touch README.md
+
+README 至少写 4 段：
+	1.	项目做什么
+	2.	支持哪些输入格式
+	3.	怎么运行
+	4.	一个最小示例
+
+你可以直接先写这个骨架：
+
+# ai_prep_tool
+
+## What it does
+A small CLI tool for reading, filtering, deduplicating, and summarizing AI prep data.
+
+## Supported formats
+- txt
+- csv
+- json
+- jsonl
+
+## How to run
+```bash
+python3 ai_prep_tool.py --input input/sample.jsonl --output output/clean.jsonl --format jsonl --keyword ok --dedup
+
+Notes
+
+Logs go to the logs/ directory.
+
+GitHub Docs 对 README 的定义就是：告诉别人项目为什么有用、可以做什么、怎么使用它。  [oai_citation:4‡GitHub Docs](https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-readmes?utm_source=chatgpt.com)
+
+### 练习 3：写最小 `.gitignore`
+
+新建：
+
+```bash
+touch .gitignore
+
+先放最小版本：
+
+__pycache__/
+*.pyc
+logs/
+output/
+.venv/
+venv/
+runs.db
+.pytest_cache/
+.DS_Store
+
+.gitignore 的作用就是告诉 Git 提交时忽略哪些文件和目录；GitHub Docs 还明确说，把 .gitignore 提交进仓库后，其他克隆仓库的人也会共享这套忽略规则。  
+
+练习 4：做一次“结构整理”提交
+
+先看状态：
+
+git status
+
+然后提交：
+
+git add README.md .gitignore tests input output logs
+git commit -m "organize repo structure and docs"
+
+这一步先不切分支，直接把仓库整理干净。你现在最重要的是有一个稳定基线，后面第二周再从这个基线切功能分支。Git 的核心工作流本来就是先记录一系列快照。  
+
+第 1 周自测
+
+这一周结束时，你要能回答：
+	•	README 解决什么问题
+	•	.gitignore 解决什么问题
+	•	现在仓库根目录里哪些文件是“给人看”的，哪些目录是“给程序跑”的
+
+这三件事如果能讲清楚，第 1 周就过关。  
+
+⸻
+
+第 2 周：分支练习 + 让代码变得可测试
+
+这一周只做一条最小分支流程：切一个功能分支、做一点小改动、提交、切回主分支、合并。Pro Git 对 branching 的定义很直接：你从主线开发偏离出去继续工作，而不打扰主线。它还给了标准示例：先创建并切到新分支，在分支上开发，再切回生产分支处理别的事，最后合并。  
+
+练习 5：确认主分支名
+
+先看当前分支：
+
+git branch --show-current
+
+记住你看到的名字。它可能是 main，也可能是 master，你后面切回主分支时就用你自己实际看到的名字。Git 官方文档列出了 branch、checkout、merge、log 这些命令都属于 Branching and Merging 这一组。  
+
+练习 6：切一个功能分支
+
+git checkout -b feature/summary-cleanup
+
+这是 Pro Git 在 branching 章节里直接使用的典型写法：创建并切换到新分支。  
+
+练习 7：在分支上做一个小改动
+
+这一周不要做大改动，只做一件很小但真实的事，例如：
+	•	给 README 加一段“Example output”
+	•	给 summary.json 多加一个字段
+	•	给日志多打一条 “processed_count”
+
+这里我建议你做最稳的一件：把 build_summary(...) 这类逻辑从 main() 里拿出来，确保它是一个单独函数。因为 pytest 最适合测这种“可单独调用”的逻辑。pytest 的入门思路本来就是直接导入函数然后断言结果。  
+
+如果你现在的主脚本还比较乱，先把它整理成这种最小结构：
+
+def read_records(...):
+    ...
+
+def filter_records(...):
+    ...
+
+def dedup_records(...):
+    ...
+
+def build_summary(...):
+    ...
+
+def main():
+    ...
+
+练习 8：提交功能分支
+
+git status
+git add .
+git commit -m "refactor summary and prepare for tests"
+
+练习 9：切回主分支并合并
+
+把 <主分支名> 换成你实际看到的名字：
+
+git checkout <主分支名>
+git merge feature/summary-cleanup
+git log --oneline --graph --decorate -n 10
+
+Pro Git 的 Basic Branching and Merging 讲的就是这套最小流程。你这周只要把这条链路跑通就够了。  
+
+第 2 周自测
+
+这一周结束时，你要能独立完成：
+	•	看当前分支
+	•	新建并切换到功能分支
+	•	提交改动
+	•	切回主分支
+	•	merge 功能分支
+	•	用 git log --oneline 看提交历史
+
+只要这条链路能独立做完，第 2 周就过关。  
+
+⸻
+
+第 3 周：pytest 最小测试
+
+这一周的目标不是学测试理论，而是先让测试真正跑起来。pytest 官方 Get Started 明确把入门顺序写得很清楚：安装 pytest、创建第一个测试、运行多个测试、断言异常。pytest 文档还说明，测试文件通常命名为 test_*.py 或 *_test.py，直接运行 pytest 就会在当前目录及其子目录里发现这些测试。  
+
+练习 10：安装 pytest
+
+pip install -U pytest
+pytest --version
+
+这是 pytest 官方入门的第一步。  
+
+练习 11：创建第一个测试文件
+
+mkdir -p tests
+touch tests/test_basic.py
+
+然后先写一个最小版本。假设你的主脚本里已经有这几个函数：
+	•	filter_records
+	•	dedup_records
+	•	build_summary
+
+你可以先写成：
+
+from ai_prep_tool import filter_records, dedup_records, build_summary
+
+def test_filter_records_keeps_keyword():
+    records = ["ok sample", "bad sample", "ok again"]
+    result = filter_records(records, "ok")
+    assert len(result) == 2
+
+def test_dedup_records_removes_duplicates():
+    records = ["a", "a", "b"]
+    result = dedup_records(records, "txt")
+    assert result == ["a", "b"]
+
+def test_build_summary_counts():
+    summary = build_summary("in.txt", "out.txt", 5, 3, 2)
+    assert summary["raw_count"] == 5
+    assert summary["filtered_count"] == 3
+    assert summary["final_count"] == 2
+
+pytest 官方就是推荐直接用普通 assert 写这类最小测试。  
+
+练习 12：跑测试
+
+pytest -q
+
+如果你想看更详细输出，也可以直接：
+
+pytest
+
+pytest 官方文档明确说明可以直接这样运行。  
+
+练习 13：补一条异常测试
+
+继续在 tests/test_basic.py 里补一条。假设你的 read_records 对不支持的格式会抛 ValueError：
+
+import pytest
+from ai_prep_tool import read_records
+
+def test_read_records_unsupported_format():
+    with pytest.raises(ValueError):
+        read_records("sample.xxx", "xxx")
+
+“断言某个异常会被抛出”正是 pytest 官方 Get Started 里单独列出的一步。  
+
+练习 14：至少修掉一个测试发现的问题
+
+这一条没有命令模板。要求是：你跑测试后，如果有失败，就把函数修到测试通过。如果第一次就全通过，也至少做一件小事：
+	•	改一个边界输入
+	•	再补一条断言
+	•	再跑一遍
+
+这一周最重要的不是“写了几条测试”，而是体验一次“测试暴露问题 → 修掉问题 → 再跑通过”的闭环。pytest 的核心价值就在这里。  
+
+练习 15：把测试也提交进 Git
+
+git status
+git add tests
+git commit -m "add minimal pytest coverage"
+git log --oneline -n 5
+
+这一提交会成为你后面继续工程化的起点。
+
+⸻
+
+Round 9 综合小任务
+
+把这一轮的成果收口成一次完整演练。你要从头做到尾：
+
+第一步，确认仓库根目录里有：
+	•	README.md
+	•	.gitignore
+	•	tests/
+
+第二步，切一个新分支，例如：
+
+git checkout -b feature/test-and-doc-cleanup
+
+第三步，在这个分支上做两件小事：
+	•	给 README 增加一段示例
+	•	给测试补一条断言
+
+第四步，提交：
+
+git add .
+git commit -m "improve docs and tests"
+
+第五步，切回主分支并合并：
+
+git checkout <主分支名>
+git merge feature/test-and-doc-cleanup
+
+第六步，跑一次：
+
+pytest -q
+
+如果这一整套你能独立完成，Round 9 就算真正跑通了。这个综合练习把 Git branching、README、.gitignore、pytest 四块都串起来了。  
+
+⸻
+
+Round 9 最终自测清单
+
+做完以后，你自己检查下面这些：
+	•	你能解释 README 为什么要放根目录，以及它最少该写什么。  
+	•	你能解释 .gitignore 为什么要提交进仓库。  
+	•	你能独立做一次 checkout -b → commit → checkout 主分支 → merge。  
+	•	你能写并运行最小 pytest 测试。  
+	•	你知道测试文件为什么通常放在 tests/ 里，且命名为 test_*.py。  
+
+这些都做到，Round 9 就算过关了。
+
+如果你继续，我下一步就给你展开 Round 10：Python 工程化基础。

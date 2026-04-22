@@ -1,0 +1,26 @@
+{
+  "version": 1,
+  "tasks": {
+    "w1-read":  { "done": false, "done_at": null },
+    "w1-ex1":   { "done": false, "done_at": null },
+    "w1-ex2":   { "done": false, "done_at": null },
+    "w1-ex3":   { "done": false, "done_at": null },
+    "w1-self":  { "done": false, "done_at": null },
+    "w2-read":  { "done": false, "done_at": null },
+    "w2-ex4":   { "done": false, "done_at": null },
+    "w2-ex5":   { "done": false, "done_at": null },
+    "w2-ex6":   { "done": false, "done_at": null },
+    "w2-ex7":   { "done": false, "done_at": null },
+    "w2-self":  { "done": false, "done_at": null },
+    "w3-read":  { "done": false, "done_at": null },
+    "w3-ex8":   { "done": false, "done_at": null },
+    "w3-ex9":   { "done": false, "done_at": null },
+    "w3-ex10":  { "done": false, "done_at": null },
+    "w3-self":  { "done": false, "done_at": null },
+    "fin-comp":  { "done": false, "done_at": null },
+    "fin-sheet": { "done": false, "done_at": null },
+    "fin-acc1":  { "done": false, "done_at": null },
+    "fin-acc2":  { "done": false, "done_at": null },
+    "fin-acc3":  { "done": false, "done_at": null }
+  }
+}

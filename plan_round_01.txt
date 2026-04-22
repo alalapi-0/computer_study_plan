@@ -1,0 +1,519 @@
+好，我把 Round 1 按你现在这套节奏重新做一版，重点改成这三个原则：
+	•	只学最常用、最容易形成正反馈的内容
+	•	资料少而精，优先官方和教学型资源
+	•	按你周末学习、每周约 8 小时的节奏设计
+
+这轮仍然建议用 3 周。原因是 Ubuntu 官方这套《The Linux command line for beginners》本身就是面向零基础、以“打开终端、创建文件夹和文件、移动和操作文件”为主线的入门教程，而且官方标注难度是 1/5；MIT Missing Semester 官方也明确说他们的讲座内容比较密、每讲配练习，更适合拆开慢慢消化，不适合你这一轮一次吃太多。 
+
+Round 1 的定位
+
+这轮不是学 Linux 全家桶，也不是学 shell 编程。它只解决一件事：
+
+让你在命令行里不慌，能自己找文件、建目录、看文件、移动文件、删测试文件、查帮助。
+
+Apple 官方把 Terminal 定义为 macOS 里用命令行执行任务的应用；Missing Semester 把 shell 解释为一种文本接口，核心能力是运行程序、给程序输入、查看输出。把这两个概念先分清，你后面学 Shell、Git、Python 才不会混。 
+
+这轮学什么，不学什么
+
+这轮只学这些命令：
+
+pwd、ls、cd、mkdir、touch、cp、mv、rm、cat、less、head、tail、man
+
+这轮先不学 chmod、sudo、Git、管道、Shell 脚本。Ubuntu 官方教程虽然也会提到 superuser 和 command chaining，但对你现在的目标来说，Round 1 先把“文件系统与基础命令”打牢，收益更高。 
+
+本轮推荐资源
+
+1. 主视频
+
+Missing Semester 2026 – Lecture 1: Course Overview + Introduction to the Shell
+
+用它来建立“为什么还要学命令行”的整体感觉，不要求全听懂。Missing Semester 官方 2026 课表把第一讲直接定为 Introduction to the Shell，并说明公开视频会放到 YouTube。 
+
+2. 主文档
+
+Apple Support – Get started with Terminal on Mac
+
+如果你主要在 Mac 上学，这一份最适合作为主文档。Apple 官方这里直接给了 Terminal 的定义，并用 ls 和 man 做最基础示例，还说明了 q 可以退出 man page。 
+
+3. 练习主线
+
+Ubuntu – The Linux command line for beginners
+
+这份非常适合你当前阶段。它官方写明“假设没有先验知识”，目录就是“Opening a terminal / Creating folders and files / Moving and manipulating files / Hidden files”等，很适合拿来做这轮练习骨架。 
+
+4. 轻量补充
+
+Linux Journey – File System Navigation
+
+Linux Journey 的优势是分块小、压力低。它的 File System Navigation 页面就直接聚焦 ls、cd、pwd 和目录结构，特别适合你周末慢慢推进。 
+
+5. GitHub 补充
+
+jlevy / the-art-of-command-line
+
+这个仓库很适合当“学完基础后的补充小抄”，不适合当 Round 1 主教材。它自己也写得很清楚：面向 beginner 和 experienced users，追求 breadth、specificity 和 brevity，内容既有基础项，也有较具体甚至偏进阶的技巧。 
+
+3 周学习安排
+
+第 1 周：路径感
+
+目标只有一个：搞清楚“我现在在哪、这里有什么、我要怎么去别处”。
+
+这周主练：
+pwd、ls、cd
+
+建议安排：
+	•	2 小时看主视频前半段，建立 shell / terminal / path 的概念
+	•	2 小时看 Apple Terminal 入门页并跟着敲 ls、man
+	•	4 小时做路径切换练习
+
+你这一周要真正分清：
+	•	当前目录
+	•	绝对路径
+	•	相对路径
+	•	. 和 ..
+
+Ubuntu 教程明确把“Opening a terminal”和“Creating folders and files”放在很前面；Linux Journey 也把 file system navigation 单独拆出来讲，这正说明路径感就是最该先练的东西。 
+
+第 2 周：文件操作
+
+这周把“建、看、搬、改、删”练顺。
+
+这周主练：
+mkdir、touch、cp、mv、rm
+
+建议安排：
+	•	2 小时跟着 Ubuntu 教程做创建和移动文件练习
+	•	3 小时自己重复做目录与文件操作
+	•	3 小时做一轮综合整理练习
+
+Ubuntu 教程明确把 “Creating folders and files” 和 “Moving and manipulating files” 作为核心章节；它还特别提醒了命令行文件名大小写、转义和命名习惯这些细节。 
+
+第 3 周：看文件和自查
+
+这周开始建立“不会就查”的习惯，而不是背参数。
+
+这周主练：
+cat、less、head、tail、man
+
+建议安排：
+	•	2 小时练短文件和长文件查看
+	•	2 小时练文件开头和结尾查看
+	•	4 小时做综合小任务并整理自己的命令小抄
+
+Ubuntu 官方教程专门解释了 man page 的定位：它更适合拿来查某个选项或参数，不太适合当完整教程硬啃；Apple 也明确示范了 man man 和按 q 退出。 
+
+这轮的唯一小项目
+
+做一个最小目录实验室：
+
+mkdir -p ~/cli-lab/round1/study_files_lab
+cd ~/cli-lab/round1/study_files_lab
+mkdir input output backup notes
+touch input/raw1.txt input/raw2.txt input/raw3.txt
+cp input/raw1.txt backup/
+mv input/raw2.txt output/
+mv input/raw3.txt input/final_raw3.txt
+touch notes/round1_notes.txt
+
+然后用 cat 或 less 打开 notes/round1_notes.txt，自己写下每个命令的中文理解。
+
+这个小项目的价值在于，它已经开始模拟你后面做 AI 项目时最常见的目录组织方式：input 放原始数据，output 放结果，backup 放备份，notes 留说明。命令行之所以长期有用，Ubuntu 官方给出的原因也很直接：它在跟着在线说明操作、管理文件、把多个命令串起来时，依然有明显的灵活性和效率优势。 
+
+本轮验收标准
+
+Round 1 结束时，你做到下面这些就算过关：
+	•	你能说清 Terminal 是应用，shell 是文本接口
+	•	你能自己完成创建目录、创建文件、复制、移动、改名、删除测试文件
+	•	你能用 cat、less、head、tail 看文本文件
+	•	你知道不会时先查 man
+	•	你已经留下一份自己的命令小抄
+
+这些目标和 Apple 的 Terminal 入门示例、Ubuntu 的零基础教程主线、以及 Missing Semester 对 shell 的定义是对齐的。 
+
+这一轮最容易踩的坑
+
+第一，只看视频不动手。Missing Semester 官方自己就提醒过课程偏密，所以这轮视频只能当引导，真正的掌握要靠练。 
+
+第二，把 man 当教材整本读。Ubuntu 官方明确说 man page 更适合当快速参考，而不是完整学习材料。 
+
+第三，太早去看命令行大全。the-art-of-command-line 很好，但它自己也说内容有些非常具体、甚至相当 obscure，所以这轮最多拿来做补充，不要拿它当主线。 
+
+给你的最简执行版
+
+如果你想把这轮压到最轻量，就按这个顺序走：
+	•	第 1 周只练：pwd ls cd
+	•	第 2 周只练：mkdir touch cp mv rm
+	•	第 3 周只练：cat less head tail man
+
+主资源就只用 3 个：
+	•	Missing Semester 第一讲
+	•	Apple Terminal 入门页
+	•	Ubuntu 初学者教程
+
+这样不会散，也最稳。 
+
+你要是继续往下走，下一步最合适的是我把这版 Round 1 专用命令练习清单 也按这个新结构重做一遍。
+
+可以。下面我把 Round 1 专用命令练习清单 重新整理成一版更稳、更适合你周末慢慢练的版本。
+
+这版只围绕最基础的一组命令来练：pwd、ls、cd、mkdir、touch、cp、mv、rm、cat、less、head、tail、man。Apple 的 Terminal 指南直接用 ls 和 man 做入门示例，并说明可以用 /Applications/Utilities 或 Launchpad 打开 Terminal；Ubuntu 的官方新手教程也明确说它假设学习者没有先验知识，而且这篇教程在官方教程列表里标为 1/5 难度。 
+
+先做准备
+
+先打开终端。
+
+在 Mac 上，你可以用这两种方式之一：
+	•	Launchpad 搜索 Terminal
+	•	Finder 里进入 /Applications/Utilities 再打开 Terminal。 
+
+然后创建 Round 1 的总练习目录：
+
+mkdir -p ~/cli-lab/round1
+cd ~/cli-lab/round1
+pwd
+ls
+
+
+⸻
+
+第 1 周：路径感训练
+
+这一周只练 3 个核心动作：
+	•	我现在在哪
+	•	这里有什么
+	•	我怎么切换到别的目录
+
+Apple 和 Ubuntu 的入门材料都把这类基础导航放在最前面，重点就是先熟悉 pwd、ls、cd。 
+
+练习 1：认识当前位置
+
+cd ~/cli-lab/round1
+pwd
+ls
+
+你要知道：
+	•	pwd：显示当前路径
+	•	ls：查看当前目录内容
+	•	cd：切换目录。 
+
+练习 2：创建几个目录并来回切换
+
+mkdir notes
+mkdir practice
+mkdir test
+ls
+
+然后开始切换：
+
+cd notes
+pwd
+
+cd ..
+pwd
+
+cd practice
+pwd
+
+cd ../test
+pwd
+
+cd ~/cli-lab/round1
+pwd
+
+这里你要体会几种写法：
+	•	cd notes：进入当前目录下的 notes
+	•	cd ..：回到上一级
+	•	cd ../test：先回上一级，再进 test
+	•	cd ~/cli-lab/round1：直接回到目标路径。Ubuntu 的新手教程就是按这种“打开终端、创建目录和文件、移动和操作文件”的顺序设计的。 
+
+练习 3：绝对路径和相对路径
+
+先进入：
+
+cd ~/cli-lab/round1/notes
+pwd
+
+再分别试：
+
+cd ..
+pwd
+
+cd ~/cli-lab/round1/practice
+pwd
+
+cd ../test
+pwd
+
+cd ~/cli-lab/round1
+pwd
+
+你要分清：
+	•	绝对路径：从固定位置开始写，例如 ~/cli-lab/round1/practice
+	•	相对路径：从当前所在位置开始写，例如 ../test
+
+第 1 周自测
+
+不看前面命令，自己完成：
+	1.	回到 ~/cli-lab/round1
+	2.	进入 notes
+	3.	回上一级
+	4.	进入 practice
+	5.	进入 test
+	6.	回到 ~/cli-lab/round1
+
+如果这组能比较顺地做完，第 1 周就算过关。
+
+⸻
+
+第 2 周：文件和目录操作
+
+这一周练这 5 个命令：
+	•	mkdir
+	•	touch
+	•	cp
+	•	mv
+	•	rm
+
+Ubuntu 官方新手教程把“创建文件夹和文件”“移动和操作文件”作为最核心章节之一。 
+
+练习 4：搭一个小目录结构
+
+cd ~/cli-lab/round1
+mkdir week2
+cd week2
+mkdir raw_data backup archive
+ls
+
+练习 5：创建测试文件
+
+touch a.txt
+touch b.txt
+touch c.txt
+ls
+
+练习 6：复制文件
+
+cp a.txt backup/
+ls
+ls backup
+
+你要观察：
+	•	当前目录里的 a.txt 还在
+	•	backup/ 里也多了一份 a.txt
+
+练习 7：移动文件
+
+mv c.txt archive/
+ls
+ls archive
+
+你要观察：
+	•	当前目录里的 c.txt 没了
+	•	archive/ 里有了 c.txt
+
+练习 8：改名
+
+mv b.txt notes.txt
+ls
+
+你要观察：
+	•	b.txt 变成了 notes.txt
+
+练习 9：复制并改名
+
+cp notes.txt backup/notes_copy.txt
+ls backup
+
+练习 10：删除测试文件
+
+先新建一个：
+
+touch delete_me.txt
+ls
+
+再删除：
+
+rm delete_me.txt
+ls
+
+这一步只在练习目录里做，不要碰真实资料文件。
+
+练习 11：删除子目录中的文件
+
+touch archive/temp.txt
+ls archive
+rm archive/temp.txt
+ls archive
+
+第 2 周自测
+
+不看前面的命令，自己完成：
+	1.	在 ~/cli-lab/round1 下创建 week2_test
+	2.	进入该目录
+	3.	创建 input、output、backup
+	4.	创建 x.txt、y.txt
+	5.	复制 x.txt 到 backup
+	6.	把 y.txt 改名成 result.txt
+	7.	删除一个你自己创建的测试文件
+
+如果这组你能独立完成，第 2 周就过关。
+
+⸻
+
+第 3 周：查看文件内容和自查能力
+
+这一周练这 5 个命令：
+	•	cat
+	•	less
+	•	head
+	•	tail
+	•	man
+
+Apple 的 Terminal 指南明确说可以用 man 查看命令手册页，并且按 q 退出；Apple 的入门页也直接拿 ls 和 man 做示例。 
+
+练习 12：准备一个文本文件
+
+cd ~/cli-lab/round1
+mkdir week3
+cd week3
+touch study_log.txt
+
+往里面写 10 行内容：
+
+echo "day1 linux practice" >> study_log.txt
+echo "day2 learned pwd ls cd" >> study_log.txt
+echo "day3 learned mkdir touch" >> study_log.txt
+echo "day4 learned cp mv rm" >> study_log.txt
+echo "day5 learned cat" >> study_log.txt
+echo "day6 learned less" >> study_log.txt
+echo "day7 learned head tail" >> study_log.txt
+echo "day8 reviewed paths" >> study_log.txt
+echo "day9 reviewed files" >> study_log.txt
+echo "day10 reviewed commands" >> study_log.txt
+
+练习 13：用 cat 看文件
+
+cat study_log.txt
+
+适合短文件。
+
+练习 14：用 less 看文件
+
+less study_log.txt
+
+进入后：
+	•	用方向键上下看
+	•	按 q 退出。Apple 的说明就是这样写的。 
+
+练习 15：只看开头
+
+head study_log.txt
+
+再试：
+
+head -n 3 study_log.txt
+
+练习 16：只看结尾
+
+tail study_log.txt
+
+再试：
+
+tail -n 4 study_log.txt
+
+练习 17：查帮助
+
+依次试：
+
+man ls
+man cp
+man mv
+man rm
+man cat
+man less
+
+每次进去后只做三件事：
+	1.	看命令名字和简介
+	2.	找一两个常见参数
+	3.	按 q 退出。Apple 文档明确把 man 作为查询 UNIX 命令的入口。 
+
+⸻
+
+Round 1 综合练习
+
+做一个小型文件整理实验室。
+
+第一步：创建目录结构
+
+cd ~/cli-lab/round1
+mkdir study_files_lab
+cd study_files_lab
+mkdir input output backup notes
+ls
+
+第二步：创建测试文件
+
+touch input/raw1.txt
+touch input/raw2.txt
+touch input/raw3.txt
+ls input
+
+第三步：复制、移动、改名
+
+cp input/raw1.txt backup/
+mv input/raw2.txt output/
+mv input/raw3.txt input/final_raw3.txt
+
+检查：
+
+ls input
+ls output
+ls backup
+
+第四步：写一份命令笔记
+
+touch notes/round1_notes.txt
+echo "pwd: 查看当前路径" >> notes/round1_notes.txt
+echo "ls: 查看当前目录内容" >> notes/round1_notes.txt
+echo "cd: 切换目录" >> notes/round1_notes.txt
+echo "mkdir: 创建目录" >> notes/round1_notes.txt
+echo "touch: 创建空文件" >> notes/round1_notes.txt
+echo "cp: 复制文件" >> notes/round1_notes.txt
+echo "mv: 移动文件或改名" >> notes/round1_notes.txt
+echo "rm: 删除文件" >> notes/round1_notes.txt
+echo "cat: 查看短文件" >> notes/round1_notes.txt
+echo "less: 查看长文件" >> notes/round1_notes.txt
+echo "head: 看文件开头" >> notes/round1_notes.txt
+echo "tail: 看文件结尾" >> notes/round1_notes.txt
+
+查看：
+
+cat notes/round1_notes.txt
+
+这个综合练习其实就是在模拟你后面做项目时最常见的目录组织方式：input 放原始内容，output 放结果，backup 放备份，notes 放说明。Ubuntu 的教程本身也是在带你熟悉这类基础文件操作。 
+
+⸻
+
+Round 1 最终自测清单
+
+做完以后，你自己检查下面这些：
+	•	你能解释什么是当前目录、绝对路径、相对路径
+	•	你能独立完成创建目录、创建文件、复制、移动、改名、删除测试文件
+	•	你能用 cat、less、head、tail 看文本文件
+	•	你知道不会时先用 man
+	•	你已经有一份自己的命令小抄
+
+Apple 的 Terminal 指南和 Ubuntu 的新手命令行教程都把这些视为真正的入门核心。 
+
+⸻
+
+这一轮最容易踩的坑
+
+第一个坑，是只看不敲。Ubuntu 官方新手教程本身就是按“边看边做”的形式设计的。 
+
+第二个坑，是把 man 当成整本教材来啃。Apple 的文档更适合你的起步方式：先会打开、会查、会退出。 
+
+第三个坑，是太早去学大量参数或高级命令。你现在把这 13 个命令练顺，比扩充命令数量更重要。这一点虽然是学习建议，但完全符合 Ubuntu 官方把这篇教程定位为“熟悉一些基础命令和概念”的目标。 
+
+如果你要，我下一条可以继续把 Round 1 的参考答案骨架 也补给你，方便你做完后对照。

@@ -1,0 +1,761 @@
+好，下面我把 Round 7：面向 AI 项目的综合练习 展开。
+
+这一轮的核心，不再是单点知识，而是把你前面学过的东西真正串起来，做成一个 能处理真实小数据文件、能从命令行运行、能输出结果和日志 的小工具。Python 标准库本身就提供了这条路线上最需要的几块能力：pathlib 负责跨平台路径与文件操作，csv 负责表格数据读写，json 负责 JSON 编解码，argparse 负责命令行参数解析并自动生成帮助信息，logging 负责日志输出。JSON Lines 规范则明确说明 .jsonl 很适合“逐行处理一条记录”，也很适合 Unix 风格的管道处理和日志场景。 
+
+Round 7 的定位
+
+这一轮建议还是按 3 周、每周约 8 小时 来走，但学习方式要从“学一个点”切到“做一个小型可用工具”。你这轮的目标不是上框架，也不是碰大模型 API，而是先把 AI 项目前置的数据处理能力 做扎实：
+你要会处理 txt / csv / json / jsonl，会做筛选、去重、简单统计、批量重命名，会把工具做成命令行程序，会留下日志，会输出处理报告。argparse 官方教程明确把它定位成 Python 标准库里“推荐的命令行解析模块”，而且会自动生成 help 和 usage；logging HOWTO 也明确区分了 print() 和 logging 的使用场景。 
+
+这一轮为什么对 AI 项目特别重要
+
+你后面不管做数据清洗、提示词样本整理、ASR/TTS 文本预处理、标注结果复查，还是把一堆原始文件整理成可继续喂给后续脚本的格式，本质上都逃不开这几件事：
+	•	遍历文件夹
+	•	识别文件格式
+	•	逐条读取记录
+	•	筛掉不需要的样本
+	•	做去重和统计
+	•	把结果导出为新文件
+	•	留一份日志，方便以后复现
+
+JSON Lines 官方把 .jsonl 描述为“每行一条 JSON 记录”的格式，适合逐条处理、日志和管道；csv 模块文档说明它支持普通读写，也支持 DictReader / DictWriter 按字典形式处理表格数据；pathlib 则提供了带 I/O 能力的 Path 对象，非常适合你做目录遍历和文件输出。 
+
+这一轮学什么，不学什么
+
+这一轮学的是：
+	•	pathlib 做路径和文件遍历
+	•	txt / csv / json / jsonl 的基础读写
+	•	argparse 做命令行参数
+	•	logging 做控制台和文件日志
+	•	用一个统一脚本完成“读取 → 筛选 → 去重 → 统计 → 输出”
+
+这一轮先不学：
+	•	pandas
+	•	第三方 CLI 框架
+	•	Web 服务
+	•	数据库
+	•	模型 API 接入
+	•	多进程并发
+
+这么安排是为了把复杂度压低。Python 标准库参考手册本身就强调标准库覆盖面很广，提供了很多“日常编程问题的标准解法”；对你当前这个阶段来说，先把标准库用顺，比一上来再引入一层新框架更稳。 
+
+⸻
+
+本轮资源包
+
+1. 主文档：argparse 教程
+
+Python 官方 argparse 教程明确说，它是对 argparse 的温和入门，而 argparse 是标准库里推荐的命令行参数解析模块。你这轮所有脚本都建议用它来做 --input、--output、--format、--dedup 之类的参数。 
+
+2. 主文档：pathlib
+
+pathlib 官方文档说明它提供了带有不同操作系统语义的文件系统路径类，而且 Path 是同时带 I/O 能力的 concrete path。对你来说，它会比拼接字符串路径更稳、更清晰。 
+
+3. 文件格式主文档：csv 和 json
+
+Python 官方 csv 文档说明这个模块专门负责 CSV 读写，并支持 DictReader / DictWriter。json 文档说明 JSON 是轻量级数据交换格式，标准库直接提供编码解码能力。 
+
+4. .jsonl 参考
+
+JSON Lines 官方说明这个格式要求每一行都是一个合法 JSON 值，适合逐条处理、日志文件和 Unix 风格的 shell pipeline。你这轮非常适合把它当成 AI 数据处理中最重要的目标格式之一。 
+
+5. 日志主文档：logging
+
+Python logging HOWTO 明确说：普通命令行脚本里，要显示用户可见输出时可以用 print()，而需要可分级、可配置、可落盘的运行记录时应该用 logging。同时文档也给出了 debug()、info()、warning()、error()、critical() 这些常见级别。 
+
+⸻
+
+第 1 周：文件格式与路径操作
+
+这一周只做一件事：把几种常见输入格式读顺。
+
+你要先接受一个现实：AI 项目前置处理里，真正最常碰到的不是复杂模型，而是“这个目录里一堆文件，怎么统一读、怎么统一吐出去”。pathlib 很适合做这件事，因为它就是为了文件系统路径对象化而设计的；csv、json 则分别提供了标准格式读写能力。 
+
+这周练习目录
+
+mkdir -p ~/cli-lab/round7/week1
+cd ~/cli-lab/round7/week1
+
+这周你要写的第一个脚本
+
+文件名：read_formats.py
+
+先只支持 4 种格式：
+	•	sample.txt
+	•	sample.csv
+	•	sample.json
+	•	sample.jsonl
+
+你可以先自己造几份最小测试数据。
+
+sample.txt
+
+ok
+blur
+ok
+bad
+
+sample.csv
+
+id,label,text
+1,ok,hello
+2,blur,world
+3,ok,test
+
+sample.json
+
+[
+  {"id": 1, "label": "ok"},
+  {"id": 2, "label": "blur"}
+]
+
+sample.jsonl
+
+{"id": 1, "label": "ok"}
+{"id": 2, "label": "bad"}
+{"id": 3, "label": "ok"}
+
+本周练习任务
+
+第一步，练 pathlib.Path：
+	•	创建 input 和 output 目录
+	•	用 Path("input") / "sample.txt" 这种写法拼路径
+	•	判断文件是否存在
+	•	遍历某个目录下所有 .jsonl 或 .csv 文件
+
+第二步，分别写 4 个读取函数：
+	•	read_txt_lines(path)
+	•	read_csv_rows(path)
+	•	read_json(path)
+	•	read_jsonl(path)
+
+JSON Lines 官方要求每行都是合法 JSON，所以 .jsonl 的读取方式通常就是“逐行 json.loads()”；而 csv 文档明确给了 reader 和 DictReader 两种方式。 
+
+第 1 周周末小成果
+
+做一个脚本，运行后能打印：
+	•	每种文件读到了多少条记录
+	•	前 2 条内容长什么样
+
+这一周结束时，你要有这种感觉：
+
+原来 txt、csv、json、jsonl 并不是四套完全不同的世界，本质上都是“把记录读进来”。
+这个判断是基于这些格式的官方读写文档做出的工程抽象。 
+
+⸻
+
+第 2 周：命令行参数、筛选、去重、日志
+
+这一周开始把脚本从“能跑”提升到“能用”。
+
+argparse 的价值在于：你不需要每次手改代码里的路径，而是可以直接在命令行里传 --input、--output、--format。官方教程和 API 文档都明确说它会自动生成帮助信息，并在参数无效时给出错误提示。logging 的价值则在于：你可以同时把运行情况输出到终端和日志文件。 
+
+这周练习目录
+
+mkdir -p ~/cli-lab/round7/week2
+cd ~/cli-lab/round7/week2
+
+这周你要写的脚本
+
+文件名：filter_tool.py
+
+先支持这些参数：
+	•	--input
+	•	--output
+	•	--format
+	•	--keyword
+	•	--dedup
+
+本周练习任务
+
+练习 1：做最小 CLI
+让它支持下面这种调用：
+
+python3 filter_tool.py --input sample.jsonl --output out.jsonl --format jsonl
+
+练习 2：加关键词过滤
+例如：
+
+python3 filter_tool.py --input sample.jsonl --output out.jsonl --format jsonl --keyword ok
+
+只保留包含 ok 的记录。
+
+练习 3：加去重开关
+例如：
+
+python3 filter_tool.py --input sample.txt --output out.txt --format txt --dedup
+
+如果是文本，就按整行去重；如果是 jsonl，你可以先用某个字段比如 id 或整条字符串来做去重。
+
+这一步会直接用到你前面 Round 4 学过的 set / dict 思维。
+
+练习 4：加日志
+至少做到：
+	•	控制台打印开始与结束
+	•	文件里写入处理条数、过滤条数、去重前后数量
+
+logging HOWTO 里明确区分了不同级别和使用场景；而 logging reference 也说明了 basicConfig() 可以快速配置 root logger，适合很多常见场景。 
+
+第 2 周周末小成果
+
+你的脚本应该已经能做到：
+	•	从命令行接收路径
+	•	根据格式读取文件
+	•	按关键词过滤
+	•	可选去重
+	•	把结果写到输出文件
+	•	同时留下日志
+
+这一周结束时，你要有这种感觉：
+
+脚本开始像“工具”了，而不是只会在编辑器里点运行的小片段。
+
+⸻
+
+第 3 周：综合成一个 AI 数据预处理小工具
+
+这一周把前两周的内容收口，做成一个统一项目。
+
+项目名建议
+
+ai_prep_tool
+
+建议目录结构
+
+ai_prep_tool/
+├─ input/
+├─ output/
+├─ logs/
+├─ ai_prep_tool.py
+└─ README.md
+
+目标功能
+
+这个工具先只做 4 个动作：
+	1.	读取 txt / csv / json / jsonl
+	2.	按条件筛选记录
+	3.	做去重
+	4.	输出统计报告
+
+建议支持的命令行形式
+
+python3 ai_prep_tool.py --input input/sample.jsonl --output output/clean.jsonl --format jsonl --keyword ok --dedup
+
+第 3 周练习任务
+
+练习 1：统一输入输出
+别再为每种格式写一堆散函数入口了，改成一个统一主函数：
+	•	先根据 --format 判断用哪个 reader
+	•	再统一进入处理流程
+	•	再根据格式输出
+
+练习 2：生成 summary
+除了输出清洗后的文件，再额外输出一份 summary.json 或 summary.txt，里面至少有：
+	•	原始记录数
+	•	保留记录数
+	•	去重后记录数
+	•	输出路径
+
+json 模块文档说明它适合轻量级数据交换，所以把 summary 落成 JSON 很自然。 
+
+练习 3：补 README
+README 里至少写清：
+	•	工具干什么
+	•	支持哪些格式
+	•	怎么运行
+	•	一个完整例子
+
+练习 4：做 2 组测试数据
+比如：
+	•	一组 jsonl 标注数据
+	•	一组 csv 样本表
+
+分别跑一次，确保你的工具不是只对一种输入有效。
+
+第 3 周周末小成果
+
+你应该拿到一个真正可以演示的最小项目：
+	•	有目录结构
+	•	有输入输出
+	•	有日志
+	•	有 summary
+	•	有 README
+	•	能从命令行跑
+
+⸻
+
+Round 7 的微型项目标准
+
+这一轮的最终项目，我建议你把要求定得非常朴素：
+
+必做
+	•	支持 txt / csv / json / jsonl 中至少 3 种
+	•	支持命令行参数
+	•	支持筛选
+	•	支持去重
+	•	支持 summary 输出
+	•	支持日志
+
+选做
+	•	批量重命名输入文件
+	•	按字段过滤 JSON/JSONL
+	•	输出多个统计项
+	•	支持遍历一个目录而不只是单文件
+
+如果你把必做部分做完，这个项目就已经足够像一个 AI 项目前置工具了。
+
+⸻
+
+Round 7 和 AI 项目的连接点
+
+这一轮和 AI 项目是直接相连的。
+
+你以后很可能会做这些事情：
+	•	把标注数据从 CSV 转成 JSONL
+	•	把一堆原始文本按规则过滤
+	•	去掉重复样本
+	•	输出一份统计报告给自己或同事
+	•	为后续模型、脚本、标注流程准备更干净的输入
+
+JSON Lines 官方明确强调它适合逐条处理和日志；argparse 适合做用户友好的 CLI；logging 适合保留程序运行记录；csv 和 json 则负责常见交换格式。把这些放到一起，就是一个非常标准的“AI 项目前置工具链起点”。 
+
+⸻
+
+Round 7 验收标准
+
+这一轮结束时，你做到下面这些，就算过关：
+
+你能独立写一个 100 行上下的 Python CLI 小工具，能从命令行接收参数，并自动生成 help 信息。argparse 官方明确支持这些能力。 
+
+你能用 pathlib 遍历目录、拼路径、创建输出目录。pathlib 官方文档说明 Path 提供了具体路径的 I/O 能力。 
+
+你能读取并输出至少 3 种常见格式，优先推荐 txt / csv / jsonl 或 csv / json / jsonl。csv、json 和 JSON Lines 官方文档都支持这种用法。 
+
+你能做简单筛选、去重和计数，并把结果写到 summary 文件里。这里的“筛选/去重/计数”是你对前几轮 Python、数据结构和 Linux 文本处理能力的综合应用。
+
+你能同时把运行状态打印到终端并写入日志文件。logging HOWTO 和 reference 都说明这是标准用法。 
+
+⸻
+
+这一轮最容易踩的坑
+
+第一个坑，是一上来就上 pandas。
+你当然以后可能会用到 pandas，但这一轮先不用。原因不是 pandas 不好，而是你当前的目标是把“文件 → 记录 → 处理 → 输出”这条基本链条彻底吃透。Python 标准库已经足够支持这条链条。 
+
+第二个坑，是把 .json 和 .jsonl 混为一谈。
+JSON Lines 官方要求每行都是独立 JSON 值，读取方式通常是逐行处理；而普通 .json 往往是一个完整数组或对象，读取方式不同。 
+
+第三个坑，是所有状态都用 print()。
+print() 适合简单输出，但 logging 更适合分级、落盘、后续排查。官方 HOWTO 已经明确区分了这两者。 
+
+第四个坑，是路径全靠字符串硬拼。
+这会让你在目录切换、输出文件生成、跨平台运行时更容易出错。pathlib 的设计目的就是减少这类问题。 
+
+如果你继续，我下一条就给你补 Round 7 专用练习清单，做成和前几轮一样，可以直接照着一步一步练的版本。
+
+可以。下面我把 Round 7 专用练习清单 做成你能直接照着练的版本。
+
+这一轮的目标很明确：把前面学过的 Python、数据结构、Linux 命令行 真正串起来，做出一个最小可用的 AI 数据预处理小工具。这里我建议你只用 Python 标准库完成主线：pathlib 处理路径和文件，csv/json 读写常见格式，.jsonl 按行处理记录，argparse 做命令行参数，logging 做日志。这样复杂度最低，也最容易形成稳定正反馈。 
+
+Round 7 你这一轮要练到什么程度
+
+这轮结束时，你不需要会 pandas，不需要接模型 API，也不需要做 Web 服务。你只要做到这几件事：
+	•	能读取 txt / csv / json / jsonl 中至少 3 种格式
+	•	能从命令行传入输入路径、输出路径和处理选项
+	•	能做最基础的筛选、去重、计数
+	•	能把结果输出成新文件，并额外生成一份 summary
+	•	能把运行过程写进日志文件
+
+argparse 官方教程明确把它定位为标准库里推荐的命令行参数解析模块，而且会自动生成 help 和 usage；logging 文档说明它是灵活的事件记录系统；JSON Lines 官方说明 .jsonl 适合逐条处理、日志和 Unix 风格的管道。 
+
+⸻
+
+先建这轮总目录
+
+先在终端里创建总练习区：
+
+mkdir -p ~/cli-lab/round7
+cd ~/cli-lab/round7
+mkdir week1 week2 week3 final_lab
+
+这一轮建议你从一开始就养成“目录清楚”的习惯，因为 pathlib 的设计目的之一就是让文件系统路径操作更清晰、更少靠字符串硬拼，而且 Path 还直接提供 I/O 能力。 
+
+⸻
+
+第 1 周：文件格式读取与路径操作
+
+这一周只做一件事：把不同文件格式稳稳读进来。
+
+Python 官方 csv 文档说明，reader / writer 读写的是序列，而 DictReader / DictWriter 可以直接按字典形式处理表格；json 文档说明 JSON 是轻量级数据交换格式；JSON Lines 官方要求 .jsonl 每一行都必须是一个合法 JSON 值。对你来说，最重要的是先接受一个统一视角：不管格式怎么变，本质上都只是“把记录读进来”。 
+
+第 1 周目录与测试数据
+
+进入 week1：
+
+cd ~/cli-lab/round7/week1
+mkdir input output
+
+创建四种测试文件。
+
+input/sample.txt
+
+ok
+blur
+ok
+bad
+
+input/sample.csv
+
+id,label,text
+1,ok,hello
+2,blur,world
+3,ok,test
+
+input/sample.json
+
+[
+  {"id": 1, "label": "ok"},
+  {"id": 2, "label": "blur"}
+]
+
+input/sample.jsonl
+
+{"id": 1, "label": "ok"}
+{"id": 2, "label": "bad"}
+{"id": 3, "label": "ok"}
+
+.jsonl 之所以适合你后面做 AI 数据处理，是因为它天然支持逐行处理，不需要一次把整个大数组都装进内存；这也是 JSON Lines 官方特别强调的使用方式。 
+
+练习 1：先练 pathlib
+
+新建脚本：
+
+touch read_formats.py
+
+先只写路径相关内容：
+
+from pathlib import Path
+
+base = Path("input")
+
+print("base exists:", base.exists())
+print("txt exists:", (base / "sample.txt").exists())
+
+for p in base.iterdir():
+    print("found:", p.name)
+
+运行：
+
+python3 read_formats.py
+
+pathlib 官方文档说明，这个模块提供面向对象的路径类，Path 属于 concrete path，既能表达路径，也能做 I/O 操作，所以非常适合你这一轮当主力工具。 
+
+练习 2：分别写四个 reader
+
+把 read_formats.py 补成下面这个结构：
+
+from pathlib import Path
+import csv
+import json
+
+def read_txt_lines(path: Path):
+    with path.open("r", encoding="utf-8") as f:
+        return [line.strip() for line in f if line.strip()]
+
+def read_csv_rows(path: Path):
+    with path.open("r", encoding="utf-8", newline="") as f:
+        return list(csv.DictReader(f))
+
+def read_json_file(path: Path):
+    with path.open("r", encoding="utf-8") as f:
+        return json.load(f)
+
+def read_jsonl_file(path: Path):
+    rows = []
+    with path.open("r", encoding="utf-8") as f:
+        for line in f:
+            line = line.strip()
+            if line:
+                rows.append(json.loads(line))
+    return rows
+
+base = Path("input")
+
+print("txt:", read_txt_lines(base / "sample.txt"))
+print("csv:", read_csv_rows(base / "sample.csv"))
+print("json:", read_json_file(base / "sample.json"))
+print("jsonl:", read_jsonl_file(base / "sample.jsonl"))
+
+这里你会同时练到几件很关键的事：Path.open()、csv.DictReader()、json.load()、以及逐行 json.loads() 读取 .jsonl。这些做法都直接对应官方文档建议的用法。 
+
+练习 3：做一个统一预览函数
+
+继续加一个统一函数，只打印：
+	•	记录总数
+	•	前 2 条内容
+
+def preview_records(name, records):
+    print(f"{name}: total={len(records)}")
+    print(records[:2])
+
+然后分别调用它。这样做的目的是让你开始形成“先读、先看、先确认数据长什么样”的工作习惯，这个习惯在后面的 AI 数据清洗里非常重要。这一步本身是工程建议，但它建立在前述标准库读写能力之上。 
+
+第 1 周周末自测
+
+你要能独立完成这几件事：
+	•	用 Path("input") / "sample.txt" 拼路径
+	•	用 iterdir() 或类似方式遍历目录
+	•	分别读 txt / csv / json / jsonl
+	•	打印每种格式的记录数和前两条记录
+
+只要这些都能做到，第 1 周就过关。
+
+⸻
+
+第 2 周：命令行参数、筛选、去重、日志
+
+这一周开始把脚本从“能跑”变成“能用”。
+
+argparse 官方教程明确说它会帮你解析 sys.argv，还能自动生成帮助信息和 usage，并在参数错误时给出提示；logging HOWTO 则明确区分了 print() 和 logging 的使用场景，说明普通用户可见输出可以用 print()，而需要跟踪运行事件时更适合用 logging。 
+
+第 2 周目录
+
+cd ~/cli-lab/round7/week2
+mkdir input output logs
+touch filter_tool.py
+
+你可以把 week1 的测试数据复制过来：
+
+cp -r ~/cli-lab/round7/week1/input/* input/
+
+练习 1：做最小 CLI
+
+在 filter_tool.py 里先写参数解析：
+
+import argparse
+
+parser = argparse.ArgumentParser(description="Simple AI prep tool")
+parser.add_argument("--input", required=True, help="input file path")
+parser.add_argument("--output", required=True, help="output file path")
+parser.add_argument("--format", required=True, choices=["txt", "csv", "json", "jsonl"])
+args = parser.parse_args()
+
+print(args)
+
+运行：
+
+python3 filter_tool.py --input input/sample.txt --output output/out.txt --format txt
+
+再试：
+
+python3 filter_tool.py --help
+
+如果能自动看到 help，说明你已经把 CLI 的最小骨架搭起来了。argparse 官方文档对这正是它的核心卖点。 
+
+练习 2：加关键词过滤
+
+继续给参数加两个选项：
+
+parser.add_argument("--keyword", help="keyword filter", default=None)
+parser.add_argument("--dedup", action="store_true", help="enable dedup")
+
+然后在读取后，做最简单的过滤逻辑。
+
+如果是 txt，你可以直接按整行是否包含关键词过滤。
+如果是 jsonl 或 csv，你可以先把整条记录转成字符串后再判断，或者先约定只检查 label / text 字段。
+
+示例调用：
+
+python3 filter_tool.py --input input/sample.jsonl --output output/out.jsonl --format jsonl --keyword ok
+
+这一练的关键不是“过滤写得多优雅”，而是让你开始把“读取 → 处理 → 输出”做成一条完整链路。这里用到的仍然是 argparse 和标准库文件读写能力。 
+
+练习 3：加去重
+
+如果是 txt，直接按整行去重。
+如果是 jsonl，你可以先按整条 JSON 字符串去重，或者如果有 id 字段，就按 id 去重。
+
+最简单的思路：
+
+seen = set()
+result = []
+
+for item in records:
+    key = str(item)
+    if key not in seen:
+        seen.add(key)
+        result.append(item)
+
+这里就是在实战里使用你前面学过的 set 思维。虽然这个做法本身是你代码设计的一部分，不是官方 API 规定，但它正好建立在 Python 内置容器的常规使用上。 
+
+练习 4：加日志
+
+先写一个最小 logging 配置：
+
+import logging
+from pathlib import Path
+
+log_dir = Path("logs")
+log_dir.mkdir(exist_ok=True)
+
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s [%(levelname)s] %(message)s",
+    handlers=[
+        logging.FileHandler(log_dir / "run.log", encoding="utf-8"),
+        logging.StreamHandler()
+    ]
+)
+
+logging.info("tool started")
+
+然后在关键步骤打日志：
+	•	读取前
+	•	读取后
+	•	过滤后
+	•	去重后
+	•	输出完成后
+
+logging 模块文档说明它提供灵活的事件日志系统；HOWTO 说明了 debug / info / warning / error / critical 的常见级别，而参考文档也说明 basicConfig() 能处理很多常见场景。 
+
+第 2 周周末小成果
+
+这一周结束时，你的 filter_tool.py 应该已经能做到：
+	•	从命令行读参数
+	•	按格式读取文件
+	•	可选按关键词过滤
+	•	可选去重
+	•	输出到新文件
+	•	同时写日志到终端和 logs/run.log
+
+只要这条链路能跑通，第 2 周就算完成。
+
+⸻
+
+第 3 周：整合成一个最小 AI 预处理项目
+
+这一周不再分散练习，直接做成一个完整小项目。
+
+第 3 周目录结构
+
+cd ~/cli-lab/round7/final_lab
+mkdir -p ai_prep_tool/{input,output,logs}
+cd ai_prep_tool
+touch ai_prep_tool.py README.md
+
+我建议你把最终项目目录固定成这样，因为之后你做别的小工具时，也可以沿用这套结构。pathlib 和标准库文件读写都很适合这种清晰目录布局。 
+
+练习 1：统一 reader / writer
+
+别再把每种格式的处理写得很散。把代码整理成这几个层次：
+	•	read_records(path, fmt)
+	•	filter_records(records, keyword)
+	•	dedup_records(records, fmt)
+	•	write_records(records, path, fmt)
+	•	build_summary(...)
+
+这里最重要的是“统一接口”。
+例如：
+
+records = read_records(input_path, fmt)
+filtered = filter_records(records, keyword)
+cleaned = dedup_records(filtered, fmt) if args.dedup else filtered
+write_records(cleaned, output_path, fmt)
+
+这种结构会让你的脚本第一次有“工具感”，而不是一长串乱逻辑。
+
+练习 2：加 summary 输出
+
+除了主输出文件，再额外生成一个 summary，例如：
+
+output/summary.json
+
+内容至少包括：
+
+{
+  "input_file": "input/sample.jsonl",
+  "output_file": "output/clean.jsonl",
+  "raw_count": 3,
+  "filtered_count": 2,
+  "final_count": 2
+}
+
+Python json 文档和教程都明确支持 json.dump() / json.load()，而且教程特别提醒 JSON 文件应使用 UTF-8 编码。 
+
+练习 3：补 README
+
+README 最少写 4 段：
+	•	这个工具干什么
+	•	支持哪些输入格式
+	•	怎么运行
+	•	一个完整示例
+
+例如你可以写一条完整命令：
+
+python3 ai_prep_tool.py --input input/sample.jsonl --output output/clean.jsonl --format jsonl --keyword ok --dedup
+
+这一步不是官方 API 规定，但它是让项目真正“可演示、可复用”的关键。
+
+练习 4：至少用两种格式跑通
+
+建议你至少用这两组数据各跑一次：
+	•	一组 jsonl
+	•	一组 csv
+
+因为 csv 和 jsonl 正好分别代表两类很常见的数据交换格式：表格型和逐条记录型。官方文档对这两者的定位非常明确。 
+
+⸻
+
+Round 7 综合小项目的最小可运行版本
+
+下面是你可以直接照着补的功能清单，不要求一次写得很漂亮，但要跑通。
+
+必做
+	•	支持 txt / csv / json / jsonl 中至少 3 种
+	•	支持 --input --output --format --keyword --dedup
+	•	能过滤
+	•	能去重
+	•	能输出结果文件
+	•	能输出 summary.json
+	•	能写日志到 logs/run.log
+
+选做
+	•	支持遍历整个输入目录
+	•	支持按字段过滤 JSON/JSONL
+	•	支持批量重命名
+	•	支持多个 summary 指标
+
+你把必做部分做完，这个项目就已经很像一个真正的 AI 项目前置小工具了。
+
+⸻
+
+Round 7 最终自测清单
+
+做完以后，你自己检查下面这些：
+	•	你能不能独立写一个大约 80 到 150 行的 Python CLI 工具
+	•	你能不能用 --help 展示参数说明
+	•	你能不能读取至少 3 种输入格式
+	•	你能不能做筛选、去重、计数
+	•	你能不能把结果写到新文件
+	•	你能不能把运行过程写进日志
+	•	你能不能额外输出一份 summary
+
+这些能力分别对应 argparse、pathlib、csv、json、JSON Lines 和 logging 的标准用法。 
+
+⸻
+
+你这一轮最容易踩的坑
+
+第一个坑，是一上来就上 pandas。
+你当然以后可能会用到它，但这一轮先不需要。因为你现在最重要的是把“文件 → 记录 → 处理 → 输出”这条基础链路彻底做通，而 Python 标准库已经足够覆盖这条链路。 
+
+第二个坑，是把 .json 和 .jsonl 混了。
+普通 .json 往往是一个完整对象或数组，而 .jsonl 强调“每行一个合法 JSON 值”，读取方式通常是逐行处理。 
+
+第三个坑，是所有状态都用 print()。
+print() 适合简单直接输出，但需要长期保留、分级和排查的问题，更适合交给 logging。官方 HOWTO 对这一点说得很明确。 
+
+第四个坑，是路径全靠字符串拼。
+这会让目录切换、输出路径生成、跨平台运行都更容易出错，而 pathlib 的设计目的就是让这件事更稳。 
+
+你要的话，下一步我可以继续把 整套 24 周计划做一个总复盘表，或者直接开始给你收尾做 Round 8：总复盘与后续升级路线。

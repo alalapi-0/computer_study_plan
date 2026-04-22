@@ -1,0 +1,762 @@
+好，下面继续 Round 3：Python 基础补强 + 复杂度直觉。
+
+这一轮我会把重心放在两件事上：第一，让你把 Python 写顺，至少能独立写出小脚本；第二，让你对 时间复杂度 建立“够用的工程直觉”，不是为了刷竞赛题，而是为了后面做 AI 项目时能判断代码是不是太笨、会不会越跑越慢。CS50P 本身就是面向“有或没有编程经验的人”的 Python 入门课，覆盖函数、变量、条件、循环、异常、库、文件 I/O 等；Python 官方教程则明确说明它更适合“已经有一点编程理解的人”继续巩固。你的情况刚好适合这两者搭配来学。 
+
+这一轮的定位
+
+这轮仍然建议按 3 周 来走，每周大约 8 小时。你不用追求“学完整门 Python”，只要做到这几个目标就够了：
+	1.	会写和读简单 Python 代码
+	2.	会用 if、for、while、函数、列表、字典
+	3.	知道单层循环、双层循环、查字典、大致意味着什么成本
+	4.	能做出一个很小但真实可用的文本处理脚本
+
+CS50P 的课程结构本身就是从 Functions/Variables 开始，再到 Conditionals、Loops、Exceptions、Libraries、File I/O；Hello Algo 的复杂度章节则是专门给初学者做“复杂度分析”的。 
+
+这一轮学什么，不学什么
+
+这轮要学的内容是：
+	•	变量、输入输出、基本类型
+	•	条件判断和循环
+	•	函数与返回值
+	•	列表、字典、集合的最基础用法
+	•	基本文件读取
+	•	时间复杂度的直觉：O(1)、O(n)、O(n^2) 到底在工程里意味着什么
+
+这轮先不学：
+	•	类和面向对象深水区
+	•	正则表达式
+	•	装饰器
+	•	生成器、迭代器细节
+	•	动态规划、递归题海
+	•	第三方 AI 框架
+
+这样安排的原因很直接：CS50P 虽然课程里后面还有 Unit Tests、Regular Expressions、OOP 等内容，但你现在最需要的是把前半段打牢；复杂度部分也先只学到能判断代码快慢趋势，不学理论推导。 
+
+本轮资源
+
+1. 主视频
+
+CS50P 官方课程。
+这轮主看 Week 0、Week 1、Week 2，也就是 Functions/Variables、Conditionals、Loops。CS50P 官方课程页写明这门课会教你读写代码、调试、学习函数、变量、条件和循环；对应的周页面也明确列出了 Week 0 是函数与变量，Week 1 是条件判断，Week 2 是循环。 
+
+2. 主文档
+
+Python 官方教程。
+这份教程非常适合你拿来“对照查”。官方明确说它是对 Python 语言和系统基本特性的非正式介绍，但默认你已经有一点编程基础；你现在已经接触过 Java/JavaScript，这个门槛是够的。重点看前几章，再配合第 5 章的数据结构部分。 
+
+3. 复杂度补充
+
+Khan Academy 的 Big-O / 运行效率文章 + Hello Algo 的 Complexity 章节。
+Khan Academy 适合建立“为什么要比较算法效率”的直觉，Hello Algo 则更像一本为初学者写的、图解更友好的补充书。Hello Algo 官方明确把自己定位成开源、免费、对初学者友好的数据结构与算法入门书。 
+
+4. 练习平台
+
+Exercism 的 Python Track。
+它是免费的，Python 轨道当前有 17 个 concepts 和 146 个 exercises；对你来说，这轮不需要刷很多，只拿它做“每周 2 到 4 个小练习”的补充就够了。Hello, World 和 Basics 这类最前面的练习尤其适合这一轮。 
+
+5. 可视化工具
+
+VisuAlgo。
+这一轮你还不正式学链表和树，但可以先用它看数组、排序和基础训练模块，帮助你把“循环次数变多 = 时间变长”这件事看得更直观。VisuAlgo 本身就提供可视化和训练模式。 
+
+3 周安排
+
+第 1 周：把 Python 写起来
+
+这一周目标只有一个：从“会看一点”变成“能自己写一点”。
+
+建议主线是：
+	•	看 CS50P Week 0
+	•	配合 Python 官方教程前面几章
+	•	练 print、input、变量、字符串、数字、函数、返回值
+
+CS50P Week 0 的官方笔记列出了 Creating Code with Python、Functions、Variables、Comments、Pseudocode、Strings、int、float、def、return 等内容，这正好就是你这周的范围。 
+
+这周结束时，你至少要能自己写出这种小程序：
+	•	输入一个名字，输出问候语
+	•	输入两个数字，输出和
+	•	写一个 def 函数，把一段重复逻辑包起来
+
+第 2 周：条件、循环、调试直觉
+
+这一周开始真正进入“程序会动起来”的阶段。
+
+建议主线是：
+	•	看 CS50P Week 1 和 Week 2
+	•	练 if / elif / else
+	•	练 for 和 while
+	•	开始接触简单错误和调试
+
+CS50P Week 1 页面列出了 if、elif、else、布尔表达式等内容，Week 2 则是 Loops。课程总纲也明确把 conditionals、loops、debugging 放在前半段核心位置。 
+
+这周最重要的不是语法背诵，而是形成这种感觉：
+	•	条件是在“分路”
+	•	循环是在“重复”
+	•	bug 往往不是“不会 Python”，而是条件没写对、循环边界错了、变量值不是你以为的那个
+
+第 3 周：列表、字典、文件读取 + 复杂度直觉
+
+这一周把 Python 基础和算法直觉第一次接上。
+
+建议主线是：
+	•	看 Python 官方教程的 Data Structures 章节
+	•	学列表、字典、集合的最基础用法
+	•	用一个简单文本文件做读取和统计
+	•	看 Big-O 和 Hello Algo 的复杂度章节
+
+Python 官方教程的数据结构章节重点讲了列表方法、列表推导式等；Hello Algo 的 Complexity 章节专门讲时间复杂度和空间复杂度；Khan Academy 则很适合你先建立“输入规模变大时，程序成本如何增长”的基本认知。 
+
+这一周你只要建立这几个直觉就够了：
+	•	一次顺序扫一遍列表，通常可以先按 O(n) 去理解
+	•	两层嵌套循环，先按 O(n^2) 去警惕
+	•	复杂度是看“数据规模变大时趋势怎么变”，不是盯着某一次运行的毫秒数
+	•	先写对，再看是否需要更快
+
+这些正是 Khan Academy 和 Hello Algo 在初学复杂度时强调的方向。 
+
+本轮练习建议
+
+这一轮我不建议你去刷很多题，而是做 小而短的代码练习：
+
+第一周做 3 个：
+	•	打招呼程序
+	•	简单加法器
+	•	摄氏华氏转换
+
+第二周做 3 个：
+	•	成绩判断
+	•	循环打印 1 到 100
+	•	猜数字小游戏的极简版
+
+第三周做 3 个：
+	•	统计列表里每个标签出现次数
+	•	读取文本文件并统计总行数
+	•	读取文本文件并统计某个关键词出现次数
+
+Exercism 很适合承接这类练习，因为它的 Python track 是按 concepts 逐步解锁的，不用你自己到处找题。 
+
+本轮微型项目
+
+这轮我建议你做一个非常贴近 AI 数据处理前置工作的微型项目：
+
+label_counter.py
+
+功能很简单：
+	1.	读一个文本文件，里面每行一个标签，比如 ok、blur、bad
+	2.	统计每个标签出现多少次
+	3.	输出总数和各标签计数
+
+这个项目为什么合适：
+	•	它会逼你用到变量、循环、条件、字典、文件读取
+	•	它和你后面做 AI 项目里的“标注结果粗统计”“数据预检查”非常接近
+	•	它规模小，三周内完成会有明显正反馈
+
+CS50P 课程后半段本来就覆盖 File I/O；而 Microsoft 的 ML for Beginners 课程也明确是以 Python 和 scikit-learn 为主线，说明用 Python 去做数据读取、处理和实验，是一条非常正的路线。 
+
+和 AI 项目的连接点
+
+这一轮虽然看起来只是“学 Python”，但它实际上是在帮你打未来 AI 项目里最常见的底层动作：
+	•	读文本、CSV、JSONL
+	•	循环处理一批样本
+	•	根据条件筛数据
+	•	对标签做计数和汇总
+	•	把重复逻辑封装成函数
+
+Python 官方文档一直把 Python 描述成适合脚本和快速开发的语言；而机器学习入门课程大量使用 Python 生态，这就是为什么我把 Round 3 放在这里，而不是继续死磕纯 Linux。 
+
+本轮验收标准
+
+Round 3 结束时，你做到这些就算过关：
+	•	能独立写出 30 到 80 行左右的简单 Python 脚本
+	•	能熟练用变量、条件、循环、函数
+	•	能读一个简单文本文件并做统计
+	•	能解释 O(1)、O(n)、O(n^2) 的直观区别
+	•	看到双层循环时会下意识问一句：“这里会不会慢”
+
+这些目标和 CS50P 的前半段课程设计、Python 官方教程的数据结构部分、以及 Khan Academy/Hello Algo 的复杂度入门是对齐的。 
+
+这一轮最容易踩的坑
+
+第一，不要把 Round 3 变成“死记语法”。CS50P 的路线本来就是边写边调试，而不是先背完一本语法书再开始写。 
+
+第二，不要太早沉迷列表推导式和花哨写法。Python 官方教程虽然会讲 list comprehensions，但你现在的重点是先把普通循环写明白。 
+
+第三，不要把复杂度理解成纯数学。Khan Academy 和 Hello Algo 都是在讲“增长趋势”和“效率比较”，不是让你现在去证明复杂公式。 
+
+如果你愿意，我下一条就直接把 Round 3 专用练习清单 也补出来，做成和前两轮一样可以直接照着练的版本。
+
+可以。下面我把 Round 3 专用练习清单 补成你能直接照着练的版本。
+
+这一轮的主线，和我们前面定的一样：
+先把 Python 基础写顺，再建立“复杂度直觉”。
+内容上主要对齐 CS50P 的前 3 周，也就是 Functions / Variables、Conditionals、Loops；再配合 Python 官方教程里的 控制流、数据结构、输入输出 章节，以及 Hello Algo 的复杂度部分来建立 O(1) / O(n) / O(n^2) 的基本感觉。 
+
+⸻
+
+Round 3 要练到什么程度
+
+这轮结束时，你不需要会类、装饰器、正则，也不需要刷很多算法题。你只要做到这几件事：
+	1.	能自己写 30 到 80 行左右的小 Python 脚本
+	2.	会用变量、if、for、while、函数、列表、字典
+	3.	会读一个简单文本文件
+	4.	看到单层循环时，会意识到它大多是线性增长；看到双层循环时，会下意识警惕它可能是平方级增长。CS50P 课程页把这门课定位成教你读写代码、学习函数、变量、条件、循环、异常、文件 I/O 和库；Hello Algo 则把时间复杂度解释为运行操作次数的渐近上界，并用 O(n) 这样的记号表达增长趋势。 
+
+⸻
+
+先建总练习目录
+
+先在终端里建这一轮的练习区：
+
+mkdir -p ~/cli-lab/round3
+cd ~/cli-lab/round3
+mkdir week1 week2 week3
+
+从这轮开始，你所有脚本都尽量放在固定目录里。这样后面复盘会轻松很多。
+
+⸻
+
+第 1 周：函数、变量、基本输入输出
+
+这一周主要对应 CS50P Week 0 Functions，核心内容包括函数、参数、返回值、变量、def、return、str、int、float 等。Python 官方教程也把函数和控制流放在最基础位置。 
+
+本周目标
+
+你要先做到两件事：
+	•	会把重复逻辑写进函数
+	•	会处理最简单的输入、计算、输出
+
+本周练习目录
+
+cd ~/cli-lab/round3/week1
+
+练习 1：最简单的问候程序
+
+新建文件：
+
+touch hello.py
+
+写入：
+
+name = input("What is your name? ")
+print("Hello,", name)
+
+运行：
+
+python3 hello.py
+
+这个练习的目的很简单：让你重新熟悉“输入 → 变量 → 输出”这条最短链路。
+
+⸻
+
+练习 2：把逻辑写成函数
+
+新建文件：
+
+touch greet.py
+
+写入：
+
+def greet(name):
+    return f"Hello, {name}"
+
+user_name = input("Name: ")
+message = greet(user_name)
+print(message)
+
+你这一步要开始体会：
+	•	函数不只是“能运行的一段代码”
+	•	函数还可以有返回值
+	•	主程序可以把返回值再拿去处理
+
+这正是 CS50P Week 0 的重点之一。 
+
+⸻
+
+练习 3：数字输入与简单计算
+
+新建文件：
+
+touch add_two_numbers.py
+
+写入：
+
+def add(a, b):
+    return a + b
+
+x = int(input("x = "))
+y = int(input("y = "))
+result = add(x, y)
+
+print("result =", result)
+
+你要开始注意：
+	•	input() 得到的是字符串
+	•	要做数值计算时，通常要先转成 int() 或 float()
+
+CS50P Week 0 页面明确把 str、int、float 都列进了这一周。 
+
+⸻
+
+练习 4：做一个简单转换器
+
+新建文件：
+
+touch celsius_to_fahrenheit.py
+
+写入：
+
+def c_to_f(c):
+    return c * 9 / 5 + 32
+
+celsius = float(input("Celsius: "))
+fahrenheit = c_to_f(celsius)
+
+print("Fahrenheit =", fahrenheit)
+
+
+⸻
+
+练习 5：一题两写
+
+把你已经写过的问候程序，改成两个版本：
+	•	一个不写函数
+	•	一个写函数
+
+然后自己比较：
+	•	哪个更容易重复使用
+	•	哪个更容易改
+
+这一题没有标准答案，重点是让你体会函数的价值。
+
+⸻
+
+第 1 周周末小任务
+
+做一个 week1_lab.py，里面放 3 个函数：
+	•	greet(name)
+	•	add(a, b)
+	•	c_to_f(c)
+
+主程序里依次调用它们。
+这就是你这周的最小成果。
+
+⸻
+
+第 2 周：条件判断、循环、调试直觉
+
+这一周主要对应 CS50P Week 1 Conditionals 和 Week 2 Loops。官方页面直接表明 Week 1 聚焦 conditionals，Week 2 聚焦 loops。Python 官方教程的控制流章节也覆盖了 if、for、range()、函数定义等内容。 
+
+本周目标
+
+你要形成这三个直觉：
+	•	if 是分路
+	•	for / while 是重复
+	•	很多 bug 不是语法不会，而是条件写错、循环边界错了
+
+本周练习目录
+
+cd ~/cli-lab/round3/week2
+
+练习 6：成绩判断
+
+新建文件：
+
+touch grade_check.py
+
+写入：
+
+score = int(input("Score: "))
+
+if score >= 90:
+    print("A")
+elif score >= 80:
+    print("B")
+elif score >= 70:
+    print("C")
+elif score >= 60:
+    print("D")
+else:
+    print("F")
+
+这一步是在练最基础的条件分支。
+
+⸻
+
+练习 7：奇偶判断
+
+新建文件：
+
+touch odd_even.py
+
+写入：
+
+num = int(input("Number: "))
+
+if num % 2 == 0:
+    print("even")
+else:
+    print("odd")
+
+
+⸻
+
+练习 8：for 循环打印 1 到 10
+
+新建文件：
+
+touch loop_for.py
+
+写入：
+
+for i in range(1, 11):
+    print(i)
+
+Python 官方教程的控制流部分就包含 range() 的常规用法。 
+
+⸻
+
+练习 9：while 循环版本
+
+新建文件：
+
+touch loop_while.py
+
+写入：
+
+i = 1
+
+while i <= 10:
+    print(i)
+    i += 1
+
+这一题的目的是对比：
+	•	for 更适合确定次数的重复
+	•	while 更适合条件驱动的重复
+
+⸻
+
+练习 10：最简单计数器
+
+新建文件：
+
+touch count_even.py
+
+写入：
+
+nums = [1, 2, 3, 4, 5, 6]
+count = 0
+
+for n in nums:
+    if n % 2 == 0:
+        count += 1
+
+print("even count =", count)
+
+这一题很重要，因为它已经开始把“循环 + 条件 + 变量更新”合在一起了。
+
+⸻
+
+练习 11：猜数字极简版
+
+新建文件：
+
+touch guess_number.py
+
+写入：
+
+target = 7
+
+while True:
+    guess = int(input("Guess: "))
+
+    if guess == target:
+        print("Correct")
+        break
+    elif guess < target:
+        print("Too small")
+    else:
+        print("Too large")
+
+这里你第一次会真正体会到：
+	•	while True
+	•	break
+	•	条件分支和循环是怎么一起工作的
+
+⸻
+
+练习 12：故意制造一个 bug
+
+拿练习 8 或练习 9，故意改错一个地方，比如：
+	•	把 <= 改成 <
+	•	把 i += 1 忘掉
+	•	把 range(1, 11) 改成 range(10)
+
+然后自己回答：
+	•	程序哪里不对
+	•	为什么会这样
+
+这一步非常值钱，因为 CS50P 明确把“读写代码、调试”都当成核心训练目标。 
+
+⸻
+
+第 2 周周末小任务
+
+做一个 week2_lab.py，里面至少包含：
+	•	一个条件判断函数
+	•	一个 for 循环示例
+	•	一个 while 循环示例
+
+例如：
+	•	is_even(n)
+	•	print_1_to_10()
+	•	count_even(nums)
+
+只要你能独立写出来，这周就算达标。
+
+⸻
+
+第 3 周：列表、字典、文件读取、复杂度直觉
+
+这一周要把 Python 基础和算法直觉第一次接上。
+
+Python 官方教程的数据结构章节重点讲了列表以及常见方法；输入输出章节明确提到程序输出既可以打印到人类可读的形式，也可以写入文件供后续使用。Hello Algo 则把时间复杂度写成对操作次数增长趋势的分析。 
+
+本周目标
+
+你要开始形成这几个感觉：
+	•	列表适合顺序处理
+	•	字典适合做映射和计数
+	•	文件读取是把“外部数据”真正拉进程序
+	•	单层循环大多先按 O(n) 去理解
+	•	双层循环先按 O(n^2) 去警惕
+
+Hello Algo 对线性增长 O(n) 的解释非常直接：运行时间随输入规模线性增长。 
+
+本周练习目录
+
+cd ~/cli-lab/round3/week3
+
+练习 13：列表求和、最大值、计数
+
+新建文件：
+
+touch list_basics.py
+
+写入：
+
+nums = [3, 8, 2, 10, 5]
+
+total = 0
+for n in nums:
+    total += n
+print("sum =", total)
+
+max_num = nums[0]
+for n in nums:
+    if n > max_num:
+        max_num = n
+print("max =", max_num)
+
+count_big = 0
+for n in nums:
+    if n > 5:
+        count_big += 1
+print("count > 5 =", count_big)
+
+这题是在练最基本的“单层遍历”。
+
+⸻
+
+练习 14：字典计数
+
+新建文件：
+
+touch label_counter.py
+
+写入：
+
+labels = ["ok", "blur", "ok", "bad", "blur", "ok"]
+
+counter = {}
+
+for label in labels:
+    if label in counter:
+        counter[label] += 1
+    else:
+        counter[label] = 1
+
+print(counter)
+
+Python 官方教程的数据结构部分把字典列为核心容器之一。 
+
+⸻
+
+练习 15：读文本文件并统计总行数
+
+先建一个文本文件：
+
+touch sample.txt
+
+写入几行，比如：
+
+ok
+blur
+ok
+bad
+ok
+
+再建脚本：
+
+touch file_line_count.py
+
+写入：
+
+count = 0
+
+with open("sample.txt", "r", encoding="utf-8") as f:
+    for line in f:
+        if line.strip():
+            count += 1
+
+print("line count =", count)
+
+Python 官方输入输出章节明确讲了文件读写。 
+
+⸻
+
+练习 16：读文本文件并做标签计数
+
+新建文件：
+
+touch file_label_counter.py
+
+写入：
+
+counter = {}
+
+with open("sample.txt", "r", encoding="utf-8") as f:
+    for line in f:
+        label = line.strip()
+        if not label:
+            continue
+
+        if label in counter:
+            counter[label] += 1
+        else:
+            counter[label] = 1
+
+print(counter)
+
+这一题已经非常接近你以后做 AI 标注数据预检查时的样子了。
+
+⸻
+
+练习 17：复杂度直觉对比
+
+新建文件：
+
+touch complexity_demo.py
+
+写入：
+
+nums = [1, 2, 3, 4, 5]
+
+print("single loop:")
+for n in nums:
+    print(n)
+
+print("double loop:")
+for i in nums:
+    for j in nums:
+        print(i, j)
+
+你现在不需要证明什么，只要直观看到：
+	•	第一部分的工作量，随着 nums 变长，大体线性增加
+	•	第二部分增长更快
+
+Hello Algo 用 Big-O 记号来表达这种增长趋势。 
+
+⸻
+
+练习 18：把暴力写法和更合理写法放一起
+
+例如统计标签次数，你可以先写一个低效版本，再写一个字典版本。
+低效版本思路：
+	•	对每个标签，再去整表数一遍
+
+字典版本思路：
+	•	一边扫一边计数
+
+这一题不是为了追求极致性能，而是让你感受到：
+
+数据结构选择，会直接影响代码怎么写。
+
+这一步是工程性训练，但背后的复杂度直觉可以用 Hello Algo 的复杂度章节来支撑。 
+
+⸻
+
+Round 3 综合小项目
+
+这一轮的综合小项目，建议你就做一个：
+
+label_counter.py
+
+目标很朴素：
+	1.	读取一个文本文件
+	2.	文件里每行一个标签
+	3.	统计每个标签出现多少次
+	4.	打印总数和各标签计数
+
+你可以把它写成这个结构：
+
+def read_labels(path):
+    ...
+
+def count_labels(labels):
+    ...
+
+def main():
+    ...
+
+这个项目为什么合适：
+	•	会逼你用到函数
+	•	会用到循环
+	•	会用到条件
+	•	会用到字典
+	•	会用到文件读取
+	•	会第一次碰到“程序不是只处理常量，而是处理外部数据”
+
+而且它和你后面 AI 项目里的“标注结果粗统计”非常接近。这个项目设计是我基于前述课程和文档内容为你的目标定制的。
+
+⸻
+
+Round 3 最终自测清单
+
+做完以后，你自己检查下面这些：
+	•	你能不能写函数，并用返回值组织代码
+	•	你能不能写 if / elif / else
+	•	你能不能写 for 和 while
+	•	你能不能用列表做顺序遍历
+	•	你能不能用字典做计数
+	•	你能不能读一个简单文本文件
+	•	你能不能说出单层循环大多先按 O(n) 去理解，双层循环先警惕 O(n^2)
+
+这些能力分别对应 CS50P 前 3 周、Python 官方教程的控制流 / 数据结构 / 输入输出章节，以及 Hello Algo 的复杂度入门。 
+
+⸻
+
+你这一轮最容易踩的坑
+
+第一个坑，是把这一轮变成“死背语法”。
+CS50P 的定位本来就是边写边调试，不是先把语法书背完再开始写。 
+
+第二个坑，是太早追求花哨写法。
+Python 官方教程虽然会讲列表推导式，但你现在的重点不是短，而是先写清楚。 
+
+第三个坑，是把复杂度当成抽象数学。
+你现在只需要先抓增长趋势：线性、平方级、谁会更快变慢。Hello Algo 的复杂度章节就是在讲这件事。 
+
+第四个坑，是不读文件，只在代码里手写测试数据。
+前两周这样练可以，但到第 3 周，你一定要把“读文件”练进去，因为 Python 官方教程已经把文件读写放进基础教程的一部分了。 
+
+你要是继续，我下一步可以把 Round 3 的参考答案骨架 也补给你，方便你做完后对照。

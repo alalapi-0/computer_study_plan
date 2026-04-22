@@ -1,0 +1,439 @@
+好，下面我把 Round 14：HTTP 与 API 设计基础 完整展开。
+
+这一轮是路线 B 的第一步，核心不是先写很多接口，而是先把三件事讲清楚：HTTP 是什么、接口为什么这样设计、FastAPI 最小服务怎么起起来。HTTP 是 Web 上数据交换的基础，也是客户端—服务器协议；HTTP 用一组请求方法来表达这次请求想做什么；状态码用来表达请求结果，范围是 100 到 599。 
+
+Round 14 的目标
+
+这轮结束时，你要做到这些：你能用自己的话解释 GET、POST、PUT、PATCH、DELETE 大概分别适合什么场景；你能看懂一个最小 JSON API 的请求和响应；你能给自己的 ai_prep_tool 画出第一版接口草图；你能用 FastAPI 起一个最小服务，并看到自动生成的交互式文档。FastAPI 的 First Steps 明确展示了如何创建 FastAPI() 实例、定义 path operation，并且默认提供交互式 API 文档和 OpenAPI schema。 
+
+这轮学什么，不学什么
+
+这轮要学的是：HTTP 基础、请求方法、状态码、JSON 请求与响应、REST 风格的最小思路、FastAPI 最小入口、最基础的接口命名和返回结构。MDN 的 HTTP 总览、方法参考和状态码参考已经足够支撑这一层学习；FastAPI 的官方教程则足够支撑“最小可运行 API”。 
+
+这轮先不学：鉴权、OAuth2、复杂数据库模型、异步任务队列、文件上传深水区、部署、反向代理和生产级安全。FastAPI 官方把安全单独放成后续章节，说明这些内容天然属于第二层，而不是 First Steps 的内容。 
+
+我对你这一轮的总体建议
+
+这一轮你不要急着把现有 CLI 全部改造成 Web 服务。更稳的顺序是：先把 HTTP 语义 理顺，再把你已经有的核心函数包一层 API。这样你以后写接口时不会只会抄代码，不知道为什么一个地方用 GET，另一个地方用 POST。HTTP 方法本身有明确语义，而且一些共同属性如 safe、idempotent、cacheable 也是围绕方法来定义的。 
+
+本轮推荐资源
+
+这一轮我建议你固定看四类资源。
+
+第一类是 MDN 的 Overview of HTTP。它最适合拿来建立整体图景：HTTP 是什么、客户端和服务器在干什么、一次请求和响应大致是什么结构。 
+
+第二类是 MDN 的 HTTP request methods 和 status codes。这两页足够支撑你把 GET、POST、PUT、PATCH、DELETE 以及 200、201、400、404、500 这类最常见状态码的直觉建立起来。MDN 还明确说明状态码分成五大类，而这些状态码定义来自 RFC 9110。 
+
+第三类是 RFC 9110: HTTP Semantics。这一份不是让你整篇精读，而是当作“更权威的语义底座”。它明确说明状态码是三位整数，范围在 100 到 599；也系统定义了请求方法和语义。 
+
+第四类是 FastAPI First Steps。这一份直接负责把前面学到的 HTTP 和 API 认知，落成一个真正能跑的最小服务。它同时也会让你第一次看到自动文档和 OpenAPI。 
+
+3 周安排
+
+第 1 周：HTTP 基础和请求/响应直觉
+
+这一周只做一件事：把 请求是什么、响应是什么、方法和状态码是什么意思 理顺。HTTP 消息由请求和响应组成，请求方法描述这次请求的意义和期望结果，例如 GET 表示客户端想获取资源，POST 表示客户端向服务器发送数据；状态码则描述结果是成功、重定向、客户端错误还是服务器错误。 
+
+你这一周最重要的学习结果，不是背术语，而是先形成这些判断：
+	•	“取状态、取列表、取详情”通常先想 GET
+	•	“提交一次处理任务”通常先想 POST
+	•	“对象不存在”通常想到 404
+	•	“参数不合法”通常会落到 4xx 这一类，而不是 5xx
+	•	“服务端自己出错”才更接近 5xx。 
+
+第 2 周：REST 风格最小接口设计
+
+这一周的重点是：先为你现有项目画出第一版接口，而不是先写代码。我建议你围绕已经做出来的 ai_prep_tool，先设计这几类接口：
+	•	GET /health：看服务活着没
+	•	GET /runs：看历史运行记录
+	•	GET /runs/{id}：看某一次运行详情
+	•	POST /run：提交一次处理任务
+	•	GET /summary/{id}：看某次任务的 summary。
+
+这种设计背后的直觉是“把核心对象当资源来看待”。HTTP 方法本来就用于表达请求目的，而 FastAPI 的 path operation 也天然适合这种资源路径写法。 
+
+这一周你还要开始建立一个简单原则：路径更像资源名，方法更像动作语义。也就是说，尽量少写成 /doRunNow 这种“把动作塞进路径”的形式，而是优先考虑资源和状态。这里我是在用 HTTP 方法语义和常见 REST 风格做工程建议；它和 MDN 对方法语义、以及 FastAPI path operation 的组织方式是一致的。 
+
+第 3 周：FastAPI 最小服务落地
+
+这一周才开始真正写代码。FastAPI 的最小路径非常直接：导入 FastAPI，创建 app，定义一个 @app.get(...) 路由，返回一个字典，然后运行开发服务器。FastAPI 官方教程明确说明了这条路径，并且会自动生成交互式 API 文档与 OpenAPI schema。 
+
+我建议你这周最少只做两个接口：
+	•	GET /health
+	•	GET /runs
+
+原因很简单：这两个接口最容易接你现在已有的 SQLite 和工具历史记录，而且不会一下子把复杂度拉得太高。等这两个稳定了，再做 POST /run 会更顺。这个排序是工程建议，但它是基于你当前项目形态做出的最稳安排。 
+
+这轮建议的最小接口草图
+
+我建议你先把第一版设计成这样：
+	•	GET /health
+返回 { "status": "ok" }
+	•	GET /runs
+返回运行记录列表
+	•	GET /runs/{id}
+返回某条运行记录详情
+	•	POST /run
+接收输入路径、输出路径、格式、keyword、dedup 这些参数，启动一次处理
+
+这里的关键不是“接口多”，而是这套接口已经能覆盖你现在项目里最核心的三种能力：看状态、看历史、触发处理。HTTP 方法语义、FastAPI path operation、以及自动文档都很适合支撑这种第一版设计。 
+
+本轮产出
+
+Round 14 结束时，你应该至少拿到这些东西：
+	•	一份你自己写的 HTTP / API 设计笔记
+	•	一张针对 ai_prep_tool 的第一版接口草图
+	•	一个最小 FastAPI 应用
+	•	两个最小接口，例如 GET /health 和 GET /runs
+	•	一次你自己打开交互式文档并测试接口的经历。
+
+这些产出虽然还不等于完整后端，但已经把路线 B 的门真正推开了。FastAPI 官方把交互式文档和 OpenAPI 当作 First Steps 就能看到的能力，这会给你很强的正反馈。 
+
+这一轮最容易踩的坑
+
+第一个坑，是还没理清 HTTP 语义，就急着堆接口。HTTP 方法不是随便选的，它们本来就有语义差异，而且还带有 safe、idempotent 等属性。 
+
+第二个坑，是一上来就做很多 POST 接口，却不先做只读接口。对你当前项目来说，先把 GET /health 和 GET /runs 做顺，会比一开始就把“触发处理 + 文件路径 + 参数校验”全塞进一个 POST 更稳。这是工程建议，但和 FastAPI 从最简单 path operation 起步的节奏是一致的。 
+
+第三个坑，是会写 FastAPI 路由，但不知道状态码为什么这么选。状态码本来就用于表达请求结果，而且分成明确的五大类；如果你把 404、400、500 混着用，后面接口会越来越难维护。 
+
+第四个坑，是把 API 路径当成“随手命名的函数名”。这一轮你要开始练“资源路径 + 方法语义”的思路，而不是仅仅把 CLI 参数搬成 URL。这个建议建立在 HTTP 方法语义和 FastAPI path operation 的天然匹配上。 
+
+Round 14 的验收标准
+
+你可以用下面这些标准判断自己有没有完成：
+	•	你能说清 HTTP 是什么，以及请求/响应大概由什么组成。 
+	•	你能解释 GET、POST 至少这两种方法在你项目里分别适合干什么。 
+	•	你能解释 200、404、500 这几个最常见状态码大概在表达什么。 
+	•	你能给 ai_prep_tool 画出第一版接口草图。
+	•	你能跑起一个最小 FastAPI 应用，并看到自动文档。 
+
+如果你确认这版 Round 14 没问题，我下一条就继续给你出 Round 14 专用练习清单。
+
+可以。下面是 Round 14 专用练习清单。
+
+这一轮只做一件大事：把你前面做出来的本地工具，开始用 HTTP 语义 去重新理解，然后落成一个 最小 FastAPI 服务。HTTP 是 Web 上数据交换的基础，也是客户端—服务器协议；HTTP 方法用来表达请求目的；状态码用来表达结果，常见分类是 1xx 到 5xx 五大类。FastAPI 的最小路径也非常直接：创建 FastAPI() 实例，写一个 @app.get(...) 路由，用 fastapi dev 启动后，本地会有自动文档。  
+
+这一轮要练到什么程度
+
+Round 14 结束时，你至少要做到这些：
+
+你能用自己的话解释，为什么“取状态、取列表、取详情”通常先想 GET，而“提交一次处理任务”更像 POST。MDN 明确写到，GET 用来请求指定资源的表示，应该只用于取数据；POST 用来向指定资源提交实体，常常会引起服务器状态变化或副作用。  
+
+你能看懂最常见的几个状态码：200 表示请求成功，201 表示创建了新资源，404 是找不到资源，500 是服务器端错误。MDN 的状态码参考页明确给出了这些分类和含义。  
+
+你能给自己的 ai_prep_tool 画出第一版接口草图，并跑起一个最小 FastAPI 应用。FastAPI 官方 first steps 直接给了最小例子：app = FastAPI()，然后用 @app.get("/") 定义路由；运行 fastapi dev 后，默认服务会在本地启动，并提供 /docs 文档页。  
+
+⸻
+
+先准备工作区
+
+先进入你的项目目录：
+
+cd ~/cli-lab/round7/final_lab/ai_prep_tool
+pwd
+ls
+
+然后补一个最小 API 文件：
+
+touch api.py
+
+这一轮你先不要动太多原有代码。更稳的做法是：保留现有 CLI 和数据库逻辑，单独新增 api.py，把 API 看成“包一层对外入口”，而不是重写项目。FastAPI 官方 first steps 本来就是从一个单独文件的最小例子开始的。  
+
+⸻
+
+第 1 周：HTTP 基础与方法直觉
+
+这一周只做一件事：先把 GET / POST / 状态码的基本感觉建立起来。HTTP 方法有各自语义，而且有些方法还带有 safe、idempotent、cacheable 这些属性；例如 GET 是 safe 且 idempotent，PUT 和 DELETE 是 idempotent，但 POST 不是。  
+
+练习 1：写你自己的 HTTP 笔记
+
+新建一个文件：
+
+touch http_notes.md
+
+然后先写最小笔记，只写这几句：
+	•	GET：拿资源
+	•	POST：提交数据并可能引起状态变化
+	•	PUT：整体替换资源
+	•	PATCH：局部修改资源
+	•	DELETE：删除资源
+
+这些定义都能在 MDN 的 HTTP methods 页直接找到。  
+
+练习 2：给你现有项目做“动作→方法”映射
+
+在 http_notes.md 里再写一组对应关系：
+	•	查看服务是否活着 → GET
+	•	查看所有运行记录 → GET
+	•	查看某一条运行记录 → GET
+	•	提交一次处理任务 → POST
+
+这里你是在练“路径更像资源名，方法更像动作语义”的思路。这个判断建立在 HTTP 方法官方语义之上。  
+
+练习 3：状态码最小记忆
+
+继续在笔记里补这几条：
+	•	200：成功
+	•	201：创建成功
+	•	404：没找到
+	•	500：服务器端错误
+
+MDN 状态码页明确说明状态码分五大类，并给出了 200 OK 与 201 Created 的语义。  
+
+练习 4：给现有工具写第一版接口草图
+
+在 http_notes.md 里写出第一版接口，不用写代码，只写设计：
+
+GET /health
+GET /runs
+GET /runs/{id}
+POST /run
+
+这一版已经足够覆盖你现在最核心的能力：看服务状态、看历史、看详情、提交一次处理。FastAPI 的 path operation 模型天然适合这种资源路径写法。  
+
+第 1 周周末小任务
+
+这一周结束时，你至少要能独立回答：
+	•	为什么查看列表更像 GET
+	•	为什么提交一次处理更像 POST
+	•	200、201、404、500 各大概表示什么
+
+只要这三件事能讲清楚，第 1 周就过关。  
+
+⸻
+
+第 2 周：接口设计草图与 JSON 返回结构
+
+这一周主题是：先把接口设计清楚，再写代码。HTTP 消息由请求和响应组成，服务端通常会返回结构化数据；FastAPI 也允许直接返回 dict、list、str、int 等内容。  
+
+练习 5：设计 GET /health
+
+先写下你期望的返回：
+
+{"status": "ok"}
+
+这是一个最小健康检查接口。它的意义不是业务逻辑，而是让你快速确认服务进程是否正常对外响应。FastAPI 最小示例本身就是返回一个 JSON 风格字典。  
+
+练习 6：设计 GET /runs
+
+你可以先设计成这样：
+
+{
+  "runs": [
+    {
+      "id": 1,
+      "input_file": "input/sample.jsonl",
+      "output_file": "output/clean.jsonl",
+      "raw_count": 10,
+      "filtered_count": 8,
+      "final_count": 7,
+      "created_at": "2026-03-26T12:00:00"
+    }
+  ]
+}
+
+这样设计的好处是后面很容易直接接你上一轮已经做好的 SQLite 查询函数。这个设计不是某条规范强制要求，但它符合“GET 取资源表示”的 HTTP 语义。  
+
+练习 7：设计 GET /runs/{id}
+
+你可以先写出预期：
+	•	找到时，返回一条记录和 200
+	•	找不到时，返回错误信息和 404
+
+状态码页明确说明 404 属于客户端错误类，而 200 表示成功。  
+
+练习 8：设计 POST /run
+
+先别急着实现，只先写请求体草图，例如：
+
+{
+  "input": "input/sample.jsonl",
+  "output": "output/clean.jsonl",
+  "format": "jsonl",
+  "keyword": "ok",
+  "dedup": true
+}
+
+然后写出预期结果：
+	•	成功提交后，返回一条最小 summary
+	•	状态码先用 200 或 201 均可，但你要给出理由
+
+MDN 明确说 POST 用于提交实体，通常会引起服务器状态变化；201 Created 适用于新资源被创建的情况。  
+
+练习 9：把接口草图整理成一个小文档
+
+新建：
+
+touch api_design.md
+
+至少写清：
+	•	路径
+	•	方法
+	•	作用
+	•	请求参数或请求体
+	•	返回结构
+	•	成功时状态码
+	•	失败时可能的状态码
+
+这一步会强迫你把“功能”翻译成“接口语义”。后面写 FastAPI 时会轻松很多。这个练习建立在 HTTP 方法和状态码的官方语义之上。  
+
+第 2 周周末小任务
+
+这一周结束时，你至少要拿到：
+	•	一份 api_design.md
+	•	4 个最小接口的路径草图
+	•	每个接口至少一个成功响应样例
+	•	至少两个错误响应场景说明
+
+⸻
+
+第 3 周：把最小 FastAPI 服务跑起来
+
+这一周才开始真正写代码。FastAPI 官方 first steps 的最小例子就是：导入 FastAPI，创建 app = FastAPI()，用 @app.get("/") 定义一个路径操作函数，然后运行 fastapi dev。运行后，本地默认地址是 http://127.0.0.1:8000，并提供 http://127.0.0.1:8000/docs 文档页。  
+
+练习 10：安装 FastAPI
+
+在你的虚拟环境里安装：
+
+pip install "fastapi[standard]"
+
+FastAPI first steps 使用的就是这个安装方式。  
+
+练习 11：写最小 api.py
+
+先写最小版：
+
+from fastapi import FastAPI
+
+app = FastAPI()
+
+@app.get("/health")
+async def health():
+    return {"status": "ok"}
+
+这里的关键是先接受 FastAPI 的最小结构：
+	•	app = FastAPI()
+	•	路径操作装饰器
+	•	返回字典作为 JSON 响应
+
+这些都直接来自 FastAPI first steps。  
+
+练习 12：启动开发服务器
+
+运行：
+
+fastapi dev api.py
+
+然后在浏览器打开：
+
+http://127.0.0.1:8000/health
+http://127.0.0.1:8000/docs
+
+FastAPI 官方 first steps 明确说明 fastapi dev 会启动开发服务器，并在本地提供 /docs 文档页。  
+
+练习 13：接上 SQLite 历史记录
+
+在 api.py 里新增第二个接口，先直接复用你上一轮的数据库函数：
+
+from fastapi import FastAPI
+from db import init_db, list_runs
+
+app = FastAPI()
+
+@app.get("/health")
+async def health():
+    return {"status": "ok"}
+
+@app.get("/runs")
+async def runs():
+    init_db()
+    rows = list_runs()
+    return {"runs": rows}
+
+这一步的重点不是“代码多高级”，而是你第一次把 已有工具能力 通过 API 暴露出来了。FastAPI 官方明确说路径操作函数在收到对应 URL 和方法的请求时会被调用，而且可以直接返回字典。  
+
+练习 14：再补一个详情接口
+
+继续加：
+
+from db import get_run_by_id
+from fastapi import HTTPException
+
+@app.get("/runs/{run_id}")
+async def run_detail(run_id: int):
+    row = get_run_by_id(run_id)
+    if row is None:
+        raise HTTPException(status_code=404, detail="run not found")
+    return {"run": row}
+
+你这一步会第一次练到“用状态码表达接口结果”。404 的语义来自 HTTP 状态码体系；FastAPI 用 HTTPException 来返回这类错误也很自然。状态码参考页明确把 404 放在客户端错误类里。  
+
+练习 15：把接口和文档对应起来
+
+现在回到浏览器里的 /docs，逐个点一下：
+	•	GET /health
+	•	GET /runs
+	•	GET /runs/{run_id}
+
+你会第一次非常直观地看到：接口设计文档和实际接口是连起来的。FastAPI 官方 first steps 把 Interactive API docs 和 OpenAPI 当作起步就能看到的能力。  
+
+第 3 周周末小任务
+
+这一周结束时，你至少要做到：
+	•	fastapi dev api.py 能跑起来
+	•	/health 能返回正常 JSON
+	•	/runs 能返回数据库里的历史记录
+	•	/runs/{id} 能在找不到时返回 404
+	•	/docs 能正常打开并交互测试
+
+⸻
+
+Round 14 综合演练
+
+把这一轮收口成一次完整演练。你从头做到尾：
+
+第一步，确认项目里有：
+
+api.py
+db.py
+api_design.md
+
+第二步，运行：
+
+fastapi dev api.py
+
+第三步，在浏览器打开：
+
+http://127.0.0.1:8000/docs
+
+第四步，依次测试：
+	•	GET /health
+	•	GET /runs
+	•	GET /runs/{id}
+
+第五步，至少故意测一次错误路径或不存在的 run_id，确认返回 404。
+
+第六步，把这一轮改动提交到 Git：
+
+git status
+git add .
+git commit -m "add first FastAPI endpoints and API design notes"
+
+如果这一整条你能独立做完，Round 14 就算真正跑通了。
+
+⸻
+
+Round 14 最终自测清单
+
+做完以后，你自己检查下面这些：
+	•	你能不能用自己的话解释 GET 和 POST 的区别。  
+	•	你能不能解释 200、201、404、500 这些最常见状态码大概在表达什么。  
+	•	你能不能给 ai_prep_tool 写出第一版接口草图。
+	•	你能不能跑起一个最小 FastAPI 服务。  
+	•	你能不能在 /docs 里实际点通至少两个接口。  
+	•	你能不能让一个接口真正复用你前面做好的数据库逻辑。
+
+这些都做到，Round 14 就算过关了。
+
+你继续的话，我下一步就给你展开 Round 15：FastAPI 基础。

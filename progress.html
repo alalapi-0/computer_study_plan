@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>学习进度看板</title>
+  <style>
+    :root {
+      --bg: #0f1117;
+      --card: #1a1d27;
+      --card-hover: #21253a;
+      --border: #2e3348;
+      --accent: #6c63ff;
+      --accent2: #38bdf8;
+      --green: #22c55e;
+      --yellow: #f59e0b;
+      --red: #ef4444;
+      --text: #e2e8f0;
+      --text-muted: #94a3b8;
+      --radius: 12px;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      padding: 2rem 1.5rem 4rem;
+    }
+
+    /* ── Header ── */
+    header { max-width: 900px; margin: 0 auto 2.5rem; }
+    header h1 { font-size: 1.75rem; font-weight: 700; letter-spacing: -0.02em; }
+    header h1 span { color: var(--accent); }
+    header p { color: var(--text-muted); margin-top: 0.4rem; font-size: 0.95rem; }
+
+    /* ── Error / loading banner ── */
+    .banner {
+      max-width: 900px;
+      margin: 0 auto 1.5rem;
+      padding: 1rem 1.4rem;
+      border-radius: var(--radius);
+      font-size: 0.88rem;
+      line-height: 1.6;
+      display: none;
+    }
+    .banner.error {
+      display: block;
+      background: rgba(239,68,68,0.12);
+      border: 1px solid var(--red);
+      color: #fca5a5;
+    }
+    .banner.info {
+      display: block;
+      background: rgba(56,189,248,0.1);
+      border: 1px solid var(--accent2);
+      color: var(--accent2);
+    }
+    .banner code {
+      background: rgba(255,255,255,0.1);
+      padding: 0.1em 0.4em;
+      border-radius: 4px;
+      font-family: "SF Mono","Fira Code",monospace;
+      font-size: 0.85em;
+    }
+    .banner strong { color: inherit; }
+
+    /* ── How-to card ── */
+    .howto {
+      max-width: 900px;
+      margin: 0 auto 2rem;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.1rem 1.4rem;
+    }
+    .howto summary {
+      cursor: pointer;
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      list-style: none;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .howto summary::before { content: "ℹ️"; }
+    .howto[open] summary { color: var(--text); margin-bottom: 0.8rem; }
+    .howto .step { font-size: 0.83rem; color: var(--text-muted); margin-bottom: 0.4rem; line-height: 1.6; }
+    .howto .step code {
+      background: rgba(255,255,255,0.07);
+      padding: 0.15em 0.45em;
+      border-radius: 4px;
+      font-family: "SF Mono","Fira Code",monospace;
+      font-size: 0.9em;
+      color: var(--accent2);
+    }
+
+    /* ── Last-updated ── */
+    .last-updated {
+      max-width: 900px;
+      margin: 0 auto 0.8rem;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+    }
+    .refresh-btn {
+      padding: 0.2rem 0.65rem;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--text-muted);
+      font-size: 0.75rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .refresh-btn:hover { border-color: var(--accent2); color: var(--accent2); }
+
+    /* ── Global progress bar ── */
+    .global-progress {
+      max-width: 900px;
+      margin: 0 auto 2rem;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.2rem 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 1.2rem;
+    }
+    .global-progress .label { font-size: 0.85rem; color: var(--text-muted); white-space: nowrap; }
+    .bar-wrap { flex: 1; height: 8px; background: var(--border); border-radius: 99px; overflow: hidden; }
+    .bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      border-radius: 99px;
+      transition: width 0.5s ease;
+    }
+    .global-progress .percent { font-size: 1rem; font-weight: 700; color: var(--accent2); min-width: 3rem; text-align: right; }
+
+    /* ── Round tabs ── */
+    .round-tabs { max-width: 900px; margin: 0 auto 1.5rem; display: flex; gap: 0.5rem; flex-wrap: wrap; }
+    .tab-btn {
+      padding: 0.45rem 1rem;
+      border-radius: 99px;
+      border: 1px solid var(--border);
+      background: var(--card);
+      color: var(--text-muted);
+      font-size: 0.82rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+    .tab-btn:hover { border-color: var(--accent); color: var(--text); }
+    .tab-btn.active { background: var(--accent); border-color: var(--accent); color: #fff; font-weight: 600; }
+    .tab-btn.done { border-color: var(--green); color: var(--green); }
+    .tab-btn.done.active { background: var(--green); border-color: var(--green); color: #fff; }
+
+    /* ── Round panel ── */
+    .round-panel { max-width: 900px; margin: 0 auto; display: none; }
+    .round-panel.active { display: block; }
+
+    .round-header {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius) var(--radius) 0 0;
+      padding: 1.2rem 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+    .round-header h2 { font-size: 1.1rem; font-weight: 700; }
+    .round-meta { display: flex; gap: 0.8rem; flex-wrap: wrap; }
+    .badge { font-size: 0.75rem; padding: 0.25rem 0.7rem; border-radius: 99px; background: var(--border); color: var(--text-muted); }
+    .badge.green { background: rgba(34,197,94,0.15); color: var(--green); }
+    .badge.blue  { background: rgba(56,189,248,0.15); color: var(--accent2); }
+
+    .round-progress-bar {
+      background: var(--card);
+      border-left: 1px solid var(--border);
+      border-right: 1px solid var(--border);
+      padding: 0.6rem 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    .round-progress-bar .bar-wrap { height: 5px; }
+    .round-progress-bar .rp-text { font-size: 0.8rem; color: var(--text-muted); white-space: nowrap; }
+
+    /* ── Week sections ── */
+    .week-section {
+      background: var(--card);
+      border-left: 1px solid var(--border);
+      border-right: 1px solid var(--border);
+      border-top: 1px solid var(--border);
+    }
+    .week-section:last-child {
+      border-bottom: 1px solid var(--border);
+      border-radius: 0 0 var(--radius) var(--radius);
+    }
+    .week-title {
+      padding: 0.8rem 1.5rem;
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      background: rgba(255,255,255,0.02);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      cursor: pointer;
+      user-select: none;
+    }
+    .week-title .week-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--border); flex-shrink: 0; }
+    .week-title.completed .week-dot { background: var(--green); }
+    .week-title .week-name { flex: 1; }
+    .week-title .week-count { font-size: 0.75rem; color: var(--text-muted); }
+    .week-title .chevron { font-size: 0.7rem; transition: transform 0.2s; }
+    .week-title.collapsed .chevron { transform: rotate(-90deg); }
+
+    .task-list { padding: 0.5rem 0; }
+    .task-list.collapsed { display: none; }
+
+    .task-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.9rem;
+      padding: 0.65rem 1.5rem;
+      border-radius: 6px;
+      margin: 0 0.5rem;
+    }
+    .task-status-icon { font-size: 1.1rem; flex-shrink: 0; margin-top: 1px; min-width: 1.2rem; text-align: center; }
+    .task-content { flex: 1; }
+    .task-title { font-size: 0.88rem; font-weight: 500; line-height: 1.4; }
+    .task-item.done .task-title { text-decoration: line-through; color: var(--text-muted); }
+    .task-meta { display: flex; align-items: center; gap: 0.6rem; margin-top: 3px; }
+    .task-file { font-size: 0.72rem; color: var(--text-muted); font-family: "SF Mono","Fira Code",monospace; }
+    .task-done-at { font-size: 0.72rem; color: var(--green); }
+    .task-cmd {
+      font-size: 0.72rem;
+      color: var(--accent2);
+      font-family: "SF Mono","Fira Code",monospace;
+      background: rgba(56,189,248,0.08);
+      padding: 0.1em 0.5em;
+      border-radius: 4px;
+    }
+    .task-type {
+      font-size: 0.7rem;
+      padding: 0.15rem 0.5rem;
+      border-radius: 4px;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+    .task-type.reading  { background: rgba(99,102,241,0.2); color: #a5b4fc; }
+    .task-type.exercise { background: rgba(245,158,11,0.2);  color: #fcd34d; }
+    .task-type.test     { background: rgba(239,68,68,0.2);   color: #fca5a5; }
+    .task-type.output   { background: rgba(34,197,94,0.2);   color: #86efac; }
+
+    /* ── Actions ── */
+    .actions {
+      max-width: 900px;
+      margin: 1.5rem auto 0;
+      display: flex;
+      justify-content: flex-end;
+      gap: 0.8rem;
+    }
+    .btn {
+      padding: 0.5rem 1.2rem;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: var(--card);
+      color: var(--text-muted);
+      font-size: 0.82rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn:hover { border-color: var(--accent); color: var(--text); }
+
+    /* ── Celebrate ── */
+    .celebrate {
+      display: none;
+      max-width: 900px;
+      margin: 1.5rem auto 0;
+      background: linear-gradient(135deg, rgba(108,99,255,0.15), rgba(56,189,248,0.15));
+      border: 1px solid var(--accent);
+      border-radius: var(--radius);
+      padding: 1.2rem 1.5rem;
+      text-align: center;
+    }
+    .celebrate h3 { font-size: 1.1rem; color: var(--accent2); }
+    .celebrate p  { font-size: 0.85rem; color: var(--text-muted); margin-top: 0.4rem; }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <h1>📚 计算机学习计划 <span>进度看板</span></h1>
+  <p>进度状态从 <code style="background:rgba(255,255,255,0.1);padding:0.1em 0.4em;border-radius:4px;font-family:monospace">progress_data.js</code> 读取，完成练习后运行 <code style="background:rgba(255,255,255,0.1);padding:0.1em 0.4em;border-radius:4px;font-family:monospace">bash mark_done.sh &lt;id&gt;</code> 再刷新即可。</p>
+</header>
+
+<!-- Error / info banner -->
+<div class="banner error" id="errorBanner"></div>
+<div class="banner info"  id="infoBanner"></div>
+
+<!-- How-to -->
+<details class="howto" id="howtoCard">
+  <summary>如何使用看板？点击展开说明</summary>
+  <div class="step">✅ <strong>双击打开（推荐，最简单）</strong>：直接双击 <code>progress.html</code>，用浏览器打开即可查看</div>
+  <div class="step">🔄 完成练习后，在终端运行 <code>bash mark_done.sh &lt;task-id&gt;</code>，然后按 <strong>⌘R</strong> 刷新页面</div>
+  <div class="step">🌐 或启动本地服务器（支持自动刷新）：<code>python3 -m http.server 8000</code>，打开 <code>http://localhost:8000/progress.html</code></div>
+  <div class="step">📋 查看所有任务 ID：<code>bash mark_done.sh</code>（不加参数）</div>
+</details>
+
+<!-- Last updated + refresh -->
+<div class="last-updated">
+  <span id="lastUpdated">正在加载…</span>
+  <button class="refresh-btn" onclick="loadProgress()" id="refreshBtn">↻ 刷新</button>
+</div>
+
+<!-- Global progress -->
+<div class="global-progress">
+  <span class="label">总进度</span>
+  <div class="bar-wrap">
+    <div class="bar-fill" id="globalBar" style="width:0%"></div>
+  </div>
+  <span class="percent" id="globalPct">—</span>
+</div>
+
+<!-- Round tabs -->
+<div class="round-tabs" id="roundTabs"></div>
+
+<!-- Round panels -->
+<div id="panels"></div>
+
+<!-- Actions -->
+<div class="actions">
+  <button class="btn" onclick="expandAll()">展开全部</button>
+  <button class="btn" onclick="collapseAll()">折叠全部</button>
+</div>
+
+<!-- Celebrate -->
+<div class="celebrate" id="celebrate">
+  <h3>🎉 Round 完成！</h3>
+  <p>你完成了这一轮的所有任务，继续保持！</p>
+</div>
+
+<script src="progress_data.js"></script>
+<script>
+// ============================================================
+// Round 定义 — 静态元数据（不含完成状态，状态来自 progress_data.js / progress.json）
+// ============================================================
+const ROUNDS = [
+  {
+    id: "round_00",
+    title: "Round 00 · Terminal 初见",
+    difficulty: "⭐☆☆☆☆",
+    duration: "3 周",
+    weeks: [
+      {
+        id: "week1",
+        title: "第 1 周：建立感觉（pwd / ls / cd）",
+        tasks: [
+          { id:"w1-read",  type:"reading",  title:"阅读 week1/notes.md",                   cmd:"bash mark_done.sh w1-read",  file:"rounds/round_00/week1/notes.md" },
+          { id:"w1-ex1",   type:"exercise", title:"练习1：认识当前位置",                    cmd:"自动（运行 exercises.sh）",  file:"rounds/round_00/week1/exercises.sh" },
+          { id:"w1-ex2",   type:"exercise", title:"练习2：创建子目录并切换",                cmd:"自动",                       file:"rounds/round_00/week1/exercises.sh" },
+          { id:"w1-ex3",   type:"exercise", title:"练习3：绝对路径 vs 相对路径",             cmd:"自动",                       file:"rounds/round_00/week1/exercises.sh" },
+          { id:"w1-self",  type:"test",     title:"第1周自测：不看提示，独立完成5步路径切换", cmd:"自动（练习结束时确认）",      file:"rounds/round_00/week1/exercises.sh" },
+        ]
+      },
+      {
+        id: "week2",
+        title: "第 2 周：创建东西（mkdir / touch / cat）",
+        tasks: [
+          { id:"w2-read",  type:"reading",  title:"阅读 week2/notes.md",             cmd:"bash mark_done.sh w2-read",  file:"rounds/round_00/week2/notes.md" },
+          { id:"w2-ex4",   type:"exercise", title:"练习4：创建更多子目录",              cmd:"自动",  file:"rounds/round_00/week2/exercises.sh" },
+          { id:"w2-ex5",   type:"exercise", title:"练习5：创建空文件",                 cmd:"自动",  file:"rounds/round_00/week2/exercises.sh" },
+          { id:"w2-ex6",   type:"exercise", title:"练习6：用 cat 查看空文件",          cmd:"自动",  file:"rounds/round_00/week2/exercises.sh" },
+          { id:"w2-ex7",   type:"exercise", title:"练习7：写入内容再查看（echo + cat）", cmd:"自动", file:"rounds/round_00/week2/exercises.sh" },
+          { id:"w2-self",  type:"test",     title:"第2周自测：独立创建目录、文件并写入",  cmd:"自动", file:"rounds/round_00/week2/exercises.sh" },
+        ]
+      },
+      {
+        id: "week3",
+        title: "第 3 周：学会自查（man）",
+        tasks: [
+          { id:"w3-read",  type:"reading",  title:"阅读 week3/notes.md",             cmd:"bash mark_done.sh w3-read",  file:"rounds/round_00/week3/notes.md" },
+          { id:"w3-ex8",   type:"exercise", title:"练习8：查 man ls，看简介，按 q 退出", cmd:"自动", file:"rounds/round_00/week3/exercises.sh" },
+          { id:"w3-ex9",   type:"exercise", title:"练习9：依次查 pwd / mkdir / touch / cat", cmd:"自动", file:"rounds/round_00/week3/exercises.sh" },
+          { id:"w3-ex10",  type:"exercise", title:"练习10：查 man man",               cmd:"自动", file:"rounds/round_00/week3/exercises.sh" },
+          { id:"w3-self",  type:"test",     title:"第3周自测：独立打开 man ls 和 man mkdir", cmd:"自动", file:"rounds/round_00/week3/exercises.sh" },
+        ]
+      },
+      {
+        id: "final",
+        title: "最终验收",
+        tasks: [
+          { id:"fin-comp",   type:"exercise", title:"综合练习：从头到尾跑一遍所有命令",      cmd:"自动", file:"rounds/round_00/final/comprehensive_exercise.sh" },
+          { id:"fin-sheet",  type:"output",   title:"完成命令小抄（command_cheatsheet.md）", cmd:"自动", file:"rounds/round_00/final/command_cheatsheet.md" },
+          { id:"fin-acc1",   type:"test",     title:"验收：能解释 Terminal 和 Shell 的区别", cmd:"自动", file:"round_00.md" },
+          { id:"fin-acc2",   type:"test",     title:"验收：能用所有 7 个命令",               cmd:"自动", file:"round_00.md" },
+          { id:"fin-acc3",   type:"output",   title:"验收：~/cli-lab/round0 目录和命令小抄存在", cmd:"自动", file:"round_00.md" },
+        ]
+      }
+    ]
+  }
+  // 后续追加更多 Round 到此处
+];
+
+// ============================================================
+// UI 折叠状态（sessionStorage，不影响进度文件）
+// ============================================================
+const COL_KEY = "progress_ui_collapsed";
+function getCollapsed() { try { return JSON.parse(sessionStorage.getItem(COL_KEY)) || {}; } catch(e) { return {}; } }
+function setCollapsed(o) { sessionStorage.setItem(COL_KEY, JSON.stringify(o)); }
+
+let activeRound = ROUNDS[0].id;
+let progressData = {};
+
+// ============================================================
+// Load progress — tries fetch first (http://), falls back to
+// window.PROGRESS_DATA (injected by progress_data.js, works
+// under file://)
+// ============================================================
+async function loadProgress() {
+  const errEl  = document.getElementById("errorBanner");
+  const infoEl = document.getElementById("infoBanner");
+  errEl.style.display  = "none";
+  infoEl.style.display = "none";
+
+  // Try fetch (works when served via http://)
+  let fetchOk = false;
+  if (window.location.protocol !== "file:") {
+    try {
+      const res = await fetch("progress.json?_=" + Date.now());
+      if (res.ok) {
+        const data = await res.json();
+        progressData = data.tasks || {};
+        fetchOk = true;
+      }
+    } catch(e) { /* fall through */ }
+  }
+
+  // Fallback: use window.PROGRESS_DATA from progress_data.js
+  if (!fetchOk) {
+    if (window.PROGRESS_DATA) {
+      progressData = window.PROGRESS_DATA.tasks || {};
+    } else {
+      errEl.innerHTML = `
+        <strong>⚠️ 无法读取进度数据</strong><br>
+        请确认 <code>progress_data.js</code> 与 <code>progress.html</code> 在同一目录。<br>
+        运行一次 <code>bash mark_done.sh</code> 可重新生成该文件。
+      `;
+      errEl.style.display = "block";
+      return;
+    }
+  }
+
+  const now = new Date().toLocaleTimeString("zh-CN");
+  document.getElementById("lastUpdated").textContent =
+    `上次读取：${now}${window.location.protocol === "file:" ? "（本地文件模式，需手动刷新页面）" : ""}`;
+  document.getElementById("howtoCard").open = false;
+  render();
+}
+
+// ============================================================
+// Render
+// ============================================================
+function isTaskDone(taskId) {
+  return !!(progressData[taskId] && progressData[taskId].done);
+}
+function taskDoneAt(taskId) {
+  return progressData[taskId]?.done_at || null;
+}
+
+function render() {
+  const tabsEl   = document.getElementById("roundTabs");
+  const panelsEl = document.getElementById("panels");
+  tabsEl.innerHTML   = "";
+  panelsEl.innerHTML = "";
+
+  const col = getCollapsed();
+
+  ROUNDS.forEach(round => {
+    const allTasks  = round.weeks.flatMap(w => w.tasks);
+    const doneTasks = allTasks.filter(t => isTaskDone(t.id));
+    const allDone   = doneTasks.length === allTasks.length && allTasks.length > 0;
+    const pct = allTasks.length ? Math.round(doneTasks.length / allTasks.length * 100) : 0;
+
+    // Tab
+    const tab = document.createElement("button");
+    tab.className = "tab-btn" + (allDone ? " done" : "") + (round.id === activeRound ? " active" : "");
+    tab.textContent = round.title;
+    tab.addEventListener("click", () => { activeRound = round.id; render(); });
+    tabsEl.appendChild(tab);
+
+    // Panel
+    const panel = document.createElement("div");
+    panel.className = "round-panel" + (round.id === activeRound ? " active" : "");
+
+    panel.innerHTML = `
+      <div class="round-header">
+        <h2>${round.title}</h2>
+        <div class="round-meta">
+          <span class="badge">${round.difficulty}</span>
+          <span class="badge blue">${round.duration}</span>
+          <span class="badge green">${doneTasks.length}/${allTasks.length} 完成</span>
+        </div>
+      </div>
+      <div class="round-progress-bar">
+        <div class="bar-wrap" style="flex:1">
+          <div class="bar-fill" style="width:${pct}%"></div>
+        </div>
+        <span class="rp-text">${pct}%</span>
+      </div>
+    `;
+
+    round.weeks.forEach(week => {
+      const weekDone  = week.tasks.filter(t => isTaskDone(t.id)).length;
+      const weekTotal = week.tasks.length;
+      const weekAllDone  = weekDone === weekTotal && weekTotal > 0;
+      const isCollapsed  = !!col[week.id];
+
+      const weekEl = document.createElement("div");
+      weekEl.className = "week-section";
+
+      const titleEl = document.createElement("div");
+      titleEl.className = "week-title" + (weekAllDone ? " completed" : "") + (isCollapsed ? " collapsed" : "");
+      titleEl.innerHTML = `
+        <span class="week-dot"></span>
+        <span class="week-name">${week.title}</span>
+        <span class="week-count">${weekDone}/${weekTotal}</span>
+        <span class="chevron">▾</span>
+      `;
+      titleEl.addEventListener("click", () => {
+        const c = getCollapsed();
+        c[week.id] = !isCollapsed;
+        setCollapsed(c);
+        render();
+      });
+
+      const listEl = document.createElement("div");
+      listEl.className = "task-list" + (isCollapsed ? " collapsed" : "");
+
+      week.tasks.forEach(task => {
+        const done   = isTaskDone(task.id);
+        const doneAt = taskDoneAt(task.id);
+
+        const item = document.createElement("div");
+        item.className = "task-item" + (done ? " done" : "");
+
+        const typeLabel = { reading:"阅读", exercise:"练习", test:"自测", output:"产出" }[task.type];
+
+        item.innerHTML = `
+          <span class="task-status-icon">${done ? "✅" : "⬜"}</span>
+          <div class="task-content">
+            <div class="task-title">${task.title}</div>
+            <div class="task-meta">
+              <span class="task-file">${task.file}</span>
+              ${doneAt ? `<span class="task-done-at">✓ ${doneAt}</span>` : `<span class="task-cmd">${task.cmd}</span>`}
+            </div>
+          </div>
+          <span class="task-type ${task.type}">${typeLabel}</span>
+        `;
+        listEl.appendChild(item);
+      });
+
+      weekEl.appendChild(titleEl);
+      weekEl.appendChild(listEl);
+      panel.appendChild(weekEl);
+    });
+
+    panelsEl.appendChild(panel);
+  });
+
+  updateGlobal();
+  checkCelebrate();
+}
+
+function renderEmpty() {
+  document.getElementById("roundTabs").innerHTML   = "";
+  document.getElementById("panels").innerHTML      = "";
+  document.getElementById("globalPct").textContent = "—";
+  document.getElementById("globalBar").style.width  = "0%";
+}
+
+function updateGlobal() {
+  const allTasks  = ROUNDS.flatMap(r => r.weeks.flatMap(w => w.tasks));
+  const doneCount = allTasks.filter(t => isTaskDone(t.id)).length;
+  const pct = allTasks.length ? Math.round(doneCount / allTasks.length * 100) : 0;
+  document.getElementById("globalBar").style.width  = pct + "%";
+  document.getElementById("globalPct").textContent  = pct + "%";
+}
+
+function checkCelebrate() {
+  const round = ROUNDS.find(r => r.id === activeRound);
+  if (!round) return;
+  const tasks   = round.weeks.flatMap(w => w.tasks);
+  const allDone = tasks.length > 0 && tasks.every(t => isTaskDone(t.id));
+  document.getElementById("celebrate").style.display = allDone ? "block" : "none";
+}
+
+function expandAll() {
+  const c = getCollapsed();
+  ROUNDS.forEach(r => r.weeks.forEach(w => { c[w.id] = false; }));
+  setCollapsed(c); render();
+}
+function collapseAll() {
+  const c = getCollapsed();
+  ROUNDS.forEach(r => r.weeks.forEach(w => { c[w.id] = true; }));
+  setCollapsed(c); render();
+}
+
+// Auto-refresh every 30 seconds (only useful when served via http://)
+if (window.location.protocol !== "file:") {
+  setInterval(loadProgress, 30000);
+}
+
+// In file:// mode, the "refresh" button reloads the whole page
+// so the browser re-reads progress_data.js from disk
+if (window.location.protocol === "file:") {
+  document.getElementById("refreshBtn").onclick = () => location.reload();
+  document.getElementById("refreshBtn").title = "重新加载页面以读取最新 progress_data.js";
+}
+
+// Initial load
+loadProgress();
+</script>
+</body>
+</html>

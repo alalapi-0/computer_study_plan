@@ -1,0 +1,618 @@
+好，下面我把 Round 11：本地持久化与数据记录 完整展开。
+
+这一轮的核心，是把你的工具从“处理完就结束”的脚本，推进成“会留下历史、能被查询、能做最小数据管理”的小系统。最适合你的起点就是 SQLite + Python 标准库 sqlite3。Python 官方明确说明，sqlite3 是面向 SQLite 的 DB-API 2.0 接口，文档本身就包含 tutorial、reference 和 how-to；SQLite 官方则把 CREATE TABLE、INSERT 这些 SQL 语句的语法说明得很清楚。 
+
+Round 11 的目标
+
+这轮结束时，你要做到这些：
+
+你现在的 ai_prep_tool 不只会输出文件和 summary，还会把每次运行的关键信息保存到本地数据库里，例如输入文件、输出文件、原始条数、最终条数、运行时间。sqlite3 官方教程就是从“创建连接对象”开始，然后执行 SQL、提交事务、取回结果。 
+
+你要有一张最小的 runs 表，并至少学会 4 个动作：
+	•	初始化数据库
+	•	插入一条运行记录
+	•	查询全部运行记录
+	•	按条件查某一类运行记录
+
+SQLite 官方文档说明 CREATE TABLE 用来定义新表，INSERT 用来向已有表插入一行或多行数据。 
+
+你还要开始建立两个工程直觉：
+
+第一，数据库不是替代文件输出，而是给你“可查询的历史”。
+第二，写数据库时不要用字符串拼 SQL，而要继续用参数化写法。Python sqlite3 官方文档和日文文档都把“使用占位符绑定值”列成 how-to 重点。 
+
+这轮学什么，不学什么
+
+这轮要学的是：
+	•	SQLite 基础认知
+	•	sqlite3.connect(...)
+	•	建表
+	•	插入记录
+	•	查询记录
+	•	最小的数据库封装
+	•	把 Round 10 的工具和数据库接起来
+
+这轮先不学：
+	•	ORM
+	•	复杂表关系
+	•	migration 工具
+	•	多表 join 深水区
+	•	事务细节深挖
+	•	API 接数据库
+
+这么安排的原因很简单：你现在最需要的，是让项目第一次具备“持久化历史”的能力，而不是把数据库系统学成一门独立课程。Python 官方 sqlite3 文档本身也非常适合这种“先上手、后加深”的节奏。 
+
+我对你这一轮的结构建议
+
+我建议你先把数据库相关代码控制在一个单独文件里，比如：
+
+ai_prep_tool/
+├─ cli.py
+├─ core.py
+├─ io_utils.py
+├─ config.py
+├─ log_utils.py
+├─ db.py
+├─ config.ini
+├─ tests/
+└─ runs.db
+
+这一轮的关键不是文件名，而是把“数据库操作”从 CLI 和核心处理逻辑里单独拎出来。这样后面 Round 12 做批处理、Round 16 做 API 接数据库时，都会顺很多。这是工程组织建议，但它正是为了配合 sqlite3 的连接、执行、提交这类独立动作。 
+
+本轮推荐资源
+
+这一轮我建议你固定看 5 类资源。
+
+第一类是 Python 官方 sqlite3 文档。它最适合你当前阶段，因为它直接给 tutorial，不需要你先学一堆数据库背景。官方明确说：先创建 Connection 对象，再通过它与数据库交互。 
+
+第二类是 SQLite 官方 CREATE TABLE 文档。你这一轮最需要的就是会写一张最小表。SQLite 官方说明，CREATE TABLE 指定表名、列名和声明类型。 
+
+第三类是 SQLite 官方 INSERT 文档。你会频繁往 runs 表插入记录，这一页足够支撑这一轮。 
+
+第四类是 Python 官方 pathlib 文档。因为你的数据库文件、输出文件、summary 文件路径，最好都继续用 Path 管理。官方明确说 Path 属于 concrete path，并提供 I/O 操作。 
+
+第五类是 Python 官方 datetime 文档。你这一轮很适合把运行时间统一保存成 ISO 风格字符串，例如 datetime.now().isoformat()。datetime 官方文档明确支持 ISO 8601 格式相关方法。 
+
+⸻
+
+第 1 周：先把数据库跑起来
+
+这一周只做一件事：从 0 到 1 建一个最小 SQLite 数据库，并能手动插入和读出数据。
+
+这周要学到什么程度
+
+你不需要会复杂 SQL，只要先会：
+	•	建连接
+	•	建表
+	•	插入
+	•	查询
+	•	关闭连接
+
+Python 官方 sqlite3 文档把这条路径讲得很清楚：创建连接对象、创建游标、执行 SQL、提交事务、再取结果。 
+
+建议表结构
+
+先只做一张表，名字就叫 runs：
+	•	id
+	•	input_file
+	•	output_file
+	•	raw_count
+	•	filtered_count
+	•	final_count
+	•	created_at
+
+SQLite 官方 CREATE TABLE 文档说明，表定义时会指定列名和类型；同时 SQLite 的类型系统比较宽松，FAQ 和 datatype 文档都强调 SQLite 使用动态类型和 type affinity，而不是非常严格的列类型限制。你现在不需要深挖，只要知道“声明类型有意义，但 SQLite 不像某些数据库那样死板”。 
+
+第 1 周建议代码目标
+
+你这一周最好做出一个 db.py，至少包含：
+	•	init_db()
+	•	save_run(...)
+	•	list_runs()
+
+如果你愿意更稳一点，再加一个：
+	•	get_run_by_id(run_id)
+
+这周产出
+
+这一周结束时，你应该已经有：
+	•	一个 runs.db
+	•	一张 runs 表
+	•	一次真实插入记录
+	•	一次真实查询结果
+
+⸻
+
+第 2 周：把数据库接回工具主流程
+
+这一周的主题是：不再只是“单独玩数据库”，而是让你的工具每跑一次，都自动写入数据库。
+
+这周要做什么
+
+你要把 Round 10 的处理链路接成这样：
+	•	读取输入
+	•	过滤 / 去重
+	•	写输出文件
+	•	写 summary
+	•	写入数据库一条运行记录
+
+这一条链路一旦跑通，你的工具就第一次有了“历史感”。
+
+推荐的保存字段
+
+我建议你至少保存这些字段：
+	•	input_file
+	•	output_file
+	•	raw_count
+	•	filtered_count
+	•	final_count
+	•	created_at
+
+其中 created_at 可以直接用 datetime.now().isoformat()。Python datetime 文档说明 ISO 风格表示是标准支持的一部分，而 isoformat() 也有明确文档。 
+
+这一周的重点
+
+不是写很多 SQL，而是把“保存运行记录”变成主流程自然的一部分。
+换句话说，CLI 工具结束时，不仅生成文件，还自动落一条数据库记录。
+
+这一周结束时，你应该已经能做这样的事情：
+	•	先跑一次工具
+	•	再跑一个小查询脚本
+	•	看到刚才那次运行已经被数据库记住了
+
+⸻
+
+第 3 周：最小查询能力和数据管理直觉
+
+这一周的主题是：让数据库不只是“存”，还要开始“查”。
+
+这周要学到什么程度
+
+你不需要学复杂 SQL，只要先掌握最小查询能力：
+	•	查全部记录
+	•	按 id 查一条
+	•	只看最近几条
+	•	按输入文件名过滤
+
+SQLite 官方 CLI 文档也说明 SQLite 自带命令行工具可以手动输入 SQL；但对你来说，这一轮更适合继续通过 Python sqlite3 来练，把查询逻辑封装成函数。 
+
+推荐函数
+
+这一周你可以把 db.py 扩到下面这个程度：
+	•	init_db()
+	•	save_run(...)
+	•	list_runs()
+	•	get_run_by_id(run_id)
+	•	find_runs_by_input(input_file)
+
+这周最重要的直觉
+
+你要开始意识到：
+	•	文件适合保存“处理结果本体”
+	•	数据库适合保存“可查询的结构化历史”
+
+这不是 SQLite 文档里的原句，但它正是 SQLite 这类嵌入式数据库在你这种工具项目里最合理的角色定位。
+
+这周产出
+
+这一周结束时，你应该已经有：
+	•	一个最小数据库访问层
+	•	几个最小查询函数
+	•	一个会留下运行历史的 CLI 工具
+	•	一组可以继续扩展的数据记录能力
+
+⸻
+
+本轮产出
+
+Round 11 结束时，你应该至少拿到这些东西：
+	•	db.py
+	•	runs.db
+	•	一张 runs 表
+	•	工具自动写数据库记录的主流程
+	•	最小查询函数
+	•	至少一条测试或手动验证脚本，证明“写入和查询都正常”
+
+这些产出虽然还不等于完整系统，但它们会直接支撑你后面的批处理、API 和服务化。
+
+这一轮最容易踩的坑
+
+第一个坑，是把 SQLite 当成“只要会 connect() 就够了”。
+其实这一轮更关键的是：你要把数据库操作收进一个相对独立的模块，而不是把 SQL 到处散落。Python sqlite3 文档虽然不会替你设计项目结构，但它已经给了足够清晰的连接、执行、提交、查询模型。 
+
+第二个坑，是用字符串拼 SQL。
+这一轮一定要继续用参数化写法。Python sqlite3 文档和日文文档都明确强调了绑定参数的写法。 
+
+第三个坑，是把数据库当成输出文件的替代品。
+这一轮你应该保留“文件输出 + summary 输出 + 数据库记录”三条线，而不是只留数据库。
+
+第四个坑，是过早深挖 SQLite 类型系统。
+SQLite 确实有自己的动态类型和 affinity 规则，官方 FAQ 和 datatype 文档都讲了，但你这一轮只需要知道它比较宽松，不需要现在就钻进细节。 
+
+Round 11 的验收标准
+
+你可以用下面这些标准判断自己有没有完成：
+	•	你能独立初始化数据库并创建 runs 表。 
+	•	你能独立插入一条运行记录。 
+	•	你能查出全部运行记录，或按条件查一部分记录。 
+	•	你的主工具跑完后，会自动写一条数据库记录。
+	•	你能说清数据库在当前项目里解决的是“历史记录与查询”问题，而不是替代所有文件输出。
+
+如果你确认这版 Round 11 没问题，我下一条就继续给你出 Round 11 专用练习清单。
+
+可以。下面是 Round 11 专用练习清单。
+
+这一轮只做一件大事：把你的 ai_prep_tool 从“处理完就结束的脚本”，升级成“会留下运行历史、能被查询的本地小系统”。最适合你的起点就是 Python 标准库里的 sqlite3。Python 官方文档明确说明，sqlite3 是 SQLite 的 DB-API 2.0 接口，并且文档本身就包含 tutorial；SQLite 官方文档则明确说明 CREATE TABLE 用来创建新表，INSERT 用来插入新行。 
+
+这一轮要练到什么程度
+
+Round 11 结束时，你要做到这些：
+
+你现在的工具在跑完以后，不只会生成输出文件和 summary，还会把本次运行的关键信息写进一个本地数据库，例如输入文件、输出文件、原始条数、过滤后条数、最终条数、运行时间。sqlite3 官方教程就是从“建立连接对象、执行 SQL、提交事务、取结果”这条线展开的。 
+
+你要有一张最小的 runs 表，并会做 4 个动作：初始化数据库、插入一条运行记录、查全部记录、按条件查记录。SQLite 官方语法页明确支持这些基础操作。 
+
+你还要养成两个习惯：第一，数据库是拿来保存“结构化历史”的，不是替代输出文件；第二，写 SQL 时继续用参数化写法，不要拼字符串。Python sqlite3 官方文档把参数绑定当作标准用法的一部分。 
+
+⸻
+
+先准备工作区
+
+进入你的项目目录。这里继续沿用前面的路径：
+
+cd ~/cli-lab/round7/final_lab/ai_prep_tool
+pwd
+ls
+
+然后补一个数据库模块文件：
+
+touch db.py
+
+这一轮建议你把数据库逻辑单独放在 db.py，不要散到 cli.py 和 core.py 里。这样后面 Round 12 做批处理、Round 16 做 API 接数据库时会轻松很多。这是工程组织建议，但它正好匹配 sqlite3 的“连接、执行、提交、查询”独立动作。 
+
+⸻
+
+第 1 周：先把数据库跑起来
+
+这一周目标很简单：
+
+从 0 到 1 建一个最小 SQLite 数据库，并能手动插入和查出数据。
+
+Python 官方 sqlite3 教程明确说，先创建 Connection 对象，再通过它与数据库交互。SQLite 官方 CREATE TABLE 文档说明建表时会指定表名、列名和声明类型。 
+
+练习 1：先写最小 db.py
+
+把下面这版最小骨架写进去：
+
+import sqlite3
+from pathlib import Path
+
+DB_PATH = Path("runs.db")
+
+def init_db():
+    conn = sqlite3.connect(DB_PATH)
+    cur = conn.cursor()
+    cur.execute("""
+        CREATE TABLE IF NOT EXISTS runs (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            input_file TEXT NOT NULL,
+            output_file TEXT NOT NULL,
+            raw_count INTEGER NOT NULL,
+            filtered_count INTEGER NOT NULL,
+            final_count INTEGER NOT NULL,
+            created_at TEXT NOT NULL
+        )
+    """)
+    conn.commit()
+    conn.close()
+
+这里你已经同时练到了三件事：
+	•	sqlite3.connect(...)
+	•	cursor.execute(...)
+	•	CREATE TABLE IF NOT EXISTS ...
+
+这些都直接对应 Python 和 SQLite 的官方文档。 
+
+练习 2：初始化数据库
+
+在终端里跑：
+
+python3 -c "from db import init_db; init_db()"
+ls
+
+现在你应该能看到一个 runs.db 文件。Python 官方文档说明，SQLite 数据库通常就是一个普通文件；SQLite 官方也说明 CREATE TABLE 会在数据库中创建新表。 
+
+练习 3：给 db.py 加插入函数
+
+继续补：
+
+def save_run(input_file, output_file, raw_count, filtered_count, final_count, created_at):
+    conn = sqlite3.connect(DB_PATH)
+    cur = conn.cursor()
+    cur.execute("""
+        INSERT INTO runs (input_file, output_file, raw_count, filtered_count, final_count, created_at)
+        VALUES (?, ?, ?, ?, ?, ?)
+    """, (input_file, output_file, raw_count, filtered_count, final_count, created_at))
+    conn.commit()
+    conn.close()
+
+这里的重点是用 ? 占位符做参数绑定，而不是拼接字符串。Python sqlite3 官方文档把参数绑定作为标准用法；SQLite INSERT 文档也说明 INSERT INTO ... VALUES (...) 是基础形式。 
+
+练习 4：手动插入一条记录
+
+先在终端里试一次：
+
+python3 -c "from db import init_db, save_run; init_db(); save_run('input/a.jsonl', 'output/a.jsonl', 10, 7, 6, '2026-03-26T12:00:00')"
+
+这一步的目标不是“好看”，而是让你确认：数据库已经真的能写进去东西了。
+
+练习 5：给 db.py 加查询函数
+
+继续补：
+
+def list_runs():
+    conn = sqlite3.connect(DB_PATH)
+    cur = conn.cursor()
+    cur.execute("""
+        SELECT id, input_file, output_file, raw_count, filtered_count, final_count, created_at
+        FROM runs
+        ORDER BY id DESC
+    """)
+    rows = cur.fetchall()
+    conn.close()
+    return rows
+
+然后在终端里查：
+
+python3 -c "from db import list_runs; print(list_runs())"
+
+Python 官方文档明确支持通过 fetchall() 拿结果；这就是最小查询闭环。 
+
+第 1 周周末小任务
+
+这一周结束时，你至少要拿到：
+	•	一个 runs.db
+	•	一个 runs 表
+	•	一条手动插入的记录
+	•	一次成功查询的结果
+
+如果这些都做到了，第 1 周就过关。
+
+⸻
+
+第 2 周：把数据库接回主工具
+
+这一周主题是：
+
+让工具每跑一次，都自动写数据库记录。
+
+datetime 官方文档说明 datetime 模块提供日期时间类型；而 isoformat() 是 Python 官方支持的标准日期时间字符串表示方式之一。这个格式很适合你现在先直接存成文本。 
+
+练习 6：准备运行时间字符串
+
+你可以在 cli.py 或 core.py 的主流程里加：
+
+from datetime import datetime
+
+created_at = datetime.now().isoformat()
+
+这一步先不要想时区或更复杂的时间处理，只要先把“运行时刻”统一成一个稳定字符串。datetime 官方文档明确支持这些基本能力。 
+
+练习 7：把数据库保存接进主流程
+
+在主处理逻辑的最后，加上：
+
+from db import init_db, save_run
+
+init_db()
+save_run(
+    input_file=str(args.input),
+    output_file=str(args.output),
+    raw_count=raw_count,
+    filtered_count=filtered_count,
+    final_count=final_count,
+    created_at=created_at
+)
+
+现在你的流程应该变成：
+	•	读取输入
+	•	过滤 / 去重
+	•	写输出文件
+	•	写 summary
+	•	写数据库记录
+
+这一步的重点，是让数据库变成“主流程自然的一部分”，而不是一个单独玩具脚本。
+
+练习 8：跑一次真实处理，再查数据库
+
+先正常跑工具，例如：
+
+python3 cli.py --input input/sample.jsonl --output output/clean.jsonl --format jsonl --keyword ok --dedup
+
+然后查数据库：
+
+python3 -c "from db import list_runs; print(list_runs())"
+
+如果你能看到刚才那次运行被记住了，这一周的核心目标就达成了。
+
+练习 9：给 README 补一段数据库说明
+
+在 README 里加一小段，例如：
+	•	工具会把运行记录写入 runs.db
+	•	可用于查看历史处理任务
+
+这一步虽然不是数据库功能本身，但会让项目更完整。
+
+第 2 周周末小任务
+
+这一周结束时，你至少要做到：
+	•	工具跑完后会自动写数据库
+	•	数据库里能看到多条运行记录
+	•	created_at 字段能正常保存
+	•	README 至少提到本地数据库记录能力
+
+⸻
+
+第 3 周：最小查询能力和数据管理直觉
+
+这一周主题是：
+
+让数据库不只是“存”，还要开始“查”。
+
+SQLite 官方 CLI 文档说明你也可以用 SQLite 自带命令行工具输入 SQL；但对你当前阶段，更适合继续用 Python sqlite3 做封装，因为这样后面可以直接接 CLI 和 API。 
+
+练习 10：按 id 查一条记录
+
+在 db.py 里补：
+
+def get_run_by_id(run_id):
+    conn = sqlite3.connect(DB_PATH)
+    cur = conn.cursor()
+    cur.execute("""
+        SELECT id, input_file, output_file, raw_count, filtered_count, final_count, created_at
+        FROM runs
+        WHERE id = ?
+    """, (run_id,))
+    row = cur.fetchone()
+    conn.close()
+    return row
+
+终端测试：
+
+python3 -c "from db import get_run_by_id; print(get_run_by_id(1))"
+
+练习 11：按输入文件名过滤
+
+继续补：
+
+def find_runs_by_input(input_file):
+    conn = sqlite3.connect(DB_PATH)
+    cur = conn.cursor()
+    cur.execute("""
+        SELECT id, input_file, output_file, raw_count, filtered_count, final_count, created_at
+        FROM runs
+        WHERE input_file = ?
+        ORDER BY id DESC
+    """, (input_file,))
+    rows = cur.fetchall()
+    conn.close()
+    return rows
+
+终端测试：
+
+python3 -c "from db import find_runs_by_input; print(find_runs_by_input('input/sample.jsonl'))"
+
+练习 12：补一个最小查询脚本
+
+新建：
+
+touch query_runs.py
+
+写一个最小版：
+
+from db import list_runs, get_run_by_id
+
+print("all runs:")
+for row in list_runs():
+    print(row)
+
+print("\nrun id=1:")
+print(get_run_by_id(1))
+
+运行：
+
+python3 query_runs.py
+
+这一步的目的，是让你开始体会“数据库适合查结构化历史”。
+
+练习 13：给 pytest 补两条数据库测试
+
+你可以在 tests/ 下加一个最小数据库测试文件，比如：
+
+touch tests/test_db.py
+
+然后先写非常轻量的版本：
+
+from db import init_db, save_run, list_runs
+
+def test_db_can_insert_and_list():
+    init_db()
+    save_run("in.txt", "out.txt", 5, 4, 4, "2026-03-26T12:00:00")
+    rows = list_runs()
+    assert len(rows) >= 1
+
+如果你想更稳一点，可以后面再把测试库和正式库分开，但这一轮先不做复杂隔离。重点是把“数据库也能测试”这个感觉建立起来。
+
+练习 14：给自己写一段“数据库角色说明”
+
+新建一个小笔记，比如 notes_db_role.txt，写三句话：
+	•	文件输出保存什么
+	•	summary 保存什么
+	•	数据库保存什么
+
+你要开始明确这个边界：
+	•	输出文件：结果本体
+	•	summary：一次运行的概要
+	•	数据库：所有运行的可查询历史
+
+这一步不是某条官方文档的原句，但它是你当前项目最合理的工程划分。
+
+第 3 周周末小任务
+
+这一周结束时，你至少要做到：
+	•	能查全部记录
+	•	能按 id 查记录
+	•	能按输入文件名查记录
+	•	至少有一个数据库相关测试
+	•	能用自己的话讲清数据库在当前项目里的角色
+
+⸻
+
+Round 11 综合练习
+
+把这一轮收口成一次完整演练。你要从头做到尾：
+
+第一步，确认项目里有：
+
+db.py
+runs.db
+cli.py
+tests/test_db.py
+
+第二步，运行工具至少两次，输入可以不同，也可以同一个文件不同参数。
+
+第三步，运行：
+
+python3 -c "from db import list_runs; print(list_runs())"
+
+第四步，再运行：
+
+python3 -c "from db import get_run_by_id; print(get_run_by_id(1))"
+
+第五步，跑测试：
+
+pytest -q
+
+第六步，把这轮改动提交进 Git：
+
+git status
+git add .
+git commit -m "add sqlite persistence and query helpers"
+
+如果这一整套你能独立完成，Round 11 就算真正跑通了。
+
+⸻
+
+Round 11 最终自测清单
+
+做完以后，你自己检查下面这些：
+	•	你能不能独立初始化数据库并创建 runs 表。 
+	•	你能不能独立插入一条运行记录。 
+	•	你能不能查全部记录和按条件查记录。 
+	•	你能不能把工具主流程和数据库记录打通。
+	•	你能不能说清数据库在当前项目里主要解决“历史记录与查询”问题，而不是替代所有文件输出。
+	•	你能不能把这轮改动正常提交到 Git。
+
+这些都做到，Round 11 就算过关了。
+
+你继续的话，我下一步就给你展开 Round 12：自动化流水线与批处理。

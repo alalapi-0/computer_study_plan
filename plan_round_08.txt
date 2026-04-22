@@ -1,0 +1,587 @@
+好，下面我把 Round 8 完整展开。
+
+这一轮的定位，不再是继续加新零件，而是做两件更重要的事：
+第一，把你前面 Round 0 到 Round 7 的能力收口成一个稳定、可展示、可复用的小项目。第二，基于你“更快上手并逐步深入做 AI 项目”的目标，给你一条后续升级路线，让你知道下一阶段该补什么、先补什么。这个安排和官方学习路径也比较一致：Git 官方文档把“Git Basics”之后接到“Git Branching”，pytest 官方把“先写并运行最小测试”作为第一步，Docker 官方把“理解容器和基础工作流”放在 Get Started 路线里，FastAPI 官方也是从 first steps 逐步扩展到完整 tutorial。 
+
+Round 8 的总目标
+
+这一轮结束时，你不需要学会很多全新的概念，但你要做到这几件事：
+
+你能把 Round 7 的 ai_prep_tool 整理成一个像样的小仓库，并用 Git 正常管理；Git 官方文档和 Pro Git 都把“获取仓库、记录改动、查看历史、分支”作为最基础的主线。 
+
+你能给这个工具补最小测试；pytest 官方文档把“install pytest、create your first test、run multiple tests”放在 Get Started 的最前面。 
+
+你能给这个工具补一个本地持久化层，最简单就是 sqlite3；Python 官方 sqlite3 文档明确说它既有 tutorial，也有 how-to，标准库直接提供 DB-API 2.0 接口。 
+
+你能把工具包装成一个最小 API；FastAPI 官方 first steps 给的是最小路径：创建 FastAPI() 实例、定义 path operation、运行应用。HTTP 的基础则可以用 MDN 的 Overview of HTTP 来补。 
+
+你能理解为什么 Docker 会在下一阶段变重要；Docker 官方把容器定义为带齐运行所需文件的隔离进程，并强调多个容器共享同一个内核，所以比整台 VM 更轻。 
+
+你还要知道：真正开始碰模型训练或 NLP 框架时，PyTorch 官方 beginner basics 和 Hugging Face 的 LLM Course 已经是很正的入口，但这一步最好放在“工具链先站稳”之后。 
+
+⸻
+
+我对你 Round 8 的总建议
+
+结合你的目标，我不建议你一结束 Round 7 就立刻扑向大模型训练。更稳的顺序是：
+
+先把 CLI 工具做扎实，再把它做成 可测、可存、可调、可调用 的小系统，最后再进入 PyTorch / Hugging Face。原因很简单：PyTorch 官方 beginner 路线讲的是完整 ML workflow，包括数据、模型、优化和保存模型；Hugging Face LLM Course 也覆盖从数据集整理到微调的大链条。你如果前面的工程基础还没站稳，很容易在“模型以外的部分”反复卡住。 
+
+所以，Round 8 我建议按 3 周 来做，但它是“总复盘 + 升级路线”的 3 周。
+
+⸻
+
+第 1 周：总复盘与代码加固
+
+这一周只做一件事：把 Round 7 的项目从“能跑”提升到“更稳”。
+
+这周要做什么
+
+先把 ai_prep_tool 重新整理一遍。最少要有：
+	•	README.md
+	•	主脚本
+	•	input/
+	•	output/
+	•	logs/
+	•	tests/
+
+然后，把 Git 工作流补完整一点。你前面 Round 2 只做了最小闭环，这一周开始要把它提升成“能维护一个小项目”的水平。Pro Git 的目录本身就把“Git Basics”之后接到“Git Branching”，说明分支是自然的下一步。 
+
+接着，给项目加最小测试。pytest 官方的 Get Started 很适合你现在这个阶段，因为它不是从复杂 fixture 开始，而是从“创建第一个测试、运行多个测试、断言异常”开始。 
+
+这周练习清单
+
+第一步，整理仓库结构。
+第二步，初始化或继续使用 Git 仓库。
+第三步，新建 tests/test_basic.py，先测最核心的几个函数，比如：
+	•	读取函数能不能正常读入数据
+	•	去重函数能不能去掉重复
+	•	过滤函数能不能正确保留 keyword
+	•	summary 里计数是否正确
+
+第四步，跑 pytest，让测试真正执行起来。pytest 官方文档就是把“install、create first test、run tests”列为最前面的步骤。 
+
+这周的产出
+
+这周结束时，你应该至少拿到：
+	•	一个更像样的 Git 仓库
+	•	一个能跑的 pytest
+	•	一份更清晰的 README
+	•	一个你敢反复改的代码基础
+
+⸻
+
+第 2 周：加本地持久化和最小 API
+
+这一周的目标是让你的工具从“单次处理脚本”开始往“小型系统”过渡。
+
+为什么先学 SQLite
+
+Python 官方 sqlite3 文档是非常适合你这个阶段的。它不是一个额外第三方框架，而是标准库直接带的数据库接口，而且官方明确写了既有 tutorial，也有 how-to。对你来说，这正好适合做“本地记录处理历史、保存 summary、保存任务信息”这种最小持久化。 
+
+你可以先做一个很简单的表，例如：
+	•	runs
+	•	id
+	•	input_file
+	•	output_file
+	•	raw_count
+	•	final_count
+	•	created_at
+
+这样每次跑一次工具，都往里面写一条记录。
+
+为什么这时候接 FastAPI
+
+FastAPI 官方 first steps 给的最小路径非常适合你这种情况：
+先 import FastAPI，再创建实例，再定义一个 path operation，然后返回内容。它非常适合把你现在已有的 CLI 工具“包一层 HTTP 接口”。而 MDN 对 HTTP 的说明也很适合作为你补 API 基础时的背景：HTTP 是 Web 上数据交换的基础，是客户端-服务器协议。 
+
+你这周不需要做复杂服务，只做一个最小 API 就够，例如：
+	•	GET /health
+	•	POST /run
+	•	GET /runs
+
+如果你想本地启动它，FastAPI 通常配 Uvicorn；Uvicorn 官方首页说明它是 Python 的 ASGI server implementation，支持 HTTP/1.1 和 WebSockets。 
+
+这周练习清单
+
+第一步，用 sqlite3 建一个最小数据库，把每次运行 summary 存进去。 
+
+第二步，把原来 CLI 里的核心处理逻辑抽成函数，而不是全塞在 main() 里。这样后面 FastAPI 才能直接调用。这个建议属于工程设计，但正是为了配合 FastAPI 的 path operation 函数写法。 
+
+第三步，新建一个最小 FastAPI 文件，比如 api.py，先写：
+	•	GET /health
+	•	GET /runs
+
+第四步，如果你本地装了 Uvicorn，就跑起来看一下。Uvicorn 官方也给了开发与部署的基本指引。 
+
+这周的产出
+
+这周结束时，你应该拿到：
+	•	一个能保存运行记录的本地数据库
+	•	一个最小 API 外壳
+	•	一个从“脚本”向“服务”迈一步的项目雏形
+
+⸻
+
+第 3 周：容器化认知 + 后续方向分叉
+
+这一周不要求你把所有东西都上线部署，而是先建立两种能力：
+
+第一，理解为什么 Docker 在下一阶段很重要。
+第二，决定你接下来到底往哪个方向继续深挖。
+
+为什么 Docker 该放在这里
+
+Docker 官方的基础文档讲得很清楚：容器是隔离进程，容器实例来自镜像，多个容器共享同一个内核，所以通常比 VM 更轻。Get Started 路线本身也是从“what is Docker / what is a container / get started”一步步来的。对你来说，Docker 现在最重要的意义不是“上生产”，而是：
+	•	把你的小项目运行环境固定下来
+	•	以后换机器、发给别人、或者部署到服务器时更稳
+	•	为后续 API 化、服务化做准备。 
+
+这周你不一定非要立刻写出很完美的 Dockerfile，但至少要把“镜像、容器、运行环境封装”这件事理解清楚。
+
+这周更重要的事：选后续升级路线
+
+我建议你把后续路线分成 3 条，你只选 1 条当主线，其他两条先当副线。
+
+路线 A：数据工具 / 自动化工程
+
+这条路线最适合你现在的基础衔接。
+主练：
+	•	pytest
+	•	sqlite3
+	•	Git branching
+	•	Docker
+	•	再把 Round 7 工具做得更完整
+
+为什么这样排：因为 Git branching、pytest、sqlite3、Docker 都是把一个“小脚本”升级成“可维护工具”的关键能力。Git 的 branching 是 Pro Git 下一阶段主线，pytest 和 sqlite3 都有官方快速入口，Docker 的官方 get started 也很成熟。 
+
+路线 B：后端 / API 工程
+
+这条路线适合你以后想把 AI 工具做成服务。
+主练：
+	•	HTTP 基础
+	•	FastAPI
+	•	Uvicorn
+	•	SQLite
+	•	后续再接 Docker
+
+MDN 明确说 HTTP 是 Web 上数据交换基础；FastAPI 的 tutorial 和 first steps 都是循序渐进的；Uvicorn 是标准 ASGI server；SQLite 适合做最小持久化。 
+
+路线 C：模型 / NLP 入门
+
+这条路线最接近你最终想做的 NLP / AI 项目，但我建议它放在 A 或 B 的基础之后。
+主练：
+	•	PyTorch beginner basics / quickstart
+	•	Hugging Face LLM Course
+
+PyTorch 官方 beginner basics 明确说会带你走一遍完整 ML workflow：数据、模型、优化、保存模型；Hugging Face 的 LLM Course 也明确覆盖 LLM 和 NLP，并使用 Transformers、Datasets、Tokenizers、Accelerate 以及 Hub。 
+
+我对你的优先级建议
+
+结合你当前已经完成到 Round 7 的节奏，我建议你这样排：
+
+主线优先级：A > B > C
+
+意思是：
+
+先把工具做稳，再把工具做成 API，最后再逐步补模型侧。
+这样最符合你“为了更快上手和深入做 AI 项目”的目标，因为很多 AI 项目真正卡人的地方，往往不是模型本身，而是数据、接口、环境、日志、复现和部署链路。这是我基于上述官方学习路径做出的工程判断。 
+
+⸻
+
+Round 8 的最终交付标准
+
+这一轮结束时，我建议你把成果定义成下面这 5 项。
+
+第一，你有一个 Git 仓库，README 清楚，至少有一次分支练习。Pro Git 明确把 Git Branching 作为 Basics 之后的下一主线。 
+
+第二，你有一组最小 pytest 测试，至少能覆盖核心函数。 
+
+第三，你的工具能把运行结果存进 SQLite。 
+
+第四，你有一个最小 FastAPI 接口，哪怕只有 health 和 runs 两个 endpoint。 
+
+第五，你能清楚说出下一阶段你选哪条主线，以及为什么。这个“为什么”要跟你的目标绑定，而不是跟流行词绑定。
+
+⸻
+
+Round 8 最容易踩的坑
+
+第一个坑，是急着跳到 PyTorch 或 Hugging Face，却没有把前面的工程基础收口。PyTorch beginner basics 和 Hugging Face LLM Course 都是很好的入口，但它们覆盖的是更长的 ML/NLP 工作流，不是替代前面工程基础的捷径。 
+
+第二个坑，是一上来就把 Docker 当成“上线神器”，但没先理解容器是什么。Docker 官方 Get Started 就是先讲容器和基础概念，再讲工作流。 
+
+第三个坑，是把 FastAPI 当成“会写接口”就结束了，却没补 HTTP 基础。MDN 的 HTTP Overview 很值得先看一遍，不然很多 API 行为你会只会写，不会解释。 
+
+第四个坑，是继续只靠 print() 和手工测试，不把测试和日志正规化。pytest 和 logging 的官方文档都已经给了你非常低门槛的起点。 
+
+⸻
+
+你这一轮最合适的执行方式
+
+如果你想继续保持低压力节奏，我建议这样拆：
+
+第 1 周只做：
+仓库整理 + README + pytest 最小测试。 
+
+第 2 周只做：
+sqlite3 存运行记录 + FastAPI 最小 API。 
+
+第 3 周只做：
+理解 Docker 基础概念 + 明确下一阶段主线。 
+
+如果你愿意，我下一步可以直接把 Round 8 专用练习清单 也补出来，继续按前面那种“你可以直接照着一步一步做”的格式给你。
+
+可以。下面是 Round 8 专用练习清单。这一轮不再扩很多新知识点，而是把你前面做出来的 ai_prep_tool 收口成一个更像样的小项目：能用 Git 正常维护，能跑最小测试，能把运行记录存进 SQLite，能暴露一个最小 API，并且开始理解 Docker 为什么会在下一阶段变重要。 这些练习对应的官方路线分别是：Pro Git 的分支与合并、pytest 的 Get Started、Python 标准库里的 sqlite3 教程、FastAPI 的 First Steps，以及 Docker 官方的容器与镜像入门。 
+
+这一轮你要练到什么程度
+
+Round 8 结束时，你不需要把项目做成正式产品，但要做到这几件事：
+你能把仓库整理清楚，并完成一次分支开发再合并；你能给核心函数补几条 pytest 测试；你能把每次运行结果写入 SQLite；你能用 FastAPI 暴露至少两个最小接口；你能说清“容器”和“镜像”分别是什么，以及为什么它们能帮助你固定运行环境。Pro Git 把分支与合并当作 Git Basics 之后的直接下一步；pytest 官方把安装、写第一个测试、运行多个测试放在最前面；sqlite3 文档明确包含 tutorial；FastAPI First Steps 明确给出 FastAPI()、路径操作和 fastapi dev；Docker 文档把容器定义为带齐运行所需文件的隔离进程，把镜像定义为包含运行容器所需文件、二进制、库和配置的标准化包。 
+
+⸻
+
+第 1 周：仓库整理、分支练习、最小测试
+
+这一周的目标是把 Round 7 的项目从“能跑”提升到“敢改”。Git 这边先做一次最小分支流程。Pro Git 的分支章节给的典型路径就是：从当前主线切一个新分支，在分支上做改动，再回主线合并；书里直接给了 git checkout -b <branch> 的写法。pytest 这边，官方 Get Started 建议先 pip install -U pytest，然后建 test_*.py 文件并运行 pytest；pytest 默认会发现当前目录及其子目录中形如 test_*.py 或 *_test.py 的测试文件。 
+
+先整理项目目录
+
+先进入你的最终项目目录。假设你沿用了上一轮的结构：
+
+cd ~/cli-lab/round7/final_lab/ai_prep_tool
+mkdir -p tests
+
+建议你至少保证现在有这些东西：
+
+ai_prep_tool/
+├─ input/
+├─ output/
+├─ logs/
+├─ tests/
+├─ ai_prep_tool.py
+└─ README.md
+
+这一步没有什么花哨技巧，重点是把项目整理干净，后面测试、Git、API 都会更顺。
+
+练习 1：确认主分支并做一次分支开发
+
+先看当前分支名：
+
+git branch --show-current
+
+记住你看到的主分支名，通常可能是 main，也可能还是 master。然后切一个新分支：
+
+git checkout -b feature/summary-cleanup
+
+在这个分支里，做一件很小但真实的改动，例如：
+	•	给 README 增加“支持的输入格式”说明
+	•	给 summary.json 增加一个字段
+	•	给日志多打一条 processed_count
+
+改完后提交：
+
+git status
+git add .
+git commit -m "improve summary and docs"
+
+然后回到你的主分支：
+
+git checkout <你的主分支名>
+git merge feature/summary-cleanup
+git log --oneline --graph --decorate -n 10
+
+这就是你这一轮第一条必须跑通的闭环。
+
+练习 2：安装并跑通 pytest
+
+安装：
+
+pip install -U pytest
+pytest --version
+
+这是 pytest 官方 Get Started 的第一步。 
+
+新建一个最小测试文件：
+
+touch tests/test_basic.py
+
+先写最简单的 3 个测试。假设你的主脚本里已经有类似这些函数：
+	•	filter_records
+	•	dedup_records
+	•	build_summary
+
+你可以先这样写骨架：
+
+from ai_prep_tool import filter_records, dedup_records, build_summary
+
+def test_filter_records_keeps_keyword():
+    records = ["ok sample", "bad sample", "ok again"]
+    result = filter_records(records, "ok")
+    assert len(result) == 2
+
+def test_dedup_records_removes_duplicates():
+    records = ["a", "a", "b"]
+    result = dedup_records(records, "txt")
+    assert result == ["a", "b"]
+
+def test_build_summary_counts():
+    summary = build_summary("in.txt", "out.txt", 5, 3, 2)
+    assert summary["raw_count"] == 5
+    assert summary["filtered_count"] == 3
+    assert summary["final_count"] == 2
+
+运行：
+
+pytest -q
+
+pytest 官方文档说明：可以直接用 assert，发现多个测试文件时会按默认规则自动发现；-q 是 quiet 模式，会让输出更短。 
+
+练习 3：加一个异常测试
+
+再加一条小测试，练一下 pytest.raises()：
+
+import pytest
+from ai_prep_tool import read_records
+
+def test_read_records_unsupported_format():
+    with pytest.raises(ValueError):
+        read_records("sample.xxx", "xxx")
+
+pytest 官方 Get Started 直接把 pytest.raises() 列成一项单独练习。 
+
+第 1 周周末小成果
+
+这一周结束时，你应该已经有：
+	•	一次分支创建、提交、合并的完整记录
+	•	一个 tests/ 目录
+	•	至少 3 到 4 条能跑过的测试
+	•	一个更清晰的 README
+
+⸻
+
+第 2 周：SQLite 持久化 + 最小 FastAPI
+
+这一周把你的工具从“单次脚本”往“小型系统”推进一步。Python 官方 sqlite3 文档明确说，这个模块就是 SQLite 的 DB-API 2.0 接口，而且文档本身包含 tutorial、reference 和 how-to；FastAPI 的 First Steps 则把最小 API 拆成几个清楚步骤：导入 FastAPI、创建实例、定义路径操作、返回内容，并说明可以用 fastapi dev 跑开发服务器。HTTP 的基础可以用 MDN 的 Overview of HTTP 来补：HTTP 是 Web 上数据交换的基础，也是客户端-服务器协议。 
+
+练习 4：给项目加 SQLite
+
+先新建数据库脚本：
+
+touch db.py
+
+写一个最小版本：
+
+import sqlite3
+from pathlib import Path
+
+DB_PATH = Path("runs.db")
+
+def init_db():
+    conn = sqlite3.connect(DB_PATH)
+    cur = conn.cursor()
+    cur.execute("""
+        CREATE TABLE IF NOT EXISTS runs (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            input_file TEXT NOT NULL,
+            output_file TEXT NOT NULL,
+            raw_count INTEGER NOT NULL,
+            final_count INTEGER NOT NULL,
+            created_at TEXT NOT NULL
+        )
+    """)
+    conn.commit()
+    conn.close()
+
+def save_run(input_file, output_file, raw_count, final_count, created_at):
+    conn = sqlite3.connect(DB_PATH)
+    cur = conn.cursor()
+    cur.execute("""
+        INSERT INTO runs (input_file, output_file, raw_count, final_count, created_at)
+        VALUES (?, ?, ?, ?, ?)
+    """, (input_file, output_file, raw_count, final_count, created_at))
+    conn.commit()
+    conn.close()
+
+def list_runs():
+    conn = sqlite3.connect(DB_PATH)
+    cur = conn.cursor()
+    cur.execute("SELECT id, input_file, output_file, raw_count, final_count, created_at FROM runs ORDER BY id DESC")
+    rows = cur.fetchall()
+    conn.close()
+    return rows
+
+然后在 Python 里手动跑一遍：
+
+python3 -c "from db import init_db, save_run, list_runs; init_db(); save_run('in.jsonl','out.jsonl',10,8,'2026-03-26T12:00:00'); print(list_runs())"
+
+sqlite3 官方文档的核心信息就是：你可以直接在标准库里创建连接、执行 SQL、提交事务、读回结果。 
+
+练习 5：把 SQLite 接回主工具
+
+现在把 ai_prep_tool.py 的主流程稍微改一下：在生成完 summary 之后，顺手调用 save_run(...) 把本次运行记录写进去。
+
+你不需要做得很复杂，只要做到这条链路：
+	•	读取输入
+	•	处理数据
+	•	写输出
+	•	写 summary
+	•	写一条数据库记录
+
+如果这条链路跑通，你的工具就已经从“一次性的脚本”升级成“会留下历史”的工具了。
+
+练习 6：加 FastAPI 最小接口
+
+先安装 FastAPI：
+
+pip install "fastapi[standard]"
+
+然后新建：
+
+touch api.py
+
+写最小版本：
+
+from fastapi import FastAPI
+from db import init_db, list_runs
+
+app = FastAPI()
+
+@app.get("/health")
+async def health():
+    return {"status": "ok"}
+
+@app.get("/runs")
+async def runs():
+    init_db()
+    rows = list_runs()
+    return {"runs": rows}
+
+运行：
+
+fastapi dev api.py
+
+FastAPI 官方 First Steps 明确给出了这条最小路径，而且 recap 里直接写了“run the development server using the command fastapi dev”。它也说明 @app.get("/") 这样的装饰器表示：这个函数负责处理某个路径上的某个 HTTP 操作，比如 GET。 
+
+练习 7：理解最小 HTTP 语义
+
+这一周你不用深入 HTTP，只要先记住：
+	•	GET /health：拿状态
+	•	GET /runs：拿一组记录
+	•	以后如果要触发处理，通常会用 POST /run
+
+MDN 的 HTTP 总览说明，HTTP 是客户端-服务器协议，用来获取资源和交换数据；HTTP request methods 文档说明，HTTP 定义了一组请求方法来表示这次请求的目的。 
+
+第 2 周周末小成果
+
+这一周结束时，你应该已经有：
+	•	一个本地 SQLite 数据库
+	•	一张最小 runs 表
+	•	一个能写运行记录的工具
+	•	一个最小 FastAPI 服务
+	•	两个最小接口：/health 和 /runs
+
+⸻
+
+第 3 周：Docker 基础认知 + 最小容器化尝试 + 后续主线选择
+
+这一周的目标不是把部署学完，而是先把容器这件事讲明白、摸一遍。Docker 官方文档把容器定义成“带齐运行所需文件的隔离进程”，多个容器共享同一个内核；镜像则是“包含运行容器所需文件、二进制、库和配置的标准化包”。Get Started 里还专门给了一个非常适合新手的演练对象：docker/welcome-to-docker，可以用它练搜索、拉取、查看镜像和镜像历史。 
+
+练习 8：先理解容器和镜像
+
+这周先不写 Dockerfile，先把两个概念记稳：
+	•	容器：正在运行的隔离进程
+	•	镜像：容器运行时所需环境的标准化包
+
+这一步不是形式主义。后面你把 FastAPI 服务装进 Docker，本质上就是：先做镜像，再用镜像起容器。 Docker 文档就是按这个逻辑组织的。 
+
+练习 9：如果你装了 Docker，就跑官方欢迎镜像
+
+先搜：
+
+docker search docker/welcome-to-docker
+
+拉镜像：
+
+docker pull docker/welcome-to-docker
+
+看本地镜像：
+
+docker image ls
+
+看镜像历史：
+
+docker image history docker/welcome-to-docker
+
+Docker 官方 “What is an image?” 页面就是用 docker/welcome-to-docker 这条线来演示搜索、拉取和查看镜像层历史。 
+
+练习 10：给你的项目写一个最小 Dockerfile
+
+如果你想试一下，把下面这个最小版先写出来：
+
+FROM python:3.12-slim
+
+WORKDIR /app
+
+COPY . /app
+
+RUN pip install "fastapi[standard]"
+
+CMD ["fastapi", "run", "api.py", "--host", "0.0.0.0", "--port", "8000"]
+
+然后试着构建：
+
+docker build -t ai-prep-tool:demo .
+
+这一步不是因为你现在必须会部署，而是让你把“镜像是标准化包，容器是镜像的运行实例”这个概念真正落到手上。Docker 文档对镜像和容器的定义已经足够支持这一层练习。 
+
+练习 11：给自己做一份“后续路线单选题”
+
+这一周最后，请你强制自己写一个 next_step.md，里面只选一条主线：
+
+第一条，数据工具 / 自动化工程主线。
+继续把项目做稳：补测试、补 Git branching、补 SQLite、补 Docker。Git、pytest、sqlite3、Docker 的官方文档都很成熟，这条线最稳。 
+
+第二条，后端 / API 主线。
+继续补 HTTP、FastAPI、Uvicorn、SQLite，再往服务化走。FastAPI First Steps、MDN HTTP、Uvicorn 官方主页都能直接承接这条路线。 
+
+第三条，模型 / NLP 主线。
+这条线你现在可以先列成副线，等前两条更稳以后再接 PyTorch 和 Hugging Face。你这轮清单里先不展开它。这个建议是路线规划，不是某一条官方文档直接规定的，但它是基于你目前项目形态做出的更稳妥排序。
+
+第 3 周周末小成果
+
+这一周结束时，你至少应该有：
+	•	对容器和镜像的清晰理解
+	•	一次 Docker 官方欢迎镜像的实际操作，或者一份你自己能讲清楚的概念笔记
+	•	一个最小 Dockerfile 草稿
+	•	一份 next_step.md
+
+⸻
+
+Round 8 综合交付清单
+
+这一轮做完以后，你应该能拿出下面这些东西：
+	•	一个更干净的 Git 仓库
+	•	一次真实的分支开发与合并记录
+	•	一个 tests/ 目录和至少 3 条 pytest 测试
+	•	一个 SQLite 数据库和最小 runs 表
+	•	一个最小 FastAPI 服务
+	•	一个 Docker 概念笔记或最小 Dockerfile
+	•	一份你自己写的下一阶段路线说明
+
+这些东西加在一起，已经足够把你前面 24 周的练习收口成一份“像样的个人学习成果”。
+
+⸻
+
+Round 8 最终自测清单
+
+你做完后，自己检查下面这些：
+	•	你能不能独立做一次 git checkout -b ... → 提交 → 回主线 → merge
+	•	你能不能跑 pytest -q 并看懂测试结果
+	•	你能不能解释 sqlite3 在这个项目里解决了什么问题
+	•	你能不能解释 FastAPI 里的一个最小 GET 接口是怎么定义的
+	•	你能不能说清容器和镜像的区别
+	•	你能不能明确写出自己下一阶段先走哪条主线
+
+如果这些都能做到，Round 8 就算完成了。
+

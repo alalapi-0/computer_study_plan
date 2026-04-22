@@ -1,0 +1,527 @@
+好，下面我把 Round 13：环境复现与发布基础 完整展开。
+
+这一轮的核心，是把你前面已经做出来的工具，从“只能在你当前机器上凑合跑”的状态，推进到“换一台机器也能较稳定复现、能更清楚地说明依赖、能用容器打包出一个最小可运行环境”的状态。Python 官方 venv 文档明确建议你要有一种“简单的环境重建方式”，例如准备 requirements.txt 并用该环境里的 pip install -r requirements.txt 重新安装依赖；PyPA 的虚拟环境指南也把“创建并激活虚拟环境、安装包、使用 requirements 文件”作为标准路径。 
+
+Round 13 的目标
+
+这轮结束时，你要做到这些：你有一个规范的虚拟环境使用方式；你能把当前项目依赖整理成可重建的文件；你知道 pyproject.toml 在现代 Python 项目里的角色；你能写出一个最小 Dockerfile，把项目打成镜像并本地运行；你也开始具备“项目交付给别人时，最少要给哪些文件和说明”的意识。pyproject.toml 的官方打包指南明确说它是打包工具以及其他工具的配置文件，并强烈建议提供 [build-system] 表；Docker 官方则说明 Docker 会读取 Dockerfile 来构建镜像，而 Dockerfile 是一个包含构建指令的文本文件。 
+
+这轮学什么，不学什么
+
+这轮要学的是：
+	•	venv 规范化使用
+	•	requirements.txt 或等价依赖清单
+	•	pyproject.toml 的最小认知
+	•	Docker 基础概念
+	•	最小 Dockerfile
+	•	本地 build / run
+	•	一份最小交付说明
+
+这轮先不学：
+	•	PyPI 正式发布
+	•	多阶段高级镜像优化
+	•	Kubernetes
+	•	CI/CD 自动发布
+	•	复杂镜像安全加固
+	•	依赖解析工具深水区
+
+这么安排的原因很简单：你这一轮更需要的是“可复现”，而不是“一次学完打包生态”。pip 官方把 requirements file 定义为“供 pip install 使用的一组待安装项”，PyPA 也把虚拟环境和 requirements 文件放在最基础的环境管理路径里。 
+
+我对你这一轮的结构建议
+
+这一轮我建议你先把项目整理到这个程度：
+
+ai_prep_tool/
+├─ cli.py
+├─ core.py
+├─ io_utils.py
+├─ config.py
+├─ log_utils.py
+├─ db.py
+├─ pipeline.py
+├─ config.ini
+├─ requirements.txt
+├─ pyproject.toml
+├─ Dockerfile
+├─ README.md
+├─ .gitignore
+├─ tests/
+├─ input/
+├─ output/
+├─ logs/
+└─ runs.db
+
+这里新增的重点是 requirements.txt、pyproject.toml 和 Dockerfile。其中 requirements.txt 负责“最简单的环境重建”，pyproject.toml 负责开始进入现代 Python 项目配置方式，Dockerfile 负责最小容器化打包。pyproject.toml 官方指南明确说它可以承载打包工具和其他工具的配置，而 Dockerfile 官方说明它是构建镜像的指令文件。 
+
+本轮推荐资源
+
+这一轮我建议你固定看这几类资源。
+
+第一类是 Python venv 文档 和 PyPA 的虚拟环境指南。venv 文档明确说它创建的是轻量级虚拟环境，而且默认与 base Python 隔离；同时它还特别提醒，应该有一种简单方式重建环境，例如准备 requirements.txt。PyPA 指南则把“创建和激活虚拟环境、安装包、使用 requirements 文件”写成了完整入门路径。 
+
+第二类是 pip 的 Requirements File Format。pip 官方明确说 requirements files 是给 pip install 使用的安装项列表，通常文件名叫 requirements.txt，但名称不是硬要求。 
+
+第三类是 pyproject.toml 官方打包指南。PyPA 明确说 pyproject.toml 是打包工具和其他工具的配置文件，并且 [build-system] 表是强烈推荐的。 
+
+第四类是 Docker 官方 Dockerfile 文档与 Build 路线。Docker 官方说明 Docker 通过读取 Dockerfile 来构建镜像，而构建镜像的基础流程就是写 Dockerfile、执行 build、再 run 容器。 
+
+第五类是 Docker 官方容器基础概念。Docker 把容器定义为包含运行所需文件的隔离进程，这一层概念会直接帮助你理解为什么容器能用来固定运行环境。 
+
+⸻
+
+第 1 周：虚拟环境规范化与依赖清单
+
+这一周只做一件事：把“我电脑上能跑”整理成“换个环境也能大致重建”。
+
+这周要学到什么程度
+
+你不需要学复杂依赖管理器，先把最朴素的路径走顺就够：
+创建虚拟环境、激活、安装依赖、导出 requirements.txt、再用 requirements.txt 重建。PyPA 的虚拟环境指南和 venv 文档都把这条路径作为基础做法。 
+
+这周建议你做什么
+
+先在项目根目录创建虚拟环境：
+
+python3 -m venv .venv
+
+然后激活它，并确认你后面的 pip 和 python 都来自这个环境。PyPA 的官方指南就是从创建和激活 venv 开始的。 
+
+接着，把你项目当前能跑起来所需的包重新装到这个环境里。
+如果这时你已经有依赖，先导出一个最小 requirements.txt。你可以先用最传统、最直接的方式：
+
+pip freeze > requirements.txt
+
+pip 官方对 requirements file 的定义，足以支撑这一轮把它当作“最小环境快照”。 
+
+然后，做一个最重要的验证：
+新建一个干净的虚拟环境，尝试只靠 requirements.txt 重新安装，再跑一次你的工具。venv 文档明确建议你应该有一种简单的环境重建方式；requirements 文件正是最直接的一种。 
+
+这周产出
+
+这一周结束时，你应该至少有：
+	•	一个规范使用中的 .venv
+	•	一个 requirements.txt
+	•	一次“从 requirements 重建环境并跑通工具”的验证记录
+
+⸻
+
+第 2 周：认识 pyproject.toml，补最小项目元信息
+
+这一周的主题是：让项目开始进入现代 Python 工程配置方式。
+
+这周要学到什么程度
+
+你这一周不需要立刻完全抛弃 requirements.txt，也不需要一步到位做正式发布。你只要先理解：
+	•	requirements.txt 更像“环境安装清单”
+	•	pyproject.toml 更像“项目配置与打包元信息入口”
+
+PyPA 的 pyproject.toml 指南明确说，这个文件既服务于打包工具，也可被其他工具使用；而 [build-system] 是强烈推荐的起点。 
+
+这周建议你做什么
+
+先在项目根目录新建一个最小 pyproject.toml。这一轮先不求完整发布，只放最基础几项，例如：
+	•	[build-system]
+	•	[project]
+	•	name
+	•	version
+	•	description
+	•	requires-python
+
+pyproject.toml 指南明确说明这些表和字段就是它的核心组成部分之一。 
+
+同时，把你现在的 README 再补一段“环境准备”说明，至少写清：
+	•	创建虚拟环境
+	•	安装 requirements
+	•	运行测试
+	•	运行主工具
+
+这一周的重点不是“把 packaging 学完”，而是让项目开始具备更清楚的工程身份。
+
+这周产出
+
+这一周结束时，你应该至少有：
+	•	一个最小 pyproject.toml
+	•	一个更清楚的 README 环境准备章节
+	•	对 requirements.txt 和 pyproject.toml 分工的基本理解
+
+⸻
+
+第 3 周：最小 Docker 化与本地构建运行
+
+这一周的主题是：把项目装进一个最小容器里，本地 build 并 run 一次。
+
+这周要学到什么程度
+
+你不需要做复杂优化，先学最小闭环：
+	•	写 Dockerfile
+	•	docker build
+	•	docker run
+
+Docker 官方文档明确说，Docker 读取 Dockerfile 中的指令来构建镜像；Docker Build 路线也把“写 Dockerfile、build image、run container”作为基础学习顺序。 
+
+这周建议你做什么
+
+先写一个最小 Dockerfile。对你当前项目，我建议从最朴素的版本开始，例如：
+
+FROM python:3.12-slim
+
+WORKDIR /app
+
+COPY requirements.txt /app/
+RUN pip install -r requirements.txt
+
+COPY . /app
+
+CMD ["python3", "cli.py", "--help"]
+
+这个写法虽然不算高级，但很适合这一轮：
+它已经覆盖了基础镜像、工作目录、复制依赖清单、安装依赖、复制项目文件、定义默认启动命令。Docker 官方 Dockerfile overview 和 reference 都明确说明，Dockerfile 是一个包含镜像构建指令的文本文件。 
+
+然后你本地跑：
+
+docker build -t ai-prep-tool:demo .
+docker run --rm ai-prep-tool:demo
+
+如果容器里能正常打印出 CLI help，说明你已经完成了最小闭环。
+接着再做一步：把默认命令从 --help 改成一个真实的小输入测试运行，看看你的工具在容器里是否也能工作。
+
+这周更重要的理解
+
+这一步的重点不是 Docker 命令背下来，而是建立一个清晰感觉：
+
+镜像是打包好的运行环境，容器是镜像跑起来的实例。
+
+Docker 官方对镜像和构建过程的说明，正是为了建立这个感觉。 
+
+这周产出
+
+这一周结束时，你应该至少有：
+	•	一个最小 Dockerfile
+	•	一次成功的 docker build
+	•	一次成功的 docker run
+	•	一份对“镜像 / 容器 / 环境复现”关系的清晰说明
+
+⸻
+
+本轮产出
+
+Round 13 结束时，你应该至少拿到这些东西：
+	•	.venv
+	•	requirements.txt
+	•	pyproject.toml
+	•	一个最小 Dockerfile
+	•	一次环境重建验证
+	•	一次镜像构建与运行验证
+	•	一段写进 README 的“环境准备与运行”说明
+
+这些产出会直接支撑你后面的路线 B，因为一旦你要做 API 服务，环境复现和容器化就会立刻变得非常重要。这个判断是基于 Docker 和 Python 包管理官方路径做出的工程安排。 
+
+这一轮最容易踩的坑
+
+第一个坑，是把虚拟环境目录本身当成“可搬运环境”。
+venv 文档明确提醒：如果你需要把环境移动到新位置，应该在目标位置重新创建环境，而不是直接搬运旧环境目录。 
+
+第二个坑，是以为有了 pyproject.toml 就完全不需要 requirements.txt。
+对你当前这个“应用型小工具”阶段来说，requirements.txt 仍然非常适合做最直接的环境重建，而 pyproject.toml 更适合承担项目配置和打包元信息角色。这个区分是我基于 PyPA 官方指南和 pip requirements 文档给你的实践建议。 
+
+第三个坑，是 Docker 一上来就追求最优镜像和高级多阶段构建。
+Docker 官方当然支持更复杂的 Build 流程，但你这一轮最重要的是先把“能 build、能 run、能复现”跑通。 
+
+第四个坑，是 Dockerfile 里直接把一切都写死，却不验证容器里命令到底能不能运行。
+这一轮一定要真的 docker run 一次，而不是只写文件不运行。Docker 的基础文档本来就是围绕 build 和 run 两步组织的。 
+
+Round 13 的验收标准
+
+你可以用下面这些标准判断自己有没有完成：
+	•	你能独立创建并使用项目虚拟环境。 
+	•	你能用 requirements.txt 重建环境并跑通工具。 
+	•	你能解释 requirements.txt 和 pyproject.toml 的不同角色。 
+	•	你能写一个最小 Dockerfile，并成功 build / run。 
+	•	你能说清楚镜像和容器的区别。 
+	•	你能把这一轮的环境准备和运行步骤写进 README。 
+
+如果你确认这版 Round 13 没问题，我下一条就继续给你出 Round 13 专用练习清单。
+
+可以。下面是 Round 13 专用练习清单。
+
+这一轮只做一件大事：把你现在的项目从“我这台机器能跑”推进到“换台机器也更容易复现、依赖更清楚、还能装进最小容器里跑”的状态。Python 官方 venv 文档明确说它用来创建轻量级虚拟环境，而且默认与基础 Python 安装隔离；同一份文档还特别提醒，如果你把环境目录移动到新位置，通常应该重建环境，而不是直接搬过去。pip 官方把 requirements file 定义为供 pip install 使用的待安装项列表；PyPA 则说明 pyproject.toml 是打包工具和其他工具使用的配置文件，并强烈建议提供 [build-system] 表。Docker 官方说明 Docker 会读取 Dockerfile 中的指令来构建镜像，而 Dockerfile 本身就是一个用于构建镜像的文本文件。 
+
+这一轮要练到什么程度
+
+Round 13 结束时，你不需要会正式发包到 PyPI，也不需要做高级多阶段镜像优化，但你要做到这些：你能规范使用 .venv；你能整理出一个可重建的 requirements.txt；你能写出一个最小 pyproject.toml；你能写一个最小 Dockerfile，并且真的 build 和 run 一次。venv 文档、pip requirements 文档、PyPA 的 pyproject.toml 指南和 Dockerfile 文档都足以支撑这一层目标。 
+
+先准备工作区
+
+先进入你的项目目录：
+
+cd ~/cli-lab/round7/final_lab/ai_prep_tool
+pwd
+ls
+
+然后补上这一轮会用到的文件：
+
+touch requirements.txt pyproject.toml Dockerfile
+
+这一轮建议你的项目至少长这样：
+
+ai_prep_tool/
+├─ cli.py
+├─ core.py
+├─ io_utils.py
+├─ config.py
+├─ log_utils.py
+├─ db.py
+├─ pipeline.py
+├─ config.ini
+├─ requirements.txt
+├─ pyproject.toml
+├─ Dockerfile
+├─ README.md
+├─ .gitignore
+├─ tests/
+├─ input/
+├─ output/
+├─ logs/
+└─ runs.db
+
+requirements.txt 负责最直接的环境重建，pyproject.toml 负责开始进入现代 Python 项目配置方式，Dockerfile 则负责把项目描述成一个可构建镜像的环境。这个分工和 pip、PyPA、Docker 的官方文档是一致的。 
+
+⸻
+
+第 1 周：虚拟环境规范化与依赖清单
+
+这一周只做一件事：把“我电脑上装过什么所以它能跑”变成“我有一套可重建的依赖说明”。venv 官方文档明确建议，应当有一种简单方式来重建环境；其中一个直接办法就是准备依赖清单并在新环境里重新安装。pip 官方则说明 requirements file 本质上就是给 pip install 用的一组安装项。 
+
+练习 1：创建并激活虚拟环境
+
+在项目根目录执行：
+
+python3 -m venv .venv
+
+激活方式按你的 shell 来做。激活后先确认：
+
+python3 --version
+pip --version
+
+venv 文档说明，虚拟环境默认与基础环境隔离，因此在环境中使用 pip 安装的包会进入该环境，而不是系统全局环境。 
+
+练习 2：把当前项目依赖整理进环境
+
+如果你之前是全局环境跑的，这一步先把当前项目真正需要的依赖在 .venv 里装一遍。比如你已经在前几轮用到了 pytest 和 fastapi，那就在激活后的环境里重新安装这些真实依赖。
+
+然后导出：
+
+pip freeze > requirements.txt
+cat requirements.txt
+
+pip 官方文档说明 requirements file 通常叫 requirements.txt，虽然这个名字不是强制的；它就是给 pip install 使用的安装项列表。 
+
+练习 3：做一次“从 requirements 重建环境”验证
+
+这一条很重要。不要只导出不验证。
+
+先退出当前环境，然后新建一个测试环境，例如：
+
+python3 -m venv .venv_test
+
+激活后执行：
+
+pip install -r requirements.txt
+pytest -q
+python3 cli.py --help
+
+如果测试和 CLI 都能正常跑，说明你的 requirements.txt 至少对当前项目是可用的。venv 文档明确强调“环境应能被重建”，而 pip requirements 文件正是最直接的重建手段。 
+
+第 1 周周末小任务
+
+这一周结束时，你至少要拿到：
+	•	一个正在使用的 .venv
+	•	一个能用的 requirements.txt
+	•	一次成功的“新环境 + requirements + 跑测试/跑 CLI”验证记录
+
+⸻
+
+第 2 周：补最小 pyproject.toml 与环境说明
+
+这一周主题是：开始进入现代 Python 项目配置方式，但不急着做正式发布。PyPA 的官方指南明确说，pyproject.toml 是打包工具以及其他工具使用的配置文件，而且 [build-system] 表是强烈推荐的。 
+
+练习 4：写最小 pyproject.toml
+
+先写一个最小版本：
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ai_prep_tool"
+version = "0.1.0"
+description = "A small CLI tool for AI data preparation"
+requires-python = ">=3.11"
+
+这一轮你不需要把所有依赖和元信息都写得很完整，但至少要先知道：
+	•	[build-system] 是项目如何被构建的声明
+	•	[project] 放项目基础元信息
+
+这和 PyPA 官方指南的定位是一致的。 
+
+练习 5：给 README 补“环境准备”章节
+
+在 README 里新增一节，例如：
+
+## Environment setup
+
+### Create a virtual environment
+python3 -m venv .venv
+
+### Install dependencies
+pip install -r requirements.txt
+
+### Run tests
+pytest -q
+
+### Run the CLI
+python3 cli.py --help
+
+这一步虽然不是某个单独规范强制要求，但它正好把 venv、requirements、pytest、CLI 入口这些已经有的能力串成了“别人能按着做”的步骤，而这正是 README 的核心职责。GitHub 的 README 文档明确强调 README 应说明项目的用途与使用方式。 
+
+练习 6：明确 requirements.txt 和 pyproject.toml 的角色
+
+给自己写一个小笔记，内容只要三句话：
+	•	requirements.txt 是我现在最直接的环境安装清单
+	•	pyproject.toml 是项目元信息和构建配置入口
+	•	现在这两个文件可以同时存在，各自解决不同问题
+
+这个区分不是“二选一”，而是你当前阶段最实用的做法。这个判断建立在 pip requirements 文档和 PyPA pyproject.toml 指南各自的官方定位之上。 
+
+第 2 周周末小任务
+
+这一周结束时，你至少要拿到：
+	•	一个最小 pyproject.toml
+	•	README 里的环境准备章节
+	•	对 requirements.txt 和 pyproject.toml 分工的清晰理解
+
+⸻
+
+第 3 周：最小 Docker 化与本地 build / run
+
+这一周主题是：把项目装进容器，并真的跑起来一次。Docker 官方文档明确说，Docker 会通过读取 Dockerfile 中的指令来构建镜像；Dockerfile 是包含构建指令的文本文件；官方写 Dockerfile 的入门页也给出了 Python 例子：先 FROM python:3.13，再 WORKDIR，然后 COPY requirements.txt，再 RUN pip install -r requirements.txt。 
+
+练习 7：写最小 Dockerfile
+
+在项目根目录把 Dockerfile 写成这样：
+
+FROM python:3.12-slim
+
+WORKDIR /app
+
+COPY requirements.txt /app/
+RUN pip install -r requirements.txt
+
+COPY . /app
+
+CMD ["python3", "cli.py", "--help"]
+
+这版非常朴素，但它已经包含了 Dockerfile 最重要的基础步骤：
+	•	选基础镜像
+	•	设工作目录
+	•	复制依赖清单
+	•	安装依赖
+	•	复制项目代码
+	•	定义默认启动命令
+
+这条路径和 Docker 官方写 Dockerfile 的入门示例是一致的。 
+
+练习 8：本地构建镜像
+
+运行：
+
+docker build -t ai-prep-tool:demo .
+
+Docker 官方 Build 文档说明，构建镜像的基础流程就是写 Dockerfile，然后执行 build。 
+
+练习 9：运行容器
+
+先跑最简单版本：
+
+docker run --rm ai-prep-tool:demo
+
+如果你看到 CLI help 正常打印，说明你已经完成最小闭环。Docker 官方对 Dockerfile 和 build/run 的说明，正是为了支撑这种最基础的容器化验证。 
+
+练习 10：把默认命令改成更贴近真实项目
+
+你可以把 Dockerfile 里的 CMD 再调整成更贴近项目实际的方式，例如仍然跑 --help，或者跑一个最小 sample 输入。先不要追求复杂挂载和生产部署，只要先验证“容器里也能运行你的工具”。
+
+练习 11：用自己的话说明“镜像”和“容器”
+
+给自己写一段最小说明：
+	•	Dockerfile：怎么构建镜像
+	•	镜像：打包好的运行环境
+	•	容器：镜像跑起来的实例
+
+Docker 官方文档对 Dockerfile、构建镜像和镜像内容的说明，足以支撑你建立这个最小认知。 
+
+第 3 周周末小任务
+
+这一周结束时，你至少要拿到：
+	•	一个最小 Dockerfile
+	•	一次成功的 docker build
+	•	一次成功的 docker run
+	•	一份你自己写的“镜像 / 容器 / Dockerfile”关系说明
+
+⸻
+
+Round 13 综合演练
+
+把这一轮收口成一次完整演练。你从头到尾做一遍：
+
+第一步，在项目里确认有：
+
+.venv
+requirements.txt
+pyproject.toml
+Dockerfile
+README.md
+
+第二步，验证当前虚拟环境里项目可运行：
+
+pytest -q
+python3 cli.py --help
+
+第三步，新建一个干净测试环境，只靠 requirements.txt 重新安装并再次验证。
+
+第四步，执行：
+
+docker build -t ai-prep-tool:demo .
+docker run --rm ai-prep-tool:demo
+
+第五步，检查 README 是否已经写清楚：
+	•	如何创建虚拟环境
+	•	如何安装依赖
+	•	如何运行测试
+	•	如何运行 CLI
+	•	Docker 的最小 build / run 方式
+
+第六步，把这一轮改动提交进 Git：
+
+git status
+git add .
+git commit -m "add reproducible environment and minimal docker setup"
+
+如果这一整套你能独立做完，Round 13 就算真正跑通了。
+
+⸻
+
+Round 13 最终自测清单
+
+做完以后，你自己检查下面这些：
+	•	你能不能独立创建和使用 .venv。 
+	•	你能不能用 requirements.txt 重建环境并跑通项目。 
+	•	你能不能解释 requirements.txt 和 pyproject.toml 的不同角色。 
+	•	你能不能写一个最小 Dockerfile，并成功 build / run。 
+	•	你能不能说清 Dockerfile、镜像、容器三者关系。 
+	•	你能不能把环境准备和运行说明写进 README。 
+
+这些都做到，Round 13 就算过关了。
+
+你继续的话，我下一步就按之前的路线，开始给你展开 路线 B 的 Round 14：HTTP 与 API 设计基础。
