@@ -1,0 +1,59 @@
+# macOS
+.DS_Store
+._*
+
+# Editor / IDE
+.idea/workspace.xml
+.idea/shelf/
+.idea/usage.statistics.xml
+.idea/dictionaries
+.idea/jsLibraryMappings.xml
+.idea/dataSources.local.xml
+.idea/sqlDataSources.xml
+.idea/dynamic.xml
+.idea/uiDesigner.xml
+.vscode/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+env/
+.eggs/
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Node
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Env / Secrets（绝不提交真实凭证）
+.env
+.env.local
+.env.*.local
+*.pem
+*.key
+id_rsa
+id_rsa.pub
+id_ed25519
+id_ed25519.pub
+known_hosts
+
+# Logs / Cache
+logs/
+*.log
+*.tmp
+
+# Build / Dist
+dist/
+build/
+
+# Local user notes (个人即兴笔记，不进 Git)
+scratch/
+*.scratch.md

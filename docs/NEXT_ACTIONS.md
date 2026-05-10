@@ -133,3 +133,71 @@
 - 验收标准：能校验 JSON 合法性、必填字段、task_id 引用关系和 Round 00 兼容性。
 - 风险：校验规则过早绑定未来未实现结构。
 - 是否需要用户介入：否。
+
+---
+
+# VPS 实操支线任务（编号 TASK-VPS-XX）
+
+> 主线 TASK-002 ~ TASK-012 与 VPS 支线 TASK-VPS-00 ~ TASK-VPS-12 **可并行推进**，编号空间互不冲突。
+> Level 2 及以上的远程操作必须先走 `docs/templates/remote_operation_confirmation.md`。
+
+## TASK-VPS-00 ~ TASK-VPS-03：文档与治理（Level 0 / Level 1）
+
+- 状态：done（在 2026-05-10 一次性完成 VPS 模块文档与治理体系接入；未来如需调整文档，可重新打开对应 Round）
+- 输出：
+  - `docs/modules/vps_remote_ops.md`
+  - `docs/governance/remote_operation_permissions.md`
+  - `docs/governance/repo_rules.md`、`docs/governance/file_naming_rules.md`、`docs/governance/codex_workflow.md`
+  - `docs/checklists/*`、`docs/templates/*`
+  - `rounds/stage_03_vps_remote_ops/round_vps_00 ~ vps_03`
+- 是否需要用户介入：否。
+
+## TASK-VPS-04: SSH 与远程 Linux 基础任务文档化
+
+- 状态：done（文档已写在 `rounds/stage_03_vps_remote_ops/round_vps_04_ssh_basics.md`）
+- 备注：实际执行（SSH 登录）属 Level 2 / 3，由 TASK-VPS-05 起接管。
+
+## TASK-VPS-05: 首次远程服务器只读检查（Level 2）
+
+- 状态：pending（**需用户授权后启动**）
+- 背景：VPS 模块的"第一次真实操作"。
+- 目标：通过 SSH 完成只读检查，输出脱敏的服务器基础信息记录。
+- 前置：用户使用 `docs/templates/remote_operation_confirmation.md` 走完确认。
+- 验收标准：参见 `rounds/stage_03_vps_remote_ops/round_vps_05_first_readonly_check.md`。
+- 风险：误执行写入操作 / 误把真实 IP / 用户名写入仓库。
+- 是否需要用户介入：是。
+
+## TASK-VPS-06 ~ TASK-VPS-08: 远程目录 / GitHub 同步 / tmux 训练（Level 3）
+
+- 状态：pending（**需用户授权后启动，且应在 TASK-VPS-05 完成后再进入**）
+- 备注：每次执行前都需要用户**单独**授权；不批量预授权。
+
+## TASK-VPS-09: 网络与端口检查（Level 2/3）
+
+- 状态：pending（**需用户授权**）。
+
+## TASK-VPS-10: 远程 API 调用最小实验（Level 3）
+
+- 状态：pending（**需用户授权**）。
+- 风险：误把真实 API Key 写入仓库 / commit message。
+
+## TASK-VPS-11: 最小 Web/API 服务部署实验（Level 4）
+
+- 状态：pending（**需用户授权**）。
+- 风险：误开放公网端口 / 误绑定域名 / 误启用 systemd。
+
+## TASK-VPS-12: VPS 操作 SOP 与 VULTRagent 需求草案（Level 1）
+
+- 状态：pending（**TASK-VPS-05 ~ TASK-VPS-11 至少完成 1 ~ 2 次真实执行后再做沉淀**，否则 SOP 仅为纸上规划）
+- 输出：`rounds/stage_03_vps_remote_ops/outputs/vps_sop.md`、`rounds/stage_03_vps_remote_ops/outputs/vultragent_mvp_requirements.md`
+- 是否需要用户介入：否。
+
+---
+
+## 推荐下一步（按优先级）
+
+1. **TASK-002**：设计统一 task registry（主线核心，依然是最高优先级）。
+2. **TASK-VPS-05**：当用户希望开始真实远程实操时，由用户主动启动并授权。
+3. **TASK-003**：实现 task registry 初版，覆盖 Round 00。
+
+> 主线推进与 VPS 实操推进**互不阻塞**；用户可根据当下心情与可用时间选择当晚要做哪一条。
