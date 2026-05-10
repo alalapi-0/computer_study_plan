@@ -145,3 +145,82 @@
 
 ## 10. 更新日志
 - 2026-04-28 11:24: 基于当前仓库代码完成项目现状扫描并更新文档。
+
+## 11. 2026-05-05 长期推进文档更新
+
+### 11.1 本轮新增内容
+- 新增 `AGENTS.md`，作为 Codex 每次进入仓库时的工作入口规则。
+- 新增 `docs/CODEX_LONG_TERM_PLAN.md`，明确本仓库的长期目标、阶段路线、数据模型方向、自动推进规则、停止条件和近期优先级。
+- 新增 `docs/AUTO_ADVANCE_PROTOCOL.md`，定义后续收到短指令时的单轮自动推进流程、验证流程、commit / push / PR 规则和最终汇报格式。
+- 新增 `docs/NEXT_ACTIONS.md`，建立从 TASK-001 到 TASK-012 的下一步任务队列。
+- 新增 `docs/DECISIONS.md`，记录当前阶段继续使用 JSON、保留静态页面、保留 `mark_done.sh`、独立分支推进、先做动作记录与反馈原型的 ADR。
+
+### 11.2 当前最终目标
+- 当前项目最终目标已明确为：从“计算机基础学习大纲仓库”逐步升级为“网页交互版计算机基础与 AI 工程学习系统”。
+- 目标系统应支持 Round 00-21 全路线任务体系、任务状态、用户动作记录、反馈、复盘、总进度与 round 进度展示。
+- 该目标是长期方向，不代表当前已经实现完整网页交互系统。
+
+### 11.3 当前仍未实现的关键能力
+- 当前仍未实现真正的网页交互操作；`progress.html` 仍主要是静态看板，任务状态更新依赖 `mark_done.sh` 和本地文件刷新。
+- 当前仍未实现 action event log；系统尚未保存每次用户动作的结构化历史。
+- 当前仍未实现 task feedback 原型；系统尚未为每条任务生成结构化反馈与下一步建议。
+- 当前仍未实现 Round 01-21 的统一任务注册和可执行练习目录。
+- 当前仍未引入数据库、后端 API、前端框架或测试体系。
+
+### 11.4 下一步最优先事项
+1. TASK-002：设计统一 task registry。
+2. TASK-003：实现 task registry 初版，优先覆盖 Round 00 现有任务。
+3. TASK-004：升级 progress 数据结构，并保证旧进度兼容。
+4. TASK-005：验证并保护 Round 00 旧任务 ID 与已有进度。
+5. TASK-006：升级 `mark_done.sh` 支持统一任务体系。
+
+### 11.5 更新日志
+- 2026-05-05：完成长期目标文档、自动推进协议、任务队列、ADR 和 Codex 仓库入口规则；本轮没有改动进度数据、静态页面、Round 00 脚本或后续功能实现。
+
+## 12. 2026-05-10 VPS 模块接入
+
+### 12.1 本轮新增内容
+- 新增治理文档目录：
+  - `docs/governance/repo_rules.md`：仓库治理总规则（删除 / 合并 / 命名硬约束）。
+  - `docs/governance/file_naming_rules.md`：文件命名规则（主线 vs 支线编号空间、目录约定）。
+  - `docs/governance/codex_workflow.md`：Codex / Cursor / 编程 AI 协作工作流总览。
+  - `docs/governance/remote_operation_permissions.md`：远程操作 Level 0 ~ Level 5 权限等级，含每级允许 / 禁止 / 命令示例 / 速查表。
+- 新增模块文档：`docs/modules/vps_remote_ops.md`（VPS 远程操作模块总纲）。
+- 新增检查清单：
+  - `docs/checklists/vps_safety_checklist.md`
+  - `docs/checklists/remote_operation_checklist.md`
+  - `docs/checklists/repository_cleanup_checklist.md`
+  - `docs/checklists/project_acceptance_checklist.md`
+- 新增确认模板：
+  - `docs/templates/remote_operation_confirmation.md`
+  - `docs/templates/repository_cleanup_confirmation.md`
+- 新增 VPS 实操支线阶段目录与 13 份 Round 文档：
+  - `rounds/stage_03_vps_remote_ops/README.md`
+  - `rounds/stage_03_vps_remote_ops/round_vps_00_repo_scan.md` ~ `round_vps_12_sop_and_vultragent.md`
+- 更新 `README.md`：
+  - "项目结构"段落加入 docs 子目录与 stage_03 目录索引。
+  - "全局路线图"下新增"实操支线 · VPS 远程操作"段落，含安全约束与入口链接。
+- 新增 `.gitignore`：忽略 `.DS_Store`、`.env`、`.venv/`、`*.pem`、`id_rsa*` 等敏感 / 系统副产物。
+
+### 12.2 本轮**未**改动的文件（按硬约束保护）
+- `progress.json`、`progress_data.js`、`progress.html`、`mark_done.sh`：Round 00 最小闭环。
+- `rounds/round_00/` 下任何文件。
+- `round_00.md` ~ `round_21.md`、`plan_round_00.txt` ~ `plan_round_21.txt`：主线 Round 概览与计划源未做内容改动。
+- `AGENTS.md`、`CONVERSION_PROTOCOL.md`、`docs/CODEX_LONG_TERM_PLAN.md`、`docs/AUTO_ADVANCE_PROTOCOL.md`、`docs/DECISIONS.md`：本轮未触动。
+- `.idea/misc.xml`：IDE 自动改动，非本轮范围。
+
+### 12.3 当前 VPS 支线状态
+- 文档体系：已建立。
+- 实际远程操作：**全部未执行**。本轮没有连接任何 VPS、没有使用任何真实凭证、没有部署任何真实服务。
+- 风险：
+  - VPS-04 ~ VPS-12 中的命令样例必须由用户在执行时再次审阅。
+  - Level 2 及以上操作必须先走 `docs/templates/remote_operation_confirmation.md`。
+  - VULTRagent 仅有需求草案接口位置，**未**在本仓库实现。
+
+### 12.4 下一步可推进方向（与 NEXT_ACTIONS.md 同步）
+- 主线优先级仍按 TASK-002 ~ TASK-012 推进（task registry / progress / Round 01 骨架等）。
+- VPS 支线可按 Round VPS-04 → VPS-05 推进（首次真实只读检查）；执行前需用户授权。
+- 仅当用户明确启动时，才进入支线 Level 2/3/4 操作。
+
+### 12.5 更新日志
+- 2026-05-10：完成 VPS 模块文档接入、远程操作权限等级、安全 / 部署 / 治理 checklist、确认模板与 13 份 Round 文档；未改动 Round 00 闭环；未连接任何远程服务器。
