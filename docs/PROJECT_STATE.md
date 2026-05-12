@@ -15,25 +15,27 @@
 ## 2. 仓库目录与关键文件
 
 ### 2.1 主要目录结构（实际存在）
-- 根目录：包含 `round_00.md` 至 `round_21.md`、`plan_round_00.txt` 至 `plan_round_21.txt`、进度相关文件与脚本。
+- 根目录：包含 `round_00.md` 至 `round_21.md`、进度相关文件与脚本。
 - `rounds/round_00/`：唯一已展开的轮次目录，含 `week1/week2/week3/final` 子目录及脚本/笔记。
 - `docs/`：本次新增，用于沉淀项目状态文档。
 
+> ⚠ 历史记录：根目录原有 `plan_round_00.txt` ~ `plan_round_21.txt`（22 份初版提示词文本），已于 **2026-05-12** 路线重定向时由用户授权删除，内容已被对应 `round_XX.md` 完整吸收。
+
 ### 2.2 关键文件与作用
 - `README.md`：项目介绍、路线图、目录说明、进度系统说明。
-- `CONVERSION_PROTOCOL.md`：`plan_round_XX.txt` 转 `round_XX.md` 的生成协议。
-- `progress.json`：进度状态“单一事实源”（任务完成状态）。
+- `CONVERSION_PROTOCOL.md`：Round md 标准结构与进度系统协议（v2.0，已移除 txt 转换流程）。
+- `progress.json`：进度状态"单一事实源"（任务完成状态 + 四主线 lanes，v2）。
 - `progress_data.js`：由脚本生成，供前端看板读取。
 - `progress.html`：可视化展示进度。
 - `mark_done.sh`：更新 `progress.json` 并同步生成 `progress_data.js`。
-- `round_00.md`~`round_21.md`：21+1 轮学习说明文档。
-- `plan_round_00.txt`~`plan_round_21.txt`：对应轮次规划文本源。
+- `round_00.md`~`round_21.md`：21+1 轮学习说明文档（路线重定向后定位为"工程实操线素材库"）。
+- `plan_round_00.txt`~`plan_round_21.txt`：已于 2026-05-12 由用户授权删除（仅 git history 可追溯）。
 
 ## 3. round00-round21 文档与实际实现对应关系
 
 ### 3.1 轮次文件存在性检查
 - `round_00.md` 到 `round_21.md`：**全部存在**（22 个）。
-- `plan_round_00.txt` 到 `plan_round_21.txt`：**全部存在**（22 个）。
+- `plan_round_00.txt` 到 `plan_round_21.txt`：**已于 2026-05-12 删除**（路线重定向，用户授权）。
 
 ### 3.2 实际代码/脚本落地情况
 - **已落地为真实脚本的轮次**：仅确认 `rounds/round_00/`。
@@ -205,7 +207,7 @@
 ### 12.2 本轮**未**改动的文件（按硬约束保护）
 - `progress.json`、`progress_data.js`、`progress.html`、`mark_done.sh`：Round 00 最小闭环。
 - `rounds/round_00/` 下任何文件。
-- `round_00.md` ~ `round_21.md`、`plan_round_00.txt` ~ `plan_round_21.txt`：主线 Round 概览与计划源未做内容改动。
+- `round_00.md` ~ `round_21.md`：主线 Round 概览未做内容改动；对应 `plan_round_XX.txt` 计划文本源在 2026-05-12 由用户授权删除。
 - `AGENTS.md`、`CONVERSION_PROTOCOL.md`、`docs/CODEX_LONG_TERM_PLAN.md`、`docs/AUTO_ADVANCE_PROTOCOL.md`、`docs/DECISIONS.md`：本轮未触动。
 - `.idea/misc.xml`：IDE 自动改动，非本轮范围。
 
@@ -224,3 +226,67 @@
 
 ### 12.5 更新日志
 - 2026-05-10：完成 VPS 模块文档接入、远程操作权限等级、安全 / 部署 / 治理 checklist、确认模板与 13 份 Round 文档；未改动 Round 00 闭环；未连接任何远程服务器。
+
+## 13. 2026-05-12 路线重定向（重大变更）
+
+### 13.1 本轮性质
+
+这是一次**重大方向变更**：仓库总目标从"网页交互式 AI 工程学习系统"升级为"软考中级 → 408/数学二/0854 跨专业考研 + Linux/工程实操"的多目标耦合路线。
+本轮经用户明确授权一次性完成"删除 + 治理 + 路线骨架 + 进度系统四主线扩展"，超出常规"一轮一任务"边界，但是受控的、全程可验证的。
+
+### 13.2 本轮删除
+
+- `plan_round_00.txt` ~ `plan_round_21.txt`（22 份初版提示词文本）。用户授权清理；内容已被对应 `round_XX.md` 完整吸收；git history 仍可追溯。
+
+### 13.3 本轮新增（13 份文档 + 7 个目录）
+
+- 路线骨架（8）：`docs/MASTER_STUDY_ROADMAP.md`、`docs/STAGE_PLAN.md`、`docs/KNOWLEDGE_MAPPING.md`、`docs/WEEKLY_EXECUTION_TEMPLATE.md`、`docs/PROGRESS_RULES.md`、`docs/ERROR_REVIEW_SYSTEM.md`、`docs/GRADUATE_SCHOOL_TRACKER.md`（模板，**不含真实院校数据**）、`docs/PROJECT_PORTFOLIO_TRACK.md`。
+- 审计报告（1）：`docs/AUDIT_2026_05_12.md`。
+- 目录骨架（5）：`plans/README.md`、`plans/linux/README.md`、`plans/soft_exam/README.md`、`plans/math2/README.md`、`plans/408/README.md`、`records/README.md`、`records/weekly_reviews/.gitkeep`、`records/error_notes/.gitkeep`、`records/completed_tasks/.gitkeep`。
+
+### 13.4 本轮修改（含进度系统升级）
+
+- `progress.json`：v1 → v2。新增顶层 `lanes` 字段（4 条主线注册），每个 task 新增 `lane` 字段。Round 00 旧任务全部归 `engineering`，`done` 与 `done_at` 不变。
+- `progress_data.js`：自动同步到 v2 结构（仍由 `mark_done.sh` 维护）。
+- `mark_done.sh`：升级支持 v2，无参数运行时按 lane 分组输出；v1 数据可自动补 `engineering`。
+- `progress.html`：重写为"总进度 + 四主线进度 + 本周任务/倒计时（localStorage）+ Stage 0–7 进度 + 薄弱项面板 + 按 lane 浏览 Round"。Round 00 现有展示完全保留。
+- `CONVERSION_PROTOCOL.md`：v1.3 → v2.0。移除"txt → md 转换"全部流程；新增 lanes 数据结构说明；Round 概览表新增"所属主线"列。
+- `README.md`：重写为路线总控入口（仓库定位、四主线、当前阶段、文档导航、维护规则）。
+- `AGENTS.md`：新增 `MASTER_STUDY_ROADMAP` 与 `STAGE_PLAN` 为必读文档；新增"不缓存考题 / 院校信息"等约束。
+- `docs/CODEX_LONG_TERM_PLAN.md`：顶部加 §0 路线重定向说明，§1 ~ §11 旧规划保留作为工程实操线参考。
+- `docs/NEXT_ACTIONS.md`：新建 TASK-RR-00 ~ TASK-RR-08 任务队列；旧 TASK-002~012 部分标记为 done/superseded/deferred，全部保留。
+- 治理与支线文档清理对 `plan_round_XX.txt` 的引用：`docs/governance/repo_rules.md`、`docs/governance/file_naming_rules.md`、`docs/templates/repository_cleanup_confirmation.md`、`docs/checklists/repository_cleanup_checklist.md`、`rounds/stage_03_vps_remote_ops/round_vps_00_repo_scan.md`、`rounds/stage_03_vps_remote_ops/round_vps_01_repo_cleanup.md`。
+
+### 13.5 本轮**未**改动的高保护对象
+
+- `rounds/round_00/` 下任何文件。
+- `round_00.md` ~ `round_21.md`（22 份 md 全部保留）。
+- Round 00 旧任务 ID、行为与默认完成状态（done=false）。
+- `docs/AUTO_ADVANCE_PROTOCOL.md`、`docs/DECISIONS.md`（未触动）。
+- `.idea/misc.xml`（IDE 自动改动，已 stash，不进入本轮 commit）。
+
+### 13.6 验证结果
+
+- `bash mark_done.sh`：可正常运行，按 lane 分组输出 21 条 Round 00 任务，全部 `engineering` lane，全部 `⬜ 未完成`。
+- `python3 -m json.tool progress.json`：合法。
+- `progress.html` 内嵌 JS 语法（Node 校验）：合法。
+- 22 份 `round_XX.md`：完整保留。
+
+### 13.7 当前进度系统状态
+
+- 四主线 lanes 已注册：`engineering` / `soft_exam` / `math2` / `cs408`。
+- 任务总数：21（全部在 `engineering` lane）。
+- 完成率：0/21。
+- 其余三条 lane 暂无注册任务（按真实学习节奏在 plans/ 下推进时再录入）。
+
+### 13.8 下一步可推进方向（与 NEXT_ACTIONS.md 同步）
+
+1. **TASK-RR-01**：Stage 2 软考 3 模块（ds / os / db）笔记骨架建立。
+2. **TASK-RR-04**：数学二 limits + la_matrix 启动笔记。
+3. **TASK-RR-02**：建立第一周复盘示例。
+4. **TASK-RR-03**：Round 02 实操目录展开（可选）。
+5. **TASK-RR-05 / 07**：用户提供院校信息 + 考试日期。
+
+### 13.9 更新日志
+
+- 2026-05-12：完成路线重定向（删除 txt + 8 份路线骨架 + plans/records 目录骨架 + 进度系统 v2 + README/AGENTS/长期规划文档对齐 + 治理引用清理）；未破坏 Round 00 闭环；未编造任何考试 / 院校信息；未引入新依赖。

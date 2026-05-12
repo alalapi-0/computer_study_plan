@@ -36,8 +36,9 @@
 
 - `progress.json`、`progress_data.js`、`progress.html`、`mark_done.sh`
 - `rounds/round_00/` 下任何文件
-- `round_XX.md`、`plan_round_XX.txt`（任意主线 Round）
-- `AGENTS.md`、`CONVERSION_PROTOCOL.md`、`docs/CODEX_LONG_TERM_PLAN.md`、`docs/AUTO_ADVANCE_PROTOCOL.md`、`docs/DECISIONS.md`
+- `round_XX.md`（任意主线 Round）
+- `records/` 下任何已写入的用户真实学习记录
+- `AGENTS.md`、`CONVERSION_PROTOCOL.md`、`docs/CODEX_LONG_TERM_PLAN.md`、`docs/AUTO_ADVANCE_PROTOCOL.md`、`docs/DECISIONS.md`、`docs/MASTER_STUDY_ROADMAP.md`、`docs/STAGE_PLAN.md`
 
 ## 操作权限等级
 
