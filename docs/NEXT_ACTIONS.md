@@ -186,14 +186,18 @@
 | TASK-007 | 升级 progress_data.js 生成逻辑 | **done** |
 | TASK-008 | 升级 progress.html 全路线展示 | **done**（已升级为四主线） |
 
-## TASK-009 ~ TASK-012：deferred（按新路线非高优先级）
+## TASK-009 ~ TASK-012：重启推进（工程实操线）
 
 | 编号 | 原标题 | 状态 |
 |---|---|---|
-| TASK-009 | 加入 action event log 初版 | **deferred** |
-| TASK-010 | 加入 task feedback 原型 | **deferred** |
+| TASK-009 | 加入 action event log 初版 | **done**（2026-05-28） |
+| TASK-010 | 加入 task feedback 原型 | pending |
 | TASK-011 | 建立 Round 01 最小骨架 | **deferred**（按 Stage 1 真实推进需要再做） |
 | TASK-012 | 建立数据校验脚本 | **deferred**（按需要再做） |
+
+TASK-009 实际产物：
+- `records/action_logs/README.md`
+- `mark_done.sh`（新增动作事件 JSONL 记录）
 
 > 这些旧 TASK 不删除，保留作为未来如果决定回到"网页交互式系统"方向时的参考。
 
@@ -201,10 +205,10 @@
 
 ## 推荐下一步（按优先级）
 
-1. **TASK-RR-05 / 07**：用户提供院校信息 + 考试日期。
-2. **TASK-RR-06**：错题系统第一次走通（需用户提供真实错题）。
-3. **TASK-RR-08**：作品集第一张项目卡片（需用户决策方向）。
-4. **TASK-VPS-05**：首次远程服务器只读检查（需用户单独授权）。
-5. （可选）重启历史任务 `TASK-009~012`（若你同意回到网页交互系统迭代）。
+1. **TASK-010**：加入 task feedback 原型（无需用户介入）。
+2. **TASK-012**：建立数据校验脚本（无需用户介入）。
+3. **TASK-011**：建立 Round 01 最小骨架（可自推进）。
+4. **TASK-RR-05 / 07**：用户提供院校信息 + 考试日期。
+5. **TASK-RR-06 / RR-08**：需用户提供错题与项目方向决策。
 
 > 主线推进、VPS 支线推进、考试日期录入**互不阻塞**；用户可根据当下心情与可用时间选择。

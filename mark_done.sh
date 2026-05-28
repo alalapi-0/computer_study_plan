@@ -22,6 +22,7 @@ set -e
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 PROGRESS_FILE="$SCRIPT_DIR/progress.json"
 PROGRESS_JS="$SCRIPT_DIR/progress_data.js"
+ACTION_LOG_FILE="$SCRIPT_DIR/records/action_logs/events.jsonl"
 
 if [ ! -f "$PROGRESS_FILE" ]; then
   echo "❌ 找不到 progress.json。请在仓库根目录执行（见 docs/WORKSPACE.md）："
@@ -84,12 +85,17 @@ PYEOF
 fi
 
 # ── 标记 / 取消 ───────────────────────────────────────────────
-python3 - "$SCRIPT_DIR" "$TASK_ID" "$MODE" <<'PYEOF'
-import json, sys, datetime
+python3 - "$SCRIPT_DIR" "$TASK_ID" "$MODE" "$ACTION_LOG_FILE" <<'PYEOF'
+import datetime
+import json
+import os
+import sys
+import uuid
 
 script_dir = sys.argv[1]
 task_id    = sys.argv[2]
 mode       = sys.argv[3] if len(sys.argv) > 3 else ""
+action_log_file = sys.argv[4]
 
 json_path = f"{script_dir}/progress.json"
 js_path   = f"{script_dir}/progress_data.js"
@@ -123,12 +129,17 @@ if task_id not in tasks:
 if "lane" not in tasks[task_id]:
     tasks[task_id]["lane"] = "engineering"
 
+action_type = "mark_done"
+result = "ok"
+
 if mode == "--undo":
+    action_type = "undo_done"
     tasks[task_id]["done"]    = False
     tasks[task_id]["done_at"] = None
     print(f"↩️  已取消完成：{task_id}")
 else:
     if tasks[task_id].get("done"):
+        result = "noop_already_done"
         ts = tasks[task_id].get("done_at")
         print(f"✅ 已是完成状态（{ts}），无需重复标记")
     else:
@@ -156,7 +167,32 @@ js_content = (
 with open(js_path, "w", encoding="utf-8") as f:
     f.write(js_content)
 
+# 追加动作事件日志（Phase 2 原型，JSONL）
+def resolve_round_id(tid: str) -> str:
+    if tid.startswith("r02-"):
+        return "round_02"
+    if tid.startswith(("w1-", "w2-", "w3-", "fin-")):
+        return "round_00"
+    return "unknown"
+
+lane = tasks[task_id].get("lane", "engineering")
+event = {
+    "action_id": str(uuid.uuid4()),
+    "task_id": task_id,
+    "round_id": resolve_round_id(task_id),
+    "lane": lane,
+    "action_type": action_type,
+    "timestamp": datetime.datetime.now().isoformat(timespec="seconds"),
+    "result": result,
+    "note": "",
+    "evidence_path": "",
+}
+os.makedirs(os.path.dirname(action_log_file), exist_ok=True)
+with open(action_log_file, "a", encoding="utf-8") as f:
+    f.write(json.dumps(event, ensure_ascii=False) + "\n")
+
 total      = len(tasks)
 done_count = sum(1 for v in tasks.values() if v.get("done"))
 print(f"📊 总进度：{done_count}/{total}")
+print(f"📝 已记录事件：{event['action_id']}")
 PYEOF

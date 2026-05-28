@@ -425,3 +425,28 @@
 
 - 未改动 `rounds/round_00/`。
 - 未改动 `records/` 下真实学习记录（仅新增 `_example.md` 示例文件）。
+
+## 20. 2026-05-28 TASK-009 动作事件日志原型
+
+### 20.1 本轮新增
+
+- 新增 `records/action_logs/README.md`（事件字段与使用说明）。
+
+### 20.2 本轮修改
+
+- `mark_done.sh`：在任务标记/撤销后自动追加写入 `records/action_logs/events.jsonl`（JSONL）。
+
+### 20.3 事件字段（v1）
+
+- `action_id`、`task_id`、`round_id`、`lane`、`action_type`、`timestamp`、`result`、`note`、`evidence_path`。
+
+### 20.4 验证
+
+- `python3 scripts/check_protocol_sync.py`：通过。
+- `python3 -m json.tool progress.json`：通过。
+- `bash mark_done.sh`：通过（状态展示正常）。
+
+### 20.5 风险边界核对
+
+- 未改动 `rounds/round_00/`。
+- 未改动 `records/` 下真实学习记录（仅新增 action log 原型目录说明）。
