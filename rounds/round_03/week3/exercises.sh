@@ -3,6 +3,12 @@
 
 set -e
 
+REPO_ROOT="$(cd "$(dirname "$0")/../../.." && pwd)"
+
+mark() {
+  bash "$REPO_ROOT/mark_done.sh" "$1"
+}
+
 mkdir -p ~/cli-lab/round3/week3
 cd ~/cli-lab/round3/week3
 
@@ -23,4 +29,11 @@ print("quadratic ops:", count_quadratic)
 EOF
 
 python3 complexity_demo.py
+
+mark r03-w3-ex3
+
+echo "请手动完成第3周自测后按回车继续..."
+read
+mark r03-w3-self
+
 echo "Week 3 完成。"
