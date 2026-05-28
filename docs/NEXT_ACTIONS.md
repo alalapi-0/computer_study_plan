@@ -55,7 +55,7 @@
 
 ## TASK-RR-03：Stage 1 工程实操线 · Round 02 实操目录展开
 
-- 状态：pending（按用户兴趣可选）
+- 状态：**done**（2026-05-28）
 - 背景：Stage 1 后续推进需要 Round 02 (Shell / 管道 / Git) 落地实操目录。
 - 目标：按 `CONVERSION_PROTOCOL.md` §7 的标准在 `rounds/round_02/` 下建立 README + week1/2/3 + final 骨架（含 notes.md + exercises.sh）。
 - 要修改：新增 `rounds/round_02/` 目录及其下文件。
@@ -63,6 +63,13 @@
 - 验收标准：目录结构符合 §7；`progress.json` 中追加 Round 02 任务（lane=engineering）；`mark_done.sh` 能识别。
 - 风险：一次性展开过多 Round 文件，违反"每轮一个任务"。
 - 是否需要用户介入：否。
+- 实际产物：
+  - `rounds/round_02/README.md`
+  - `rounds/round_02/week1/notes.md`、`rounds/round_02/week1/exercises.sh`
+  - `rounds/round_02/week2/notes.md`、`rounds/round_02/week2/exercises.sh`
+  - `rounds/round_02/week3/notes.md`、`rounds/round_02/week3/exercises.sh`
+  - `rounds/round_02/final/comprehensive_exercise.sh`、`rounds/round_02/final/command_cheatsheet.md`
+  - `progress.json` 追加 `r02-*` 任务（lane=`engineering`）
 
 ---
 

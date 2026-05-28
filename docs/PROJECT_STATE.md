@@ -298,3 +298,30 @@
 - 新增 `docs/WORKSPACE.md` 作为路径单一事实源。
 - `README.md` §0、`AGENTS.md`、`docs/governance/repo_rules.md`、`rounds/round_00/README.md`、`mark_done.sh` 错误提示与上述约定对齐。
 - 明确区分：**仓库根** `~/PycharmProjects/computer_study_plan` vs **练习沙盒** `~/cli-lab/round0`（Round 文档中的 `~/cli-lab` 保持不变）。
+
+## 15. 2026-05-28 TASK-RR-03 Round 02 实操目录展开
+
+### 15.1 本轮新增
+
+- 新增 `rounds/round_02/README.md`。
+- 新增 `rounds/round_02/week1|week2|week3/notes.md` 与 `exercises.sh`。
+- 新增 `rounds/round_02/final/comprehensive_exercise.sh` 与 `command_cheatsheet.md`。
+
+### 15.2 本轮修改
+
+- `progress.json`：追加 Round 02 的 `r02-*` 任务，全部归属 `engineering` lane。
+- `progress.html`：在 `ROUNDS` 静态元数据中注册 Round 02 任务面板。
+- `CONVERSION_PROTOCOL.md`：Round 02 行的“实操目录”状态改为“✅ 已展开”。
+- `README.md`：仓库结构与“按 lane / Round 浏览”说明同步到“Round 00 + Round 02”。
+- `docs/NEXT_ACTIONS.md`：`TASK-RR-03` 状态更新为 done，并记录产物。
+
+### 15.3 验证
+
+- `python3 scripts/check_protocol_sync.py`。
+- `python3 -m json.tool progress.json`。
+- `bash mark_done.sh`（确认新增 `r02-*` 任务可识别并按 lane 展示）。
+
+### 15.4 风险边界核对
+
+- 未修改 `rounds/round_00/` 任何文件。
+- 未修改 `records/` 下真实学习记录。
