@@ -360,7 +360,7 @@
 <!-- ── Block 6: 按 lane / Round 浏览 ── -->
 <div class="card">
   <h2>📦 按主线查看 Round</h2>
-  <div class="card-sub">按 lane 切换，查看每条主线下的 Round 任务清单。当前仅 Round 00 已展开为实操目录。</div>
+  <div class="card-sub">按 lane 切换，查看每条主线下的 Round 任务清单。当前已展开 Round 00、Round 02。</div>
   <div class="lane-tabs" id="laneTabs"></div>
   <div class="round-tabs" id="roundTabs"></div>
   <div id="panels"></div>
@@ -418,8 +418,44 @@ const ROUNDS = [
         { id:"fin-acc3",   type:"output",   title:"验收：cli-lab 目录与小抄存在",          cmd:"自动", file:"round_00.md" },
       ]}
     ]
+  },
+  {
+    id: "round_02",
+    title: "Round 02 · Shell、管道、Git 最小工作流",
+    lane: "engineering",
+    difficulty: "⭐⭐☆☆☆",
+    duration: "3 周",
+    weeks: [
+      { id: "round02-week1", title: "第 1 周：重定向与管道", tasks: [
+        { id:"r02-w1-read",  type:"reading",  title:"阅读 week1/notes.md",               cmd:"bash mark_done.sh r02-w1-read", file:"rounds/round_02/week1/notes.md" },
+        { id:"r02-w1-ex1",   type:"exercise", title:"练习1：覆盖与追加",                  cmd:"自动", file:"rounds/round_02/week1/exercises.sh" },
+        { id:"r02-w1-ex2",   type:"exercise", title:"练习2：去重统计",                    cmd:"自动", file:"rounds/round_02/week1/exercises.sh" },
+        { id:"r02-w1-ex3",   type:"exercise", title:"练习3：日志过滤",                    cmd:"自动", file:"rounds/round_02/week1/exercises.sh" },
+        { id:"r02-w1-self",  type:"test",     title:"第1周自测",                          cmd:"自动", file:"rounds/round_02/week1/exercises.sh" },
+      ]},
+      { id: "round02-week2", title: "第 2 周：最小 shell 脚本", tasks: [
+        { id:"r02-w2-read",  type:"reading",  title:"阅读 week2/notes.md",               cmd:"bash mark_done.sh r02-w2-read", file:"rounds/round_02/week2/notes.md" },
+        { id:"r02-w2-ex4",   type:"exercise", title:"练习4：count_errors.sh",             cmd:"自动", file:"rounds/round_02/week2/exercises.sh" },
+        { id:"r02-w2-ex5",   type:"exercise", title:"练习5：count_labels.sh",             cmd:"自动", file:"rounds/round_02/week2/exercises.sh" },
+        { id:"r02-w2-ex6",   type:"exercise", title:"练习6：show_args.sh",                cmd:"自动", file:"rounds/round_02/week2/exercises.sh" },
+        { id:"r02-w2-self",  type:"test",     title:"第2周自测",                          cmd:"自动", file:"rounds/round_02/week2/exercises.sh" },
+      ]},
+      { id: "round02-week3", title: "第 3 周：Git 最小工作流", tasks: [
+        { id:"r02-w3-read",  type:"reading",  title:"阅读 week3/notes.md",               cmd:"bash mark_done.sh r02-w3-read", file:"rounds/round_02/week3/notes.md" },
+        { id:"r02-w3-ex7",   type:"exercise", title:"练习7：初始化与首次提交",             cmd:"自动", file:"rounds/round_02/week3/exercises.sh" },
+        { id:"r02-w3-ex8",   type:"exercise", title:"练习8：第二次提交",                  cmd:"自动", file:"rounds/round_02/week3/exercises.sh" },
+        { id:"r02-w3-ex9",   type:"exercise", title:"练习9：新增文件提交",                 cmd:"自动", file:"rounds/round_02/week3/exercises.sh" },
+        { id:"r02-w3-self",  type:"test",     title:"第3周自测",                          cmd:"自动", file:"rounds/round_02/week3/exercises.sh" },
+      ]},
+      { id: "round02-final", title: "最终验收", tasks: [
+        { id:"r02-fin-comp",  type:"exercise", title:"综合练习：日志过滤 + 迷你 Git 仓库", cmd:"自动", file:"rounds/round_02/final/comprehensive_exercise.sh" },
+        { id:"r02-fin-sheet", type:"output",   title:"完成 Round 02 命令小抄",            cmd:"自动", file:"rounds/round_02/final/command_cheatsheet.md" },
+        { id:"r02-fin-acc1",  type:"test",     title:"验收：解释 >、>>、| 区别",          cmd:"自动", file:"round_02.md" },
+        { id:"r02-fin-acc2",  type:"output",   title:"验收：完成 3 次 Git 提交并解释",    cmd:"自动", file:"round_02.md" },
+      ]}
+    ]
   }
-  // 后续 Round 在落地为实操目录时按本结构追加；当前仅 Round 00 完整展开。
+  // 后续 Round 在落地为实操目录时按本结构追加；当前已展开 Round 00、Round 02。
 ];
 
 // ============================================================
