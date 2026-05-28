@@ -1,0 +1,32 @@
+agent_policy:
+  version: "1.0.0"
+  default_mode: conservative_governance
+  required_prechecks:
+    - git_status_clean
+    - read_required_governance_files
+    - confirm_no_round_00_breaking_changes
+  allowed_actions:
+    - read_and_update_docs_and_governance_files
+    - create_lightweight_validation_scripts
+    - reconcile_conflicting_or_redundant_document_statements
+    - add_stage_or_round_entries_with_clear_boundaries
+  restricted_actions:
+    - introducing_large_dependencies
+    - database_or_backend_introduction
+    - wide_unrelated_refactors
+    - remote_operation_beyond_documented_permissions
+  approval_required:
+    - deleting_non_empty_records_entries
+    - deleting_round_00_core_files
+    - deleting_root_round_overview_files
+    - changing_remote_git_or_authentication
+  forbidden_actions:
+    - commit_secrets
+    - read_or_print_secret_files
+    - bypass_high_risk_stop_conditions
+    - push_main_directly
+  commit_policy:
+    default: do_not_commit_without_user_request
+  sync_policy:
+    mandatory: true
+    sync_reference: governance/repo_protocol_standard.yaml

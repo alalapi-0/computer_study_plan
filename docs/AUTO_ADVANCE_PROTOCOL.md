@@ -7,6 +7,8 @@
 开始任何一轮前，Codex 必须确认：
 
 - 已读取 `AGENTS.md`
+- 已读取 `governance/repo_protocol_standard.yaml` 与 `project.yaml`
+- 已读取 `governance/agent_policy.yaml`、`governance/round_state.yaml`、`governance/file_role_map.yaml`
 - 已读取 `docs/CODEX_LONG_TERM_PLAN.md`
 - 已读取 `docs/PROJECT_STATE.md`
 - 已读取 `docs/NEXT_ACTIONS.md`
@@ -30,9 +32,9 @@
 7. 将该任务标记为 `done`，并更新后续任务状态。
 8. 更新 `docs/PROJECT_STATE.md`。
 9. 必要时更新 `docs/DECISIONS.md`、`README.md`、`AGENTS.md` 或长期规划文档。
-10. commit。
-11. remote 存在时 push 当前分支。
-12. 如 GitHub CLI 可用并已登录，创建或更新 PR。
+10. 同步机器协议与文档（含 `docs/reports/` 治理报告）。
+11. 仅在用户明确要求时 commit。
+12. 仅在用户明确要求且 remote 可用时 push / 创建或更新 PR。
 
 ## 3. 验证流程
 
@@ -57,10 +59,10 @@ bash mark_done.sh
 
 如果新增脚本或测试工具，应运行对应最小验证命令，并在最终汇报中说明结果。
 
-## 4. Commit 规则
+## 4. Commit 规则（按需）
 
-- 只有验证通过后才能 commit。
-- 每次 commit 只对应一个任务。
+- 默认不自动 commit，只有用户明确要求时才能 commit。
+- 若执行 commit，必须先通过验证，且每次 commit 只对应一个任务。
 - commit message 使用格式：
 
 ```text
@@ -70,10 +72,10 @@ TASK-XXX: short imperative summary
 - 不把无关格式化、无关重构和任务实现混在同一个 commit。
 - 不提交临时文件、缓存文件、运行产物或编辑器私有文件。
 
-## 5. Push 规则
+## 5. Push 规则（按需）
 
 - 不直接 push `main`。
-- remote 存在时，push 当前独立分支。
+- 默认不自动 push，只有用户明确要求时才 push 当前独立分支。
 - push 失败时停止并报告，不继续做下一轮。
 - 不修改 GitHub remote 或认证配置，除非用户明确要求。
 

@@ -82,6 +82,14 @@
 ~/PycharmProjects/computer_study_plan/   ← 唯一 Git 工作副本（见 docs/WORKSPACE.md）
 ├─ README.md                       ← 本文件（仓库入口）
 ├─ docs/WORKSPACE.md               ← ★ 路径与工作区约定（单一事实源）
+├─ project.yaml                    ← ★ 项目身份卡（绑定治理协议版本）
+├─ governance/                     ← ★ 机器可读治理层
+│  ├─ repo_protocol_standard.yaml  ← 通用治理协议（跨仓可迁移）
+│  ├─ agent_policy.yaml            ← Agent 权限与边界
+│  ├─ round_state.yaml             ← 当前治理轮次状态
+│  ├─ file_role_map.yaml           ← 关键文件角色映射
+│  ├─ model_policy.yaml            ← 模型使用边界
+│  └─ data_policy.yaml             ← 数据与记录保护策略
 ├─ AGENTS.md                       ← Codex / Cursor / 编程 AI 协作硬规则
 ├─ CONVERSION_PROTOCOL.md          ← Round md 与进度系统协议（v2.0）
 ├─ progress.html                   ← 进度看板（四主线 + 阶段 + 倒计时）
@@ -89,6 +97,8 @@
 ├─ progress_data.js                ← 进度镜像（mark_done.sh 自动生成）
 ├─ mark_done.sh                    ← 进度 CLI（支持按 lane 分组）
 ├─ .gitignore
+├─ scripts/
+│  └─ check_protocol_sync.py       ← 协议同步一致性检查脚本
 │
 ├─ round_00.md ~ round_21.md       ← 工程实操线 22 份 Round 概览（保留）
 │
@@ -218,7 +228,16 @@ bash mark_done.sh <task-id> --undo  # 取消完成
 
 ---
 
-## 8. 维护规则
+## 8. 协议同步机制
+
+- 任何治理规则、目录骨架、Stage/Round 结构、验证命令更新，都必须触发协议同步。
+- 执行清单：`docs/checklists/protocol_sync_checklist.md`。
+- 检查命令：`python3 scripts/check_protocol_sync.py`。
+- 同步留痕：在 `docs/reports/` 写本轮治理报告，并同步 `docs/PROJECT_STATE.md` 与 `docs/NEXT_ACTIONS.md`。
+
+---
+
+## 9. 维护规则
 
 > 这些是**硬约束**，AI 与人类都需遵守。
 
@@ -237,7 +256,7 @@ bash mark_done.sh <task-id> --undo  # 取消完成
 
 ---
 
-## 9. 历史变更
+## 10. 历史变更
 
 - **2026-05-28** · 路径统一：约定唯一工作副本为 `~/PycharmProjects/computer_study_plan`，见 `docs/WORKSPACE.md`。
 - **2026-05-12** · 路线重定向：从单一"网页交互式学习系统"升级为"软考 → 408/数学二/0854 多目标耦合"；删除 22 份 `plan_round_XX.txt`；建立四主线 lanes 与 Stage 0–7 阶段计划；进度系统升级到 v2。详情见 `docs/AUDIT_2026_05_12.md`。
@@ -246,7 +265,7 @@ bash mark_done.sh <task-id> --undo  # 取消完成
 
 ---
 
-## 10. 现存路线 vs 历史 Round 文档
+## 11. 现存路线 vs 历史 Round 文档
 
 仓库中 `round_00.md` ~ `round_21.md` 是历史 Round 概览文档（22 份），现在的定位是**工程实操线（`engineering` lane）的素材库**。它们：
 
@@ -257,7 +276,7 @@ bash mark_done.sh <task-id> --undo  # 取消完成
 
 ---
 
-## 11. 致使用者
+## 12. 致使用者
 
 - 这条路线长度按年计，节奏需要**长期可持续 > 短期高强度**。
 - 错题本是知识体系最重要的指针，而不是炫学习量的工具。

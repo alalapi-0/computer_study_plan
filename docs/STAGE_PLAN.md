@@ -430,3 +430,17 @@ M8–M12    Stage 3 + Stage 4
 - 若发现某个 Stage 的真实学习节奏远超预算（比如本来 3 个月却用了 9 个月），**优先停下重新评估总目标**，而不是硬推。
 - 若软考改版 / 408 改版 / 数学二大纲变化，必须停下来对照 `docs/MASTER_STUDY_ROADMAP.md` 与本文件同步更新。
 - 若进入 Stage 6 后发现目标院校全部不考 408 或不考数学二，Stage 5 / Stage 4 优先级应**重新评估**而不是死撑。
+
+---
+
+## 13. 治理轮次（Gov Round）与 Stage 同步
+
+为避免 Stage 文档与治理规则漂移，新增治理轮次编号空间：`gov_round_XXX`（例如 `gov_round_001`）。
+
+- `gov_round` 用于记录**仓库治理/协议同步**工作，不替代学习 Stage。
+- 每次涉及 Stage 结构、lane 定义、关键入口文档变化时，必须：
+  1. 更新 `governance/round_state.yaml`；
+  2. 同步 `docs/PROJECT_STATE.md` 与 `docs/NEXT_ACTIONS.md`；
+  3. 运行 `python3 scripts/check_protocol_sync.py`；
+  4. 在 `docs/reports/` 写治理报告。
+- Stage 主线推进仍按 Stage 0–7 不变；治理轮次作为横向保障层，确保全仓一致性与可持续维护。

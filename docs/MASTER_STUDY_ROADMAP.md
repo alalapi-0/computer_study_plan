@@ -309,3 +309,4 @@
 - 任何修改本文档的 PR 都必须说明"为什么改 + 影响哪些主线"。
 - 短期 / 中期 / 长期目标的"年限"是参考值，不是承诺，可以根据真实学习节奏调整。
 - 当与某一具体目标冲突时（例如某年某院校改考试科目），优先以**最新官方信息**为准，而不是本文档的描述。
+- 当路线或阶段结构变更时，必须同步更新 `governance/repo_protocol_standard.yaml` 与 `project.yaml`，并通过 `python3 scripts/check_protocol_sync.py` 校验一致性。

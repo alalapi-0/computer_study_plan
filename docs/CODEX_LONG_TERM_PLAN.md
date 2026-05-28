@@ -403,18 +403,16 @@
 Codex 后续每一轮都必须按以下流程推进：
 
 1. 读取 AGENTS.md
-2. 读取 docs/CODEX_LONG_TERM_PLAN.md
-3. 读取 docs/PROJECT_STATE.md
-4. 读取 docs/NEXT_ACTIONS.md
-5. 选择优先级最高且不需要用户介入的任务
-6. 创建或切换到独立分支
-7. 执行一个小轮次
-8. 运行验证
-9. 更新文档
-10. commit
-11. push 到 GitHub 分支
-12. 如可用，创建或更新 PR
-13. 继续下一轮，直到遇到必须用户介入的情况
+2. 读取 governance/repo_protocol_standard.yaml 与 project.yaml
+3. 读取 governance/agent_policy.yaml、governance/round_state.yaml、governance/file_role_map.yaml
+4. 读取 docs/CODEX_LONG_TERM_PLAN.md
+5. 读取 docs/PROJECT_STATE.md
+6. 读取 docs/NEXT_ACTIONS.md
+7. 选择优先级最高且不需要用户介入的任务
+8. 执行一个小轮次并运行验证
+9. 同步机器协议与文档（含 docs/reports）
+10. 仅在用户明确要求时 commit/push/PR
+11. 继续下一轮，直到遇到必须用户介入的情况
 
 如果用户只说“请根据长期规划继续推进下一轮”，Codex 应按上述流程自动选择任务，不再要求用户重复解释项目背景。
 
@@ -443,12 +441,9 @@ Codex 后续每一轮都必须按以下流程推进：
 
 ## 8. Git 与 GitHub 推进规则
 
-- 每轮必须在独立分支完成
-- 默认分支命名：`codex/<task-id>-short-title`
-- 验证通过后 commit
-- remote 存在时 push 到 GitHub
+- 默认在独立分支执行，分支命名：`codex/<task-id>-short-title`
+- 仅在用户明确要求时 commit / push / PR
 - 不直接 push main
-- 如 gh CLI 可用并已登录，可创建 PR
 - 如果 push 失败，需要停止并报告
 - 如果工作区有用户未提交修改，需要停止并报告
 

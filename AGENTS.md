@@ -13,12 +13,15 @@
 
 ## 每次工作前必须读取
 
-1. `docs/WORKSPACE.md`（路径与工作区，避免改错目录）
-2. `docs/MASTER_STUDY_ROADMAP.md`（总目标与四主线）
-3. `docs/STAGE_PLAN.md`（Stage 0–7 阶段计划）
-4. `docs/CODEX_LONG_TERM_PLAN.md`（长期协作规则，含 2026-05-12 重定向说明）
-5. `docs/PROJECT_STATE.md`（仓库当前状态）
-6. `docs/NEXT_ACTIONS.md`（下一步任务队列）
+1. `governance/repo_protocol_standard.yaml`（通用治理协议，最高机器规则）
+2. `project.yaml`（本仓库身份卡 + 协议版本绑定）
+3. `governance/agent_policy.yaml`、`governance/round_state.yaml`、`governance/file_role_map.yaml`（执行边界与本轮状态）
+4. `docs/WORKSPACE.md`（路径与工作区，避免改错目录）
+5. `docs/MASTER_STUDY_ROADMAP.md`（总目标与四主线）
+6. `docs/STAGE_PLAN.md`（Stage 0–7 阶段计划）
+7. `docs/CODEX_LONG_TERM_PLAN.md`（长期协作规则，含 2026-05-12 重定向说明）
+8. `docs/PROJECT_STATE.md`（仓库当前状态）
+9. `docs/NEXT_ACTIONS.md`（下一步任务队列）
 
 > 历史规划（"网页交互式学习系统"Phase 0–7）仍保留作为工程实操线的演进参考，但**不再是最高优先级**。
 
@@ -31,7 +34,14 @@
 - 不把未来规划写成已完成事实。
 - 不一次性大范围重构无关内容。
 - 不直接 push `main`。
-- 每轮完成后必须运行验证，更新文档，commit，并在 remote 存在时 push 独立分支。
+- 每轮完成后必须运行验证并更新文档；仅在用户明确要求时执行 commit/push。
+
+## 协议同步机制（新增）
+
+- 触发条件：治理规则、阶段结构、关键目录、读取顺序、验证命令发生变化。
+- 同步清单：`docs/checklists/protocol_sync_checklist.md`。
+- 自动检查：`python3 scripts/check_protocol_sync.py`。
+- 同步目标至少包括：`governance/*.yaml`、`project.yaml`、`docs/PROJECT_STATE.md`、`docs/NEXT_ACTIONS.md`、`docs/reports/`。
 
 ## Git 规则
 

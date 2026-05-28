@@ -1,0 +1,172 @@
+protocol:
+  name: computer_study_plan_repo_protocol
+  version: "1.0.0"
+  status: active
+  last_updated: "2026-05-28"
+  based_on:
+    source_repo: novel-continuation-agent
+    source_file: governance/repo_protocol_standard.yaml
+    source_version: "0.2.9"
+  purpose: >
+    Provide a portable governance standard for this repository while preserving
+    the four-lane study roadmap and Round 00 operational safety baseline.
+
+scope:
+  repository_type:
+    - study_management_repository
+    - documentation_heavy_repository
+    - lightweight_cli_repository
+  non_goals:
+    - replacing project-specific learning content
+    - storing exam question banks or unofficial enrollment facts
+    - introducing backend services, database migration, or heavy dependencies
+  protected_assets:
+    - rounds/round_00/
+    - progress.json
+    - progress_data.js
+    - progress.html
+    - mark_done.sh
+    - records/
+
+authority:
+  priority_order:
+    - governance/repo_protocol_standard.yaml
+    - project.yaml
+    - governance/round_state.yaml
+    - governance/agent_policy.yaml
+    - governance/file_role_map.yaml
+    - AGENTS.md
+    - README.md
+  conflict_resolution: >
+    Apply this standard first. Project-specific overrides must be recorded in
+    project.yaml with reason, owner, and review trigger.
+
+naming_conventions:
+  yaml_fields: snake_case
+  generated_suffixes:
+    - .generated.json
+    - .generated.yaml
+    - .generated.md
+  round_ids:
+    human_format: Stage/Round naming allowed in docs
+    governance_format: gov_round_001
+  file_rules:
+    governance_machine_files: governance/*.yaml
+    reports: docs/reports/*_report.md
+    scripts: scripts/*.py
+
+required_files:
+  root:
+    - AGENTS.md
+    - README.md
+    - project.yaml
+  governance:
+    - governance/repo_protocol_standard.yaml
+    - governance/agent_policy.yaml
+    - governance/file_role_map.yaml
+    - governance/round_state.yaml
+    - governance/model_policy.yaml
+    - governance/data_policy.yaml
+  docs:
+    - docs/MASTER_STUDY_ROADMAP.md
+    - docs/STAGE_PLAN.md
+    - docs/PROJECT_STATE.md
+    - docs/NEXT_ACTIONS.md
+    - docs/reports/
+
+agent_reading_protocol:
+  default_reading_order:
+    - governance/repo_protocol_standard.yaml
+    - project.yaml
+    - governance/agent_policy.yaml
+    - governance/round_state.yaml
+    - governance/file_role_map.yaml
+    - AGENTS.md
+    - docs/WORKSPACE.md
+    - docs/MASTER_STUDY_ROADMAP.md
+    - docs/STAGE_PLAN.md
+    - docs/CODEX_LONG_TERM_PLAN.md
+    - docs/PROJECT_STATE.md
+    - docs/NEXT_ACTIONS.md
+  search_first_policy: use_glob_and_rg_before_large_file_reads
+  forbidden_scan_paths:
+    - .git/
+    - .idea/
+    - .cursor/
+    - node_modules/
+    - dist/
+    - build/
+    - __pycache__/
+    - .venv/
+  pre_edit_checks:
+    - confirm_clean_worktree
+    - confirm_round_00_safety_boundary
+    - read_required_governance_files
+  post_edit_checks:
+    - run_protocol_sync_check
+    - update_round_state
+    - update_project_state_and_next_actions
+    - write_or_update_governance_report_when_structure_changes
+
+round_protocol:
+  lifecycle:
+    - intake
+    - scan
+    - plan
+    - implement
+    - validate
+    - report
+    - sync
+  required_outputs:
+    - files_changed_list
+    - validation_results
+    - pending_decisions
+  required_sync_targets:
+    - governance/repo_protocol_standard.yaml
+    - governance/round_state.yaml
+    - docs/PROJECT_STATE.md
+    - docs/NEXT_ACTIONS.md
+    - docs/reports/
+
+study_program_alignment:
+  lanes:
+    - engineering
+    - soft_exam
+    - math2
+    - cs408
+  stages:
+    - stage_0_governance_setup
+    - stage_1_engineering_foundation
+    - stage_2_soft_exam_core
+    - stage_3_soft_exam_drills
+    - stage_4_math2_long_term
+    - stage_5_cs408_deepen
+    - stage_6_school_targeting
+    - stage_7_portfolio_projects
+  rule: >
+    Governance changes cannot contradict four-lane positioning. If conflict is
+    found, resolve in roadmap and stage plan within the same round.
+
+protocol_sync_mechanism:
+  triggers:
+    - required_file_added_removed_or_renamed
+    - stage_or_round_structure_changed
+    - reading_order_or_safety_policy_changed
+    - validation_command_changed
+    - new governance rule introduced in markdown docs
+  checklist_file: docs/checklists/protocol_sync_checklist.md
+  script_check: python3 scripts/check_protocol_sync.py
+  sync_steps:
+    - update_governance_yaml_files
+    - update_human_docs_references
+    - run_sync_script_and_record_output
+    - append_or_update_docs_reports_entry
+    - update_governance_round_state
+  ownership:
+    standard_owner: repo_governance_agent
+    project_owner: user
+    execution_owner: current_coding_agent
+  boundary:
+    - do_not_auto_delete_records
+    - do_not_break_round_00_closed_loop
+    - do_not_commit_or_push_without_user_request

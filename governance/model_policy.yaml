@@ -1,0 +1,18 @@
+model_policy:
+  version: "1.0.0"
+  defaults:
+    repository_understanding: use_glob_and_rg_first
+    network_usage: only_when_required_by_task
+    context_loading: targeted_and_minimal
+  guidance:
+    prefer_strong_reasoning_for:
+      - governance_protocol_design
+      - conflict_resolution_between_docs
+      - stage_and_lane_alignment
+    prefer_lightweight_reasoning_for:
+      - straightforward_text_sync
+      - checklist_generation
+      - status_updates
+  boundaries:
+    - no_secret_exposure
+    - no_unverified_exam_or_school_data_generation

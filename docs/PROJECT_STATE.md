@@ -298,3 +298,44 @@
 - 新增 `docs/WORKSPACE.md` 作为路径单一事实源。
 - `README.md` §0、`AGENTS.md`、`docs/governance/repo_rules.md`、`rounds/round_00/README.md`、`mark_done.sh` 错误提示与上述约定对齐。
 - 明确区分：**仓库根** `~/PycharmProjects/computer_study_plan` vs **练习沙盒** `~/cli-lab/round0`（Round 文档中的 `~/cli-lab` 保持不变）。
+
+## 15. 2026-05-28 治理协议重构（Gov Round 001）
+
+### 15.1 本轮目标
+
+- 引入机器可读治理层，参考外部协议并适配本仓库四主线学习场景。
+- 建立协议同步机制，避免后续文档与规则漂移。
+- 在不破坏 Round 00 最小闭环、不触碰 `records/` 真实记录的前提下完成全仓对齐。
+
+### 15.2 本轮新增
+
+- 根级治理目录与协议文件：
+  - `governance/repo_protocol_standard.yaml`
+  - `governance/agent_policy.yaml`
+  - `governance/file_role_map.yaml`
+  - `governance/round_state.yaml`
+  - `governance/model_policy.yaml`
+  - `governance/data_policy.yaml`
+- 项目身份卡：`project.yaml`
+- 协议校验脚本：`scripts/check_protocol_sync.py`
+- 同步检查清单：`docs/checklists/protocol_sync_checklist.md`
+- 治理报告：`docs/reports/repo_governance_refactor_2026_05_28_report.md`
+
+### 15.3 本轮修改
+
+- `AGENTS.md`：新增治理协议优先读取顺序与协议同步机制条款。
+- `README.md`：补充 `governance/`、`project.yaml`、`scripts/` 入口，并新增协议同步机制章节。
+- `docs/MASTER_STUDY_ROADMAP.md`：补充路线变更时必须同步机器协议。
+- `docs/STAGE_PLAN.md`：新增 Gov Round 编号空间与 Stage 同步规则。
+- `docs/NEXT_ACTIONS.md`：新增协议同步巡检任务（TASK-RR-09）。
+- `docs/governance/repo_rules.md`：声明机器权威源迁移到 `governance/*.yaml`。
+
+### 15.4 验证命令
+
+- `python3 scripts/check_protocol_sync.py`
+- `python3 -m json.tool progress.json`
+
+### 15.5 结果摘要
+
+- 治理协议已形成机器可读闭环，并明确了与四主线（soft_exam/math2/cs408/engineering）的一致性约束。
+- 后续每次治理更新均可通过“触发条件 + 清单 + 脚本 + 报告 + round_state”进行同步。

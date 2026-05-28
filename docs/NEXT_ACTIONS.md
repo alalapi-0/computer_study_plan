@@ -125,6 +125,19 @@
 
 ---
 
+## TASK-RR-09：协议同步巡检（Gov Round 周期任务）
+
+- 状态：pending（每次治理变更后触发）
+- 背景：仓库已建立机器可读治理协议层（`governance/*.yaml` + `project.yaml`），需要持续防止规则漂移。
+- 目标：当发生结构/规则变化时，按清单完成同步并留下治理报告。
+- 要修改：按实际变化更新 `governance/*.yaml`、`project.yaml`、`docs/PROJECT_STATE.md`、`docs/NEXT_ACTIONS.md`、`docs/reports/*_report.md`。
+- 必跑校验：`python3 scripts/check_protocol_sync.py`。
+- 同步清单：`docs/checklists/protocol_sync_checklist.md`。
+- 风险：只改 Markdown 不改机器协议，导致后续代理读取分歧。
+- 是否需要用户介入：否（除非涉及高风险删除或方向变更）。
+
+---
+
 # VPS 实操支线任务（编号 TASK-VPS-XX）
 
 > 主线 TASK-RR-XX 与 VPS 支线 TASK-VPS-XX **可并行推进**，编号空间互不冲突。
@@ -186,9 +199,10 @@
 ## 推荐下一步（按优先级）
 
 1. **TASK-RR-01**：Stage 2 软考三模块（ds / os / db）笔记骨架建立。
-2. **TASK-RR-04**：数学二保底节奏启动（limits + la_matrix）。
-3. **TASK-RR-02**：建立第一周复盘示例。
-4. **TASK-RR-03**：Round 02 实操目录展开（按用户兴趣可选）。
-5. **TASK-RR-05 / 07**：用户提供院校信息 + 考试日期。
+2. **TASK-RR-09**：协议同步巡检（治理变更后立即执行）。
+3. **TASK-RR-04**：数学二保底节奏启动（limits + la_matrix）。
+4. **TASK-RR-02**：建立第一周复盘示例。
+5. **TASK-RR-03**：Round 02 实操目录展开（按用户兴趣可选）。
+6. **TASK-RR-05 / 07**：用户提供院校信息 + 考试日期。
 
 > 主线推进、VPS 支线推进、考试日期录入**互不阻塞**；用户可根据当下心情与可用时间选择。

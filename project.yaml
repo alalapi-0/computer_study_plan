@@ -1,0 +1,43 @@
+project:
+  name: computer_study_plan
+  display_name: Computer Study Plan
+  repository_root: /Users/alalapi/PycharmProjects/computer_study_plan
+  owner: alalapi
+  maintainers:
+    - user
+    - codex_agent
+  summary: >
+    A local-first study governance repository for software exam, math2, cs408,
+    and engineering practice with persistent progress tracking.
+  output_language: zh_cn
+  protocol_standard:
+    path: governance/repo_protocol_standard.yaml
+    version: "1.0.0"
+  active_baseline:
+    roadmap: docs/MASTER_STUDY_ROADMAP.md
+    stage_plan: docs/STAGE_PLAN.md
+    project_state: docs/PROJECT_STATE.md
+    next_actions: docs/NEXT_ACTIONS.md
+  current_focus:
+    stage: stage_2_soft_exam_core
+    governance_round: gov_round_001
+    highest_priority_task: TASK-RR-01
+  lane_strategy:
+    short_term_main: soft_exam
+    long_term_always_on:
+      - math2
+      - cs408
+      - engineering
+  hard_constraints:
+    - keep_round_00_closed_loop_available
+    - preserve_records_history
+    - avoid_unofficial_exam_or_school_facts
+    - avoid_heavy_dependency_and_architecture_shift_without_approval
+  sync_contract:
+    required_on_each_governance_update:
+      - governance/repo_protocol_standard.yaml
+      - governance/round_state.yaml
+      - governance/file_role_map.yaml
+      - docs/PROJECT_STATE.md
+      - docs/NEXT_ACTIONS.md
+      - docs/reports/

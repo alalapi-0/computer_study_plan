@@ -1,0 +1,16 @@
+data_policy:
+  version: "1.0.0"
+  storage_rules:
+    progress_source_of_truth: progress.json
+    generated_progress_view: progress_data.js
+    historical_study_records: records/
+  protection_rules:
+    - do_not_delete_existing_user_records_without_explicit_approval
+    - do_not_reset_done_or_done_at_without_request
+    - do_not_commit_secret_or_private_credentials
+  exam_information_rules:
+    - official_sources_only_for_exam_and_enrollment_facts
+    - if_official_source_unavailable_store_template_only
+  migration_rules:
+    - prefer_structure_updates_over_data_loss
+    - capture_migration_impact_in_docs_reports

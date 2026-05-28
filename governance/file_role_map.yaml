@@ -1,0 +1,29 @@
+file_role_map:
+  version: "1.0.0"
+  authoritative_machine_files:
+    - governance/repo_protocol_standard.yaml
+    - project.yaml
+    - governance/round_state.yaml
+    - governance/agent_policy.yaml
+    - governance/file_role_map.yaml
+    - governance/model_policy.yaml
+    - governance/data_policy.yaml
+  authoritative_human_files:
+    - AGENTS.md
+    - README.md
+    - docs/MASTER_STUDY_ROADMAP.md
+    - docs/STAGE_PLAN.md
+    - docs/PROJECT_STATE.md
+    - docs/NEXT_ACTIONS.md
+  protected_files:
+    - progress.json
+    - progress_data.js
+    - progress.html
+    - mark_done.sh
+    - rounds/round_00/
+    - records/
+  generated_or_derived_files:
+    - progress_data.js
+  report_location:
+    - docs/reports/
+  sync_check_script: scripts/check_protocol_sync.py

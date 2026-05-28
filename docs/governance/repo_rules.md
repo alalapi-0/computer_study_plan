@@ -3,6 +3,18 @@
 > 本文件是 `computer_study_plan` 仓库的长期治理规则。
 > 它不替代 `AGENTS.md`，但补充更细的"如何修改仓库"的边界。
 
+## 0. 机器权威源（2026-05-28 起）
+
+为减少重复口径与漂移，本仓库治理的机器权威源已固定为：
+
+- `governance/repo_protocol_standard.yaml`
+- `project.yaml`
+- `governance/round_state.yaml`
+- `governance/agent_policy.yaml`
+- `governance/file_role_map.yaml`
+
+本文件保留为人类可读解释层；若与机器权威源冲突，以机器权威源为准，并在下一治理轮同步修复本文档。
+
 ## 1. 仓库定位
 
 `computer_study_plan` 是**长期计算机学习总控仓库**，不是工具仓库、不是项目代码仓库、不是文档站。

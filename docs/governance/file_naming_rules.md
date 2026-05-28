@@ -40,7 +40,17 @@
 - 治理规则：`docs/governance/<topic>.md`。
 - 检查清单：`docs/checklists/<topic>_checklist.md`。
 - 操作模板：`docs/templates/<topic>_template.md` 或 `<topic>_confirmation.md`。
+- 治理报告：`docs/reports/<topic>_report.md`。
 - 长期规划与状态：保留现有名字（`CODEX_LONG_TERM_PLAN.md`、`PROJECT_STATE.md`、`NEXT_ACTIONS.md`、`DECISIONS.md`、`AUTO_ADVANCE_PROTOCOL.md`），不重命名。
+
+## 4.1 机器治理文件命名规则（新增）
+
+- 协议标准：`governance/repo_protocol_standard.yaml`（固定名）。
+- Agent 边界：`governance/agent_policy.yaml`。
+- 文件角色映射：`governance/file_role_map.yaml`。
+- 当前治理轮状态：`governance/round_state.yaml`。
+- 项目身份卡：`project.yaml`（固定在仓库根）。
+- YAML 字段统一 `snake_case`，不使用 `camelCase`。
 
 ## 5. 进度系统命名规则（不改）
 
