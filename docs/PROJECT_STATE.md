@@ -632,3 +632,29 @@
 
 - 未改动 `rounds/round_00/`。
 - 未改动 `records/` 下真实学习记录。
+
+## 27. 2026-05-28 Stage 1 增强：Round 03 接入进度系统
+
+### 27.1 本轮修改
+
+- `progress.json`：新增 Round 03 的 `r03-*` 任务 ID。
+- `progress.html`：新增 Round 03 面板与任务元数据展示。
+- `rounds/round_03/*/exercises.sh`：接入 `mark_done.sh` 自动打卡。
+- `README.md`：按 lane/Round 浏览描述同步到 Round 03。
+- `docs/NEXT_ACTIONS.md`：可选项从 Round 03 进度接入更新为 Round 04 进度接入。
+
+### 27.2 验证
+
+- `bash -n rounds/round_03/week1/exercises.sh`：通过。
+- `bash -n rounds/round_03/week2/exercises.sh`：通过。
+- `bash -n rounds/round_03/week3/exercises.sh`：通过。
+- `bash -n rounds/round_03/final/comprehensive_exercise.sh`：通过。
+- `python3 scripts/generate_task_feedback.py`：通过（反馈文件已同步）。
+- `python3 scripts/check_protocol_sync.py`：通过。
+- `python3 scripts/validate_learning_data.py`：通过。
+- `python3 -m json.tool progress.json`：通过。
+
+### 27.3 风险边界核对
+
+- 未改动 `rounds/round_00/`。
+- 未改动 `records/` 下真实学习记录。
