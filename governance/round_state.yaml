@@ -14,5 +14,12 @@ round_state:
   protocol_standard_sync_required: true
   protocol_standard_synced: true
   follow_up_tasks:
-    - TASK-RR-01
-    - TASK-RR-09
+    - TASK-RR-04
+    - TASK-RR-02
+  last_content_task:
+    id: TASK-RR-01
+    completed_date: "2026-05-28"
+    artifacts:
+      - plans/soft_exam/ds.md
+      - plans/soft_exam/os.md
+      - plans/soft_exam/db.md

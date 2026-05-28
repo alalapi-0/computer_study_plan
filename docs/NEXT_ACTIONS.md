@@ -29,7 +29,7 @@
 
 ## TASK-RR-01：Stage 2 软考软件设计师知识体系拆解（**最高优先级**）
 
-- 状态：pending（推荐下一轮）
+- 状态：**done**（2026-05-28）
 - 背景：路线重定向完成后，短期主推 lane 是 `soft_exam`。`plans/soft_exam/README.md` 列出了 12 个模块清单，但模块本身没有笔记骨架。
 - 目标：为软考软件设计师建立第一份可推进的模块笔记骨架（按用户当前精力，**先做 3 个模块**：数据结构 / 操作系统 / 数据库），每份骨架仅含"章节列表 + 与 408 差异说明 + 引用最新官方大纲的提示"，**不缓存具体考点**。
 - 要修改：新增 `plans/soft_exam/ds.md`、`plans/soft_exam/os.md`、`plans/soft_exam/db.md`。
@@ -37,6 +37,7 @@
 - 验收标准：3 份文件存在；每份顶部有"⚠ 最新大纲见官方"提示；列出建议章节清单与 408 差异。
 - 风险：复制教材内容 / 把"建议章节"误写为"官方考点"。
 - 是否需要用户介入：否。
+- 实际产物：`plans/soft_exam/ds.md`、`plans/soft_exam/os.md`、`plans/soft_exam/db.md`（章节骨架 + 408 差异 + 官方大纲提示，无具体考点缓存）。
 
 ---
 
@@ -127,7 +128,7 @@
 
 ## TASK-RR-09：协议同步巡检（Gov Round 周期任务）
 
-- 状态：pending（每次治理变更后触发）
+- 状态：**done**（2026-05-28，随 gov_round_001 落地并校验通过）
 - 背景：仓库已建立机器可读治理协议层（`governance/*.yaml` + `project.yaml`），需要持续防止规则漂移。
 - 目标：当发生结构/规则变化时，按清单完成同步并留下治理报告。
 - 要修改：按实际变化更新 `governance/*.yaml`、`project.yaml`、`docs/PROJECT_STATE.md`、`docs/NEXT_ACTIONS.md`、`docs/reports/*_report.md`。
@@ -198,9 +199,9 @@
 
 ## 推荐下一步（按优先级）
 
-1. **TASK-RR-01**：Stage 2 软考三模块（ds / os / db）笔记骨架建立。
-2. **TASK-RR-09**：协议同步巡检（治理变更后立即执行）。
-3. **TASK-RR-04**：数学二保底节奏启动（limits + la_matrix）。
+1. **TASK-RR-04**：数学二保底节奏启动（limits + la_matrix）。
+2. **TASK-RR-02**：建立第一周复盘示例。
+3. **TASK-RR-09**：协议同步巡检（下次治理/结构变更后再次执行）。
 4. **TASK-RR-02**：建立第一周复盘示例。
 5. **TASK-RR-03**：Round 02 实操目录展开（按用户兴趣可选）。
 6. **TASK-RR-05 / 07**：用户提供院校信息 + 考试日期。

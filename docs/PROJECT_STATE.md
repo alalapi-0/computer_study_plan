@@ -339,3 +339,21 @@
 
 - 治理协议已形成机器可读闭环，并明确了与四主线（soft_exam/math2/cs408/engineering）的一致性约束。
 - 后续每次治理更新均可通过“触发条件 + 清单 + 脚本 + 报告 + round_state”进行同步。
+
+## 16. 2026-05-28 TASK-RR-01 软考三模块笔记骨架
+
+### 16.1 本轮新增
+
+- `plans/soft_exam/ds.md`：数据结构章节骨架 + 与 408 差异说明。
+- `plans/soft_exam/os.md`：操作系统章节骨架 + 与 408 差异说明。
+- `plans/soft_exam/db.md`：数据库章节骨架（408 不直接考，单独说明）。
+
+### 16.2 验证
+
+- `python3 scripts/check_protocol_sync.py`：通过。
+- 三份文件均含官方大纲提示，未缓存具体考点。
+
+### 16.3 下一步（与 NEXT_ACTIONS 同步）
+
+1. **TASK-RR-04**：数学二 limits + la_matrix 启动笔记。
+2. **TASK-RR-02**：第一周复盘示例骨架。

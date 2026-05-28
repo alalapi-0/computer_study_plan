@@ -21,7 +21,7 @@ project:
   current_focus:
     stage: stage_2_soft_exam_core
     governance_round: gov_round_001
-    highest_priority_task: TASK-RR-01
+    highest_priority_task: TASK-RR-04
   lane_strategy:
     short_term_main: soft_exam
     long_term_always_on:
