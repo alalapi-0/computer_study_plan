@@ -455,6 +455,126 @@
       "message": "尚未开始，建议先做一个 15 分钟启动动作。",
       "next_suggestion": "先读 1 小节笔记或完成 1 道基础题。"
     },
+    "r04-w1-read": {
+      "task_id": "r04-w1-read",
+      "lane": "engineering",
+      "done": false,
+      "action_count": 0,
+      "last_action_type": null,
+      "feedback_type": "not_started",
+      "message": "尚未开始，建议先做一个 15 分钟启动动作。",
+      "next_suggestion": "先读 1 小节笔记或完成 1 道基础题。"
+    },
+    "r04-w1-ex1": {
+      "task_id": "r04-w1-ex1",
+      "lane": "engineering",
+      "done": false,
+      "action_count": 0,
+      "last_action_type": null,
+      "feedback_type": "not_started",
+      "message": "尚未开始，建议先做一个 15 分钟启动动作。",
+      "next_suggestion": "先读 1 小节笔记或完成 1 道基础题。"
+    },
+    "r04-w1-self": {
+      "task_id": "r04-w1-self",
+      "lane": "engineering",
+      "done": false,
+      "action_count": 0,
+      "last_action_type": null,
+      "feedback_type": "not_started",
+      "message": "尚未开始，建议先做一个 15 分钟启动动作。",
+      "next_suggestion": "先读 1 小节笔记或完成 1 道基础题。"
+    },
+    "r04-w2-read": {
+      "task_id": "r04-w2-read",
+      "lane": "engineering",
+      "done": false,
+      "action_count": 0,
+      "last_action_type": null,
+      "feedback_type": "not_started",
+      "message": "尚未开始，建议先做一个 15 分钟启动动作。",
+      "next_suggestion": "先读 1 小节笔记或完成 1 道基础题。"
+    },
+    "r04-w2-ex2": {
+      "task_id": "r04-w2-ex2",
+      "lane": "engineering",
+      "done": false,
+      "action_count": 0,
+      "last_action_type": null,
+      "feedback_type": "not_started",
+      "message": "尚未开始，建议先做一个 15 分钟启动动作。",
+      "next_suggestion": "先读 1 小节笔记或完成 1 道基础题。"
+    },
+    "r04-w2-self": {
+      "task_id": "r04-w2-self",
+      "lane": "engineering",
+      "done": false,
+      "action_count": 0,
+      "last_action_type": null,
+      "feedback_type": "not_started",
+      "message": "尚未开始，建议先做一个 15 分钟启动动作。",
+      "next_suggestion": "先读 1 小节笔记或完成 1 道基础题。"
+    },
+    "r04-w3-read": {
+      "task_id": "r04-w3-read",
+      "lane": "engineering",
+      "done": false,
+      "action_count": 0,
+      "last_action_type": null,
+      "feedback_type": "not_started",
+      "message": "尚未开始，建议先做一个 15 分钟启动动作。",
+      "next_suggestion": "先读 1 小节笔记或完成 1 道基础题。"
+    },
+    "r04-w3-ex3": {
+      "task_id": "r04-w3-ex3",
+      "lane": "engineering",
+      "done": false,
+      "action_count": 0,
+      "last_action_type": null,
+      "feedback_type": "not_started",
+      "message": "尚未开始，建议先做一个 15 分钟启动动作。",
+      "next_suggestion": "先读 1 小节笔记或完成 1 道基础题。"
+    },
+    "r04-w3-self": {
+      "task_id": "r04-w3-self",
+      "lane": "engineering",
+      "done": false,
+      "action_count": 0,
+      "last_action_type": null,
+      "feedback_type": "not_started",
+      "message": "尚未开始，建议先做一个 15 分钟启动动作。",
+      "next_suggestion": "先读 1 小节笔记或完成 1 道基础题。"
+    },
+    "r04-fin-comp": {
+      "task_id": "r04-fin-comp",
+      "lane": "engineering",
+      "done": false,
+      "action_count": 0,
+      "last_action_type": null,
+      "feedback_type": "not_started",
+      "message": "尚未开始，建议先做一个 15 分钟启动动作。",
+      "next_suggestion": "先读 1 小节笔记或完成 1 道基础题。"
+    },
+    "r04-fin-sheet": {
+      "task_id": "r04-fin-sheet",
+      "lane": "engineering",
+      "done": false,
+      "action_count": 0,
+      "last_action_type": null,
+      "feedback_type": "not_started",
+      "message": "尚未开始，建议先做一个 15 分钟启动动作。",
+      "next_suggestion": "先读 1 小节笔记或完成 1 道基础题。"
+    },
+    "r04-fin-acc1": {
+      "task_id": "r04-fin-acc1",
+      "lane": "engineering",
+      "done": false,
+      "action_count": 0,
+      "last_action_type": null,
+      "feedback_type": "not_started",
+      "message": "尚未开始，建议先做一个 15 分钟启动动作。",
+      "next_suggestion": "先读 1 小节笔记或完成 1 道基础题。"
+    },
     "r02-w1-read": {
       "task_id": "r02-w1-read",
       "lane": "engineering",

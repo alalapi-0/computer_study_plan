@@ -360,7 +360,7 @@
 <!-- ── Block 6: 按 lane / Round 浏览 ── -->
 <div class="card">
   <h2>📦 按主线查看 Round</h2>
-  <div class="card-sub">按 lane 切换，查看每条主线下的 Round 任务清单。当前已展开 Round 00、Round 01、Round 02、Round 03。</div>
+  <div class="card-sub">按 lane 切换，查看每条主线下的 Round 任务清单。当前已展开 Round 00、Round 01、Round 02、Round 03、Round 04。</div>
   <div class="lane-tabs" id="laneTabs"></div>
   <div class="round-tabs" id="roundTabs"></div>
   <div id="panels"></div>
@@ -512,8 +512,37 @@ const ROUNDS = [
         { id:"r03-fin-acc1",  type:"test",     title:"验收：解释 O(n) 与 O(n^2) 差异",   cmd:"自动", file:"round_03.md" },
       ]}
     ]
+  },
+  {
+    id: "round_04",
+    title: "Round 04 · 核心数据结构",
+    lane: "engineering",
+    difficulty: "⭐⭐⭐☆☆",
+    duration: "3 周",
+    weeks: [
+      { id: "round04-week1", title: "第 1 周：列表与顺序存储", tasks: [
+        { id:"r04-w1-read", type:"reading",  title:"阅读 week1/notes.md",                cmd:"bash mark_done.sh r04-w1-read", file:"rounds/round_04/week1/notes.md" },
+        { id:"r04-w1-ex1",  type:"exercise", title:"练习1：列表统计与访问",                cmd:"自动", file:"rounds/round_04/week1/exercises.sh" },
+        { id:"r04-w1-self", type:"test",     title:"第1周自测",                          cmd:"自动", file:"rounds/round_04/week1/exercises.sh" },
+      ]},
+      { id: "round04-week2", title: "第 2 周：栈与队列", tasks: [
+        { id:"r04-w2-read", type:"reading",  title:"阅读 week2/notes.md",                cmd:"bash mark_done.sh r04-w2-read", file:"rounds/round_04/week2/notes.md" },
+        { id:"r04-w2-ex2",  type:"exercise", title:"练习2：stack/queue 基础操作",         cmd:"自动", file:"rounds/round_04/week2/exercises.sh" },
+        { id:"r04-w2-self", type:"test",     title:"第2周自测",                          cmd:"自动", file:"rounds/round_04/week2/exercises.sh" },
+      ]},
+      { id: "round04-week3", title: "第 3 周：哈希与去重", tasks: [
+        { id:"r04-w3-read", type:"reading",  title:"阅读 week3/notes.md",                cmd:"bash mark_done.sh r04-w3-read", file:"rounds/round_04/week3/notes.md" },
+        { id:"r04-w3-ex3",  type:"exercise", title:"练习3：dict/set 统计与去重",          cmd:"自动", file:"rounds/round_04/week3/exercises.sh" },
+        { id:"r04-w3-self", type:"test",     title:"第3周自测",                          cmd:"自动", file:"rounds/round_04/week3/exercises.sh" },
+      ]},
+      { id: "round04-final", title: "最终验收", tasks: [
+        { id:"r04-fin-comp",  type:"exercise", title:"综合练习：data toolkit",           cmd:"自动", file:"rounds/round_04/final/comprehensive_exercise.sh" },
+        { id:"r04-fin-sheet", type:"output",   title:"完成 Round 04 数据结构小抄",       cmd:"自动", file:"rounds/round_04/final/complexity_cheatsheet.md" },
+        { id:"r04-fin-acc1",  type:"test",     title:"验收：解释 dict/set/deque 场景",   cmd:"自动", file:"round_04.md" },
+      ]}
+    ]
   }
-  // 后续 Round 在落地为实操目录时按本结构追加；当前已展开 Round 00、Round 01、Round 02、Round 03。
+  // 后续 Round 在落地为实操目录时按本结构追加；当前已展开 Round 00、Round 01、Round 02、Round 03、Round 04。
 ];
 
 // ============================================================
