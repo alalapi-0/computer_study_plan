@@ -598,3 +598,37 @@
 
 - 未改动 `rounds/round_00/`。
 - 未改动 `records/` 下真实学习记录。
+
+## 26. 2026-05-28 Stage 1 可选推进：Round 04 最小骨架
+
+### 26.1 本轮新增
+
+- 新增 `rounds/round_04/README.md`。
+- 新增 `rounds/round_04/week1|week2|week3/notes.md`。
+- 新增 `rounds/round_04/week1|week2|week3/exercises.sh`。
+- 新增 `rounds/round_04/final/comprehensive_exercise.sh`。
+- 新增 `rounds/round_04/final/complexity_cheatsheet.md`。
+
+### 26.2 同步更新
+
+- `CONVERSION_PROTOCOL.md`：Round 04 状态更新为“已展开”。
+- `README.md`：已展开 Round 列表同步到 Round 00/01/02/03/04。
+- `docs/NEXT_ACTIONS.md`：可选下一轮提示从 Round 04 调整为 Round 05。
+
+### 26.3 验证
+
+- `bash -n rounds/round_04/week1/exercises.sh`：通过。
+- `bash -n rounds/round_04/week2/exercises.sh`：通过。
+- `bash -n rounds/round_04/week3/exercises.sh`：通过。
+- `bash -n rounds/round_04/final/comprehensive_exercise.sh`：通过。
+- `bash rounds/round_04/week1/exercises.sh`：通过。
+- `bash rounds/round_04/week2/exercises.sh`：通过。
+- `bash rounds/round_04/week3/exercises.sh`：通过。
+- `bash rounds/round_04/final/comprehensive_exercise.sh`：通过。
+- `python3 scripts/check_protocol_sync.py`：通过。
+- `python3 scripts/validate_learning_data.py`：通过。
+
+### 26.4 风险边界核对
+
+- 未改动 `rounds/round_00/`。
+- 未改动 `records/` 下真实学习记录。
