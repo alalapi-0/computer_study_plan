@@ -714,3 +714,33 @@
 
 - 未改动 `rounds/round_00/`。
 - 未改动 `records/` 下真实学习记录。
+
+## 30. 2026-05-28 Stage 1 可选推进：Round 06 最小骨架
+
+### 30.1 本轮新增
+
+- 新增 `rounds/round_06/README.md`。
+- 新增 `rounds/round_06/week1|week2|week3/notes.md`。
+- 新增 `rounds/round_06/week1|week2|week3/exercises.sh`。
+- 新增 `rounds/round_06/final/comprehensive_exercise.sh`。
+- 新增 `rounds/round_06/final/linux_automation_cheatsheet.md`。
+
+### 30.2 本轮修改
+
+- `CONVERSION_PROTOCOL.md`：Round 06 状态更新为“已展开”。
+- `README.md`：已展开 Round 列表同步到 Round 00/01/02/03/04/05/06。
+- `docs/NEXT_ACTIONS.md`：新增并完成 `TASK-RR-10`，可选下一轮提示更新到 Round 07 最小骨架。
+
+### 30.3 验证
+
+- `bash -n rounds/round_06/week1/exercises.sh`：通过。
+- `bash -n rounds/round_06/week2/exercises.sh`：通过。
+- `bash -n rounds/round_06/week3/exercises.sh`：通过。
+- `bash -n rounds/round_06/final/comprehensive_exercise.sh`：通过。
+- `python3 scripts/check_protocol_sync.py`：通过。
+- `python3 scripts/validate_learning_data.py`：通过。
+
+### 30.4 风险边界核对
+
+- 未改动 `rounds/round_00/`。
+- 未改动 `records/` 下真实学习记录。

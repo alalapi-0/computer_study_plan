@@ -189,7 +189,7 @@ cd ~/PycharmProjects/computer_study_plan
 - 考试倒计时（localStorage）
 - 阶段进度（Stage 0–7）
 - 当前薄弱项（自动识别完成率 < 30% 且任务数 ≥ 5 的 lane）
-- 按 lane / Round 浏览（当前已展开 Round 00、Round 01、Round 02、Round 03、Round 04、Round 05）
+- 按 lane / Round 浏览（当前已展开 Round 00、Round 01、Round 02、Round 03、Round 04、Round 05、Round 06）
 
 ### 6.4 进度系统 CLI
 
@@ -257,7 +257,7 @@ bash mark_done.sh <task-id> --undo  # 取消完成
 仓库中 `round_00.md` ~ `round_21.md` 是历史 Round 概览文档（22 份），现在的定位是**工程实操线（`engineering` lane）的素材库**。它们：
 
 - ✅ 全部保留，未被废弃
-- ✅ 按需在 `rounds/round_XX/` 展开为可执行实操目录（当前已展开 Round 00、Round 01、Round 02、Round 03、Round 04、Round 05）
+- ✅ 按需在 `rounds/round_XX/` 展开为可执行实操目录（当前已展开 Round 00、Round 01、Round 02、Round 03、Round 04、Round 05、Round 06）
 - ✅ 数据结构、算法、网络、Linux 等 Round 内容会作为软考 / 408 模块的辅助素材（参考 `docs/KNOWLEDGE_MAPPING.md`）
 - ❌ 不替代 `plans/soft_exam/` 与 `plans/408/` 中的专项考试笔记
 
