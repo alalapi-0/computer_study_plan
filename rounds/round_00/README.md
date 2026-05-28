@@ -2,6 +2,10 @@
 
 这个目录是 Round 00（Terminal 初见）的展开内容。
 
+> **仓库根**（进度、`mark_done.sh`）：`~/PycharmProjects/computer_study_plan`  
+> **练习沙盒**（手敲命令）：`~/cli-lab/round0`  
+> 路径说明见 [`docs/WORKSPACE.md`](../../docs/WORKSPACE.md)。
+
 ## 目录结构
 
 ```
@@ -29,4 +33,11 @@ round_00/
 
 ## 进度追踪
 
-打开仓库根目录的 `progress.html` 查看整体进度。
+在仓库根目录打开 `progress.html`：
+
+```bash
+cd ~/PycharmProjects/computer_study_plan
+open progress.html   # 或：python3 -m http.server 8000 后浏览器访问
+```
+
+练习脚本会自动定位仓库根并调用 `mark_done.sh`，无需在 `~/cli-lab` 下执行打卡命令。

@@ -2,6 +2,8 @@
 
 ## 1. 项目概览
 - **仓库名称**：`computer_study_plan`（基于当前目录名判断）。
+- **唯一本地工作副本**：`~/PycharmProjects/computer_study_plan`（绝对路径 `/Users/alalapi/PycharmProjects/computer_study_plan`）。IDE 工作区、文档中的「仓库根」、Git 操作均指此目录；详见 `docs/WORKSPACE.md`。
+- **练习沙盒（非仓库）**：Round 00 等终端练习使用 `~/cli-lab/round0`，与 Git 根分离。
 - **项目类型判断**：当前以**学习型仓库**为主，附带少量脚本与可视化看板能力（混合了文档 + 轻量 CLI + 静态页面）。
 - **当前主入口（基于实际文件）**：
   - `README.md`：总入口与学习路线说明。
@@ -290,3 +292,9 @@
 ### 13.9 更新日志
 
 - 2026-05-12：完成路线重定向（删除 txt + 8 份路线骨架 + plans/records 目录骨架 + 进度系统 v2 + README/AGENTS/长期规划文档对齐 + 治理引用清理）；未破坏 Round 00 闭环；未编造任何考试 / 院校信息；未引入新依赖。
+
+## 14. 2026-05-28 路径统一
+
+- 新增 `docs/WORKSPACE.md` 作为路径单一事实源。
+- `README.md` §0、`AGENTS.md`、`docs/governance/repo_rules.md`、`rounds/round_00/README.md`、`mark_done.sh` 错误提示与上述约定对齐。
+- 明确区分：**仓库根** `~/PycharmProjects/computer_study_plan` vs **练习沙盒** `~/cli-lab/round0`（Round 文档中的 `~/cli-lab` 保持不变）。

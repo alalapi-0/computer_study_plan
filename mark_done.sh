@@ -24,7 +24,8 @@ PROGRESS_FILE="$SCRIPT_DIR/progress.json"
 PROGRESS_JS="$SCRIPT_DIR/progress_data.js"
 
 if [ ! -f "$PROGRESS_FILE" ]; then
-  echo "❌ 找不到 progress.json，请确认你在仓库根目录"
+  echo "❌ 找不到 progress.json。请在仓库根目录执行（见 docs/WORKSPACE.md）："
+  echo "   cd ~/PycharmProjects/computer_study_plan"
   exit 1
 fi
 

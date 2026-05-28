@@ -21,6 +21,16 @@
 - 真实服务器 IP、域名、token
 - 部署生产服务
 
+### 1.1 本地路径（固定）
+
+| 项 | 值 |
+|---|---|
+| Git 仓库根 / IDE 工作区 | `~/PycharmProjects/computer_study_plan` |
+| 本机绝对路径 | `/Users/alalapi/PycharmProjects/computer_study_plan` |
+| Round 00 练习沙盒 | `~/cli-lab/round0`（不提交进本仓库） |
+
+细则与自检命令见 `docs/WORKSPACE.md`。治理文档不得再把 `Desktop/computer_study_plan` 写成默认工作路径。
+
 ## 2. 修改仓库的总原则
 
 > 先扫描 → 再判断 → 再提出整理方案 → 再修改仓库 → 再输出变更报告。
