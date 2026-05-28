@@ -507,3 +507,33 @@
 
 - 未改动 `rounds/round_00/`。
 - 未改动 `records/` 下真实学习记录。
+
+## 23. 2026-05-28 TASK-011 Round 01 最小骨架
+
+### 23.1 本轮新增
+
+- 新增 `rounds/round_01/README.md`。
+- 新增 `rounds/round_01/week1|week2|week3/notes.md`。
+- 新增 `rounds/round_01/week1|week2|week3/exercises.sh`。
+- 新增 `rounds/round_01/final/comprehensive_exercise.sh`。
+- 新增 `rounds/round_01/final/command_cheatsheet.md`。
+
+### 23.2 同步更新
+
+- `CONVERSION_PROTOCOL.md`：Round 01 状态从“未展开”更新为“已展开”。
+- `README.md`：已展开 Round 列表同步为 Round 00/01/02。
+- `docs/NEXT_ACTIONS.md`：`TASK-011` 标记为 done 并记录产物。
+
+### 23.3 验证
+
+- `bash rounds/round_01/week1/exercises.sh`：通过。
+- `bash rounds/round_01/week2/exercises.sh`：通过。
+- `bash rounds/round_01/week3/exercises.sh`：通过。
+- `bash rounds/round_01/final/comprehensive_exercise.sh`：通过。
+- `python3 scripts/check_protocol_sync.py`：通过。
+- `python3 scripts/validate_learning_data.py`：通过。
+
+### 23.4 风险边界核对
+
+- 未改动 `rounds/round_00/`。
+- 未改动 `records/` 下真实学习记录。
