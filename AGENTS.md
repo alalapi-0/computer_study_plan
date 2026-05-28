@@ -4,13 +4,21 @@
 
 详细路线见 `docs/MASTER_STUDY_ROADMAP.md`。
 
+## 本地工作副本（固定）
+
+- **唯一 Git 仓库根**：`~/PycharmProjects/computer_study_plan`（本机绝对路径 `/Users/alalapi/PycharmProjects/computer_study_plan`）
+- Cursor / PyCharm **工作区必须打开该目录**；文档与脚本中的「仓库根」均指此处
+- Round 00 终端练习沙盒为 `~/cli-lab/round0`（不进 Git，与仓库根不同）
+- 完整约定见 `docs/WORKSPACE.md`；不要在文档中再写 `Desktop/computer_study_plan` 为默认路径
+
 ## 每次工作前必须读取
 
-1. `docs/MASTER_STUDY_ROADMAP.md`（总目标与四主线）
-2. `docs/STAGE_PLAN.md`（Stage 0–7 阶段计划）
-3. `docs/CODEX_LONG_TERM_PLAN.md`（长期协作规则，含 2026-05-12 重定向说明）
-4. `docs/PROJECT_STATE.md`（仓库当前状态）
-5. `docs/NEXT_ACTIONS.md`（下一步任务队列）
+1. `docs/WORKSPACE.md`（路径与工作区，避免改错目录）
+2. `docs/MASTER_STUDY_ROADMAP.md`（总目标与四主线）
+3. `docs/STAGE_PLAN.md`（Stage 0–7 阶段计划）
+4. `docs/CODEX_LONG_TERM_PLAN.md`（长期协作规则，含 2026-05-12 重定向说明）
+5. `docs/PROJECT_STATE.md`（仓库当前状态）
+6. `docs/NEXT_ACTIONS.md`（下一步任务队列）
 
 > 历史规划（"网页交互式学习系统"Phase 0–7）仍保留作为工程实操线的演进参考，但**不再是最高优先级**。
 

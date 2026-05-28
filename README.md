@@ -5,6 +5,19 @@
 
 ---
 
+## 0. 本地路径（唯一工作副本）
+
+| 用途 | 路径 |
+|---|---|
+| **本仓库 Git 根目录（Cursor / PyCharm 工作区）** | `~/PycharmProjects/computer_study_plan` |
+| **本机绝对路径** | `/Users/alalapi/PycharmProjects/computer_study_plan` |
+| **Round 00 终端练习沙盒（不进 Git）** | `~/cli-lab/round0` |
+
+完整约定（含如何自检、废弃的 Desktop 副本说明）见 **[`docs/WORKSPACE.md`](docs/WORKSPACE.md)**。  
+文档、IDE 左下角路径、终端 `pwd` 应一致指向上表中的**仓库根**，不要维护第二份同名目录。
+
+---
+
 ## 1. 仓库定位
 
 本仓库**不是**：
@@ -66,8 +79,9 @@
 ## 5. 仓库结构
 
 ```
-computer_study_plan/
+~/PycharmProjects/computer_study_plan/   ← 唯一 Git 工作副本（见 docs/WORKSPACE.md）
 ├─ README.md                       ← 本文件（仓库入口）
+├─ docs/WORKSPACE.md               ← ★ 路径与工作区约定（单一事实源）
 ├─ AGENTS.md                       ← Codex / Cursor / 编程 AI 协作硬规则
 ├─ CONVERSION_PROTOCOL.md          ← Round md 与进度系统协议（v2.0）
 ├─ progress.html                   ← 进度看板（四主线 + 阶段 + 倒计时）
@@ -129,6 +143,12 @@ computer_study_plan/
 
 ### 6.1 第一次进入仓库
 
+```bash
+cd ~/PycharmProjects/computer_study_plan
+```
+
+在 Cursor / PyCharm 中打开**同一文件夹**作为工作区根目录。
+
 依序阅读：
 
 1. [`docs/MASTER_STUDY_ROADMAP.md`](docs/MASTER_STUDY_ROADMAP.md) — 总目标
@@ -150,7 +170,7 @@ computer_study_plan/
 - **方式一（推荐）**：双击 `progress.html`，浏览器打开。完成练习后按 `⌘R` 刷新。
 - **方式二（自动刷新）**：
   ```bash
-  cd computer_study_plan
+  cd ~/PycharmProjects/computer_study_plan
   python3 -m http.server 8000
   open http://localhost:8000/progress.html
   ```
@@ -167,7 +187,10 @@ computer_study_plan/
 
 ### 6.4 进度系统 CLI
 
+在仓库根目录执行：
+
 ```bash
+cd ~/PycharmProjects/computer_study_plan
 bash mark_done.sh                # 查看所有任务（按 lane 分组）
 bash mark_done.sh <task-id>      # 标记完成
 bash mark_done.sh <task-id> --undo  # 取消完成
@@ -179,6 +202,7 @@ bash mark_done.sh <task-id> --undo  # 取消完成
 
 | 我想... | 看哪里 |
 |---|---|
+| 确认本机仓库 / IDE 应打开哪个目录 | `docs/WORKSPACE.md` |
 | 看总目标 | `docs/MASTER_STUDY_ROADMAP.md` |
 | 看现在该做什么阶段 | `docs/STAGE_PLAN.md` |
 | 看某个知识点属于哪条 lane | `docs/KNOWLEDGE_MAPPING.md` |
@@ -215,6 +239,7 @@ bash mark_done.sh <task-id> --undo  # 取消完成
 
 ## 9. 历史变更
 
+- **2026-05-28** · 路径统一：约定唯一工作副本为 `~/PycharmProjects/computer_study_plan`，见 `docs/WORKSPACE.md`。
 - **2026-05-12** · 路线重定向：从单一"网页交互式学习系统"升级为"软考 → 408/数学二/0854 多目标耦合"；删除 22 份 `plan_round_XX.txt`；建立四主线 lanes 与 Stage 0–7 阶段计划；进度系统升级到 v2。详情见 `docs/AUDIT_2026_05_12.md`。
 - **2026-05-10** · VPS 远程实操支线接入。
 - **2026-05-05** · 长期目标与 Codex 协议文档建立。
