@@ -355,5 +355,17 @@
 
 ### 16.3 下一步（与 NEXT_ACTIONS 同步）
 
-1. **TASK-RR-04**：数学二 limits + la_matrix 启动笔记。
-2. **TASK-RR-02**：第一周复盘示例骨架。
+1. **TASK-RR-02**：第一周复盘示例骨架。
+2. **TASK-RR-03**：Round 02 实操目录（可选）。
+
+## 17. 2026-05-28 TASK-RR-04 数学二启动骨架
+
+### 17.1 本轮新增
+
+- `plans/math2/limits.md`：函数/极限/连续小节骨架 + 启动级易错点。
+- `plans/math2/la_matrix.md`：矩阵与行列式小节骨架 + 启动级易错点。
+
+### 17.2 验证
+
+- `python3 scripts/check_protocol_sync.py`：通过。
+- 未预写大量例题，未缓存考纲条目。
