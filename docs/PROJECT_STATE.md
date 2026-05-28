@@ -479,3 +479,31 @@
 
 - 未改动 `rounds/round_00/`。
 - 未改动 `records/` 下真实学习记录（仅新增反馈原型文件）。
+
+## 22. 2026-05-28 TASK-012 数据一致性校验脚本
+
+### 22.1 本轮新增
+
+- 新增 `scripts/validate_learning_data.py`。
+
+### 22.2 校验范围
+
+- `progress.json`：检查 lanes/tasks 结构、`done`/`done_at`/`lane` 字段。
+- `records/action_logs/events.jsonl`：检查 `task_id` 存在性、动作类型、结果枚举、时间戳类型。
+- `records/feedback/task_feedback.json`：检查任务 ID 对齐与反馈类型枚举。
+
+### 22.3 同步更新
+
+- `docs/NEXT_ACTIONS.md`：`TASK-012` 标记为 done 并记录产物。
+
+### 22.4 验证
+
+- `python3 scripts/validate_learning_data.py`：通过。
+- `python3 scripts/check_protocol_sync.py`：通过。
+- `python3 -m json.tool progress.json`：通过。
+- `python3 -m json.tool records/feedback/task_feedback.json`：通过。
+
+### 22.5 风险边界核对
+
+- 未改动 `rounds/round_00/`。
+- 未改动 `records/` 下真实学习记录。
