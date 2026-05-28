@@ -450,3 +450,32 @@
 
 - 未改动 `rounds/round_00/`。
 - 未改动 `records/` 下真实学习记录（仅新增 action log 原型目录说明）。
+
+## 21. 2026-05-28 TASK-010 任务反馈原型
+
+### 21.1 本轮新增
+
+- 新增 `scripts/generate_task_feedback.py`。
+- 新增 `records/feedback/README.md`。
+- 新增 `records/feedback/task_feedback.json`（原型输出）。
+
+### 21.2 能力说明
+
+- 基于 `progress.json` 与 `records/action_logs/events.jsonl` 生成任务级反馈。
+- 当前反馈类型：`completed` / `not_started` / `in_progress`。
+- 每个任务输出基础建议（`message` + `next_suggestion`）。
+
+### 21.3 同步更新
+
+- `docs/NEXT_ACTIONS.md`：`TASK-010` 标记为 done 并补齐产物。
+
+### 21.4 验证
+
+- `python3 scripts/generate_task_feedback.py`：通过并生成反馈文件。
+- `python3 scripts/check_protocol_sync.py`：通过。
+- `python3 -m json.tool records/feedback/task_feedback.json`：通过。
+
+### 21.5 风险边界核对
+
+- 未改动 `rounds/round_00/`。
+- 未改动 `records/` 下真实学习记录（仅新增反馈原型文件）。

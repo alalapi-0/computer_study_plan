@@ -191,7 +191,7 @@
 | 编号 | 原标题 | 状态 |
 |---|---|---|
 | TASK-009 | 加入 action event log 初版 | **done**（2026-05-28） |
-| TASK-010 | 加入 task feedback 原型 | pending |
+| TASK-010 | 加入 task feedback 原型 | **done**（2026-05-28） |
 | TASK-011 | 建立 Round 01 最小骨架 | **deferred**（按 Stage 1 真实推进需要再做） |
 | TASK-012 | 建立数据校验脚本 | **deferred**（按需要再做） |
 
@@ -199,16 +199,21 @@ TASK-009 实际产物：
 - `records/action_logs/README.md`
 - `mark_done.sh`（新增动作事件 JSONL 记录）
 
+TASK-010 实际产物：
+- `scripts/generate_task_feedback.py`
+- `records/feedback/README.md`
+- `records/feedback/task_feedback.json`
+
 > 这些旧 TASK 不删除，保留作为未来如果决定回到"网页交互式系统"方向时的参考。
 
 ---
 
 ## 推荐下一步（按优先级）
 
-1. **TASK-010**：加入 task feedback 原型（无需用户介入）。
-2. **TASK-012**：建立数据校验脚本（无需用户介入）。
-3. **TASK-011**：建立 Round 01 最小骨架（可自推进）。
-4. **TASK-RR-05 / 07**：用户提供院校信息 + 考试日期。
+1. **TASK-012**：建立数据校验脚本（无需用户介入）。
+2. **TASK-011**：建立 Round 01 最小骨架（可自推进）。
+3. **TASK-RR-05 / 07**：用户提供院校信息 + 考试日期。
+4. **TASK-VPS-05**：首次远程服务器只读检查（需用户单独授权）。
 5. **TASK-RR-06 / RR-08**：需用户提供错题与项目方向决策。
 
 > 主线推进、VPS 支线推进、考试日期录入**互不阻塞**；用户可根据当下心情与可用时间选择。
