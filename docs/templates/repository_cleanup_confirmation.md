@@ -27,8 +27,9 @@
 >
 > - `progress.json`、`progress_data.js`、`progress.html`、`mark_done.sh`
 > - `rounds/round_00/` 下所有文件
-> - 任意 `round_XX.md` / `plan_round_XX.txt`
-> - `AGENTS.md`、`README.md`、`CONVERSION_PROTOCOL.md`、`docs/CODEX_LONG_TERM_PLAN.md`、`docs/PROJECT_STATE.md`、`docs/NEXT_ACTIONS.md`、`docs/DECISIONS.md`、`docs/AUTO_ADVANCE_PROTOCOL.md`
+> - 任意 `round_XX.md`
+> - `records/` 下任何已写入的用户真实学习记录
+> - `AGENTS.md`、`README.md`、`CONVERSION_PROTOCOL.md`、`docs/CODEX_LONG_TERM_PLAN.md`、`docs/PROJECT_STATE.md`、`docs/NEXT_ACTIONS.md`、`docs/DECISIONS.md`、`docs/AUTO_ADVANCE_PROTOCOL.md`、`docs/MASTER_STUDY_ROADMAP.md`、`docs/STAGE_PLAN.md`
 
 ## 4. 拟重命名文件
 

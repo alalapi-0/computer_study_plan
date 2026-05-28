@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>学习进度看板</title>
+  <title>学习进度看板 · 四主线</title>
   <style>
     :root {
       --bg: #0f1117;
@@ -15,6 +15,7 @@
       --green: #22c55e;
       --yellow: #f59e0b;
       --red: #ef4444;
+      --pink: #ec4899;
       --text: #e2e8f0;
       --text-muted: #94a3b8;
       --radius: 12px;
@@ -27,191 +28,189 @@
       min-height: 100vh;
       padding: 2rem 1.5rem 4rem;
     }
+    .container { max-width: 980px; margin: 0 auto; }
 
     /* ── Header ── */
-    header { max-width: 900px; margin: 0 auto 2.5rem; }
     header h1 { font-size: 1.75rem; font-weight: 700; letter-spacing: -0.02em; }
     header h1 span { color: var(--accent); }
     header p { color: var(--text-muted); margin-top: 0.4rem; font-size: 0.95rem; }
+    header { margin-bottom: 2rem; }
 
-    /* ── Error / loading banner ── */
-    .banner {
-      max-width: 900px;
-      margin: 0 auto 1.5rem;
-      padding: 1rem 1.4rem;
-      border-radius: var(--radius);
-      font-size: 0.88rem;
-      line-height: 1.6;
-      display: none;
-    }
-    .banner.error {
-      display: block;
-      background: rgba(239,68,68,0.12);
-      border: 1px solid var(--red);
-      color: #fca5a5;
-    }
-    .banner.info {
-      display: block;
-      background: rgba(56,189,248,0.1);
-      border: 1px solid var(--accent2);
-      color: var(--accent2);
-    }
-    .banner code {
-      background: rgba(255,255,255,0.1);
-      padding: 0.1em 0.4em;
-      border-radius: 4px;
-      font-family: "SF Mono","Fira Code",monospace;
-      font-size: 0.85em;
-    }
-    .banner strong { color: inherit; }
-
-    /* ── How-to card ── */
-    .howto {
-      max-width: 900px;
-      margin: 0 auto 2rem;
+    /* ── Generic card ── */
+    .card {
       background: var(--card);
       border: 1px solid var(--border);
       border-radius: var(--radius);
-      padding: 1.1rem 1.4rem;
+      padding: 1.2rem 1.4rem;
+      margin-bottom: 1.5rem;
     }
-    .howto summary {
-      cursor: pointer;
-      font-size: 0.88rem;
-      color: var(--text-muted);
-      list-style: none;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
+    .card h2 {
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 0.8rem;
+      display: flex; align-items: center; gap: 0.5rem;
+      color: var(--text);
     }
-    .howto summary::before { content: "ℹ️"; }
-    .howto[open] summary { color: var(--text); margin-bottom: 0.8rem; }
-    .howto .step { font-size: 0.83rem; color: var(--text-muted); margin-bottom: 0.4rem; line-height: 1.6; }
-    .howto .step code {
-      background: rgba(255,255,255,0.07);
-      padding: 0.15em 0.45em;
-      border-radius: 4px;
-      font-family: "SF Mono","Fira Code",monospace;
-      font-size: 0.9em;
-      color: var(--accent2);
+    .card-sub { color: var(--text-muted); font-size: 0.8rem; margin-bottom: 0.8rem; }
+
+    /* ── Banner ── */
+    .banner {
+      padding: 0.9rem 1.2rem;
+      border-radius: var(--radius);
+      font-size: 0.85rem;
+      line-height: 1.5;
+      margin-bottom: 1rem;
+      display: none;
+    }
+    .banner.error { display: block; background: rgba(239,68,68,0.12); border: 1px solid var(--red); color: #fca5a5; }
+    .banner code {
+      background: rgba(255,255,255,0.08); padding: 0.1em 0.4em; border-radius: 4px;
+      font-family: "SF Mono","Fira Code",monospace; font-size: 0.85em;
     }
 
-    /* ── Last-updated ── */
+    /* ── Last updated ── */
     .last-updated {
-      max-width: 900px;
-      margin: 0 auto 0.8rem;
-      font-size: 0.78rem;
-      color: var(--text-muted);
-      display: flex;
-      align-items: center;
-      gap: 0.8rem;
+      font-size: 0.78rem; color: var(--text-muted);
+      display: flex; align-items: center; gap: 0.8rem;
+      margin-bottom: 0.8rem;
     }
     .refresh-btn {
-      padding: 0.2rem 0.65rem;
-      border-radius: 6px;
-      border: 1px solid var(--border);
-      background: transparent;
-      color: var(--text-muted);
-      font-size: 0.75rem;
-      cursor: pointer;
-      transition: all 0.2s;
+      padding: 0.2rem 0.65rem; border-radius: 6px;
+      border: 1px solid var(--border); background: transparent;
+      color: var(--text-muted); font-size: 0.75rem;
+      cursor: pointer; transition: all 0.2s;
     }
     .refresh-btn:hover { border-color: var(--accent2); color: var(--accent2); }
 
-    /* ── Global progress bar ── */
-    .global-progress {
-      max-width: 900px;
-      margin: 0 auto 2rem;
-      background: var(--card);
+    /* ── Bar (general) ── */
+    .bar-wrap { height: 8px; background: var(--border); border-radius: 99px; overflow: hidden; }
+    .bar-fill { height: 100%; border-radius: 99px; transition: width 0.5s ease; background: linear-gradient(90deg, var(--accent), var(--accent2)); }
+
+    /* ── Lane grid (四主线进度) ── */
+    .lane-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 0.8rem;
+    }
+    .lane-item {
+      background: rgba(255,255,255,0.02);
       border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 1.2rem 1.5rem;
-      display: flex;
-      align-items: center;
-      gap: 1.2rem;
+      border-radius: 8px;
+      padding: 0.8rem 1rem;
     }
+    .lane-item .lane-title { font-size: 0.88rem; font-weight: 600; margin-bottom: 0.2rem; }
+    .lane-item .lane-meta  { font-size: 0.72rem; color: var(--text-muted); margin-bottom: 0.55rem; }
+    .lane-item .lane-row   { display: flex; align-items: center; gap: 0.6rem; }
+    .lane-item .lane-pct   { font-size: 0.78rem; min-width: 2.5rem; text-align: right; color: var(--accent2); }
+    .lane-item.engineering .bar-fill { background: linear-gradient(90deg, var(--accent), var(--accent2)); }
+    .lane-item.soft_exam   .bar-fill { background: linear-gradient(90deg, var(--yellow), #f97316); }
+    .lane-item.math2       .bar-fill { background: linear-gradient(90deg, var(--green), #14b8a6); }
+    .lane-item.cs408       .bar-fill { background: linear-gradient(90deg, var(--pink), #a855f7); }
+    .lane-item.weak { border-color: var(--red); }
+    .lane-item.weak .lane-meta { color: var(--red); }
+
+    /* ── Global bar ── */
+    .global-progress { display: flex; align-items: center; gap: 1rem; }
     .global-progress .label { font-size: 0.85rem; color: var(--text-muted); white-space: nowrap; }
-    .bar-wrap { flex: 1; height: 8px; background: var(--border); border-radius: 99px; overflow: hidden; }
-    .bar-fill {
-      height: 100%;
-      background: linear-gradient(90deg, var(--accent), var(--accent2));
-      border-radius: 99px;
-      transition: width 0.5s ease;
-    }
+    .global-progress .bar-wrap { flex: 1; }
     .global-progress .percent { font-size: 1rem; font-weight: 700; color: var(--accent2); min-width: 3rem; text-align: right; }
 
-    /* ── Round tabs ── */
-    .round-tabs { max-width: 900px; margin: 0 auto 1.5rem; display: flex; gap: 0.5rem; flex-wrap: wrap; }
-    .tab-btn {
-      padding: 0.45rem 1rem;
-      border-radius: 99px;
+    /* ── Personal config (本周任务 + 倒计时) ── */
+    .config-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    @media (max-width: 720px) { .config-grid { grid-template-columns: 1fr; } }
+    .config-card { background: rgba(255,255,255,0.02); border: 1px solid var(--border); border-radius: 8px; padding: 1rem; }
+    .config-card h3 { font-size: 0.9rem; margin-bottom: 0.5rem; }
+    .config-card textarea, .config-card input[type="date"] {
+      width: 100%;
+      background: var(--bg); color: var(--text);
+      border: 1px solid var(--border); border-radius: 6px;
+      padding: 0.5rem 0.7rem; font-size: 0.82rem; font-family: inherit;
+    }
+    .config-card textarea { min-height: 5.5rem; resize: vertical; }
+    .config-card .countdown-row { display: flex; align-items: center; gap: 0.6rem; margin-bottom: 0.5rem; }
+    .config-card .countdown-row label { font-size: 0.78rem; color: var(--text-muted); min-width: 4.5rem; }
+    .config-card .countdown-row .days { font-size: 0.82rem; color: var(--accent2); margin-left: auto; min-width: 5rem; text-align: right; }
+    .config-card .hint { color: var(--text-muted); font-size: 0.72rem; margin-top: 0.4rem; }
+    .config-card button.save-btn {
+      margin-top: 0.5rem; padding: 0.3rem 0.8rem;
+      border-radius: 6px; border: 1px solid var(--accent2);
+      background: transparent; color: var(--accent2);
+      font-size: 0.78rem; cursor: pointer;
+    }
+    .config-card button.save-btn:hover { background: rgba(56,189,248,0.1); }
+
+    /* ── Stage panel ── */
+    .stage-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 0.6rem; }
+    .stage-item {
+      background: rgba(255,255,255,0.02);
       border: 1px solid var(--border);
-      background: var(--card);
-      color: var(--text-muted);
-      font-size: 0.82rem;
-      cursor: pointer;
+      border-radius: 8px;
+      padding: 0.6rem 0.8rem;
+    }
+    .stage-item .stage-name { font-size: 0.78rem; font-weight: 600; margin-bottom: 0.25rem; }
+    .stage-item .stage-lane { font-size: 0.7rem; color: var(--text-muted); margin-bottom: 0.4rem; }
+    .stage-item .bar-wrap { height: 5px; }
+    .stage-item .stage-pct { font-size: 0.7rem; color: var(--text-muted); margin-top: 0.3rem; text-align: right; }
+
+    /* ── Round tabs / panels (沿用旧版) ── */
+    .lane-tabs { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 0.7rem; }
+    .lane-tab {
+      padding: 0.4rem 0.9rem; border-radius: 99px;
+      border: 1px solid var(--border); background: var(--card);
+      color: var(--text-muted); font-size: 0.78rem; cursor: pointer;
       transition: all 0.2s;
-      white-space: nowrap;
+    }
+    .lane-tab:hover { border-color: var(--accent); color: var(--text); }
+    .lane-tab.active { background: var(--accent); border-color: var(--accent); color: #fff; font-weight: 600; }
+
+    .round-tabs { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1rem; }
+    .tab-btn {
+      padding: 0.45rem 1rem; border-radius: 99px;
+      border: 1px solid var(--border); background: var(--card);
+      color: var(--text-muted); font-size: 0.82rem;
+      cursor: pointer; transition: all 0.2s; white-space: nowrap;
     }
     .tab-btn:hover { border-color: var(--accent); color: var(--text); }
     .tab-btn.active { background: var(--accent); border-color: var(--accent); color: #fff; font-weight: 600; }
     .tab-btn.done { border-color: var(--green); color: var(--green); }
     .tab-btn.done.active { background: var(--green); border-color: var(--green); color: #fff; }
 
-    /* ── Round panel ── */
-    .round-panel { max-width: 900px; margin: 0 auto; display: none; }
+    .round-panel { display: none; }
     .round-panel.active { display: block; }
-
     .round-header {
-      background: var(--card);
-      border: 1px solid var(--border);
+      background: var(--card); border: 1px solid var(--border);
       border-radius: var(--radius) var(--radius) 0 0;
       padding: 1.2rem 1.5rem;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 1rem;
+      display: flex; align-items: center; justify-content: space-between; gap: 1rem;
     }
-    .round-header h2 { font-size: 1.1rem; font-weight: 700; }
-    .round-meta { display: flex; gap: 0.8rem; flex-wrap: wrap; }
-    .badge { font-size: 0.75rem; padding: 0.25rem 0.7rem; border-radius: 99px; background: var(--border); color: var(--text-muted); }
+    .round-header h3 { font-size: 1.1rem; font-weight: 700; }
+    .round-meta { display: flex; gap: 0.6rem; flex-wrap: wrap; }
+    .badge { font-size: 0.72rem; padding: 0.22rem 0.65rem; border-radius: 99px; background: var(--border); color: var(--text-muted); }
     .badge.green { background: rgba(34,197,94,0.15); color: var(--green); }
     .badge.blue  { background: rgba(56,189,248,0.15); color: var(--accent2); }
-
+    .badge.lane  { background: rgba(108,99,255,0.15); color: var(--accent); }
     .round-progress-bar {
       background: var(--card);
-      border-left: 1px solid var(--border);
-      border-right: 1px solid var(--border);
+      border-left: 1px solid var(--border); border-right: 1px solid var(--border);
       padding: 0.6rem 1.5rem;
-      display: flex;
-      align-items: center;
-      gap: 1rem;
+      display: flex; align-items: center; gap: 1rem;
     }
-    .round-progress-bar .bar-wrap { height: 5px; }
+    .round-progress-bar .bar-wrap { flex:1; height: 5px; }
     .round-progress-bar .rp-text { font-size: 0.8rem; color: var(--text-muted); white-space: nowrap; }
 
-    /* ── Week sections ── */
     .week-section {
       background: var(--card);
-      border-left: 1px solid var(--border);
-      border-right: 1px solid var(--border);
-      border-top: 1px solid var(--border);
+      border-left: 1px solid var(--border); border-right: 1px solid var(--border); border-top: 1px solid var(--border);
     }
-    .week-section:last-child {
-      border-bottom: 1px solid var(--border);
-      border-radius: 0 0 var(--radius) var(--radius);
-    }
+    .week-section:last-child { border-bottom: 1px solid var(--border); border-radius: 0 0 var(--radius) var(--radius); }
     .week-title {
       padding: 0.8rem 1.5rem;
-      font-size: 0.9rem;
-      font-weight: 600;
+      font-size: 0.9rem; font-weight: 600;
       color: var(--text-muted);
       background: rgba(255,255,255,0.02);
       border-bottom: 1px solid var(--border);
-      display: flex;
-      align-items: center;
-      gap: 0.6rem;
-      cursor: pointer;
-      user-select: none;
+      display: flex; align-items: center; gap: 0.6rem;
+      cursor: pointer; user-select: none;
     }
     .week-title .week-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--border); flex-shrink: 0; }
     .week-title.completed .week-dot { background: var(--green); }
@@ -219,17 +218,11 @@
     .week-title .week-count { font-size: 0.75rem; color: var(--text-muted); }
     .week-title .chevron { font-size: 0.7rem; transition: transform 0.2s; }
     .week-title.collapsed .chevron { transform: rotate(-90deg); }
-
     .task-list { padding: 0.5rem 0; }
     .task-list.collapsed { display: none; }
-
     .task-item {
-      display: flex;
-      align-items: flex-start;
-      gap: 0.9rem;
-      padding: 0.65rem 1.5rem;
-      border-radius: 6px;
-      margin: 0 0.5rem;
+      display: flex; align-items: flex-start; gap: 0.9rem;
+      padding: 0.65rem 1.5rem; border-radius: 6px; margin: 0 0.5rem;
     }
     .task-status-icon { font-size: 1.1rem; flex-shrink: 0; margin-top: 1px; min-width: 1.2rem; text-align: center; }
     .task-content { flex: 1; }
@@ -239,101 +232,139 @@
     .task-file { font-size: 0.72rem; color: var(--text-muted); font-family: "SF Mono","Fira Code",monospace; }
     .task-done-at { font-size: 0.72rem; color: var(--green); }
     .task-cmd {
-      font-size: 0.72rem;
-      color: var(--accent2);
+      font-size: 0.72rem; color: var(--accent2);
       font-family: "SF Mono","Fira Code",monospace;
       background: rgba(56,189,248,0.08);
-      padding: 0.1em 0.5em;
-      border-radius: 4px;
+      padding: 0.1em 0.5em; border-radius: 4px;
     }
-    .task-type {
-      font-size: 0.7rem;
-      padding: 0.15rem 0.5rem;
-      border-radius: 4px;
-      flex-shrink: 0;
-      margin-top: 2px;
-    }
+    .task-type { font-size: 0.7rem; padding: 0.15rem 0.5rem; border-radius: 4px; flex-shrink: 0; margin-top: 2px; }
     .task-type.reading  { background: rgba(99,102,241,0.2); color: #a5b4fc; }
     .task-type.exercise { background: rgba(245,158,11,0.2);  color: #fcd34d; }
     .task-type.test     { background: rgba(239,68,68,0.2);   color: #fca5a5; }
     .task-type.output   { background: rgba(34,197,94,0.2);   color: #86efac; }
 
     /* ── Actions ── */
-    .actions {
-      max-width: 900px;
-      margin: 1.5rem auto 0;
-      display: flex;
-      justify-content: flex-end;
-      gap: 0.8rem;
-    }
+    .actions { display: flex; justify-content: flex-end; gap: 0.8rem; margin-top: 1rem; }
     .btn {
-      padding: 0.5rem 1.2rem;
-      border-radius: 8px;
-      border: 1px solid var(--border);
-      background: var(--card);
-      color: var(--text-muted);
-      font-size: 0.82rem;
-      cursor: pointer;
-      transition: all 0.2s;
+      padding: 0.5rem 1.2rem; border-radius: 8px;
+      border: 1px solid var(--border); background: var(--card);
+      color: var(--text-muted); font-size: 0.82rem; cursor: pointer; transition: all 0.2s;
     }
     .btn:hover { border-color: var(--accent); color: var(--text); }
 
-    /* ── Celebrate ── */
-    .celebrate {
-      display: none;
-      max-width: 900px;
-      margin: 1.5rem auto 0;
-      background: linear-gradient(135deg, rgba(108,99,255,0.15), rgba(56,189,248,0.15));
-      border: 1px solid var(--accent);
-      border-radius: var(--radius);
-      padding: 1.2rem 1.5rem;
-      text-align: center;
+    /* ── Empty state ── */
+    .empty-state { padding: 1.2rem 1.5rem; color: var(--text-muted); font-size: 0.85rem; }
+
+    /* ── Weak panel ── */
+    .weak-list { display: flex; flex-direction: column; gap: 0.4rem; }
+    .weak-list .weak-item {
+      padding: 0.5rem 0.8rem;
+      border: 1px solid var(--border); border-radius: 6px;
+      font-size: 0.82rem; color: var(--text-muted);
+      display: flex; justify-content: space-between; align-items: center;
     }
-    .celebrate h3 { font-size: 1.1rem; color: var(--accent2); }
-    .celebrate p  { font-size: 0.85rem; color: var(--text-muted); margin-top: 0.4rem; }
+    .weak-list .weak-item.alert { border-color: var(--red); color: #fca5a5; }
+    .weak-list .weak-item .lane-name { font-weight: 600; color: var(--text); }
+    .weak-empty { color: var(--text-muted); font-size: 0.8rem; }
   </style>
 </head>
 
 <body>
 
+<div class="container">
+
 <header>
-  <h1>📚 计算机学习计划 <span>进度看板</span></h1>
-  <p>进度状态从 <code style="background:rgba(255,255,255,0.1);padding:0.1em 0.4em;border-radius:4px;font-family:monospace">progress_data.js</code> 读取，完成练习后运行 <code style="background:rgba(255,255,255,0.1);padding:0.1em 0.4em;border-radius:4px;font-family:monospace">bash mark_done.sh &lt;id&gt;</code> 再刷新即可。</p>
+  <h1>📚 学习进度看板 · <span>四主线</span></h1>
+  <p>状态从 <code style="background:rgba(255,255,255,0.1);padding:0.1em 0.4em;border-radius:4px;font-family:monospace">progress.json</code> / <code style="background:rgba(255,255,255,0.1);padding:0.1em 0.4em;border-radius:4px;font-family:monospace">progress_data.js</code> 读取。完成练习后运行 <code style="background:rgba(255,255,255,0.1);padding:0.1em 0.4em;border-radius:4px;font-family:monospace">bash mark_done.sh &lt;id&gt;</code> 再刷新。</p>
 </header>
 
-<!-- Error / info banner -->
+<!-- Banner -->
 <div class="banner error" id="errorBanner"></div>
-<div class="banner info"  id="infoBanner"></div>
 
-<!-- How-to -->
-<details class="howto" id="howtoCard">
-  <summary>如何使用看板？点击展开说明</summary>
-  <div class="step">✅ <strong>双击打开（推荐，最简单）</strong>：直接双击 <code>progress.html</code>，用浏览器打开即可查看</div>
-  <div class="step">🔄 完成练习后，在终端运行 <code>bash mark_done.sh &lt;task-id&gt;</code>，然后按 <strong>⌘R</strong> 刷新页面</div>
-  <div class="step">🌐 或启动本地服务器（支持自动刷新）：<code>python3 -m http.server 8000</code>，打开 <code>http://localhost:8000/progress.html</code></div>
-  <div class="step">📋 查看所有任务 ID：<code>bash mark_done.sh</code>（不加参数）</div>
-</details>
-
-<!-- Last updated + refresh -->
 <div class="last-updated">
   <span id="lastUpdated">正在加载…</span>
   <button class="refresh-btn" onclick="loadProgress()" id="refreshBtn">↻ 刷新</button>
 </div>
 
-<!-- Global progress -->
-<div class="global-progress">
-  <span class="label">总进度</span>
-  <div class="bar-wrap">
-    <div class="bar-fill" id="globalBar" style="width:0%"></div>
+<!-- ── Block 1: 总进度 ── -->
+<div class="card">
+  <h2>🎯 总进度</h2>
+  <div class="global-progress">
+    <span class="label">全部任务</span>
+    <div class="bar-wrap"><div class="bar-fill" id="globalBar" style="width:0%"></div></div>
+    <span class="percent" id="globalPct">—</span>
   </div>
-  <span class="percent" id="globalPct">—</span>
 </div>
 
-<!-- Round tabs -->
-<div class="round-tabs" id="roundTabs"></div>
+<!-- ── Block 2: 四主线进度 ── -->
+<div class="card">
+  <h2>🛤️ 四主线进度</h2>
+  <div class="card-sub">每条主线（lane）的任务完成率。完成率 &lt; 30% 且任务数 ≥ 5 时会标红为薄弱项。</div>
+  <div class="lane-grid" id="laneGrid"></div>
+</div>
 
-<!-- Round panels -->
-<div id="panels"></div>
+<!-- ── Block 3: 个人配置（本周任务 + 倒计时） ── -->
+<div class="card">
+  <h2>🗓️ 本周与倒计时（本地保存）</h2>
+  <div class="card-sub">本周任务与考试日期保存在浏览器 localStorage，不写入 progress.json。</div>
+  <div class="config-grid">
+    <div class="config-card">
+      <h3>本周任务</h3>
+      <textarea id="weekTasks" placeholder="一行一条；例如：
+- 软考 OS 第 2 章
+- 数学二极限 3 题
+- VPS-04 文档阅读
+"></textarea>
+      <div class="hint">写完点保存。下次打开看板会自动加载。</div>
+      <button class="save-btn" onclick="saveWeekTasks()">保存本周任务</button>
+      <span id="weekSavedHint" style="margin-left:0.6rem;font-size:0.72rem;color:var(--green);display:none;">已保存 ✓</span>
+    </div>
+    <div class="config-card">
+      <h3>考试倒计时</h3>
+      <div class="countdown-row">
+        <label>软考</label>
+        <input type="date" id="softExamDate" />
+        <span class="days" id="softExamDays">—</span>
+      </div>
+      <div class="countdown-row">
+        <label>数学二</label>
+        <input type="date" id="math2Date" />
+        <span class="days" id="math2Days">—</span>
+      </div>
+      <div class="countdown-row">
+        <label>408</label>
+        <input type="date" id="cs408Date" />
+        <span class="days" id="cs408Days">—</span>
+      </div>
+      <div class="hint">具体考试日期以官方公告为准。本字段仅用于个人参考。</div>
+      <button class="save-btn" onclick="saveExamDates()">保存日期</button>
+      <span id="dateSavedHint" style="margin-left:0.6rem;font-size:0.72rem;color:var(--green);display:none;">已保存 ✓</span>
+    </div>
+  </div>
+</div>
+
+<!-- ── Block 4: 阶段进度（Stage 0–7） ── -->
+<div class="card">
+  <h2>📐 阶段进度（Stage 0–7）</h2>
+  <div class="card-sub">详见 <code style="background:rgba(255,255,255,0.08);padding:0.05em 0.35em;border-radius:4px;font-family:monospace">docs/STAGE_PLAN.md</code>。Stage 进度按"该 Stage 关联 lane 的完成率"近似计算。</div>
+  <div class="stage-list" id="stageList"></div>
+</div>
+
+<!-- ── Block 5: 当前薄弱项 ── -->
+<div class="card">
+  <h2>⚠️ 当前薄弱项</h2>
+  <div class="card-sub">按 lane 完成率自动识别（&lt; 30% 且 ≥ 5 任务）。详细错题回流见 <code style="background:rgba(255,255,255,0.08);padding:0.05em 0.35em;border-radius:4px;font-family:monospace">docs/ERROR_REVIEW_SYSTEM.md</code>。</div>
+  <div class="weak-list" id="weakList"></div>
+</div>
+
+<!-- ── Block 6: 按 lane / Round 浏览 ── -->
+<div class="card">
+  <h2>📦 按主线查看 Round</h2>
+  <div class="card-sub">按 lane 切换，查看每条主线下的 Round 任务清单。当前仅 Round 00 已展开为实操目录。</div>
+  <div class="lane-tabs" id="laneTabs"></div>
+  <div class="round-tabs" id="roundTabs"></div>
+  <div id="panels"></div>
+</div>
 
 <!-- Actions -->
 <div class="actions">
@@ -341,96 +372,94 @@
   <button class="btn" onclick="collapseAll()">折叠全部</button>
 </div>
 
-<!-- Celebrate -->
-<div class="celebrate" id="celebrate">
-  <h3>🎉 Round 完成！</h3>
-  <p>你完成了这一轮的所有任务，继续保持！</p>
-</div>
+</div> <!-- /container -->
 
 <script src="progress_data.js"></script>
 <script>
 // ============================================================
-// Round 定义 — 静态元数据（不含完成状态，状态来自 progress_data.js / progress.json）
+// 静态元数据：Round 列表（每个 Round 必须有 lane 字段）
+// 这是 progress.html 的本地"知识源"，与 progress.json 中的任务 ID 通过 task_id 对齐。
 // ============================================================
 const ROUNDS = [
   {
     id: "round_00",
     title: "Round 00 · Terminal 初见",
+    lane: "engineering",
     difficulty: "⭐☆☆☆☆",
     duration: "3 周",
     weeks: [
-      {
-        id: "week1",
-        title: "第 1 周：建立感觉（pwd / ls / cd）",
-        tasks: [
-          { id:"w1-read",  type:"reading",  title:"阅读 week1/notes.md",                   cmd:"bash mark_done.sh w1-read",  file:"rounds/round_00/week1/notes.md" },
-          { id:"w1-ex1",   type:"exercise", title:"练习1：认识当前位置",                    cmd:"自动（运行 exercises.sh）",  file:"rounds/round_00/week1/exercises.sh" },
-          { id:"w1-ex2",   type:"exercise", title:"练习2：创建子目录并切换",                cmd:"自动",                       file:"rounds/round_00/week1/exercises.sh" },
-          { id:"w1-ex3",   type:"exercise", title:"练习3：绝对路径 vs 相对路径",             cmd:"自动",                       file:"rounds/round_00/week1/exercises.sh" },
-          { id:"w1-self",  type:"test",     title:"第1周自测：不看提示，独立完成5步路径切换", cmd:"自动（练习结束时确认）",      file:"rounds/round_00/week1/exercises.sh" },
-        ]
-      },
-      {
-        id: "week2",
-        title: "第 2 周：创建东西（mkdir / touch / cat）",
-        tasks: [
-          { id:"w2-read",  type:"reading",  title:"阅读 week2/notes.md",             cmd:"bash mark_done.sh w2-read",  file:"rounds/round_00/week2/notes.md" },
-          { id:"w2-ex4",   type:"exercise", title:"练习4：创建更多子目录",              cmd:"自动",  file:"rounds/round_00/week2/exercises.sh" },
-          { id:"w2-ex5",   type:"exercise", title:"练习5：创建空文件",                 cmd:"自动",  file:"rounds/round_00/week2/exercises.sh" },
-          { id:"w2-ex6",   type:"exercise", title:"练习6：用 cat 查看空文件",          cmd:"自动",  file:"rounds/round_00/week2/exercises.sh" },
-          { id:"w2-ex7",   type:"exercise", title:"练习7：写入内容再查看（echo + cat）", cmd:"自动", file:"rounds/round_00/week2/exercises.sh" },
-          { id:"w2-self",  type:"test",     title:"第2周自测：独立创建目录、文件并写入",  cmd:"自动", file:"rounds/round_00/week2/exercises.sh" },
-        ]
-      },
-      {
-        id: "week3",
-        title: "第 3 周：学会自查（man）",
-        tasks: [
-          { id:"w3-read",  type:"reading",  title:"阅读 week3/notes.md",             cmd:"bash mark_done.sh w3-read",  file:"rounds/round_00/week3/notes.md" },
-          { id:"w3-ex8",   type:"exercise", title:"练习8：查 man ls，看简介，按 q 退出", cmd:"自动", file:"rounds/round_00/week3/exercises.sh" },
-          { id:"w3-ex9",   type:"exercise", title:"练习9：依次查 pwd / mkdir / touch / cat", cmd:"自动", file:"rounds/round_00/week3/exercises.sh" },
-          { id:"w3-ex10",  type:"exercise", title:"练习10：查 man man",               cmd:"自动", file:"rounds/round_00/week3/exercises.sh" },
-          { id:"w3-self",  type:"test",     title:"第3周自测：独立打开 man ls 和 man mkdir", cmd:"自动", file:"rounds/round_00/week3/exercises.sh" },
-        ]
-      },
-      {
-        id: "final",
-        title: "最终验收",
-        tasks: [
-          { id:"fin-comp",   type:"exercise", title:"综合练习：从头到尾跑一遍所有命令",      cmd:"自动", file:"rounds/round_00/final/comprehensive_exercise.sh" },
-          { id:"fin-sheet",  type:"output",   title:"完成命令小抄（command_cheatsheet.md）", cmd:"自动", file:"rounds/round_00/final/command_cheatsheet.md" },
-          { id:"fin-acc1",   type:"test",     title:"验收：能解释 Terminal 和 Shell 的区别", cmd:"自动", file:"round_00.md" },
-          { id:"fin-acc2",   type:"test",     title:"验收：能用所有 7 个命令",               cmd:"自动", file:"round_00.md" },
-          { id:"fin-acc3",   type:"output",   title:"验收：~/cli-lab/round0 目录和命令小抄存在", cmd:"自动", file:"round_00.md" },
-        ]
-      }
+      { id: "week1", title: "第 1 周：建立感觉（pwd / ls / cd）", tasks: [
+        { id:"w1-read",  type:"reading",  title:"阅读 week1/notes.md",                   cmd:"bash mark_done.sh w1-read",  file:"rounds/round_00/week1/notes.md" },
+        { id:"w1-ex1",   type:"exercise", title:"练习1：认识当前位置",                    cmd:"自动",  file:"rounds/round_00/week1/exercises.sh" },
+        { id:"w1-ex2",   type:"exercise", title:"练习2：创建子目录并切换",                cmd:"自动",  file:"rounds/round_00/week1/exercises.sh" },
+        { id:"w1-ex3",   type:"exercise", title:"练习3：绝对路径 vs 相对路径",             cmd:"自动",  file:"rounds/round_00/week1/exercises.sh" },
+        { id:"w1-self",  type:"test",     title:"第1周自测",                              cmd:"自动",  file:"rounds/round_00/week1/exercises.sh" },
+      ]},
+      { id: "week2", title: "第 2 周：创建东西（mkdir / touch / cat）", tasks: [
+        { id:"w2-read",  type:"reading",  title:"阅读 week2/notes.md",             cmd:"bash mark_done.sh w2-read",  file:"rounds/round_00/week2/notes.md" },
+        { id:"w2-ex4",   type:"exercise", title:"练习4：创建更多子目录",              cmd:"自动",  file:"rounds/round_00/week2/exercises.sh" },
+        { id:"w2-ex5",   type:"exercise", title:"练习5：创建空文件",                 cmd:"自动",  file:"rounds/round_00/week2/exercises.sh" },
+        { id:"w2-ex6",   type:"exercise", title:"练习6：用 cat 查看空文件",          cmd:"自动",  file:"rounds/round_00/week2/exercises.sh" },
+        { id:"w2-ex7",   type:"exercise", title:"练习7：echo + cat",                cmd:"自动",  file:"rounds/round_00/week2/exercises.sh" },
+        { id:"w2-self",  type:"test",     title:"第2周自测",                        cmd:"自动",  file:"rounds/round_00/week2/exercises.sh" },
+      ]},
+      { id: "week3", title: "第 3 周：学会自查（man）", tasks: [
+        { id:"w3-read",  type:"reading",  title:"阅读 week3/notes.md",             cmd:"bash mark_done.sh w3-read",  file:"rounds/round_00/week3/notes.md" },
+        { id:"w3-ex8",   type:"exercise", title:"练习8：man ls", cmd:"自动", file:"rounds/round_00/week3/exercises.sh" },
+        { id:"w3-ex9",   type:"exercise", title:"练习9：man pwd/mkdir/touch/cat", cmd:"自动", file:"rounds/round_00/week3/exercises.sh" },
+        { id:"w3-ex10",  type:"exercise", title:"练习10：man man",               cmd:"自动", file:"rounds/round_00/week3/exercises.sh" },
+        { id:"w3-self",  type:"test",     title:"第3周自测",                     cmd:"自动", file:"rounds/round_00/week3/exercises.sh" },
+      ]},
+      { id: "final", title: "最终验收", tasks: [
+        { id:"fin-comp",   type:"exercise", title:"综合练习",                            cmd:"自动", file:"rounds/round_00/final/comprehensive_exercise.sh" },
+        { id:"fin-sheet",  type:"output",   title:"完成命令小抄",                         cmd:"自动", file:"rounds/round_00/final/command_cheatsheet.md" },
+        { id:"fin-acc1",   type:"test",     title:"验收：Terminal 与 Shell 的区别",       cmd:"自动", file:"round_00.md" },
+        { id:"fin-acc2",   type:"test",     title:"验收：能用 7 个命令",                 cmd:"自动", file:"round_00.md" },
+        { id:"fin-acc3",   type:"output",   title:"验收：cli-lab 目录与小抄存在",          cmd:"自动", file:"round_00.md" },
+      ]}
     ]
   }
-  // 后续追加更多 Round 到此处
+  // 后续 Round 在落地为实操目录时按本结构追加；当前仅 Round 00 完整展开。
 ];
 
 // ============================================================
-// UI 折叠状态（sessionStorage，不影响进度文件）
+// Stage 与 lane 的映射（基于 docs/STAGE_PLAN.md）
+// 进度算法：取该 Stage 的"主 lane"的完成率作为近似值。
+// 这是当前阶段的最小实现；后续若有 stage→具体 task 列表，可替换。
 // ============================================================
-const COL_KEY = "progress_ui_collapsed";
+const STAGES = [
+  { id: "stage_0", name: "Stage 0 · 治理准备",   lane: null,           note: "治理任务，不进度统计" },
+  { id: "stage_1", name: "Stage 1 · Linux/Git/Shell", lane: "engineering" },
+  { id: "stage_2", name: "Stage 2 · 软考基础核心",   lane: "soft_exam" },
+  { id: "stage_3", name: "Stage 3 · 软考真题强化",   lane: "soft_exam" },
+  { id: "stage_4", name: "Stage 4 · 数学二长期",     lane: "math2" },
+  { id: "stage_5", name: "Stage 5 · 408 兼容基础",   lane: "cs408" },
+  { id: "stage_6", name: "Stage 6 · 院校筛选",       lane: "cs408",     note: "信息收集类，进度仅参考" },
+  { id: "stage_7", name: "Stage 7 · 项目作品集",     lane: "engineering" },
+];
+
+// ============================================================
+// localStorage key
+// ============================================================
+const LS_WEEK   = "csp_week_tasks_v1";
+const LS_DATES  = "csp_exam_dates_v1";
+const COL_KEY   = "progress_ui_collapsed";
+
 function getCollapsed() { try { return JSON.parse(sessionStorage.getItem(COL_KEY)) || {}; } catch(e) { return {}; } }
 function setCollapsed(o) { sessionStorage.setItem(COL_KEY, JSON.stringify(o)); }
 
-let activeRound = ROUNDS[0].id;
+let activeLane  = "engineering";
+let activeRound = "round_00";
 let progressData = {};
+let lanesData    = {};
 
 // ============================================================
-// Load progress — tries fetch first (http://), falls back to
-// window.PROGRESS_DATA (injected by progress_data.js, works
-// under file://)
+// Load progress
 // ============================================================
 async function loadProgress() {
-  const errEl  = document.getElementById("errorBanner");
-  const infoEl = document.getElementById("infoBanner");
-  errEl.style.display  = "none";
-  infoEl.style.display = "none";
+  const errEl = document.getElementById("errorBanner");
+  errEl.style.display = "none";
 
-  // Try fetch (works when served via http://)
   let fetchOk = false;
   if (window.location.protocol !== "file:") {
     try {
@@ -438,81 +467,205 @@ async function loadProgress() {
       if (res.ok) {
         const data = await res.json();
         progressData = data.tasks || {};
+        lanesData    = data.lanes || {};
         fetchOk = true;
       }
     } catch(e) { /* fall through */ }
   }
 
-  // Fallback: use window.PROGRESS_DATA from progress_data.js
   if (!fetchOk) {
     if (window.PROGRESS_DATA) {
       progressData = window.PROGRESS_DATA.tasks || {};
+      lanesData    = window.PROGRESS_DATA.lanes || {};
     } else {
       errEl.innerHTML = `
         <strong>⚠️ 无法读取进度数据</strong><br>
         请确认 <code>progress_data.js</code> 与 <code>progress.html</code> 在同一目录。<br>
-        运行一次 <code>bash mark_done.sh</code> 可重新生成该文件。
+        运行一次 <code>bash mark_done.sh &lt;任意任务&gt;</code> 可重新生成该文件。
       `;
       errEl.style.display = "block";
       return;
     }
   }
 
+  // 兜底 lanes（即使 progress.json v1 也能展示）
+  if (!Object.keys(lanesData).length) {
+    lanesData = {
+      engineering: { title: "工程实操线" },
+      soft_exam:   { title: "软考中级线" },
+      math2:       { title: "数学二线" },
+      cs408:       { title: "408/0854 线" },
+    };
+  }
+
   const now = new Date().toLocaleTimeString("zh-CN");
   document.getElementById("lastUpdated").textContent =
     `上次读取：${now}${window.location.protocol === "file:" ? "（本地文件模式，需手动刷新页面）" : ""}`;
-  document.getElementById("howtoCard").open = false;
   render();
+}
+
+// ============================================================
+// Helpers
+// ============================================================
+function isTaskDone(taskId) { return !!(progressData[taskId] && progressData[taskId].done); }
+function taskDoneAt(taskId) { return progressData[taskId]?.done_at || null; }
+function taskLane(taskId)   { return progressData[taskId]?.lane || "engineering"; }
+
+function laneStats(laneKey) {
+  const items = Object.entries(progressData).filter(([id, v]) => (v.lane || "engineering") === laneKey);
+  const total = items.length;
+  const done  = items.filter(([id, v]) => v.done).length;
+  const pct   = total ? Math.round(done / total * 100) : 0;
+  return { total, done, pct };
 }
 
 // ============================================================
 // Render
 // ============================================================
-function isTaskDone(taskId) {
-  return !!(progressData[taskId] && progressData[taskId].done);
-}
-function taskDoneAt(taskId) {
-  return progressData[taskId]?.done_at || null;
+function render() {
+  renderGlobal();
+  renderLanes();
+  renderStages();
+  renderWeak();
+  renderLaneTabs();
+  renderRoundsForLane(activeLane);
 }
 
-function render() {
+function renderGlobal() {
+  const allIds = Object.keys(progressData);
+  const done = allIds.filter(id => isTaskDone(id)).length;
+  const pct = allIds.length ? Math.round(done / allIds.length * 100) : 0;
+  document.getElementById("globalBar").style.width = pct + "%";
+  document.getElementById("globalPct").textContent = pct + "%";
+}
+
+function renderLanes() {
+  const el = document.getElementById("laneGrid");
+  el.innerHTML = "";
+  Object.entries(lanesData).forEach(([key, meta]) => {
+    const s = laneStats(key);
+    const weak = s.total >= 5 && s.pct < 30;
+    const item = document.createElement("div");
+    item.className = `lane-item ${key}${weak ? " weak" : ""}`;
+    item.innerHTML = `
+      <div class="lane-title">${meta.title || key}</div>
+      <div class="lane-meta">${meta.description || ""}</div>
+      <div class="lane-row">
+        <div class="bar-wrap" style="flex:1"><div class="bar-fill" style="width:${s.pct}%"></div></div>
+        <span class="lane-pct">${s.done}/${s.total}</span>
+      </div>
+      <div class="lane-meta" style="margin-top:0.35rem;">${s.pct}%${weak ? " · 薄弱项" : ""}</div>
+    `;
+    el.appendChild(item);
+  });
+}
+
+function renderStages() {
+  const el = document.getElementById("stageList");
+  el.innerHTML = "";
+  STAGES.forEach(stage => {
+    let pct = 0, note = stage.note || "";
+    if (stage.lane) {
+      const s = laneStats(stage.lane);
+      pct = s.pct;
+    }
+    const item = document.createElement("div");
+    item.className = "stage-item";
+    item.innerHTML = `
+      <div class="stage-name">${stage.name}</div>
+      <div class="stage-lane">${stage.lane ? "lane: " + stage.lane : note}</div>
+      <div class="bar-wrap"><div class="bar-fill" style="width:${pct}%"></div></div>
+      <div class="stage-pct">${stage.lane ? pct + "%" : "—"}</div>
+    `;
+    el.appendChild(item);
+  });
+}
+
+function renderWeak() {
+  const el = document.getElementById("weakList");
+  el.innerHTML = "";
+  const weaks = Object.entries(lanesData).map(([key, meta]) => {
+    const s = laneStats(key);
+    return { key, meta, s };
+  }).filter(x => x.s.total >= 5 && x.s.pct < 30);
+  if (!weaks.length) {
+    const item = document.createElement("div");
+    item.className = "weak-empty";
+    item.textContent = "✅ 当前没有完成率低于 30% 且任务数 ≥ 5 的主线。";
+    el.appendChild(item);
+    return;
+  }
+  weaks.forEach(({key, meta, s}) => {
+    const item = document.createElement("div");
+    item.className = "weak-item alert";
+    item.innerHTML = `
+      <span><span class="lane-name">${meta.title || key}</span> · ${s.done}/${s.total} 完成（${s.pct}%）</span>
+      <span style="font-size:0.72rem;">建议本周主推该 lane</span>
+    `;
+    el.appendChild(item);
+  });
+}
+
+function renderLaneTabs() {
+  const el = document.getElementById("laneTabs");
+  el.innerHTML = "";
+  Object.entries(lanesData).forEach(([key, meta]) => {
+    const s = laneStats(key);
+    const btn = document.createElement("button");
+    btn.className = "lane-tab" + (key === activeLane ? " active" : "");
+    btn.textContent = `${meta.title || key}（${s.done}/${s.total}）`;
+    btn.addEventListener("click", () => {
+      activeLane = key;
+      // 默认选中该 lane 的第一个 Round
+      const firstRound = ROUNDS.find(r => r.lane === key);
+      activeRound = firstRound ? firstRound.id : null;
+      render();
+    });
+    el.appendChild(btn);
+  });
+}
+
+function renderRoundsForLane(laneKey) {
   const tabsEl   = document.getElementById("roundTabs");
   const panelsEl = document.getElementById("panels");
   tabsEl.innerHTML   = "";
   panelsEl.innerHTML = "";
 
+  const laneRounds = ROUNDS.filter(r => r.lane === laneKey);
+  if (!laneRounds.length) {
+    panelsEl.innerHTML = `<div class="empty-state">本主线下尚未注册任何 Round。可在 progress.json 注册任务，或在 progress.html 的 ROUNDS 数组追加 Round 元数据。</div>`;
+    return;
+  }
+
   const col = getCollapsed();
 
-  ROUNDS.forEach(round => {
+  laneRounds.forEach(round => {
     const allTasks  = round.weeks.flatMap(w => w.tasks);
     const doneTasks = allTasks.filter(t => isTaskDone(t.id));
     const allDone   = doneTasks.length === allTasks.length && allTasks.length > 0;
     const pct = allTasks.length ? Math.round(doneTasks.length / allTasks.length * 100) : 0;
 
-    // Tab
     const tab = document.createElement("button");
     tab.className = "tab-btn" + (allDone ? " done" : "") + (round.id === activeRound ? " active" : "");
     tab.textContent = round.title;
     tab.addEventListener("click", () => { activeRound = round.id; render(); });
     tabsEl.appendChild(tab);
 
-    // Panel
     const panel = document.createElement("div");
     panel.className = "round-panel" + (round.id === activeRound ? " active" : "");
 
     panel.innerHTML = `
       <div class="round-header">
-        <h2>${round.title}</h2>
+        <h3>${round.title}</h3>
         <div class="round-meta">
+          <span class="badge lane">${round.lane}</span>
           <span class="badge">${round.difficulty}</span>
           <span class="badge blue">${round.duration}</span>
           <span class="badge green">${doneTasks.length}/${allTasks.length} 完成</span>
         </div>
       </div>
       <div class="round-progress-bar">
-        <div class="bar-wrap" style="flex:1">
-          <div class="bar-fill" style="width:${pct}%"></div>
-        </div>
+        <div class="bar-wrap" style="flex:1"><div class="bar-fill" style="width:${pct}%"></div></div>
         <span class="rp-text">${pct}%</span>
       </div>
     `;
@@ -550,7 +703,6 @@ function render() {
 
         const item = document.createElement("div");
         item.className = "task-item" + (done ? " done" : "");
-
         const typeLabel = { reading:"阅读", exercise:"练习", test:"自测", output:"产出" }[task.type];
 
         item.innerHTML = `
@@ -574,34 +726,69 @@ function render() {
 
     panelsEl.appendChild(panel);
   });
-
-  updateGlobal();
-  checkCelebrate();
 }
 
-function renderEmpty() {
-  document.getElementById("roundTabs").innerHTML   = "";
-  document.getElementById("panels").innerHTML      = "";
-  document.getElementById("globalPct").textContent = "—";
-  document.getElementById("globalBar").style.width  = "0%";
+// ============================================================
+// Personal config (本周任务 + 倒计时) — localStorage
+// ============================================================
+function loadPersonal() {
+  try {
+    const w = localStorage.getItem(LS_WEEK);
+    if (w !== null) document.getElementById("weekTasks").value = w;
+  } catch(e) {}
+  try {
+    const d = JSON.parse(localStorage.getItem(LS_DATES) || "{}");
+    if (d.soft) document.getElementById("softExamDate").value = d.soft;
+    if (d.math) document.getElementById("math2Date").value    = d.math;
+    if (d.cs)   document.getElementById("cs408Date").value    = d.cs;
+    updateCountdowns();
+  } catch(e) {}
 }
-
-function updateGlobal() {
-  const allTasks  = ROUNDS.flatMap(r => r.weeks.flatMap(w => w.tasks));
-  const doneCount = allTasks.filter(t => isTaskDone(t.id)).length;
-  const pct = allTasks.length ? Math.round(doneCount / allTasks.length * 100) : 0;
-  document.getElementById("globalBar").style.width  = pct + "%";
-  document.getElementById("globalPct").textContent  = pct + "%";
+function saveWeekTasks() {
+  localStorage.setItem(LS_WEEK, document.getElementById("weekTasks").value);
+  const hint = document.getElementById("weekSavedHint");
+  hint.style.display = "inline";
+  setTimeout(() => hint.style.display = "none", 1500);
 }
-
-function checkCelebrate() {
-  const round = ROUNDS.find(r => r.id === activeRound);
-  if (!round) return;
-  const tasks   = round.weeks.flatMap(w => w.tasks);
-  const allDone = tasks.length > 0 && tasks.every(t => isTaskDone(t.id));
-  document.getElementById("celebrate").style.display = allDone ? "block" : "none";
+function saveExamDates() {
+  const d = {
+    soft: document.getElementById("softExamDate").value || "",
+    math: document.getElementById("math2Date").value || "",
+    cs:   document.getElementById("cs408Date").value || "",
+  };
+  localStorage.setItem(LS_DATES, JSON.stringify(d));
+  updateCountdowns();
+  const hint = document.getElementById("dateSavedHint");
+  hint.style.display = "inline";
+  setTimeout(() => hint.style.display = "none", 1500);
 }
+function diffDays(target) {
+  if (!target) return null;
+  const now = new Date(); now.setHours(0,0,0,0);
+  const t = new Date(target); t.setHours(0,0,0,0);
+  const ms = t - now;
+  return Math.round(ms / (1000 * 60 * 60 * 24));
+}
+function fmtDays(n) {
+  if (n === null) return "—";
+  if (n > 0)  return `还剩 ${n} 天`;
+  if (n === 0) return "就是今天";
+  return `已过 ${-n} 天`;
+}
+function updateCountdowns() {
+  document.getElementById("softExamDays").textContent = fmtDays(diffDays(document.getElementById("softExamDate").value));
+  document.getElementById("math2Days").textContent    = fmtDays(diffDays(document.getElementById("math2Date").value));
+  document.getElementById("cs408Days").textContent    = fmtDays(diffDays(document.getElementById("cs408Date").value));
+}
+["softExamDate","math2Date","cs408Date"].forEach(id => {
+  document.addEventListener("DOMContentLoaded", () => {
+    document.getElementById(id).addEventListener("change", updateCountdowns);
+  });
+});
 
+// ============================================================
+// Bulk expand / collapse
+// ============================================================
 function expandAll() {
   const c = getCollapsed();
   ROUNDS.forEach(r => r.weeks.forEach(w => { c[w.id] = false; }));
@@ -613,20 +800,23 @@ function collapseAll() {
   setCollapsed(c); render();
 }
 
-// Auto-refresh every 30 seconds (only useful when served via http://)
+// ============================================================
+// Boot
+// ============================================================
 if (window.location.protocol !== "file:") {
   setInterval(loadProgress, 30000);
 }
-
-// In file:// mode, the "refresh" button reloads the whole page
-// so the browser re-reads progress_data.js from disk
 if (window.location.protocol === "file:") {
-  document.getElementById("refreshBtn").onclick = () => location.reload();
-  document.getElementById("refreshBtn").title = "重新加载页面以读取最新 progress_data.js";
+  document.addEventListener("DOMContentLoaded", () => {
+    const btn = document.getElementById("refreshBtn");
+    btn.onclick = () => location.reload();
+    btn.title = "重新加载页面以读取最新 progress_data.js";
+  });
 }
-
-// Initial load
-loadProgress();
+document.addEventListener("DOMContentLoaded", () => {
+  loadPersonal();
+  loadProgress();
+});
 </script>
 </body>
 </html>

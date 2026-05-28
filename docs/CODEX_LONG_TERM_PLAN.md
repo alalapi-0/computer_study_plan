@@ -1,6 +1,40 @@
 # Codex Long Term Plan
 
-## 1. 项目最终目标
+## 0. 2026-05-12 项目目标重定向（必读）
+
+本文件原是面向"把仓库升级为网页交互式 AI 工程学习系统"的长期规划（Phase 0–7）。
+
+在 2026-05-12 路线重定向中，仓库总目标已升级为**多目标耦合路线**：
+
+| 时段 | 目标 |
+|---|---|
+| 短期（0–18 个月） | **软考中级软件设计师，高分 / 满分导向** |
+| 中期（12–30 个月） | 系统化补齐非科班计算机基础短板 |
+| 长期（24–48 个月） | **0854 电子信息**（人工智能 / 计算机技术 / 软件工程）跨专业考研 |
+| 长期考试基础 | **数学二** + **408 兼容** |
+
+新总目标的详细说明、四主线（engineering / soft_exam / math2 / cs408）、Stage 0–7 阶段计划、知识点映射表与错题系统已沉淀在以下文档：
+
+- `docs/MASTER_STUDY_ROADMAP.md`（总学习路线）
+- `docs/STAGE_PLAN.md`（Stage 0–7 阶段计划）
+- `docs/KNOWLEDGE_MAPPING.md`（知识点映射）
+- `docs/WEEKLY_EXECUTION_TEMPLATE.md`（周计划三档强度）
+- `docs/PROGRESS_RULES.md`（四主线进度规则）
+- `docs/ERROR_REVIEW_SYSTEM.md`（错题与复盘系统）
+- `docs/GRADUATE_SCHOOL_TRACKER.md`（院校跟踪模板）
+- `docs/PROJECT_PORTFOLIO_TRACK.md`（作品集追踪）
+
+下面 §1 ~ §11 的原"网页交互式学习系统"路线**保留作为工程实操线（`engineering` lane）的演进参考**，但**不再是仓库的最高优先级**。
+
+- 仍可参考：Phase 0、Phase 1（任务体系）、Phase 2（动作记录）的数据模型方向。
+- 不再追求：把 Round 01–21 全部展开为可执行目录、引入后端 API、引入前端框架——这些都不是路线重定向后的优先级。
+- 新增 Round 实操目录只在"工程实操线"被新阶段需要时再做。
+
+> 短指令"请根据长期规划继续推进下一轮"现在应当按 `docs/NEXT_ACTIONS.md` 中**新 TASK-RR 系列**或仓库当前 Stage 推进，而不是 §1 ~ §11 的旧 Phase。
+
+---
+
+## 1. 项目最终目标（历史规划，保留参考）
 
 这个仓库最终要从“计算机基础学习大纲仓库”升级为一个“网页交互版计算机基础与 AI 工程学习系统”。
 
@@ -463,15 +497,20 @@ TASK-XXX: short imperative summary
 - README 误导用户以为 Round 01-21 已落地
 - NEXT_ACTIONS 与当前状态脱节
 
-## 11. 当前近期优先级
+## 11. 当前近期优先级（已被 2026-05-12 重定向覆盖）
 
-1. 创建长期目标和 Codex 协议文档
-2. 统一 task registry
-3. 升级 progress 数据结构
-4. 兼容 Round 00
-5. 升级 mark_done.sh
-6. 升级 progress.html
-7. 加入 action event log
-8. 加入 task feedback 原型
-9. 建立 Round 01 最小骨架
-10. 建立数据校验脚本
+> ⚠️ 本节是 2026-05-05 时的优先级列表，路线重定向后**不再适用**。
+> 新优先级请直接看 `docs/NEXT_ACTIONS.md` 的 TASK-RR 系列。
+
+历史优先级（仅供参考）：
+
+1. 创建长期目标和 Codex 协议文档（已完成）
+2. 统一 task registry（已弃用 / 改由四主线 lanes 替代）
+3. 升级 progress 数据结构（**已在 2026-05-12 完成 v2 升级，新增 lanes 与 tasks[].lane**）
+4. 兼容 Round 00（**已在 2026-05-12 完成兼容**）
+5. 升级 mark_done.sh（**已在 2026-05-12 完成按 lane 分组输出**）
+6. 升级 progress.html（**已在 2026-05-12 完成四主线进度 / 阶段进度 / 倒计时 / 薄弱项**）
+7. 加入 action event log（**暂缓**，按新路线非高优先级）
+8. 加入 task feedback 原型（**暂缓**，按新路线非高优先级）
+9. 建立 Round 01 最小骨架（**保留可选**，仅当 Stage 1 真实推进需要时再做）
+10. 建立数据校验脚本（**保留可选**）

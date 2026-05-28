@@ -47,8 +47,9 @@
 | Checklist | `docs/checklists/` | 可勾选的检查清单 |
 | 确认模板 | `docs/templates/` | 高风险操作前的确认模板 |
 | Round 概览（主线） | `round_00.md` ~ `round_21.md` | 已建立的工程/服务/AI 主线轮次概览 |
-| Round 计划源（主线） | `plan_round_00.txt` ~ `plan_round_21.txt` | 主线轮次的计划文本源 |
 | Round 实操（主线） | `rounds/round_XX/` | 主线轮次的可执行展开 |
+| 学习计划专题 | `plans/<scope>/` | 软考 / 数学二 / 408 / Linux 等独立学习计划目录 |
+| 学习记录 | `records/<scope>/` | 周复盘 / 错题 / 完成任务等用户真实学习记录 |
 | Round 实操（支线） | `rounds/stage_*/round_*.md` | 阶段性支线（如 VPS 远程实操） |
 | 进度系统 | `progress.json`、`progress_data.js`、`progress.html`、`mark_done.sh` | 任务状态与展示 |
 | IDE/系统副产物 | `.idea/`、`.DS_Store` | 不属本仓库内容范围，不主动改 |
@@ -71,7 +72,8 @@
 - 先在 PR / 变更报告中列出拟删除文件清单；
 - 说明删除理由；
 - 如果有内容残值，先确认已迁移；
-- 如果是 Round 00 相关文件、`progress.json`、`mark_done.sh` 或主线 Round 文档，**默认禁止删除**，除非用户明确授权（参见 `docs/templates/repository_cleanup_confirmation.md`）。
+- 如果是 Round 00 相关文件、`progress.json`、`mark_done.sh`、主线 Round md 文档或用户真实学习记录（`records/` 下已写入的内容），**默认禁止删除**，除非用户明确授权（参见 `docs/templates/repository_cleanup_confirmation.md`）。
+- 已删除的对象（不再保护）：`plan_round_XX.txt`（22 份初版提示词文本，于 2026-05-12 经用户授权统一清理，内容已由 `round_XX.md` 完整吸收）。
 
 ## 5. 合并文件的硬约束
 

@@ -16,7 +16,8 @@
   - [ ] `progress.html`
   - [ ] `mark_done.sh`
   - [ ] `rounds/round_00/`
-  - [ ] 任意 `round_XX.md` / `plan_round_XX.txt`（未经用户授权）
+  - [ ] 任意 `round_XX.md`（未经用户授权）
+  - [ ] `records/` 下任何已写入的用户真实学习记录
 
 ## B. 提案
 
