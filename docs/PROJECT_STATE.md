@@ -572,3 +572,29 @@
 
 - 未改动 `rounds/round_00/`。
 - 未改动 `records/` 下真实学习记录。
+
+## 25. 2026-05-28 RR-05 意向院校落库（待官网核验）
+
+### 25.1 本轮修改
+
+- `docs/GRADUATE_SCHOOL_TRACKER.md`：新增“意向院校（待官网核验）”区，记录用户目标院校“中国科学研究院”。
+- `docs/NEXT_ACTIONS.md`：
+  - `TASK-RR-05` 调整为 `in_progress`（目标已录入，待官网链接回填）。
+  - `TASK-RR-06`、`TASK-RR-07`、`TASK-VPS-05` 按用户指示调整为 `deferred`。
+  - 推荐下一步队列改为以“无需即时用户输入”的可选推进为主。
+
+### 25.2 规则边界
+
+- 未在主表写入任何未经官网核验的考试字段（专业代码/科目/复试）。
+- 考试日期按用户要求暂不处理（两年内不纳入当前日程）。
+
+### 25.3 验证
+
+- `python3 scripts/check_protocol_sync.py`：通过。
+- `python3 scripts/validate_learning_data.py`：通过。
+- `python3 -m json.tool progress.json`：通过。
+
+### 25.4 风险边界核对
+
+- 未改动 `rounds/round_00/`。
+- 未改动 `records/` 下真实学习记录。
