@@ -372,3 +372,56 @@
 
 - 未改动 `rounds/round_00/`。
 - 未改动 `records/` 下真实学习记录。
+
+## 18. 2026-05-28 TASK-RR-04 数学二启动骨架落地
+
+### 18.1 本轮新增
+
+- 新增 `plans/math2/limits.md`。
+- 新增 `plans/math2/la_matrix.md`。
+
+### 18.2 内容范围
+
+- 两份文件均仅包含：建议小节标题、低强度启动节奏、启动级易错点示例。
+- 文件顶部均保留“以官方最新大纲为准”的提醒，不缓存具体考题与题库内容。
+
+### 18.3 同步更新
+
+- `docs/NEXT_ACTIONS.md`：`TASK-RR-04` 标记为 done，并补充实际产物。
+
+### 18.4 验证
+
+- `python3 scripts/check_protocol_sync.py`：通过。
+- `python3 -m json.tool progress.json`：通过。
+- `bash mark_done.sh`：通过（Round 00/02 任务识别正常）。
+
+### 18.5 风险边界核对
+
+- 未改动 `rounds/round_00/`。
+- 未改动 `records/` 下真实学习记录。
+
+## 19. 2026-05-28 TASK-RR-02 第一周复盘示例落地
+
+### 19.1 本轮新增
+
+- 新增 `records/weekly_reviews/_example.md`。
+
+### 19.2 内容范围
+
+- 文件明确声明为示例骨架，不代表真实周复盘数据。
+- 内容采用标准模式模板字段，覆盖“完成项/错题/卡点/下周计划/强度调整”。
+
+### 19.3 同步更新
+
+- `docs/NEXT_ACTIONS.md`：`TASK-RR-02` 标记为 done，并补充实际产物。
+
+### 19.4 验证
+
+- `python3 scripts/check_protocol_sync.py`：通过。
+- `python3 -m json.tool progress.json`：通过。
+- `bash mark_done.sh`：通过。
+
+### 19.5 风险边界核对
+
+- 未改动 `rounds/round_00/`。
+- 未改动 `records/` 下真实学习记录（仅新增 `_example.md` 示例文件）。
