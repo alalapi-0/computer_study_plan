@@ -263,7 +263,7 @@
 | Round 00 | Terminal 初见 | ✅ 完整 | ✅ 已展开 | engineering | 已完成最小闭环 |
 | Round 01 | 文件系统与基础命令 | ✅ 概览 | ✅ 已展开 | engineering | 2026-05-28 完成 Round 01 最小目录骨架 |
 | Round 02 | Shell、管道、Git | ✅ 概览 | ✅ 已展开 | engineering | 2026-05-28 完成 Round 02 目录骨架 |
-| Round 03 | Python 基础 + 复杂度 | ✅ 概览 | ❌ 未展开 | engineering | |
+| Round 03 | Python 基础 + 复杂度 | ✅ 概览 | ✅ 已展开 | engineering | 2026-05-28 完成 Round 03 最小目录骨架 |
 | Round 04 | 核心数据结构 | ✅ 概览 | ❌ 未展开 | engineering + soft_exam + cs408 | 软考/408 共用素材 |
 | Round 05 | 高频算法模式 | ✅ 概览 | ❌ 未展开 | engineering + soft_exam + cs408 | 软考/408 共用素材 |
 | Round 06 | Linux 进阶与自动化 | ✅ 概览 | ❌ 未展开 | engineering | |
