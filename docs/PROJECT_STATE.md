@@ -325,3 +325,50 @@
 
 - 未修改 `rounds/round_00/` 任何文件。
 - 未修改 `records/` 下真实学习记录。
+
+## 16. 2026-05-28 校验脚本缺失修复
+
+### 16.1 本轮新增
+
+- 新增 `scripts/check_protocol_sync.py`，用于执行仓库协议同步的基础一致性检查。
+
+### 16.2 触发原因
+
+- 命令 `python3 scripts/check_protocol_sync.py` 报错 `No such file or directory`，定位为仓库缺少该脚本文件与 `scripts/` 目录。
+
+### 16.3 验证
+
+- `python3 scripts/check_protocol_sync.py`：通过（`Protocol sync check PASSED`）。
+- `python3 -m json.tool progress.json`：通过。
+
+### 16.4 风险边界核对
+
+- 未改动 `rounds/round_00/`。
+- 未改动 `records/` 下真实学习记录。
+
+## 17. 2026-05-28 TASK-RR-01 软考三模块骨架落地
+
+### 17.1 本轮新增
+
+- 新增 `plans/soft_exam/ds.md`。
+- 新增 `plans/soft_exam/os.md`。
+- 新增 `plans/soft_exam/db.md`。
+
+### 17.2 内容范围
+
+- 三份文件均仅包含：学习章节骨架、与 408 差异提示、启动节奏建议、启动级易错提醒。
+- 每份文件顶部均添加“以官方最新大纲为准”的提示；未写入具体考题与考点原文。
+
+### 17.3 同步更新
+
+- `docs/NEXT_ACTIONS.md`：`TASK-RR-01` 标记为 done，并补充实际产物。
+
+### 17.4 验证
+
+- `python3 scripts/check_protocol_sync.py`：通过。
+- `python3 -m json.tool progress.json`：通过。
+
+### 17.5 风险边界核对
+
+- 未改动 `rounds/round_00/`。
+- 未改动 `records/` 下真实学习记录。
