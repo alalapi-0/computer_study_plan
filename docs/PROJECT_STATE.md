@@ -523,15 +523,20 @@
 - `CONVERSION_PROTOCOL.md`：Round 01 状态从“未展开”更新为“已展开”。
 - `README.md`：已展开 Round 列表同步为 Round 00/01/02。
 - `docs/NEXT_ACTIONS.md`：`TASK-011` 标记为 done 并记录产物。
+- `progress.json`：新增 Round 01 的 `r01-*` 任务 ID。
+- `progress.html`：新增 Round 01 面板与任务元数据展示。
+- `rounds/round_01/*/exercises.sh`：接入 `mark_done.sh` 自动打卡。
 
 ### 23.3 验证
 
-- `bash rounds/round_01/week1/exercises.sh`：通过。
-- `bash rounds/round_01/week2/exercises.sh`：通过。
-- `bash rounds/round_01/week3/exercises.sh`：通过。
-- `bash rounds/round_01/final/comprehensive_exercise.sh`：通过。
+- `bash -n rounds/round_01/week1/exercises.sh`：通过。
+- `bash -n rounds/round_01/week2/exercises.sh`：通过。
+- `bash -n rounds/round_01/week3/exercises.sh`：通过。
+- `bash -n rounds/round_01/final/comprehensive_exercise.sh`：通过。
+- `python3 scripts/generate_task_feedback.py`：通过。
 - `python3 scripts/check_protocol_sync.py`：通过。
 - `python3 scripts/validate_learning_data.py`：通过。
+- `python3 -m json.tool progress.json`：通过。
 
 ### 23.4 风险边界核对
 
