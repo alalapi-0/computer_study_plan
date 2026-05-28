@@ -14,11 +14,9 @@ round_state:
   protocol_standard_sync_required: true
   protocol_standard_synced: true
   follow_up_tasks:
-    - TASK-RR-02
     - TASK-RR-03
   last_content_task:
-    id: TASK-RR-04
+    id: TASK-RR-02
     completed_date: "2026-05-28"
     artifacts:
-      - plans/math2/limits.md
-      - plans/math2/la_matrix.md
+      - records/weekly_reviews/_example.md

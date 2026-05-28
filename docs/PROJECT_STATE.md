@@ -369,3 +369,14 @@
 
 - `python3 scripts/check_protocol_sync.py`：通过。
 - 未预写大量例题，未缓存考纲条目。
+
+## 18. 2026-05-28 TASK-RR-02 周复盘示例
+
+### 18.1 本轮新增
+
+- `records/weekly_reviews/_example.md`：标准模式周复盘示例，文首明确「非真实数据」。
+
+### 18.2 验证
+
+- 文件存在且含 `_example` 与示例声明。
+- 未写入用户真实学习记录。
