@@ -325,3 +325,250 @@
 
 - 未修改 `rounds/round_00/` 任何文件。
 - 未修改 `records/` 下真实学习记录。
+
+## 16. 2026-05-28 校验脚本缺失修复
+
+### 16.1 本轮新增
+
+- 新增 `scripts/check_protocol_sync.py`，用于执行仓库协议同步的基础一致性检查。
+
+### 16.2 触发原因
+
+- 命令 `python3 scripts/check_protocol_sync.py` 报错 `No such file or directory`，定位为仓库缺少该脚本文件与 `scripts/` 目录。
+
+### 16.3 验证
+
+- `python3 scripts/check_protocol_sync.py`：通过（`Protocol sync check PASSED`）。
+- `python3 -m json.tool progress.json`：通过。
+
+### 16.4 风险边界核对
+
+- 未改动 `rounds/round_00/`。
+- 未改动 `records/` 下真实学习记录。
+
+## 17. 2026-05-28 TASK-RR-01 软考三模块骨架落地
+
+### 17.1 本轮新增
+
+- 新增 `plans/soft_exam/ds.md`。
+- 新增 `plans/soft_exam/os.md`。
+- 新增 `plans/soft_exam/db.md`。
+
+### 17.2 内容范围
+
+- 三份文件均仅包含：学习章节骨架、与 408 差异提示、启动节奏建议、启动级易错提醒。
+- 每份文件顶部均添加“以官方最新大纲为准”的提示；未写入具体考题与考点原文。
+
+### 17.3 同步更新
+
+- `docs/NEXT_ACTIONS.md`：`TASK-RR-01` 标记为 done，并补充实际产物。
+
+### 17.4 验证
+
+- `python3 scripts/check_protocol_sync.py`：通过。
+- `python3 -m json.tool progress.json`：通过。
+
+### 17.5 风险边界核对
+
+- 未改动 `rounds/round_00/`。
+- 未改动 `records/` 下真实学习记录。
+
+## 18. 2026-05-28 TASK-RR-04 数学二启动骨架落地
+
+### 18.1 本轮新增
+
+- 新增 `plans/math2/limits.md`。
+- 新增 `plans/math2/la_matrix.md`。
+
+### 18.2 内容范围
+
+- 两份文件均仅包含：建议小节标题、低强度启动节奏、启动级易错点示例。
+- 文件顶部均保留“以官方最新大纲为准”的提醒，不缓存具体考题与题库内容。
+
+### 18.3 同步更新
+
+- `docs/NEXT_ACTIONS.md`：`TASK-RR-04` 标记为 done，并补充实际产物。
+
+### 18.4 验证
+
+- `python3 scripts/check_protocol_sync.py`：通过。
+- `python3 -m json.tool progress.json`：通过。
+- `bash mark_done.sh`：通过（Round 00/02 任务识别正常）。
+
+### 18.5 风险边界核对
+
+- 未改动 `rounds/round_00/`。
+- 未改动 `records/` 下真实学习记录。
+
+## 19. 2026-05-28 TASK-RR-02 第一周复盘示例落地
+
+### 19.1 本轮新增
+
+- 新增 `records/weekly_reviews/_example.md`。
+
+### 19.2 内容范围
+
+- 文件明确声明为示例骨架，不代表真实周复盘数据。
+- 内容采用标准模式模板字段，覆盖“完成项/错题/卡点/下周计划/强度调整”。
+
+### 19.3 同步更新
+
+- `docs/NEXT_ACTIONS.md`：`TASK-RR-02` 标记为 done，并补充实际产物。
+
+### 19.4 验证
+
+- `python3 scripts/check_protocol_sync.py`：通过。
+- `python3 -m json.tool progress.json`：通过。
+- `bash mark_done.sh`：通过。
+
+### 19.5 风险边界核对
+
+- 未改动 `rounds/round_00/`。
+- 未改动 `records/` 下真实学习记录（仅新增 `_example.md` 示例文件）。
+
+## 20. 2026-05-28 TASK-009 动作事件日志原型
+
+### 20.1 本轮新增
+
+- 新增 `records/action_logs/README.md`（事件字段与使用说明）。
+
+### 20.2 本轮修改
+
+- `mark_done.sh`：在任务标记/撤销后自动追加写入 `records/action_logs/events.jsonl`（JSONL）。
+
+### 20.3 事件字段（v1）
+
+- `action_id`、`task_id`、`round_id`、`lane`、`action_type`、`timestamp`、`result`、`note`、`evidence_path`。
+
+### 20.4 验证
+
+- `python3 scripts/check_protocol_sync.py`：通过。
+- `python3 -m json.tool progress.json`：通过。
+- `bash mark_done.sh`：通过（状态展示正常）。
+
+### 20.5 风险边界核对
+
+- 未改动 `rounds/round_00/`。
+- 未改动 `records/` 下真实学习记录（仅新增 action log 原型目录说明）。
+
+## 21. 2026-05-28 TASK-010 任务反馈原型
+
+### 21.1 本轮新增
+
+- 新增 `scripts/generate_task_feedback.py`。
+- 新增 `records/feedback/README.md`。
+- 新增 `records/feedback/task_feedback.json`（原型输出）。
+
+### 21.2 能力说明
+
+- 基于 `progress.json` 与 `records/action_logs/events.jsonl` 生成任务级反馈。
+- 当前反馈类型：`completed` / `not_started` / `in_progress`。
+- 每个任务输出基础建议（`message` + `next_suggestion`）。
+
+### 21.3 同步更新
+
+- `docs/NEXT_ACTIONS.md`：`TASK-010` 标记为 done 并补齐产物。
+
+### 21.4 验证
+
+- `python3 scripts/generate_task_feedback.py`：通过并生成反馈文件。
+- `python3 scripts/check_protocol_sync.py`：通过。
+- `python3 -m json.tool records/feedback/task_feedback.json`：通过。
+
+### 21.5 风险边界核对
+
+- 未改动 `rounds/round_00/`。
+- 未改动 `records/` 下真实学习记录（仅新增反馈原型文件）。
+
+## 22. 2026-05-28 TASK-012 数据一致性校验脚本
+
+### 22.1 本轮新增
+
+- 新增 `scripts/validate_learning_data.py`。
+
+### 22.2 校验范围
+
+- `progress.json`：检查 lanes/tasks 结构、`done`/`done_at`/`lane` 字段。
+- `records/action_logs/events.jsonl`：检查 `task_id` 存在性、动作类型、结果枚举、时间戳类型。
+- `records/feedback/task_feedback.json`：检查任务 ID 对齐与反馈类型枚举。
+
+### 22.3 同步更新
+
+- `docs/NEXT_ACTIONS.md`：`TASK-012` 标记为 done 并记录产物。
+
+### 22.4 验证
+
+- `python3 scripts/validate_learning_data.py`：通过。
+- `python3 scripts/check_protocol_sync.py`：通过。
+- `python3 -m json.tool progress.json`：通过。
+- `python3 -m json.tool records/feedback/task_feedback.json`：通过。
+
+### 22.5 风险边界核对
+
+- 未改动 `rounds/round_00/`。
+- 未改动 `records/` 下真实学习记录。
+
+## 23. 2026-05-28 TASK-011 Round 01 最小骨架
+
+### 23.1 本轮新增
+
+- 新增 `rounds/round_01/README.md`。
+- 新增 `rounds/round_01/week1|week2|week3/notes.md`。
+- 新增 `rounds/round_01/week1|week2|week3/exercises.sh`。
+- 新增 `rounds/round_01/final/comprehensive_exercise.sh`。
+- 新增 `rounds/round_01/final/command_cheatsheet.md`。
+
+### 23.2 同步更新
+
+- `CONVERSION_PROTOCOL.md`：Round 01 状态从“未展开”更新为“已展开”。
+- `README.md`：已展开 Round 列表同步为 Round 00/01/02。
+- `docs/NEXT_ACTIONS.md`：`TASK-011` 标记为 done 并记录产物。
+- `progress.json`：新增 Round 01 的 `r01-*` 任务 ID。
+- `progress.html`：新增 Round 01 面板与任务元数据展示。
+- `rounds/round_01/*/exercises.sh`：接入 `mark_done.sh` 自动打卡。
+
+### 23.3 验证
+
+- `bash -n rounds/round_01/week1/exercises.sh`：通过。
+- `bash -n rounds/round_01/week2/exercises.sh`：通过。
+- `bash -n rounds/round_01/week3/exercises.sh`：通过。
+- `bash -n rounds/round_01/final/comprehensive_exercise.sh`：通过。
+- `python3 scripts/generate_task_feedback.py`：通过。
+- `python3 scripts/check_protocol_sync.py`：通过。
+- `python3 scripts/validate_learning_data.py`：通过。
+- `python3 -m json.tool progress.json`：通过。
+
+### 23.4 风险边界核对
+
+- 未改动 `rounds/round_00/`。
+- 未改动 `records/` 下真实学习记录。
+
+## 24. 2026-05-28 Stage 1 可选推进：Round 03 最小骨架
+
+### 24.1 本轮新增
+
+- 新增 `rounds/round_03/README.md`。
+- 新增 `rounds/round_03/week1|week2|week3/notes.md`。
+- 新增 `rounds/round_03/week1|week2|week3/exercises.sh`。
+- 新增 `rounds/round_03/final/comprehensive_exercise.sh`。
+- 新增 `rounds/round_03/final/complexity_cheatsheet.md`。
+
+### 24.2 同步更新
+
+- `CONVERSION_PROTOCOL.md`：Round 03 状态更新为“已展开”。
+- `README.md`：已展开 Round 列表同步到 Round 00/01/02/03。
+- `docs/NEXT_ACTIONS.md`：可选下一轮提示从 Round 03 调整为 Round 04。
+
+### 24.3 验证
+
+- `bash -n rounds/round_03/week1/exercises.sh`：通过。
+- `bash -n rounds/round_03/week2/exercises.sh`：通过。
+- `bash -n rounds/round_03/week3/exercises.sh`：通过。
+- `bash -n rounds/round_03/final/comprehensive_exercise.sh`：通过。
+- `python3 scripts/check_protocol_sync.py`：通过。
+- `python3 scripts/validate_learning_data.py`：通过。
+
+### 24.4 风险边界核对
+
+- 未改动 `rounds/round_00/`。
+- 未改动 `records/` 下真实学习记录。

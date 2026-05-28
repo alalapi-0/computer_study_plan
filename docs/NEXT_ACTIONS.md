@@ -27,9 +27,9 @@
 
 ---
 
-## TASK-RR-01：Stage 2 软考软件设计师知识体系拆解（**最高优先级**）
+## TASK-RR-01：Stage 2 软考软件设计师知识体系拆解
 
-- 状态：pending（推荐下一轮）
+- 状态：**done**（2026-05-28）
 - 背景：路线重定向完成后，短期主推 lane 是 `soft_exam`。`plans/soft_exam/README.md` 列出了 12 个模块清单，但模块本身没有笔记骨架。
 - 目标：为软考软件设计师建立第一份可推进的模块笔记骨架（按用户当前精力，**先做 3 个模块**：数据结构 / 操作系统 / 数据库），每份骨架仅含"章节列表 + 与 408 差异说明 + 引用最新官方大纲的提示"，**不缓存具体考点**。
 - 要修改：新增 `plans/soft_exam/ds.md`、`plans/soft_exam/os.md`、`plans/soft_exam/db.md`。
@@ -37,12 +37,16 @@
 - 验收标准：3 份文件存在；每份顶部有"⚠ 最新大纲见官方"提示；列出建议章节清单与 408 差异。
 - 风险：复制教材内容 / 把"建议章节"误写为"官方考点"。
 - 是否需要用户介入：否。
+- 实际产物：
+  - `plans/soft_exam/ds.md`
+  - `plans/soft_exam/os.md`
+  - `plans/soft_exam/db.md`
 
 ---
 
 ## TASK-RR-02：建立第一周复盘示例（节奏起步）
 
-- 状态：pending
+- 状态：**done**（2026-05-28）
 - 背景：`docs/WEEKLY_EXECUTION_TEMPLATE.md` 已建立三档强度模板，但用户尚未真实写过一份复盘。需要建一份**示例骨架**（不是用户的真实数据）作为后续模仿对象。
 - 目标：新增 `records/weekly_reviews/_example.md`（带下划线前缀，避免被误认为真实周复盘），展示标准模式的填写方式。
 - 要修改：新增 `records/weekly_reviews/_example.md`。
@@ -50,6 +54,8 @@
 - 验收标准：示例文件存在且明确标注 `_example.md` / "这是示例骨架，不是真实周复盘"。
 - 风险：让示例数据被误认为真实进度。
 - 是否需要用户介入：否。
+- 实际产物：
+  - `records/weekly_reviews/_example.md`
 
 ---
 
@@ -75,7 +81,7 @@
 
 ## TASK-RR-04：Stage 4 数学二保底节奏启动
 
-- 状态：pending
+- 状态：**done**（2026-05-28）
 - 背景：数学二必须早启动 + 长期低强度 + 不断线。
 - 目标：在 `plans/math2/` 下新增 `limits.md` 与 `la_matrix.md` 两份最小骨架，作为"先动起来"的入口。
 - 要修改：新增 `plans/math2/limits.md` 与 `plans/math2/la_matrix.md`。
@@ -83,6 +89,9 @@
 - 验收标准：两份文件存在；每份顶部有官方大纲提示；列出建议小节标题与一个"启动级"易错点示例。
 - 风险：把数学二变成"一开始就高强度"，反而崩盘。
 - 是否需要用户介入：否。
+- 实际产物：
+  - `plans/math2/limits.md`
+  - `plans/math2/la_matrix.md`
 
 ---
 
@@ -177,14 +186,33 @@
 | TASK-007 | 升级 progress_data.js 生成逻辑 | **done** |
 | TASK-008 | 升级 progress.html 全路线展示 | **done**（已升级为四主线） |
 
-## TASK-009 ~ TASK-012：deferred（按新路线非高优先级）
+## TASK-009 ~ TASK-012：重启推进（工程实操线）
 
 | 编号 | 原标题 | 状态 |
 |---|---|---|
-| TASK-009 | 加入 action event log 初版 | **deferred** |
-| TASK-010 | 加入 task feedback 原型 | **deferred** |
-| TASK-011 | 建立 Round 01 最小骨架 | **deferred**（按 Stage 1 真实推进需要再做） |
-| TASK-012 | 建立数据校验脚本 | **deferred**（按需要再做） |
+| TASK-009 | 加入 action event log 初版 | **done**（2026-05-28） |
+| TASK-010 | 加入 task feedback 原型 | **done**（2026-05-28） |
+| TASK-011 | 建立 Round 01 最小骨架 | **done**（2026-05-28） |
+| TASK-012 | 建立数据校验脚本 | **done**（2026-05-28） |
+
+TASK-009 实际产物：
+- `records/action_logs/README.md`
+- `mark_done.sh`（新增动作事件 JSONL 记录）
+
+TASK-010 实际产物：
+- `scripts/generate_task_feedback.py`
+- `records/feedback/README.md`
+- `records/feedback/task_feedback.json`
+
+TASK-012 实际产物：
+- `scripts/validate_learning_data.py`
+
+TASK-011 实际产物：
+- `rounds/round_01/README.md`
+- `rounds/round_01/week1|week2|week3/notes.md`
+- `rounds/round_01/week1|week2|week3/exercises.sh`
+- `rounds/round_01/final/comprehensive_exercise.sh`
+- `rounds/round_01/final/command_cheatsheet.md`
 
 > 这些旧 TASK 不删除，保留作为未来如果决定回到"网页交互式系统"方向时的参考。
 
@@ -192,10 +220,10 @@
 
 ## 推荐下一步（按优先级）
 
-1. **TASK-RR-01**：Stage 2 软考三模块（ds / os / db）笔记骨架建立。
-2. **TASK-RR-04**：数学二保底节奏启动（limits + la_matrix）。
-3. **TASK-RR-02**：建立第一周复盘示例。
-4. **TASK-RR-03**：Round 02 实操目录展开（按用户兴趣可选）。
-5. **TASK-RR-05 / 07**：用户提供院校信息 + 考试日期。
+1. **TASK-RR-05 / 07**：用户提供院校信息 + 考试日期。
+2. **TASK-RR-06 / RR-08**：需用户提供错题与项目方向决策。
+3. **TASK-VPS-05**：首次远程服务器只读检查（需用户单独授权）。
+4. （可选）清理历史 deferred 任务描述，保持队列精简。
+5. （可选）推进 Stage 1 下一轮（如 Round 04 最小骨架）。
 
 > 主线推进、VPS 支线推进、考试日期录入**互不阻塞**；用户可根据当下心情与可用时间选择。

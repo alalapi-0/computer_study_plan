@@ -360,7 +360,7 @@
 <!-- ── Block 6: 按 lane / Round 浏览 ── -->
 <div class="card">
   <h2>📦 按主线查看 Round</h2>
-  <div class="card-sub">按 lane 切换，查看每条主线下的 Round 任务清单。当前已展开 Round 00、Round 02。</div>
+  <div class="card-sub">按 lane 切换，查看每条主线下的 Round 任务清单。当前已展开 Round 00、Round 01、Round 02。</div>
   <div class="lane-tabs" id="laneTabs"></div>
   <div class="round-tabs" id="roundTabs"></div>
   <div id="panels"></div>
@@ -420,6 +420,35 @@ const ROUNDS = [
     ]
   },
   {
+    id: "round_01",
+    title: "Round 01 · 文件系统与基础命令",
+    lane: "engineering",
+    difficulty: "⭐☆☆☆☆",
+    duration: "3 周",
+    weeks: [
+      { id: "round01-week1", title: "第 1 周：路径感", tasks: [
+        { id:"r01-w1-read", type:"reading",  title:"阅读 week1/notes.md",      cmd:"bash mark_done.sh r01-w1-read", file:"rounds/round_01/week1/notes.md" },
+        { id:"r01-w1-ex1",  type:"exercise", title:"练习1：路径与目录切换",      cmd:"自动", file:"rounds/round_01/week1/exercises.sh" },
+        { id:"r01-w1-self", type:"test",     title:"第1周自测",                cmd:"自动", file:"rounds/round_01/week1/exercises.sh" },
+      ]},
+      { id: "round01-week2", title: "第 2 周：文件操作", tasks: [
+        { id:"r01-w2-read", type:"reading",  title:"阅读 week2/notes.md",      cmd:"bash mark_done.sh r01-w2-read", file:"rounds/round_01/week2/notes.md" },
+        { id:"r01-w2-ex2",  type:"exercise", title:"练习2：创建与整理文件",      cmd:"自动", file:"rounds/round_01/week2/exercises.sh" },
+        { id:"r01-w2-self", type:"test",     title:"第2周自测",                cmd:"自动", file:"rounds/round_01/week2/exercises.sh" },
+      ]},
+      { id: "round01-week3", title: "第 3 周：查看文本与帮助", tasks: [
+        { id:"r01-w3-read", type:"reading",  title:"阅读 week3/notes.md",      cmd:"bash mark_done.sh r01-w3-read", file:"rounds/round_01/week3/notes.md" },
+        { id:"r01-w3-ex3",  type:"exercise", title:"练习3：文本查看与 man",      cmd:"自动", file:"rounds/round_01/week3/exercises.sh" },
+        { id:"r01-w3-self", type:"test",     title:"第3周自测",                cmd:"自动", file:"rounds/round_01/week3/exercises.sh" },
+      ]},
+      { id: "round01-final", title: "最终验收", tasks: [
+        { id:"r01-fin-comp",  type:"exercise", title:"综合练习：文件实验室",       cmd:"自动", file:"rounds/round_01/final/comprehensive_exercise.sh" },
+        { id:"r01-fin-sheet", type:"output",   title:"完成 Round 01 命令小抄",    cmd:"自动", file:"rounds/round_01/final/command_cheatsheet.md" },
+        { id:"r01-fin-acc1",  type:"test",     title:"验收：解释基础命令与路径概念", cmd:"自动", file:"round_01.md" },
+      ]}
+    ]
+  },
+  {
     id: "round_02",
     title: "Round 02 · Shell、管道、Git 最小工作流",
     lane: "engineering",
@@ -455,7 +484,7 @@ const ROUNDS = [
       ]}
     ]
   }
-  // 后续 Round 在落地为实操目录时按本结构追加；当前已展开 Round 00、Round 02。
+  // 后续 Round 在落地为实操目录时按本结构追加；当前已展开 Round 00、Round 01、Round 02。
 ];
 
 // ============================================================
