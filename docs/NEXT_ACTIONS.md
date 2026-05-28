@@ -142,6 +142,26 @@
 
 ---
 
+## TASK-RR-09：Stage 1 可选推进 · Round 05 最小骨架
+
+- 状态：**done**（2026-05-28）
+- 背景：`TASK-RR-05`、`TASK-RR-08` 当前都需要用户输入/决策，为保持自动推进节奏，先推进 Stage 1 无需用户介入的可选项。
+- 目标：在 `rounds/round_05/` 下建立 README + week1/2/3 + final 的最小实操骨架（含 notes.md + exercises.sh + cheatsheet）。
+- 要修改：新增 `rounds/round_05/` 目录与文件；同步 `CONVERSION_PROTOCOL.md`、`README.md`、`docs/PROJECT_STATE.md`。
+- 不要修改：不触碰 `rounds/round_00/`；不改 `records/` 真实学习记录；不引入新依赖。
+- 验收标准：目录结构符合协议 §7；脚本语法校验通过；协议同步检查与学习数据校验通过。
+- 风险：一次性把 Round 05 进度接入也做掉，导致超出“最小骨架”边界。
+- 是否需要用户介入：否。
+- 实际产物：
+  - `rounds/round_05/README.md`
+  - `rounds/round_05/week1/notes.md`、`rounds/round_05/week1/exercises.sh`
+  - `rounds/round_05/week2/notes.md`、`rounds/round_05/week2/exercises.sh`
+  - `rounds/round_05/week3/notes.md`、`rounds/round_05/week3/exercises.sh`
+  - `rounds/round_05/final/comprehensive_exercise.sh`
+  - `rounds/round_05/final/algorithm_patterns_cheatsheet.md`
+
+---
+
 # VPS 实操支线任务（编号 TASK-VPS-XX）
 
 > 主线 TASK-RR-XX 与 VPS 支线 TASK-VPS-XX **可并行推进**，编号空间互不冲突。
@@ -223,7 +243,7 @@ TASK-011 实际产物：
 
 1. **TASK-RR-05**：补院校官网招生目录链接并回填主表正式字段。
 2. **TASK-RR-08**：作品集第一张项目卡片（需用户决策方向）。
-3. （可选）推进 Stage 1 下一轮（如 Round 05 最小骨架）。
+3. （可选）推进 Stage 1 下一轮（如 Round 06 最小骨架）。
 4. （可选）清理历史 deferred 任务描述，保持队列精简。
 5. （可选）推进 Stage 1 下一轮（如 Round 05 进度接入/骨架细化）。
 
