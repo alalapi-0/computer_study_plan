@@ -774,3 +774,33 @@
 
 - 未改动 `rounds/round_00/`。
 - 未改动 `records/` 下真实学习记录。
+
+## 32. 2026-05-29 Stage 1 可选推进：Round 08 最小骨架
+
+### 32.1 本轮新增
+
+- 新增 `rounds/round_08/README.md`。
+- 新增 `rounds/round_08/week1|week2|week3/notes.md`。
+- 新增 `rounds/round_08/week1|week2|week3/exercises.py`。
+- 新增 `rounds/round_08/final/comprehensive_exercise.py`。
+- 新增 `rounds/round_08/final/upgrade_route_cheatsheet.md`。
+
+### 32.2 本轮修改
+
+- `CONVERSION_PROTOCOL.md`：Round 08 状态更新为“已展开”。
+- `README.md`：已展开 Round 列表同步到 Round 00/01/02/03/04/05/06/07/08。
+- `docs/NEXT_ACTIONS.md`：新增并完成 `TASK-RR-12`，可选下一轮提示更新到 Round 09 最小骨架。
+
+### 32.3 验证
+
+- `python3 -m py_compile rounds/round_08/week1/exercises.py`：通过。
+- `python3 -m py_compile rounds/round_08/week2/exercises.py`：通过。
+- `python3 -m py_compile rounds/round_08/week3/exercises.py`：通过。
+- `python3 -m py_compile rounds/round_08/final/comprehensive_exercise.py`：通过。
+- `python3 scripts/check_protocol_sync.py`：通过。
+- `python3 scripts/validate_learning_data.py`：通过。
+
+### 32.4 风险边界核对
+
+- 未改动 `rounds/round_00/`。
+- 未改动 `records/` 下真实学习记录。
