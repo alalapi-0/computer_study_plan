@@ -269,7 +269,7 @@
 | Round 06 | Linux 进阶与自动化 | ✅ 概览 | ✅ 已展开 | engineering | 2026-05-28 完成 Round 06 最小目录骨架 |
 | Round 07 | 面向 AI 项目综合练习 | ✅ 概览 | ✅ 已展开 | engineering | 2026-05-29 完成 Round 07 最小目录骨架 |
 | Round 08 | 总复盘与升级路线 | ✅ 概览 | ✅ 已展开 | engineering | 2026-05-29 完成 Round 08 最小目录骨架 |
-| Round 09 | 仓库规范化与测试（路线 A） | ✅ 概览 | ❌ 未展开 | engineering | |
+| Round 09 | 仓库规范化与测试（路线 A） | ✅ 概览 | ✅ 已展开 | engineering | 2026-05-29 完成 Round 09 最小目录骨架 |
 | Round 10 | Python 工程化基础（路线 A） | ✅ 概览 | ❌ 未展开 | engineering | |
 | Round 11 | 本地持久化（路线 A） | ✅ 概览 | ❌ 未展开 | engineering + soft_exam | 数据库素材 |
 | Round 12 | 自动化流水线（路线 A） | ✅ 概览 | ❌ 未展开 | engineering | |
