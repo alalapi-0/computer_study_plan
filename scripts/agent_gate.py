@@ -129,7 +129,7 @@ def pick_optional_round_task() -> GateTask | None:
         for match in OPTIONAL_ROUND_RE.finditer(text):
             num = int(match.group(1))
             if not (REPO_ROOT / f"rounds/round_{num:02d}").exists():
-                seq = 3 + num
+                seq = num + 4 if num >= 9 else num + 3
                 return GateTask(
                     task_id=f"TASK-RR-{seq:02d}-round{num:02d}-skeleton",
                     title=f"Stage 1 可选推进 · Round {num:02d} 最小骨架",
@@ -140,7 +140,7 @@ def pick_optional_round_task() -> GateTask | None:
     num = next_optional_round()
     if num is None:
         return None
-    seq = 3 + num
+    seq = num + 4 if num >= 9 else num + 3
     return GateTask(
         task_id=f"TASK-RR-{seq:02d}-round{num:02d}-skeleton",
         title=f"Stage 1 可选推进 · Round {num:02d} 最小骨架",
