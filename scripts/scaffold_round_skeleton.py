@@ -90,6 +90,7 @@ def write_round(num: int) -> None:
     if root.exists():
         print(f"skip round_{num:02d}: already exists")
         return
+    root.mkdir(parents=True)
 
     readme = f"""# Round {num:02d} · {title}
 

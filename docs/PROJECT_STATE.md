@@ -904,3 +904,15 @@
 
 - `python3 scripts/agent_gate.py --verify`：通过。
 - `python3 -m py_compile rounds/round_12/**/exercises.py`（逐文件）：通过。
+
+## 37. 2026-05-31 TASK-RR-17..25 Round 13–21 最小骨架
+
+### 37.1 本轮新增
+
+- 新增 `rounds/round_13/` … `rounds/round_21/` 最小骨架（`scripts/scaffold_round_skeleton.py` 生成）。
+- 工程实操线 Round 00–21 概览文档均已对应 `rounds/round_XX/` 目录。
+
+### 37.2 验证
+
+- `python3 scripts/agent_gate.py --verify`：通过。
+- Round 13–21 Python 练习脚本 `py_compile`：通过。

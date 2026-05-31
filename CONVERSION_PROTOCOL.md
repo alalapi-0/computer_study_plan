@@ -273,15 +273,15 @@
 | Round 10 | Python 工程化基础（路线 A） | ✅ 概览 | ✅ 已展开 | engineering | 2026-05-31 完成 Round 10 最小目录骨架 |
 | Round 11 | 本地持久化（路线 A） | ✅ 概览 | ✅ 已展开 | engineering + soft_exam | 2026-05-31 完成 Round 11 最小目录骨架 |
 | Round 12 | 自动化流水线（路线 A） | ✅ 概览 | ✅ 已展开 | engineering | 2026-05-31 完成 Round 12 最小目录骨架 |
-| Round 13 | 环境复现与发布（路线 A） | ✅ 概览 | ❌ 未展开 | engineering | |
-| Round 14 | HTTP 与 API 设计（路线 B） | ✅ 概览 | ❌ 未展开 | engineering + soft_exam + cs408 | 网络素材 |
-| Round 15 | FastAPI 基础（路线 B） | ✅ 概览 | ❌ 未展开 | engineering | |
-| Round 16 | API 与数据层结合（路线 B） | ✅ 概览 | ❌ 未展开 | engineering | |
-| Round 17 | 服务化收口（路线 B） | ✅ 概览 | ❌ 未展开 | engineering | |
-| Round 18 | 数值计算与数据分析（路线 C） | ✅ 概览 | ❌ 未展开 | engineering | |
-| Round 19 | 机器学习最小闭环（路线 C） | ✅ 概览 | ❌ 未展开 | engineering | |
-| Round 20 | PyTorch 入门（路线 C） | ✅ 概览 | ❌ 未展开 | engineering | |
-| Round 21 | NLP 前置基础（路线 C） | ✅ 概览 | ❌ 未展开 | engineering | |
+| Round 13 | 环境复现与发布（路线 A） | ✅ 概览 | ✅ 已展开 | engineering | 2026-05-31 完成 Round 13 最小目录骨架 |
+| Round 14 | HTTP 与 API 设计（路线 B） | ✅ 概览 | ✅ 已展开 | engineering + soft_exam + cs408 | 2026-05-31 完成 Round 14 最小目录骨架 |
+| Round 15 | FastAPI 基础（路线 B） | ✅ 概览 | ✅ 已展开 | engineering | 2026-05-31 完成 Round 15 最小目录骨架 |
+| Round 16 | API 与数据层结合（路线 B） | ✅ 概览 | ✅ 已展开 | engineering | 2026-05-31 完成 Round 16 最小目录骨架 |
+| Round 17 | 服务化收口（路线 B） | ✅ 概览 | ✅ 已展开 | engineering | 2026-05-31 完成 Round 17 最小目录骨架 |
+| Round 18 | 数值计算与数据分析（路线 C） | ✅ 概览 | ✅ 已展开 | engineering | 2026-05-31 完成 Round 18 最小目录骨架 |
+| Round 19 | 机器学习最小闭环（路线 C） | ✅ 概览 | ✅ 已展开 | engineering | 2026-05-31 完成 Round 19 最小目录骨架 |
+| Round 20 | PyTorch 入门（路线 C） | ✅ 概览 | ✅ 已展开 | engineering | 2026-05-31 完成 Round 20 最小目录骨架 |
+| Round 21 | NLP 前置基础（路线 C） | ✅ 概览 | ✅ 已展开 | engineering | 2026-05-31 完成 Round 21 最小目录骨架 |
 
 > "所属主线"是 v2.0 新增字段，用于把现有工程实操内容映射到新增的多目标体系（详见 `docs/KNOWLEDGE_MAPPING.md`）。
 
