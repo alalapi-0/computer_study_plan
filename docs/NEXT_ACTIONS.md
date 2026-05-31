@@ -97,7 +97,7 @@
 
 ## TASK-RR-05：院校跟踪表第一行（需要用户提供 / 联网）
 
-- 状态：in_progress（已记录目标院校意向，待官网核验）
+- 状态：**skipped**（2026-05-31 用户要求永久跳过，不阻塞 agent_gate；**非**官网核验完成）
 - 背景：`docs/GRADUATE_SCHOOL_TRACKER.md` 模板已建立，但任何院校数据必须以官网为准。
 - 目标：填入用户感兴趣的第一所目标院校。
 - 要修改：在 `docs/GRADUATE_SCHOOL_TRACKER.md` 末尾"院校列表"追加一行。
@@ -110,7 +110,7 @@
 
 ## TASK-RR-06：错题系统第一次走通（需要用户提供 / 联网）
 
-- 状态：deferred（用户暂缓）
+- 状态：**skipped**（2026-05-31 永久跳过，原 deferred；非已走通错题系统）
 - 背景：错题系统流程已建立，但需要一道真实做错的题来跑通"记录 → 归类 → 复盘 → 回流"。
 - 目标：在 `records/error_notes/<lane>/<module>/` 下记录第一道错题，并在本周复盘中说明回流动作。
 - 前置：用户提供一道错题（含题面 + 你的错误答案 + 正确答案）。
@@ -121,7 +121,7 @@
 
 ## TASK-RR-07：考试日期填入（需要用户提供）
 
-- 状态：deferred（用户明确两年内不处理）
+- 状态：**skipped**（2026-05-31 永久跳过，原 deferred；非已填入考试日期）
 - 背景：`progress.html` 已支持考试倒计时（localStorage），用户需要在浏览器里录入日期。
 - 目标：打开 `progress.html`，在"考试倒计时"卡片填入软考 / 数学二 / 408 的考试日期。
 - 前置：用户后续决定启动考试日期管理时再恢复。
@@ -132,7 +132,7 @@
 
 ## TASK-RR-08：作品集第一个项目卡片
 
-- 状态：pending
+- 状态：**skipped**（2026-05-31 用户要求永久跳过决策类卡点；非已追加项目卡片）
 - 背景：`docs/PROJECT_PORTFOLIO_TRACK.md` 已建立追踪模板，但还没有任何已启动项目。
 - 目标：协助用户挑选第一个项目方向，按 §3 卡片模板在文档末尾追加一份卡片。
 - 要修改：`docs/PROJECT_PORTFOLIO_TRACK.md` 追加项目卡片。
@@ -219,6 +219,20 @@
   - `rounds/round_08/week3/notes.md`、`rounds/round_08/week3/exercises.py`
   - `rounds/round_08/final/comprehensive_exercise.py`
   - `rounds/round_08/final/upgrade_route_cheatsheet.md`
+
+---
+
+## TASK-RR-16：Stage 1 可选推进 · Round 12 最小骨架
+
+- 状态：**done**（2026-05-31）
+- 背景：agent_gate 跳过 RR-05/06/07/08 后继续 Stage 1 最小骨架推进。
+- 目标：在 `rounds/round_12/` 下建立自动化流水线练习骨架。
+- 是否需要用户介入：否。
+- 实际产物：
+  - `rounds/round_12/README.md`
+  - `rounds/round_12/week1|week2|week3/notes.md` 与 `exercises.py`
+  - `rounds/round_12/final/comprehensive_exercise.py`
+  - `rounds/round_12/final/pipeline_automation_cheatsheet.md`
 
 ---
 
@@ -356,10 +370,8 @@ TASK-011 实际产物：
 
 ## 推荐下一步（按优先级）
 
-1. **TASK-RR-05**：补院校官网招生目录链接并回填主表正式字段。
-2. **TASK-RR-08**：作品集第一张项目卡片（需用户决策方向）。
-3. （可选）推进 Stage 1 下一轮（如 Round 12 最小骨架）。
-4. （可选）清理历史 deferred 任务描述，保持队列精简。
-5. （可选）运行 `python3 scripts/agent_gate.py` 查看下一项可自动推进任务。
+1. 运行 `python3 scripts/agent_gate.py --json` 查看下一项可自动推进任务（已跳过 RR-05/06/07/08）。
+2. （自动）Stage 1 下一轮最小骨架（当前候选：Round 12+，见 `round_12.md` 等概览）。
+3. （可选）用户自行恢复 RR-05 官网核验或 RR-08 作品集决策时，在队列中改回 `pending` 并移出 `SKIP_TASK_IDS`。
 
 > 主线推进、VPS 支线推进、考试日期录入**互不阻塞**；用户可根据当下心情与可用时间选择。

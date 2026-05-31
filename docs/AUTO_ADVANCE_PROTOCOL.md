@@ -21,18 +21,19 @@
 
 每轮只执行一个明确任务：
 
-1. 从 `docs/NEXT_ACTIONS.md` 选择优先级最高、状态为 `pending`、且不需要用户介入的任务。
-2. 创建或切换到独立分支，默认分支名：`codex/<task-id>-short-title`。
-3. 将该任务在 `docs/NEXT_ACTIONS.md` 中标记为 `in_progress`。
-4. 阅读任务涉及的现有文件，确认真实状态。
-5. 做最小必要修改。
-6. 运行验证。
-7. 将该任务标记为 `done`，并更新后续任务状态。
-8. 更新 `docs/PROJECT_STATE.md`。
-9. 必要时更新 `docs/DECISIONS.md`、`README.md`、`AGENTS.md` 或长期规划文档。
-10. commit。
-11. remote 存在时 push 当前分支。
-12. 如 GitHub CLI 可用并已登录，创建或更新 PR。
+1. 从 `docs/NEXT_ACTIONS.md` 选择优先级最高、状态为 `pending`、且不需要用户介入的任务；运行 `python3 scripts/agent_gate.py --json` 时以门禁输出为准。
+2. **永久跳过（用户 2026-05-31）**：`TASK-RR-05` / `06` / `07` / `08` 及同类「不影响仓库推进」的人类介入、决策、联网核验卡点——`agent_gate` 的 `SKIP_TASK_IDS` 会过滤，不得阻塞自动选任务。Playwright 等依赖若轮次需要，在仓库内 `pip install` 即可，勿等待用户本机确认。
+3. 创建或切换到独立分支，默认分支名：`codex/<task-id>-short-title`；用户显式授权时可 **commit/push 到 `main`**（见 `agent_gate` JSON 的 `commit_to_main`）。
+4. 将该任务在 `docs/NEXT_ACTIONS.md` 中标记为 `in_progress`。
+5. 阅读任务涉及的现有文件，确认真实状态。
+6. 做最小必要修改。
+7. 运行验证（`python3 scripts/agent_gate.py --verify`）。
+8. 将该任务标记为 `done`，并更新后续任务状态。
+9. 更新 `docs/PROJECT_STATE.md`。
+10. 必要时更新 `docs/DECISIONS.md`、`README.md`、`AGENTS.md` 或长期规划文档。
+11. commit。
+12. remote 存在时 push（独立分支或 `main`，按用户当轮授权）。
+13. 如 GitHub CLI 可用并已登录，可创建或更新 PR（推 `main` 时通常省略 PR）。
 
 ## 3. 验证流程
 
@@ -72,8 +73,8 @@ TASK-XXX: short imperative summary
 
 ## 5. Push 规则
 
-- 不直接 push `main`。
-- remote 存在时，push 当前独立分支。
+- 默认不直接 push `main`；用户显式授权自动连推时，可按 `agent_gate` 的 `commit_to_main` 推送到 `main`。
+- remote 存在时，push 当前工作分支（独立分支或 `main`）。
 - push 失败时停止并报告，不继续做下一轮。
 - 不修改 GitHub remote 或认证配置，除非用户明确要求。
 

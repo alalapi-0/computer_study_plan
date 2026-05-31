@@ -887,3 +887,20 @@
 ### 35.4 风险边界核对
 
 - 未改动 `rounds/round_00/` 与 `records/` 真实学习记录。
+
+## 36. 2026-05-31 agent_gate 跳过卡点 + TASK-RR-16 Round 12
+
+### 36.1 agent_gate
+
+- `scripts/agent_gate.py` 新增 `SKIP_TASK_IDS`（RR-05/06/07/08，用户 2026-05-31 永久跳过）。
+- `docs/AUTO_ADVANCE_PROTOCOL.md`、`docs/NEXT_ACTIONS.md` 同步 skipped 状态（非已完成核验/决策）。
+
+### 36.2 Round 12
+
+- 新增 `rounds/round_12/` 完整最小骨架。
+- `CONVERSION_PROTOCOL.md`、`README.md` 同步 Round 12 已展开。
+
+### 36.3 验证
+
+- `python3 scripts/agent_gate.py --verify`：通过。
+- `python3 -m py_compile rounds/round_12/**/exercises.py`（逐文件）：通过。

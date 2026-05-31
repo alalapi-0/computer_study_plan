@@ -272,7 +272,7 @@
 | Round 09 | 仓库规范化与测试（路线 A） | ✅ 概览 | ✅ 已展开 | engineering | 2026-05-29 完成 Round 09 最小目录骨架 |
 | Round 10 | Python 工程化基础（路线 A） | ✅ 概览 | ✅ 已展开 | engineering | 2026-05-31 完成 Round 10 最小目录骨架 |
 | Round 11 | 本地持久化（路线 A） | ✅ 概览 | ✅ 已展开 | engineering + soft_exam | 2026-05-31 完成 Round 11 最小目录骨架 |
-| Round 12 | 自动化流水线（路线 A） | ✅ 概览 | ❌ 未展开 | engineering | |
+| Round 12 | 自动化流水线（路线 A） | ✅ 概览 | ✅ 已展开 | engineering | 2026-05-31 完成 Round 12 最小目录骨架 |
 | Round 13 | 环境复现与发布（路线 A） | ✅ 概览 | ❌ 未展开 | engineering | |
 | Round 14 | HTTP 与 API 设计（路线 B） | ✅ 概览 | ❌ 未展开 | engineering + soft_exam + cs408 | 网络素材 |
 | Round 15 | FastAPI 基础（路线 B） | ✅ 概览 | ❌ 未展开 | engineering | |

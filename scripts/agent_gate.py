@@ -29,6 +29,18 @@ STATUS_RE = re.compile(r"- 状态：\*\*(.+?)\*\*")
 USER_NEEDED_RE = re.compile(r"- 是否需要用户介入：\*\*(.+?)\*\*")
 OPTIONAL_ROUND_RE = re.compile(r"Round (\d{2}) 最小骨架")
 
+# User 2026-05-31: permanently skip human/decision/verification tasks that do
+# not block repository progress. agent_gate must not select these or treat
+# them as blocking when choosing the next automatable task.
+SKIP_TASK_IDS = frozenset(
+    {
+        "TASK-RR-05",
+        "TASK-RR-06",
+        "TASK-RR-07",
+        "TASK-RR-08",
+    }
+)
+
 
 @dataclass
 class GateTask:
@@ -85,6 +97,8 @@ def parse_task_blocks(text: str) -> list[GateTask]:
 def pick_queue_task(tasks: list[GateTask]) -> GateTask | None:
     automatable_status = {"pending", "in_progress"}
     for task in tasks:
+        if task.task_id in SKIP_TASK_IDS:
+            continue
         if task.needs_user:
             continue
         if not any(task.status.startswith(s) for s in automatable_status):
@@ -210,6 +224,7 @@ def main() -> int:
             pending_human = [
                 t
                 for t in all_tasks
+                if t.task_id not in SKIP_TASK_IDS
                 if t.needs_user
                 and not t.status.startswith("done")
                 and not t.status.startswith("deferred")
@@ -232,6 +247,7 @@ def main() -> int:
         "status": task.status,
         "needs_user": task.needs_user,
         "source": task.source,
+        "skipped_task_ids": sorted(SKIP_TASK_IDS),
         "branch_hint": f"codex/{task.task_id.lower()}",
         "commit_to_main": True,
         "verify_commands": [
