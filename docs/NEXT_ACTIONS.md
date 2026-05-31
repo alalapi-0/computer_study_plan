@@ -222,6 +222,20 @@
 
 ---
 
+## TASK-RR-15：Stage 1 可选推进 · Round 11 最小骨架
+
+- 状态：**done**（2026-05-31）
+- 背景：在 `TASK-RR-14` 完成后继续 Stage 1 最小骨架推进。
+- 目标：在 `rounds/round_11/` 下建立 SQLite 持久化练习骨架。
+- 是否需要用户介入：否。
+- 实际产物：
+  - `rounds/round_11/README.md`
+  - `rounds/round_11/week1|week2|week3/notes.md` 与 `exercises.py`
+  - `rounds/round_11/final/comprehensive_exercise.py`
+  - `rounds/round_11/final/sqlite_persistence_cheatsheet.md`
+
+---
+
 ## TASK-RR-14：Stage 1 可选推进 · Round 10 最小骨架
 
 - 状态：**done**（2026-05-31）
@@ -344,7 +358,7 @@ TASK-011 实际产物：
 
 1. **TASK-RR-05**：补院校官网招生目录链接并回填主表正式字段。
 2. **TASK-RR-08**：作品集第一张项目卡片（需用户决策方向）。
-3. （可选）推进 Stage 1 下一轮（如 Round 11 最小骨架）。
+3. （可选）推进 Stage 1 下一轮（如 Round 12 最小骨架）。
 4. （可选）清理历史 deferred 任务描述，保持队列精简。
 5. （可选）运行 `python3 scripts/agent_gate.py` 查看下一项可自动推进任务。
 

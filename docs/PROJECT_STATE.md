@@ -866,3 +866,24 @@
 
 - 未改动 `rounds/round_00/`。
 - 未改动 `records/` 下真实学习记录。
+
+## 35. 2026-05-31 TASK-RR-15 Round 11 最小骨架
+
+### 35.1 本轮新增
+
+- 新增 `rounds/round_11/` 完整最小骨架（README、week1–3、final）。
+
+### 35.2 本轮修改
+
+- `scripts/agent_gate.py`：修正可选 Round 任务 ID 序号映射。
+- `CONVERSION_PROTOCOL.md`、`README.md`、`docs/NEXT_ACTIONS.md` 同步 Round 11 已展开状态。
+
+### 35.3 验证
+
+- `python3 -m py_compile rounds/round_11/**/exercises.py`（逐文件）：通过。
+- `python3 scripts/check_protocol_sync.py`：通过。
+- `python3 scripts/validate_learning_data.py`：通过。
+
+### 35.4 风险边界核对
+
+- 未改动 `rounds/round_00/` 与 `records/` 真实学习记录。
