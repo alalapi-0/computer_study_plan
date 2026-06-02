@@ -1,0 +1,30 @@
+---
+description: Workspace MCP Servers requirements and usage rules
+globs:
+alwaysApply: true
+---
+
+# MCP Required
+
+当前仓库默认需要以下 5 个 Workspace MCP Servers：
+
+- chrome-devtools
+- context7
+- filesystem
+- github
+- playwright
+
+## 启动前检查
+
+Agent 开始自动推进前，必须确认 `.cursor/mcp.json` 存在且包含上述 server，并运行 `node scripts/check_mcp_config.js`（或 `npm run check:mcp`）验证配置。
+
+若某个 MCP 不可用，记录原因，不要无意义反复安装；使用可用替代方案继续推进。
+
+## 使用规则
+
+1. **UI / 浏览器任务**：涉及页面、审核台、生成结果、预览、发布流程时，必须使用 chrome-devtools 或 playwright 进行真实浏览器检查。
+2. **文档与依赖不确定**：优先用 context7 查询第三方库和框架文档。
+3. **文件读写**：filesystem MCP 只允许访问当前项目目录；禁止授权 `/`、`~`、用户主目录、磁盘根目录等大范围路径。
+4. **GitHub 操作**：执行前必须检查 `git status` 和 `git diff`；GitHub token 只能通过环境变量提供，禁止写入仓库。
+5. **提交安全**：提交前必须确认没有 token、API Key、cookie、无关大文件。
+6. **Cursor 重启**：新增或修改 `.cursor/mcp.json` 后，可能需要重启 Cursor 或重新加载窗口才能识别。

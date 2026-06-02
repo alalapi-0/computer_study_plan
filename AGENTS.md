@@ -40,6 +40,32 @@
 - remote 存在时 push 到 GitHub 分支。
 - 不直接 push `main`。
 
+## MCP Tools
+
+当前项目要求启用以下 Workspace MCP Servers：
+
+- chrome-devtools
+- context7
+- filesystem
+- github
+- playwright
+
+用途：
+
+- **chrome-devtools**：用于浏览器调试、console、network、页面状态检查。
+- **context7**：用于查询第三方库和框架文档。
+- **filesystem**：用于安全读取和检查当前项目文件。
+- **github**：用于仓库、提交、分支、issue、PR 等相关操作。
+- **playwright**：用于浏览器自动化、页面操作、E2E 检查。
+
+自动推进轮开始前，Agent 必须确认这些 MCP 已加载。
+
+如果某个 MCP 不可用，Agent 需要记录原因，并使用可用替代方案继续推进。
+
+涉及页面、审核台、生成结果、预览、发布流程的任务，必须使用 chrome-devtools 或 playwright 进行真实浏览器检查。
+
+配置位于 `.cursor/mcp.json`；可运行 `npm run check:mcp` 或 `node scripts/check_mcp_config.js` 验证。修改后可能需要重启 Cursor 或重新加载窗口。
+
 ## 高风险停止条件
 
 遇到以下情况必须停止并向用户报告：

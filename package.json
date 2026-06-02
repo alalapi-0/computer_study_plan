@@ -1,0 +1,8 @@
+{
+  "name": "computer_study_plan",
+  "private": true,
+  "description": "Learning roadmap and progress control repository",
+  "scripts": {
+    "check:mcp": "node scripts/check_mcp_config.js"
+  }
+}

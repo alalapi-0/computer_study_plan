@@ -18,6 +18,26 @@
 
 ---
 
+## Workspace MCP Servers
+
+当前项目需要以下 Workspace MCP Servers：
+
+- chrome-devtools
+- context7
+- filesystem
+- github
+- playwright
+
+说明：
+
+1. `.cursor/mcp.json` 是当前项目的 Workspace MCP 配置。
+2. Cursor 可能需要**重启**或**重新加载窗口**后才能识别新配置。
+3. GitHub MCP 需要通过环境变量 `GITHUB_PERSONAL_ACCESS_TOKEN` 提供 token，**不允许写进仓库**。
+4. filesystem MCP 只授权当前项目目录（`.`，即仓库根）。
+5. 可运行 `npm run check:mcp` 检查配置（等价于 `node scripts/check_mcp_config.js`）。
+
+---
+
 ## 1. 仓库定位
 
 本仓库**不是**：
