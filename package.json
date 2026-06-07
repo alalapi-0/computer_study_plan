@@ -3,6 +3,7 @@
   "private": true,
   "description": "Learning roadmap and progress control repository",
   "scripts": {
-    "check:mcp": "node scripts/check_mcp_config.js"
+    "check:mcp": "node scripts/check_mcp_config.js",
+    "check:cursor-mcp": "bash scripts/check_cursor_mcp_status.sh"
   }
 }

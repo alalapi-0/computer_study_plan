@@ -49,6 +49,7 @@
 - filesystem
 - github
 - playwright
+- stitch
 
 用途：
 
@@ -57,6 +58,7 @@
 - **filesystem**：用于安全读取和检查当前项目文件。
 - **github**：用于仓库、提交、分支、issue、PR 等相关操作。
 - **playwright**：用于浏览器自动化、页面操作、E2E 检查。
+- **stitch**：用于 UI 设计输入与设计变体参考（需 `STITCH_API_KEY` 环境变量）。
 
 自动推进轮开始前，Agent 必须确认这些 MCP 已加载。
 
@@ -64,7 +66,28 @@
 
 涉及页面、审核台、生成结果、预览、发布流程的任务，必须使用 chrome-devtools 或 playwright 进行真实浏览器检查。
 
-配置位于 `.cursor/mcp.json`；可运行 `npm run check:mcp` 或 `node scripts/check_mcp_config.js` 验证。修改后可能需要重启 Cursor 或重新加载窗口。
+配置位于 `.cursor/mcp.json`；可运行 `npm run check:mcp` 或 `node scripts/check_mcp_config.js` 验证；CLI 层状态另见 `npm run check:cursor-mcp`。修改后可能需要重启 Cursor 或重新加载窗口。
+
+## Cursor Browser UI Workflow
+
+Cursor 执行 UI 优化（如 `progress.html`）时必须遵守：
+
+1. **必须使用普通前台 Agent**——禁止 Multitask / 后台子 Agent 控制浏览器。
+2. **禁止 Multitask 控制浏览器**——子 Agent 通常不继承 Workspace MCP。
+3. **每轮 UI 实现必须先检查真实页面**——启动本地服务并打开目标 URL。
+4. **每轮 UI 实现必须使用 before / after 浏览器检查**——截图或记录观察结果。
+5. **Stitch 用作设计输入**——不得无审查覆盖代码。
+6. **chrome-devtools 用作页面调试**——console、network、截图。
+7. **playwright 用作回归测试**——稳定 E2E 验证。
+8. **filesystem 用作文件真值检查**——仅限当前项目目录。
+9. **context7 用作文档查询**——前端库与框架文档。
+10. **github 用作提交和远程状态**——token 仅通过环境变量。
+11. **微信已登录页面只允许 wechat-chrome-session**——本仓库非微信项目，普通 Web UI 不得使用该 server。
+12. **当前线程缺工具时必须 BLOCKED**——输出 `BLOCKED: MISSING_FROM_THREAD_TOOL_REGISTRY`，不要继续假装执行。
+
+详细 runbook：`docs/cursor_browser_ui_runbook.md`  
+工具注册排查：`docs/cursor_tool_registry_check.md`  
+下一轮 Prompt 模板：`docs/prompts/CURSOR_UI_IMPLEMENTATION_PROMPT.md`
 
 ## 高风险停止条件
 

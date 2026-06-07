@@ -27,14 +27,61 @@
 - filesystem
 - github
 - playwright
+- stitch
 
 说明：
 
 1. `.cursor/mcp.json` 是当前项目的 Workspace MCP 配置。
-2. Cursor 可能需要**重启**或**重新加载窗口**后才能识别新配置。
+2. Cursor 可能需要**重启**或**重新加载窗口**后才能识别新配置；**批准 MCP 后建议完全退出 Cursor 并重开仓库**。
 3. GitHub MCP 需要通过环境变量 `GITHUB_PERSONAL_ACCESS_TOKEN` 提供 token，**不允许写进仓库**。
-4. filesystem MCP 只授权当前项目目录（`.`，即仓库根）。
-5. 可运行 `npm run check:mcp` 检查配置（等价于 `node scripts/check_mcp_config.js`）。
+4. Stitch MCP 需要通过环境变量 `STITCH_API_KEY` 提供 key，**不允许写进仓库**（见 `.env.example`）。
+5. filesystem MCP 只授权当前项目目录（`.`，即仓库根）。
+6. 可运行 `npm run check:mcp` 检查静态配置；`npm run check:cursor-mcp` 检查 CLI 层 MCP 状态（**均不代表当前 Agent 线程已暴露工具**）。
+
+---
+
+## Cursor Browser UI Workflow
+
+当使用 Cursor Agent 优化本地 Web UI（如 `progress.html`）时：
+
+### 1. 如何检查 MCP
+
+```bash
+npm run check:cursor-mcp
+# 或
+bash scripts/check_cursor_mcp_status.sh
+npm run check:mcp
+```
+
+### 2. 为什么需要重启 Cursor
+
+- 批准 MCP 后，**旧 Agent 对话**可能仍看不到新工具
+- **Multitask 子 Agent** 可能不继承 Workspace MCP
+- **新建普通前台 Agent 对话**最稳定
+
+详见 [`docs/cursor_tool_registry_check.md`](docs/cursor_tool_registry_check.md)。
+
+### 3. UI 优化标准流程
+
+1. 启动项目（如 `python3 -m http.server 8000`）
+2. 打开页面 → 截图（before）
+3. Stitch 设计输入（可选）
+4. 修改代码（每轮一个 UI 切片）
+5. 再打开页面 → console / network 检查
+6. 截图（after）→ 运行测试
+7. commit / push（独立分支）
+
+完整 14 步见 [`docs/cursor_browser_ui_runbook.md`](docs/cursor_browser_ui_runbook.md)。
+
+### 4. 微信页面特殊说明
+
+本仓库**不是**微信相关项目。若在其他场景操作微信公众号已登录页面：
+
+- 必须使用 **wechat-chrome-session**
+- 不允许用 Playwright 新开页面替代
+- 遇到扫码 / 风控时停止，等待用户手动处理
+
+下一轮 UI 推进 Prompt：[`docs/prompts/CURSOR_UI_IMPLEMENTATION_PROMPT.md`](docs/prompts/CURSOR_UI_IMPLEMENTATION_PROMPT.md)
 
 ---
 

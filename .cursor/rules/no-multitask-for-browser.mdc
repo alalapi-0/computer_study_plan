@@ -1,0 +1,15 @@
+---
+description: 禁止 Multitask 执行浏览器控制任务
+globs:
+alwaysApply: true
+---
+
+# No Multitask for Browser Tasks
+
+1. **涉及 browser / chrome-devtools / playwright / wechat-chrome-session 的任务禁止使用 Multitask。**
+2. **浏览器控制任务必须使用普通前台 Agent。**
+3. **若当前处于 Multitask 或后台子 Agent，必须停止并要求用户切换到普通前台 Agent。**
+4. **微信已登录页面操作必须只使用 wechat-chrome-session**（本仓库非微信项目，通常不适用）。
+5. **普通本地 Web UI 优化不得使用 wechat-chrome-session**——应使用 chrome-devtools / playwright / cursor-ide-browser 等常规模块。
+
+排查与恢复步骤见 `docs/cursor_tool_registry_check.md`。
