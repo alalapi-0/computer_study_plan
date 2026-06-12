@@ -132,14 +132,13 @@ npm run check:mcp
 
 ## 4. 当前阶段
 
-> ✏️ **此区块可手动更新**
+> **勿在此硬编码轮次列表。** 运行 `python3 scripts/round_status.py --summary` 查看概览 md / 实操骨架 / 进度接入的真实数量。  
+> Agent 选下一任务：`python3 scripts/agent_gate.py --json`（见 `docs/NEXT_ACTIONS.md`）。
 
-- 已完成 **Stage 0 · 仓库治理与学习系统准备**：删除 22 份 `plan_round_XX.txt`，建立路线骨架与四主线进度系统。
-- 当前最有效闭环：**Round 00 终端入门**（`engineering` lane）。
-- 下一步可选：
-  1. 继续推进 Stage 1（Round 02 / Round 06 实操目录展开 / VPS-04 SSH 文档练习）
-  2. 启动 Stage 2 软考软件设计师知识体系拆解（见 `plans/soft_exam/`）
-  3. 启动 Stage 4 数学二保底节奏（见 `plans/math2/`）
+- 已完成 **Stage 0 · 仓库治理与学习系统准备**（路线骨架 + 四主线进度系统 v2）。
+- **进度闭环**（`progress.json` + 练习脚本 `mark_done` + 看板任务清单）：以 `scripts/round_status.py` 输出的 `full_loop_rounds` 为准（当前为 Round 00–04）。
+- **最小实操骨架**（`rounds/round_XX/` 目录齐全、尚未接入进度）：见 `scaffold_only_rounds`（当前为 Round 05–21）。
+- 下一步队列与优先级：见 [`docs/NEXT_ACTIONS.md`](docs/NEXT_ACTIONS.md) 顶部「推荐下一步」。
 
 ---
 
@@ -194,29 +193,19 @@ npm run check:mcp
 │  └─ completed_tasks/             ← 完成的练习快照（可选）
 │
 └─ rounds/                         ← Round 实操目录（仅可执行内容进此）
-   ├─ round_00/                    ← 终端入门（已完成）
-   │  ├─ README.md
-   │  ├─ week1/ week2/ week3/ final/
-   ├─ round_01/                    ← 文件系统与基础命令（已展开）
-   ├─ round_02/                    ← Shell/管道/Git 最小工作流（已展开）
-   │  ├─ README.md
-   │  ├─ week1/ week2/ week3/ final/
-   ├─ round_03/                    ← Python 基础与复杂度入门（已展开）
-   ├─ round_04/                    ← 核心数据结构（已展开）
-   ├─ round_05/                    ← 高频算法模式（已展开）
-   ├─ round_06/                    ← Linux 进阶与自动化（已展开）
-   ├─ round_07/                    ← 面向 AI 项目综合练习（已展开）
-   ├─ round_08/                    ← 总复盘与升级路线（已展开）
-   ├─ round_09/                    ← 仓库规范化与测试入门（已展开）
-   ├─ round_10/                    ← Python 工程化基础（已展开）
-   ├─ round_11/                    ← 本地持久化与数据记录（已展开）
-   ├─ round_12/ … round_21/        ← 路线 A/B/C 后续轮次（已展开最小骨架）
+   ├─ round_00/ … round_21/        ← 工程线 22 轮（层级见 round_status 扫描）
    └─ stage_03_vps_remote_ops/     ← VPS 远程实操支线（13 份 Round 文档）
-      ├─ README.md
-      └─ round_vps_00 ~ round_vps_12.md
 ```
 
-> Round md 文件（`round_00.md` ~ `round_21.md`）作为**工程实操线素材库**全部保留，按需展开到 `rounds/round_XX/`。
+**轮次三层含义（避免混淆）**
+
+| 层级 | 含义 | 如何查看 |
+|------|------|----------|
+| 概览文档 | 根目录 `round_XX.md` 大纲 | `ls round_*.md` |
+| 实操骨架 | `rounds/round_XX/` 含 week1–3 + final | `python3 scripts/round_status.py` |
+| 进度闭环 | 任务在 `progress.json` 且练习可 `mark_done` | 字段 `full_loop_rounds` |
+
+> Round md（`round_00.md` ~ `round_21.md`）是**工程实操线素材库**；「骨架已存在」≠「你已学完」≠「已接入进度看板打卡」。
 
 ---
 
@@ -225,7 +214,9 @@ npm run check:mcp
 ### 6.1 第一次进入仓库
 
 ```bash
-cd ~/PycharmProjects/computer_study_plan
+cd ~/PycharmProjects/computer_study_plan   # 或你的克隆路径，见 docs/WORKSPACE.md
+test -f progress.json && test -f mark_done.sh && echo "OK: 仓库根"
+python3 scripts/check_user_journey.py      # 用户旅程自检（生成审计报告）
 ```
 
 在 Cursor / PyCharm 中打开**同一文件夹**作为工作区根目录。
@@ -248,13 +239,16 @@ cd ~/PycharmProjects/computer_study_plan
 
 ### 6.3 看进度
 
-- **方式一（推荐）**：双击 `progress.html`，浏览器打开。完成练习后按 `⌘R` 刷新。
-- **方式二（自动刷新）**：
+- **方式一（只读看板）**：双击 `progress.html`；完成练习后终端 `mark_done.sh` 再按 `⌘R` 刷新。
+- **方式二（学习服务 · 推荐，支持网页打卡与读笔记）**：
   ```bash
   cd ~/PycharmProjects/computer_study_plan
-  python3 -m http.server 8000
-  open http://localhost:8000/progress.html
+  python3 scripts/learn_server.py
+  # 或 npm run learn:server
+  # 浏览器打开 http://127.0.0.1:8000/progress.html
   ```
+- **方式三（只读 HTTP）**：`python3 -m http.server 8000` 仅适合看进度，**不能**网页打卡（无 `/api/*`）。
+- **后续能力**（练习引导、错题表单等）：见 [`docs/PROGRESS_WEB_LEARNING_ROADMAP.md`](docs/PROGRESS_WEB_LEARNING_ROADMAP.md) PW-3 ~ PW-6。
 
 看板包含：
 
@@ -264,7 +258,7 @@ cd ~/PycharmProjects/computer_study_plan
 - 考试倒计时（localStorage）
 - 阶段进度（Stage 0–7）
 - 当前薄弱项（自动识别完成率 < 30% 且任务数 ≥ 5 的 lane）
-- 按 lane / Round 浏览（当前已展开 Round 00–Round 21）
+- 按 lane / Round 浏览（元数据来自 `progress_rounds.json`；进度任务仅覆盖已接入轮次，见 `round_status.py`）
 
 ### 6.4 进度系统 CLI
 
@@ -289,6 +283,7 @@ bash mark_done.sh <task-id> --undo  # 取消完成
 | 看某个知识点属于哪条 lane | `docs/KNOWLEDGE_MAPPING.md` |
 | 设计本周节奏 | `docs/WEEKLY_EXECUTION_TEMPLATE.md` |
 | 看进度系统规则 | `docs/PROGRESS_RULES.md` + `CONVERSION_PROTOCOL.md` |
+| 看 progress 网页全学习闭环规划 | `docs/PROGRESS_WEB_LEARNING_ROADMAP.md` |
 | 学错题系统怎么用 | `docs/ERROR_REVIEW_SYSTEM.md` |
 | 填院校信息 | `docs/GRADUATE_SCHOOL_TRACKER.md` |
 | 看作品集追踪 | `docs/PROJECT_PORTFOLIO_TRACK.md` |
@@ -303,6 +298,7 @@ bash mark_done.sh <task-id> --undo  # 取消完成
 
 > 这些是**硬约束**，AI 与人类都需遵守。
 
+- 轮次状态表、README「当前阶段」、看板 Round 列表：**禁止手工维护完整枚举**；以 `scripts/round_status.py` + `scripts/generate_progress_rounds.py` 为准。
 - 不随意新增重复文档；任何新计划必须挂到总路线（`docs/MASTER_STUDY_ROADMAP.md`）。
 - 所有学习任务必须能对应到某个 Stage（`docs/STAGE_PLAN.md`）。
 - 每周至少一次复盘（`records/weekly_reviews/YYYY-WW.md`）。
@@ -332,7 +328,7 @@ bash mark_done.sh <task-id> --undo  # 取消完成
 仓库中 `round_00.md` ~ `round_21.md` 是历史 Round 概览文档（22 份），现在的定位是**工程实操线（`engineering` lane）的素材库**。它们：
 
 - ✅ 全部保留，未被废弃
-- ✅ 按需在 `rounds/round_XX/` 展开为可执行实操目录（当前已展开 Round 00–Round 21）
+- ✅ 可按需在 `rounds/round_XX/` 展开实操目录（当前 22 轮均有最小骨架；进度接入情况运行 `python3 scripts/round_status.py`）
 - ✅ 数据结构、算法、网络、Linux 等 Round 内容会作为软考 / 408 模块的辅助素材（参考 `docs/KNOWLEDGE_MAPPING.md`）
 - ❌ 不替代 `plans/soft_exam/` 与 `plans/408/` 中的专项考试笔记
 

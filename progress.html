@@ -266,6 +266,111 @@
     .weak-list .weak-item.alert { border-color: var(--red); color: #fca5a5; }
     .weak-list .weak-item .lane-name { font-weight: 600; color: var(--text); }
     .weak-empty { color: var(--text-muted); font-size: 0.8rem; }
+
+    /* ── Learn server actions ── */
+    .task-actions { display: flex; flex-direction: column; gap: 0.25rem; align-items: flex-end; }
+    .task-actions button {
+      padding: 0.2rem 0.55rem; border-radius: 6px; border: 1px solid var(--border);
+      background: var(--card-hover); color: var(--text); font-size: 0.72rem; cursor: pointer;
+    }
+    .task-actions button:hover { border-color: var(--accent); }
+    .task-actions button.primary { border-color: var(--green); color: var(--green); }
+    .task-actions button.read { border-color: var(--accent2); color: var(--accent2); }
+
+    .learn-mode-banner {
+      padding: 0.65rem 1rem; margin-bottom: 1rem; border-radius: var(--radius);
+      border: 1px solid var(--border); background: rgba(108, 99, 255, 0.12); font-size: 0.85rem;
+    }
+    .learn-mode-banner.off { background: rgba(245, 158, 11, 0.1); border-color: var(--yellow); }
+
+    .notes-modal-backdrop {
+      position: fixed; inset: 0; background: rgba(0,0,0,0.65); z-index: 1000;
+      display: none; align-items: center; justify-content: center; padding: 1rem;
+    }
+    .notes-modal-backdrop.open { display: flex; }
+    .notes-modal {
+      background: var(--card); border: 1px solid var(--border); border-radius: var(--radius);
+      max-width: 820px; width: 100%; max-height: 85vh; overflow: hidden; display: flex; flex-direction: column;
+    }
+    .notes-modal header {
+      padding: 0.75rem 1rem; border-bottom: 1px solid var(--border);
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .notes-modal .notes-body {
+      padding: 1rem 1.25rem; overflow-y: auto; font-size: 0.9rem; line-height: 1.55;
+    }
+    .notes-modal .notes-body h1, .notes-modal .notes-body h2 { margin: 0.6rem 0 0.35rem; }
+    .notes-modal .notes-body code { background: rgba(255,255,255,0.08); padding: 0.1em 0.35em; border-radius: 4px; }
+    .notes-modal .notes-body pre { background: #0b0d14; padding: 0.75rem; border-radius: 8px; overflow-x: auto; }
+    .notes-modal .notes-footer {
+      padding: 0.65rem 1rem; border-top: 1px solid var(--border);
+      display: flex; gap: 0.5rem; justify-content: flex-end;
+    }
+
+    .week-title-row { display: flex; align-items: center; gap: 0.5rem; }
+    .week-title-row .week-title { flex: 1; }
+    .week-guide-btn {
+      padding: 0.2rem 0.55rem; border-radius: 6px; border: 1px solid var(--accent);
+      background: transparent; color: var(--accent); font-size: 0.72rem; cursor: pointer;
+      flex-shrink: 0;
+    }
+    .week-guide-btn:hover { background: rgba(108,99,255,0.15); }
+
+    .exercise-step {
+      border: 1px solid var(--border); border-radius: 8px; padding: 0.75rem 1rem; margin-bottom: 0.65rem;
+    }
+    .exercise-step h4 { font-size: 0.9rem; margin-bottom: 0.35rem; }
+    .exercise-step ul { margin: 0.35rem 0; padding-left: 1.2rem; font-size: 0.82rem; color: var(--text-muted); }
+    .exercise-step code { font-size: 0.78rem; }
+    .exercise-output {
+      background: #0b0d14; border-radius: 8px; padding: 0.75rem; font-size: 0.78rem;
+      max-height: 200px; overflow: auto; white-space: pre-wrap; margin-top: 0.5rem;
+    }
+    .sandbox-hint { font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.75rem; }
+
+    .error-note-form label {
+      display: block; font-size: 0.78rem; color: var(--text-muted); margin-bottom: 0.25rem;
+    }
+    .error-note-form input, .error-note-form select, .error-note-form textarea {
+      width: 100%; background: var(--bg); color: var(--text);
+      border: 1px solid var(--border); border-radius: 6px;
+      padding: 0.45rem 0.6rem; font-size: 0.82rem; font-family: inherit; margin-bottom: 0.55rem;
+    }
+    .error-note-form textarea { min-height: 3.5rem; resize: vertical; }
+    .error-note-form .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem; }
+    @media (max-width: 720px) { .error-note-form .form-row { grid-template-columns: 1fr; } }
+    .error-note-status { font-size: 0.78rem; margin-top: 0.35rem; }
+    .error-note-status.ok { color: var(--green); }
+    .error-note-status.err { color: var(--red); }
+
+    .lane-study-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 0.75rem;
+    }
+    .lane-study-item {
+      border: 1px solid var(--border); border-radius: 8px; padding: 0.75rem 0.9rem;
+      background: rgba(255,255,255,0.02);
+    }
+    .lane-study-item h3 { font-size: 0.88rem; margin-bottom: 0.35rem; }
+    .lane-study-item .lane-study-meta { font-size: 0.72rem; color: var(--text-muted); margin-bottom: 0.5rem; }
+    .lane-study-links { display: flex; flex-direction: column; gap: 0.35rem; }
+    .lane-study-links button {
+      text-align: left; padding: 0.25rem 0.5rem; border-radius: 6px;
+      border: 1px solid var(--border); background: transparent; color: var(--accent2);
+      font-size: 0.78rem; cursor: pointer;
+    }
+    .lane-study-links button:hover { border-color: var(--accent2); background: rgba(56,189,248,0.08); }
+
+    .meta-event-list { list-style: none; padding: 0; margin: 0; }
+    .meta-event-list li {
+      padding: 0.45rem 0; border-bottom: 1px solid var(--border);
+      font-size: 0.82rem; color: var(--text-muted);
+    }
+    .meta-event-list li:last-child { border-bottom: none; }
+    .meta-feedback-box {
+      background: rgba(255,255,255,0.03); border: 1px solid var(--border);
+      border-radius: 8px; padding: 0.75rem; font-size: 0.82rem; margin-top: 0.5rem;
+    }
+    .task-actions button.meta { border-color: var(--yellow); color: var(--yellow); }
   </style>
 </head>
 
@@ -275,8 +380,10 @@
 
 <header>
   <h1>📚 学习进度看板 · <span>四主线</span></h1>
-  <p>状态从 <code style="background:rgba(255,255,255,0.1);padding:0.1em 0.4em;border-radius:4px;font-family:monospace">progress.json</code> / <code style="background:rgba(255,255,255,0.1);padding:0.1em 0.4em;border-radius:4px;font-family:monospace">progress_data.js</code> 读取。完成练习后运行 <code style="background:rgba(255,255,255,0.1);padding:0.1em 0.4em;border-radius:4px;font-family:monospace">bash mark_done.sh &lt;id&gt;</code> 再刷新。</p>
+  <p id="headerIntro">状态从 <code style="background:rgba(255,255,255,0.1);padding:0.1em 0.4em;border-radius:4px;font-family:monospace">progress.json</code> 读取。启动 <code style="background:rgba(255,255,255,0.1);padding:0.1em 0.4em;border-radius:4px;font-family:monospace">python3 scripts/learn_server.py</code> 后可在本页打卡与阅读笔记。</p>
 </header>
+
+<div class="learn-mode-banner off" id="learnModeBanner" style="display:none;"></div>
 
 <!-- Banner -->
 <div class="banner error" id="errorBanner"></div>
@@ -357,10 +464,50 @@
   <div class="weak-list" id="weakList"></div>
 </div>
 
+<!-- ── Block 5b: 快速记错题（需 learn_server） ── -->
+<div class="card" id="errorNoteCard" style="display:none">
+  <h2>📝 快速记错题</h2>
+  <div class="card-sub">写入 <code>records/error_notes/&lt;lane&gt;/&lt;module&gt;/</code>，字段约定见 <code>docs/ERROR_REVIEW_SYSTEM.md</code>。</div>
+  <form class="error-note-form" id="errorNoteForm" onsubmit="submitErrorNote(event)">
+    <div class="form-row">
+      <div>
+        <label for="errorLane">主线 lane</label>
+        <select id="errorLane" name="lane">
+          <option value="soft_exam">软考中级线</option>
+          <option value="math2">数学二线</option>
+          <option value="cs408">408/0854 线</option>
+          <option value="engineering">工程实操线</option>
+        </select>
+      </div>
+      <div>
+        <label for="errorModule">模块 module</label>
+        <input id="errorModule" name="module" type="text" placeholder="例如 os、limits、general" required />
+      </div>
+    </div>
+    <label for="errorTitle">题面 / 知识点摘要</label>
+    <input id="errorTitle" name="title" type="text" placeholder="一句话概括错题" required />
+    <label for="errorWrong">我的错误思路或答案</label>
+    <textarea id="errorWrong" name="wrong_answer" placeholder="错在哪里、当时怎么想的"></textarea>
+    <label for="errorCorrect">正确思路或答案</label>
+    <textarea id="errorCorrect" name="correct_answer" placeholder="正确做法或要点"></textarea>
+    <label for="errorNote">复盘备注</label>
+    <textarea id="errorNote" name="note" placeholder="下次如何避免、关联章节"></textarea>
+    <button class="save-btn" type="submit">保存错题笔记</button>
+    <div class="error-note-status" id="errorNoteStatus"></div>
+  </form>
+</div>
+
+<!-- ── Block 5c: 四主线学习材料（PW-6） ── -->
+<div class="card" id="laneStudyCard">
+  <h2>📖 四主线学习材料</h2>
+  <div class="card-sub">engineering 以外 lane 的本周可推进入口：阅读 <code>plans/</code> 模块笔记（与 Round 实操并列）。</div>
+  <div class="lane-study-grid" id="laneStudyGrid"></div>
+</div>
+
 <!-- ── Block 6: 按 lane / Round 浏览 ── -->
 <div class="card">
   <h2>📦 按主线查看 Round</h2>
-  <div class="card-sub">按 lane 切换，查看每条主线下的 Round 任务清单。当前已展开 Round 00、Round 01、Round 02、Round 03、Round 04。</div>
+  <div class="card-sub" id="roundBrowseSub">按 lane 切换查看 Round。轮次状态由 <code style="background:rgba(255,255,255,0.08);padding:0.05em 0.35em;border-radius:4px;font-family:monospace">progress_rounds.json</code> 提供（运行 <code style="background:rgba(255,255,255,0.08);padding:0.05em 0.35em;border-radius:4px;font-family:monospace">python3 scripts/generate_progress_rounds.py</code> 同步）。</div>
   <div class="lane-tabs" id="laneTabs"></div>
   <div class="round-tabs" id="roundTabs"></div>
   <div id="panels"></div>
@@ -374,182 +521,127 @@
 
 </div> <!-- /container -->
 
+<div class="notes-modal-backdrop" id="exerciseModalBackdrop" onclick="if(event.target===this) closeExerciseModal()">
+  <div class="notes-modal" role="dialog" aria-labelledby="exerciseModalTitle">
+    <header>
+      <strong id="exerciseModalTitle">练习向导</strong>
+      <button class="btn" type="button" onclick="closeExerciseModal()">关闭</button>
+    </header>
+    <div class="notes-body" id="exerciseModalBody">加载中…</div>
+    <div class="notes-footer">
+      <button class="btn" type="button" id="exerciseRunBtn" style="display:none">运行脚本</button>
+      <button class="btn" type="button" onclick="closeExerciseModal()">关闭</button>
+    </div>
+  </div>
+</div>
+
+<div class="notes-modal-backdrop" id="taskMetaModalBackdrop" onclick="if(event.target===this) closeTaskMetaModal()">
+  <div class="notes-modal" role="dialog" aria-labelledby="taskMetaModalTitle">
+    <header>
+      <strong id="taskMetaModalTitle">任务历史与反馈</strong>
+      <button class="btn" type="button" onclick="closeTaskMetaModal()">关闭</button>
+    </header>
+    <div class="notes-body" id="taskMetaModalBody">加载中…</div>
+    <div class="notes-footer">
+      <button class="btn" type="button" onclick="closeTaskMetaModal()">关闭</button>
+    </div>
+  </div>
+</div>
+
+<div class="notes-modal-backdrop" id="notesModalBackdrop" onclick="if(event.target===this) closeNotesModal()">
+  <div class="notes-modal" role="dialog" aria-labelledby="notesModalTitle">
+    <header>
+      <strong id="notesModalTitle">学习笔记</strong>
+      <button class="btn" type="button" onclick="closeNotesModal()">关闭</button>
+    </header>
+    <div class="notes-body" id="notesModalBody">加载中…</div>
+    <div class="notes-footer">
+      <button class="btn" type="button" id="notesMarkDoneBtn" style="display:none">标记阅读完成</button>
+      <button class="btn" type="button" onclick="closeNotesModal()">关闭</button>
+    </div>
+  </div>
+</div>
+
+<script src="progress_rounds.js"></script>
 <script src="progress_data.js"></script>
 <script>
 // ============================================================
-// 静态元数据：Round 列表（每个 Round 必须有 lane 字段）
-// 这是 progress.html 的本地"知识源"，与 progress.json 中的任务 ID 通过 task_id 对齐。
+// Round 元数据：从 progress_rounds.json / progress_rounds.js 加载（勿在此硬编码轮次列表）
+// 生成：python3 scripts/generate_progress_rounds.py
 // ============================================================
-const ROUNDS = [
-  {
-    id: "round_00",
-    title: "Round 00 · Terminal 初见",
-    lane: "engineering",
-    difficulty: "⭐☆☆☆☆",
-    duration: "3 周",
-    weeks: [
-      { id: "week1", title: "第 1 周：建立感觉（pwd / ls / cd）", tasks: [
-        { id:"w1-read",  type:"reading",  title:"阅读 week1/notes.md",                   cmd:"bash mark_done.sh w1-read",  file:"rounds/round_00/week1/notes.md" },
-        { id:"w1-ex1",   type:"exercise", title:"练习1：认识当前位置",                    cmd:"自动",  file:"rounds/round_00/week1/exercises.sh" },
-        { id:"w1-ex2",   type:"exercise", title:"练习2：创建子目录并切换",                cmd:"自动",  file:"rounds/round_00/week1/exercises.sh" },
-        { id:"w1-ex3",   type:"exercise", title:"练习3：绝对路径 vs 相对路径",             cmd:"自动",  file:"rounds/round_00/week1/exercises.sh" },
-        { id:"w1-self",  type:"test",     title:"第1周自测",                              cmd:"自动",  file:"rounds/round_00/week1/exercises.sh" },
-      ]},
-      { id: "week2", title: "第 2 周：创建东西（mkdir / touch / cat）", tasks: [
-        { id:"w2-read",  type:"reading",  title:"阅读 week2/notes.md",             cmd:"bash mark_done.sh w2-read",  file:"rounds/round_00/week2/notes.md" },
-        { id:"w2-ex4",   type:"exercise", title:"练习4：创建更多子目录",              cmd:"自动",  file:"rounds/round_00/week2/exercises.sh" },
-        { id:"w2-ex5",   type:"exercise", title:"练习5：创建空文件",                 cmd:"自动",  file:"rounds/round_00/week2/exercises.sh" },
-        { id:"w2-ex6",   type:"exercise", title:"练习6：用 cat 查看空文件",          cmd:"自动",  file:"rounds/round_00/week2/exercises.sh" },
-        { id:"w2-ex7",   type:"exercise", title:"练习7：echo + cat",                cmd:"自动",  file:"rounds/round_00/week2/exercises.sh" },
-        { id:"w2-self",  type:"test",     title:"第2周自测",                        cmd:"自动",  file:"rounds/round_00/week2/exercises.sh" },
-      ]},
-      { id: "week3", title: "第 3 周：学会自查（man）", tasks: [
-        { id:"w3-read",  type:"reading",  title:"阅读 week3/notes.md",             cmd:"bash mark_done.sh w3-read",  file:"rounds/round_00/week3/notes.md" },
-        { id:"w3-ex8",   type:"exercise", title:"练习8：man ls", cmd:"自动", file:"rounds/round_00/week3/exercises.sh" },
-        { id:"w3-ex9",   type:"exercise", title:"练习9：man pwd/mkdir/touch/cat", cmd:"自动", file:"rounds/round_00/week3/exercises.sh" },
-        { id:"w3-ex10",  type:"exercise", title:"练习10：man man",               cmd:"自动", file:"rounds/round_00/week3/exercises.sh" },
-        { id:"w3-self",  type:"test",     title:"第3周自测",                     cmd:"自动", file:"rounds/round_00/week3/exercises.sh" },
-      ]},
-      { id: "final", title: "最终验收", tasks: [
-        { id:"fin-comp",   type:"exercise", title:"综合练习",                            cmd:"自动", file:"rounds/round_00/final/comprehensive_exercise.sh" },
-        { id:"fin-sheet",  type:"output",   title:"完成命令小抄",                         cmd:"自动", file:"rounds/round_00/final/command_cheatsheet.md" },
-        { id:"fin-acc1",   type:"test",     title:"验收：Terminal 与 Shell 的区别",       cmd:"自动", file:"round_00.md" },
-        { id:"fin-acc2",   type:"test",     title:"验收：能用 7 个命令",                 cmd:"自动", file:"round_00.md" },
-        { id:"fin-acc3",   type:"output",   title:"验收：cli-lab 目录与小抄存在",          cmd:"自动", file:"round_00.md" },
-      ]}
-    ]
-  },
-  {
-    id: "round_01",
-    title: "Round 01 · 文件系统与基础命令",
-    lane: "engineering",
-    difficulty: "⭐☆☆☆☆",
-    duration: "3 周",
-    weeks: [
-      { id: "round01-week1", title: "第 1 周：路径感", tasks: [
-        { id:"r01-w1-read", type:"reading",  title:"阅读 week1/notes.md",      cmd:"bash mark_done.sh r01-w1-read", file:"rounds/round_01/week1/notes.md" },
-        { id:"r01-w1-ex1",  type:"exercise", title:"练习1：路径与目录切换",      cmd:"自动", file:"rounds/round_01/week1/exercises.sh" },
-        { id:"r01-w1-self", type:"test",     title:"第1周自测",                cmd:"自动", file:"rounds/round_01/week1/exercises.sh" },
-      ]},
-      { id: "round01-week2", title: "第 2 周：文件操作", tasks: [
-        { id:"r01-w2-read", type:"reading",  title:"阅读 week2/notes.md",      cmd:"bash mark_done.sh r01-w2-read", file:"rounds/round_01/week2/notes.md" },
-        { id:"r01-w2-ex2",  type:"exercise", title:"练习2：创建与整理文件",      cmd:"自动", file:"rounds/round_01/week2/exercises.sh" },
-        { id:"r01-w2-self", type:"test",     title:"第2周自测",                cmd:"自动", file:"rounds/round_01/week2/exercises.sh" },
-      ]},
-      { id: "round01-week3", title: "第 3 周：查看文本与帮助", tasks: [
-        { id:"r01-w3-read", type:"reading",  title:"阅读 week3/notes.md",      cmd:"bash mark_done.sh r01-w3-read", file:"rounds/round_01/week3/notes.md" },
-        { id:"r01-w3-ex3",  type:"exercise", title:"练习3：文本查看与 man",      cmd:"自动", file:"rounds/round_01/week3/exercises.sh" },
-        { id:"r01-w3-self", type:"test",     title:"第3周自测",                cmd:"自动", file:"rounds/round_01/week3/exercises.sh" },
-      ]},
-      { id: "round01-final", title: "最终验收", tasks: [
-        { id:"r01-fin-comp",  type:"exercise", title:"综合练习：文件实验室",       cmd:"自动", file:"rounds/round_01/final/comprehensive_exercise.sh" },
-        { id:"r01-fin-sheet", type:"output",   title:"完成 Round 01 命令小抄",    cmd:"自动", file:"rounds/round_01/final/command_cheatsheet.md" },
-        { id:"r01-fin-acc1",  type:"test",     title:"验收：解释基础命令与路径概念", cmd:"自动", file:"round_01.md" },
-      ]}
-    ]
-  },
-  {
-    id: "round_02",
-    title: "Round 02 · Shell、管道、Git 最小工作流",
-    lane: "engineering",
-    difficulty: "⭐⭐☆☆☆",
-    duration: "3 周",
-    weeks: [
-      { id: "round02-week1", title: "第 1 周：重定向与管道", tasks: [
-        { id:"r02-w1-read",  type:"reading",  title:"阅读 week1/notes.md",               cmd:"bash mark_done.sh r02-w1-read", file:"rounds/round_02/week1/notes.md" },
-        { id:"r02-w1-ex1",   type:"exercise", title:"练习1：覆盖与追加",                  cmd:"自动", file:"rounds/round_02/week1/exercises.sh" },
-        { id:"r02-w1-ex2",   type:"exercise", title:"练习2：去重统计",                    cmd:"自动", file:"rounds/round_02/week1/exercises.sh" },
-        { id:"r02-w1-ex3",   type:"exercise", title:"练习3：日志过滤",                    cmd:"自动", file:"rounds/round_02/week1/exercises.sh" },
-        { id:"r02-w1-self",  type:"test",     title:"第1周自测",                          cmd:"自动", file:"rounds/round_02/week1/exercises.sh" },
-      ]},
-      { id: "round02-week2", title: "第 2 周：最小 shell 脚本", tasks: [
-        { id:"r02-w2-read",  type:"reading",  title:"阅读 week2/notes.md",               cmd:"bash mark_done.sh r02-w2-read", file:"rounds/round_02/week2/notes.md" },
-        { id:"r02-w2-ex4",   type:"exercise", title:"练习4：count_errors.sh",             cmd:"自动", file:"rounds/round_02/week2/exercises.sh" },
-        { id:"r02-w2-ex5",   type:"exercise", title:"练习5：count_labels.sh",             cmd:"自动", file:"rounds/round_02/week2/exercises.sh" },
-        { id:"r02-w2-ex6",   type:"exercise", title:"练习6：show_args.sh",                cmd:"自动", file:"rounds/round_02/week2/exercises.sh" },
-        { id:"r02-w2-self",  type:"test",     title:"第2周自测",                          cmd:"自动", file:"rounds/round_02/week2/exercises.sh" },
-      ]},
-      { id: "round02-week3", title: "第 3 周：Git 最小工作流", tasks: [
-        { id:"r02-w3-read",  type:"reading",  title:"阅读 week3/notes.md",               cmd:"bash mark_done.sh r02-w3-read", file:"rounds/round_02/week3/notes.md" },
-        { id:"r02-w3-ex7",   type:"exercise", title:"练习7：初始化与首次提交",             cmd:"自动", file:"rounds/round_02/week3/exercises.sh" },
-        { id:"r02-w3-ex8",   type:"exercise", title:"练习8：第二次提交",                  cmd:"自动", file:"rounds/round_02/week3/exercises.sh" },
-        { id:"r02-w3-ex9",   type:"exercise", title:"练习9：新增文件提交",                 cmd:"自动", file:"rounds/round_02/week3/exercises.sh" },
-        { id:"r02-w3-self",  type:"test",     title:"第3周自测",                          cmd:"自动", file:"rounds/round_02/week3/exercises.sh" },
-      ]},
-      { id: "round02-final", title: "最终验收", tasks: [
-        { id:"r02-fin-comp",  type:"exercise", title:"综合练习：日志过滤 + 迷你 Git 仓库", cmd:"自动", file:"rounds/round_02/final/comprehensive_exercise.sh" },
-        { id:"r02-fin-sheet", type:"output",   title:"完成 Round 02 命令小抄",            cmd:"自动", file:"rounds/round_02/final/command_cheatsheet.md" },
-        { id:"r02-fin-acc1",  type:"test",     title:"验收：解释 >、>>、| 区别",          cmd:"自动", file:"round_02.md" },
-        { id:"r02-fin-acc2",  type:"output",   title:"验收：完成 3 次 Git 提交并解释",    cmd:"自动", file:"round_02.md" },
-      ]}
-    ]
-  },
-  {
-    id: "round_03",
-    title: "Round 03 · Python 基础与复杂度入门",
-    lane: "engineering",
-    difficulty: "⭐⭐☆☆☆",
-    duration: "3 周",
-    weeks: [
-      { id: "round03-week1", title: "第 1 周：Python 基础语法", tasks: [
-        { id:"r03-w1-read", type:"reading",  title:"阅读 week1/notes.md",                cmd:"bash mark_done.sh r03-w1-read", file:"rounds/round_03/week1/notes.md" },
-        { id:"r03-w1-ex1",  type:"exercise", title:"练习1：变量、循环与函数",              cmd:"自动", file:"rounds/round_03/week1/exercises.sh" },
-        { id:"r03-w1-self", type:"test",     title:"第1周自测",                          cmd:"自动", file:"rounds/round_03/week1/exercises.sh" },
-      ]},
-      { id: "round03-week2", title: "第 2 周：list/dict 与函数拆分", tasks: [
-        { id:"r03-w2-read", type:"reading",  title:"阅读 week2/notes.md",                cmd:"bash mark_done.sh r03-w2-read", file:"rounds/round_03/week2/notes.md" },
-        { id:"r03-w2-ex2",  type:"exercise", title:"练习2：标签统计函数",                  cmd:"自动", file:"rounds/round_03/week2/exercises.sh" },
-        { id:"r03-w2-self", type:"test",     title:"第2周自测",                          cmd:"自动", file:"rounds/round_03/week2/exercises.sh" },
-      ]},
-      { id: "round03-week3", title: "第 3 周：复杂度观察", tasks: [
-        { id:"r03-w3-read", type:"reading",  title:"阅读 week3/notes.md",                cmd:"bash mark_done.sh r03-w3-read", file:"rounds/round_03/week3/notes.md" },
-        { id:"r03-w3-ex3",  type:"exercise", title:"练习3：线性与平方级对比",              cmd:"自动", file:"rounds/round_03/week3/exercises.sh" },
-        { id:"r03-w3-self", type:"test",     title:"第3周自测",                          cmd:"自动", file:"rounds/round_03/week3/exercises.sh" },
-      ]},
-      { id: "round03-final", title: "最终验收", tasks: [
-        { id:"r03-fin-comp",  type:"exercise", title:"综合练习：mini analyzer",          cmd:"自动", file:"rounds/round_03/final/comprehensive_exercise.sh" },
-        { id:"r03-fin-sheet", type:"output",   title:"完成 Round 03 复杂度小抄",         cmd:"自动", file:"rounds/round_03/final/complexity_cheatsheet.md" },
-        { id:"r03-fin-acc1",  type:"test",     title:"验收：解释 O(n) 与 O(n^2) 差异",   cmd:"自动", file:"round_03.md" },
-      ]}
-    ]
-  },
-  {
-    id: "round_04",
-    title: "Round 04 · 核心数据结构",
-    lane: "engineering",
-    difficulty: "⭐⭐⭐☆☆",
-    duration: "3 周",
-    weeks: [
-      { id: "round04-week1", title: "第 1 周：列表与顺序存储", tasks: [
-        { id:"r04-w1-read", type:"reading",  title:"阅读 week1/notes.md",                cmd:"bash mark_done.sh r04-w1-read", file:"rounds/round_04/week1/notes.md" },
-        { id:"r04-w1-ex1",  type:"exercise", title:"练习1：列表统计与访问",                cmd:"自动", file:"rounds/round_04/week1/exercises.sh" },
-        { id:"r04-w1-self", type:"test",     title:"第1周自测",                          cmd:"自动", file:"rounds/round_04/week1/exercises.sh" },
-      ]},
-      { id: "round04-week2", title: "第 2 周：栈与队列", tasks: [
-        { id:"r04-w2-read", type:"reading",  title:"阅读 week2/notes.md",                cmd:"bash mark_done.sh r04-w2-read", file:"rounds/round_04/week2/notes.md" },
-        { id:"r04-w2-ex2",  type:"exercise", title:"练习2：stack/queue 基础操作",         cmd:"自动", file:"rounds/round_04/week2/exercises.sh" },
-        { id:"r04-w2-self", type:"test",     title:"第2周自测",                          cmd:"自动", file:"rounds/round_04/week2/exercises.sh" },
-      ]},
-      { id: "round04-week3", title: "第 3 周：哈希与去重", tasks: [
-        { id:"r04-w3-read", type:"reading",  title:"阅读 week3/notes.md",                cmd:"bash mark_done.sh r04-w3-read", file:"rounds/round_04/week3/notes.md" },
-        { id:"r04-w3-ex3",  type:"exercise", title:"练习3：dict/set 统计与去重",          cmd:"自动", file:"rounds/round_04/week3/exercises.sh" },
-        { id:"r04-w3-self", type:"test",     title:"第3周自测",                          cmd:"自动", file:"rounds/round_04/week3/exercises.sh" },
-      ]},
-      { id: "round04-final", title: "最终验收", tasks: [
-        { id:"r04-fin-comp",  type:"exercise", title:"综合练习：data toolkit",           cmd:"自动", file:"rounds/round_04/final/comprehensive_exercise.sh" },
-        { id:"r04-fin-sheet", type:"output",   title:"完成 Round 04 数据结构小抄",       cmd:"自动", file:"rounds/round_04/final/complexity_cheatsheet.md" },
-        { id:"r04-fin-acc1",  type:"test",     title:"验收：解释 dict/set/deque 场景",   cmd:"自动", file:"round_04.md" },
-      ]}
-    ]
+let ROUNDS = [];
+
+async function loadRoundsMeta() {
+  if (window.PROGRESS_ROUNDS && Array.isArray(window.PROGRESS_ROUNDS.rounds)) {
+    ROUNDS = window.PROGRESS_ROUNDS.rounds;
+    return;
   }
-  // 后续 Round 在落地为实操目录时按本结构追加；当前已展开 Round 00、Round 01、Round 02、Round 03、Round 04。
-];
+  if (window.location.protocol !== "file:") {
+    try {
+      const res = await fetch("progress_rounds.json?_=" + Date.now());
+      if (res.ok) {
+        const data = await res.json();
+        ROUNDS = data.rounds || [];
+        return;
+      }
+    } catch (e) { /* fall through */ }
+  }
+  ROUNDS = [];
+}
+
+function updateRoundBrowseSub() {
+  const el = document.getElementById("roundBrowseSub");
+  if (!el) return;
+  const linked = ROUNDS.filter(r => r.progress_linked).map(r => r.id.replace("round_", ""));
+  const scaffold = ROUNDS.filter(r => r.scaffold_only).map(r => r.id.replace("round_", ""));
+  const linkedTxt = linked.length ? `进度已接入 Round ${linked.join("、")}` : "尚无进度接入轮次";
+  const scaffoldTxt = scaffold.length ? `仅骨架 Round ${scaffold.join("、")}` : "";
+  el.textContent = `按 lane 切换。${linkedTxt}${scaffoldTxt ? "；" + scaffoldTxt : ""}。状态扫描：python3 scripts/round_status.py`;
+}
+
 
 // ============================================================
 // Stage 与 lane 的映射（基于 docs/STAGE_PLAN.md）
 // 进度算法：取该 Stage 的"主 lane"的完成率作为近似值。
 // 这是当前阶段的最小实现；后续若有 stage→具体 task 列表，可替换。
 // ============================================================
+const LANE_STUDY_PLANS = {
+  engineering: {
+    title: "工程实操线",
+    hint: "Round 实操见下方「按主线查看 Round」；此处为 Linux 线总览。",
+    plans: [
+      { path: "plans/linux/README.md", label: "Linux 线总览" },
+    ],
+  },
+  soft_exam: {
+    title: "软考中级线",
+    hint: "模块笔记骨架；考点以最新官方大纲为准。",
+    plans: [
+      { path: "plans/soft_exam/README.md", label: "软考总览" },
+      { path: "plans/soft_exam/ds.md", label: "数据结构" },
+      { path: "plans/soft_exam/os.md", label: "操作系统" },
+      { path: "plans/soft_exam/db.md", label: "数据库" },
+    ],
+  },
+  math2: {
+    title: "数学二线",
+    hint: "保底节奏：每周至少一题；下方可阅读模块笔记。",
+    plans: [
+      { path: "plans/math2/README.md", label: "数学二总览" },
+      { path: "plans/math2/limits.md", label: "极限" },
+      { path: "plans/math2/la_matrix.md", label: "线性代数 / 矩阵" },
+    ],
+  },
+  cs408: {
+    title: "408/0854 线",
+    hint: "阅读 plans 并与 KNOWLEDGE_MAPPING 对照。",
+    plans: [
+      { path: "plans/408/README.md", label: "408 总览" },
+      { path: "docs/KNOWLEDGE_MAPPING.md", label: "知识映射（docs）" },
+    ],
+  },
+};
+
 const STAGES = [
   { id: "stage_0", name: "Stage 0 · 治理准备",   lane: null,           note: "治理任务，不进度统计" },
   { id: "stage_1", name: "Stage 1 · Linux/Git/Shell", lane: "engineering" },
@@ -575,6 +667,8 @@ let activeLane  = "engineering";
 let activeRound = "round_00";
 let progressData = {};
 let lanesData    = {};
+let learnApiAvailable = false;
+let notesModalTaskId = null;
 
 // ============================================================
 // Load progress
@@ -622,9 +716,311 @@ async function loadProgress() {
   }
 
   const now = new Date().toLocaleTimeString("zh-CN");
-  document.getElementById("lastUpdated").textContent =
-    `上次读取：${now}${window.location.protocol === "file:" ? "（本地文件模式，需手动刷新页面）" : ""}`;
+  const modeHint = learnApiAvailable
+    ? "（学习服务模式，可网页打卡）"
+    : (window.location.protocol === "file:" ? "（file:// 模式，请用 learn_server）" : "");
+  document.getElementById("lastUpdated").textContent = `上次读取：${now}${modeHint}`;
   render();
+}
+
+async function probeLearnApi() {
+  if (window.location.protocol === "file:") return false;
+  try {
+    const res = await fetch("/api/health?_=" + Date.now());
+    if (!res.ok) return false;
+    const data = await res.json();
+    return data && data.ok === true;
+  } catch (e) {
+    return false;
+  }
+}
+
+function updateLearnModeBanner() {
+  const el = document.getElementById("learnModeBanner");
+  const intro = document.getElementById("headerIntro");
+  if (!el || !intro) return;
+  updateErrorNoteCard();
+  if (learnApiAvailable) {
+    el.style.display = "block";
+    el.className = "learn-mode-banner";
+    el.textContent = "✅ 学习服务已连接：可打卡、阅读笔记与 plans、练习向导、查看任务历史/反馈、快速记错题。";
+    intro.textContent = "学习服务已连接。可在本页打卡、阅读材料、记错题与查看四主线 plans。";
+  } else if (window.location.protocol === "file:") {
+    el.style.display = "block";
+    el.className = "learn-mode-banner off";
+    el.innerHTML = "⚠️ 当前为 file:// 打开。请运行 <code>python3 scripts/learn_server.py</code>，访问 <code>http://127.0.0.1:8000/progress.html</code> 以启用网页打卡。";
+  } else {
+    el.style.display = "none";
+    intro.textContent = "只读 HTTP 模式。交互打卡请使用 python3 scripts/learn_server.py（非 python3 -m http.server）。";
+  }
+}
+
+async function markTaskFromUI(taskId, undo) {
+  if (!learnApiAvailable) {
+    alert("请使用 learn_server 启动后再网页打卡。");
+    return;
+  }
+  const path = undo
+    ? `/api/tasks/${encodeURIComponent(taskId)}/undo`
+    : `/api/tasks/${encodeURIComponent(taskId)}/done`;
+  try {
+    const res = await fetch(path, { method: "POST" });
+    const data = await res.json();
+    if (!res.ok || !data.ok) throw new Error(data.error || "操作失败");
+    progressData = data.tasks || progressData;
+    lanesData = data.lanes || lanesData;
+    render();
+    return data;
+  } catch (e) {
+    alert("打卡失败：" + (e.message || e));
+    throw e;
+  }
+}
+
+async function openNotesModal(filePath, taskId) {
+  if (!learnApiAvailable) {
+    alert("请使用 learn_server 启动后再在页面内阅读笔记。");
+    return;
+  }
+  notesModalTaskId = taskId || null;
+  const backdrop = document.getElementById("notesModalBackdrop");
+  const body = document.getElementById("notesModalBody");
+  const title = document.getElementById("notesModalTitle");
+  const markBtn = document.getElementById("notesMarkDoneBtn");
+  title.textContent = filePath;
+  body.textContent = "加载中…";
+  markBtn.style.display = taskId ? "inline-block" : "none";
+  markBtn.onclick = () => { if (notesModalTaskId) markTaskFromUI(notesModalTaskId, false); closeNotesModal(); };
+  backdrop.classList.add("open");
+  try {
+    const res = await fetch(`/api/content?path=${encodeURIComponent(filePath)}&format=json`);
+    const data = await res.json();
+    if (!res.ok || !data.ok) throw new Error(data.error || "无法读取");
+    body.innerHTML = data.html || data.markdown || "";
+  } catch (e) {
+    body.textContent = "读取失败：" + (e.message || e);
+  }
+}
+
+function closeNotesModal() {
+  document.getElementById("notesModalBackdrop").classList.remove("open");
+  notesModalTaskId = null;
+}
+
+async function openTaskMetaModal(taskId) {
+  if (!learnApiAvailable) {
+    alert("请使用 learn_server 启动后再查看任务历史。");
+    return;
+  }
+  const backdrop = document.getElementById("taskMetaModalBackdrop");
+  const body = document.getElementById("taskMetaModalBody");
+  const title = document.getElementById("taskMetaModalTitle");
+  title.textContent = `任务：${taskId}`;
+  body.textContent = "加载中…";
+  backdrop.classList.add("open");
+  try {
+    const [evRes, fbRes] = await Promise.all([
+      fetch(`/api/tasks/${encodeURIComponent(taskId)}/events`),
+      fetch(`/api/tasks/${encodeURIComponent(taskId)}/feedback`),
+    ]);
+    const evData = await evRes.json();
+    const fbData = await fbRes.json();
+    if (!evRes.ok || !evData.ok) throw new Error(evData.error || "无法读取 events");
+    if (!fbRes.ok || !fbData.ok) throw new Error(fbData.error || "无法读取 feedback");
+    const events = evData.events || [];
+    let html = "<h3 style='font-size:0.95rem;margin-bottom:0.5rem'>动作历史</h3>";
+    if (!events.length) {
+      html += "<p style='color:var(--text-muted);font-size:0.82rem'>尚无 events.jsonl 记录。</p>";
+    } else {
+      html += "<ul class='meta-event-list'>";
+      events.forEach(e => {
+        const ts = e.timestamp || e.time || "";
+        const action = e.action || e.event || "—";
+        html += `<li><strong>${action}</strong> · ${ts}</li>`;
+      });
+      html += "</ul>";
+    }
+    html += "<h3 style='font-size:0.95rem;margin:1rem 0 0.5rem'>任务反馈</h3>";
+    const fb = fbData.feedback;
+    if (!fb) {
+      html += "<p style='color:var(--text-muted);font-size:0.82rem'>暂无 task_feedback 条目。</p>";
+    } else {
+      html += "<div class='meta-feedback-box'><pre style='white-space:pre-wrap;margin:0'>";
+      html += JSON.stringify(fb, null, 2);
+      html += "</pre></div>";
+    }
+    body.innerHTML = html;
+  } catch (e) {
+    body.textContent = "加载失败：" + (e.message || e);
+  }
+}
+
+function closeTaskMetaModal() {
+  document.getElementById("taskMetaModalBackdrop").classList.remove("open");
+}
+
+async function submitErrorNote(ev) {
+  ev.preventDefault();
+  if (!learnApiAvailable) {
+    alert("请使用 learn_server 启动后再记错题。");
+    return;
+  }
+  const statusEl = document.getElementById("errorNoteStatus");
+  statusEl.className = "error-note-status";
+  statusEl.textContent = "提交中…";
+  const payload = {
+    lane: document.getElementById("errorLane").value,
+    module: document.getElementById("errorModule").value,
+    title: document.getElementById("errorTitle").value,
+    wrong_answer: document.getElementById("errorWrong").value,
+    correct_answer: document.getElementById("errorCorrect").value,
+    note: document.getElementById("errorNote").value,
+  };
+  try {
+    const res = await fetch("/api/error_notes", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    });
+    const data = await res.json();
+    if (!res.ok || !data.ok) throw new Error(data.error || "保存失败");
+    statusEl.className = "error-note-status ok";
+    statusEl.textContent = `已保存：${data.path}`;
+    document.getElementById("errorNoteForm").reset();
+  } catch (e) {
+    statusEl.className = "error-note-status err";
+    statusEl.textContent = "保存失败：" + (e.message || e);
+  }
+}
+
+function renderLaneStudyGrid() {
+  const grid = document.getElementById("laneStudyGrid");
+  if (!grid) return;
+  grid.innerHTML = "";
+  Object.entries(LANE_STUDY_PLANS).forEach(([laneKey, meta]) => {
+    const s = laneStats(laneKey);
+    const item = document.createElement("div");
+    item.className = "lane-study-item " + laneKey;
+    item.innerHTML = `
+      <h3>${meta.title}</h3>
+      <div class="lane-study-meta">${meta.hint} · 进度 ${s.done}/${s.total}</div>
+    `;
+    const links = document.createElement("div");
+    links.className = "lane-study-links";
+    (meta.plans || []).forEach(p => {
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.textContent = "📄 " + p.label;
+      btn.addEventListener("click", () => {
+        if (learnApiAvailable) openNotesModal(p.path, null);
+        else alert("请使用 learn_server 在页面内阅读 plans。");
+      });
+      links.appendChild(btn);
+    });
+    item.appendChild(links);
+    grid.appendChild(item);
+  });
+}
+
+function updateErrorNoteCard() {
+  const card = document.getElementById("errorNoteCard");
+  if (card) card.style.display = learnApiAvailable ? "block" : "none";
+}
+
+function findWeekExercisePath(week, roundId) {
+  const tasks = week.tasks || [];
+  const hit = tasks.find(t => t.file && /exercises\.(sh|py)$/.test(t.file));
+  if (hit) return hit.file;
+  const m = (week.id || "").match(/week(\d+)/i);
+  const n = m ? m[1] : "1";
+  const num = roundId.replace("round_", "");
+  return `rounds/round_${num}/week${n}/exercises.sh`;
+}
+
+async function openExerciseModal(exercisePath) {
+  if (!learnApiAvailable) {
+    alert("请使用 learn_server 启动后再使用练习向导。");
+    return;
+  }
+  const backdrop = document.getElementById("exerciseModalBackdrop");
+  const body = document.getElementById("exerciseModalBody");
+  const title = document.getElementById("exerciseModalTitle");
+  const runBtn = document.getElementById("exerciseRunBtn");
+  title.textContent = exercisePath;
+  body.textContent = "加载练习步骤…";
+  runBtn.style.display = "none";
+  runBtn.onclick = () => runExerciseFromUI(exercisePath);
+  backdrop.classList.add("open");
+  try {
+    const res = await fetch(`/api/exercise/guide?path=${encodeURIComponent(exercisePath)}`);
+    const data = await res.json();
+    if (!res.ok || !data.ok) throw new Error(data.error || "加载失败");
+    let html = `<div class="sandbox-hint">练习沙盒：<code>${data.sandbox}</code>（在终端手敲命令，完成后在下方步骤点「完成」）</div>`;
+    if (data.interactive_shell) {
+      html += `<p style="font-size:0.82rem;color:var(--yellow)">本练习含交互确认（read），请按步骤在终端操作，勿一键运行脚本。</p>`;
+    }
+    data.steps.forEach((step, i) => {
+      const done = step.task_id && isTaskDone(step.task_id);
+      html += `<div class="exercise-step"><h4>步骤 ${i + 1}：${step.title}</h4>`;
+      if (step.hints.length) {
+        html += "<ul>" + step.hints.map(h => `<li>${h}</li>`).join("") + "</ul>";
+      }
+      if (step.commands.length) {
+        html += "<p style='font-size:0.78rem;color:var(--text-muted)'>参考命令：</p><ul>";
+        html += step.commands.map(c => `<li><code>${c}</code></li>`).join("");
+        html += "</ul>";
+      }
+      if (step.task_id && learnApiAvailable) {
+        html += `<button class="btn ${done ? "" : "primary"}" type="button" data-task="${step.task_id}" data-done="${done}">`;
+        html += done ? "撤销完成" : "标记本步完成";
+        html += "</button>";
+      }
+      html += "</div>";
+    });
+    body.innerHTML = html;
+    body.querySelectorAll("button[data-task]").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const tid = btn.getAttribute("data-task");
+        const undo = btn.getAttribute("data-done") === "true";
+        markTaskFromUI(tid, undo).then(() => openExerciseModal(exercisePath));
+      });
+    });
+    if (data.can_run) {
+      runBtn.style.display = "inline-block";
+      runBtn.textContent = data.kind === "python" ? "运行 Python 脚本" : "运行练习脚本";
+    }
+  } catch (e) {
+    body.textContent = "加载失败：" + (e.message || e);
+  }
+}
+
+function closeExerciseModal() {
+  document.getElementById("exerciseModalBackdrop").classList.remove("open");
+}
+
+async function runExerciseFromUI(exercisePath) {
+  const body = document.getElementById("exerciseModalBody");
+  try {
+    const res = await fetch("/api/exercise/run", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ path: exercisePath }),
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || "运行失败");
+    if (data.progress && data.progress.tasks) {
+      progressData = data.progress.tasks;
+      lanesData = data.progress.lanes || lanesData;
+      render();
+    }
+    const out = document.createElement("div");
+    out.className = "exercise-output";
+    out.textContent = (data.stdout || "") + (data.stderr ? "\n[stderr]\n" + data.stderr : "");
+    body.appendChild(out);
+    if (!data.ok) out.style.border = "1px solid var(--red)";
+  } catch (e) {
+    alert("运行失败：" + (e.message || e));
+  }
 }
 
 // ============================================================
@@ -646,10 +1042,12 @@ function laneStats(laneKey) {
 // Render
 // ============================================================
 function render() {
+  updateRoundBrowseSub();
   renderGlobal();
   renderLanes();
   renderStages();
   renderWeak();
+  renderLaneStudyGrid();
   renderLaneTabs();
   renderRoundsForLane(activeLane);
 }
@@ -756,21 +1154,23 @@ function renderRoundsForLane(laneKey) {
 
   const laneRounds = ROUNDS.filter(r => r.lane === laneKey);
   if (!laneRounds.length) {
-    panelsEl.innerHTML = `<div class="empty-state">本主线下尚未注册任何 Round。可在 progress.json 注册任务，或在 progress.html 的 ROUNDS 数组追加 Round 元数据。</div>`;
+    panelsEl.innerHTML = `<div class="empty-state">本主线下尚未注册任何 Round。运行 <code>python3 scripts/generate_progress_rounds.py</code> 同步 <code>progress_rounds.json</code>。</div>`;
     return;
   }
 
   const col = getCollapsed();
 
   laneRounds.forEach(round => {
-    const allTasks  = round.weeks.flatMap(w => w.tasks);
+    const weeks = round.weeks || [];
+    const allTasks  = weeks.flatMap(w => w.tasks || []);
     const doneTasks = allTasks.filter(t => isTaskDone(t.id));
     const allDone   = doneTasks.length === allTasks.length && allTasks.length > 0;
     const pct = allTasks.length ? Math.round(doneTasks.length / allTasks.length * 100) : 0;
+    const isScaffold = round.scaffold_only || weeks.length === 0;
 
     const tab = document.createElement("button");
     tab.className = "tab-btn" + (allDone ? " done" : "") + (round.id === activeRound ? " active" : "");
-    tab.textContent = round.title;
+    tab.textContent = isScaffold ? `${round.title}（骨架）` : round.title;
     tab.addEventListener("click", () => { activeRound = round.id; render(); });
     tabsEl.appendChild(tab);
 
@@ -784,16 +1184,31 @@ function renderRoundsForLane(laneKey) {
           <span class="badge lane">${round.lane}</span>
           <span class="badge">${round.difficulty}</span>
           <span class="badge blue">${round.duration}</span>
-          <span class="badge green">${doneTasks.length}/${allTasks.length} 完成</span>
+          <span class="badge green">${isScaffold ? "未接入进度" : `${doneTasks.length}/${allTasks.length} 完成`}</span>
         </div>
       </div>
       <div class="round-progress-bar">
         <div class="bar-wrap" style="flex:1"><div class="bar-fill" style="width:${pct}%"></div></div>
-        <span class="rp-text">${pct}%</span>
+        <span class="rp-text">${isScaffold ? "—" : pct + "%"}</span>
       </div>
     `;
 
-    round.weeks.forEach(week => {
+    if (isScaffold) {
+      const readme = round.readme || `rounds/${round.id}/README.md`;
+      const sandbox = `~/cli-lab/round${round.id.replace("round_", "")}`;
+      const note = document.createElement("div");
+      note.className = "empty-state";
+      note.innerHTML = `
+        本轮为<strong>最小实操骨架</strong>，尚未接入 <code>progress.json</code> 任务打卡。<br>
+        阅读 <code>${readme}</code>，在 <code>${sandbox}</code> 沙盒练习。<br>
+        接入进度见 <code>CONVERSION_PROTOCOL.md</code> §8；状态扫描 <code>python3 scripts/round_status.py</code>。
+      `;
+      panel.appendChild(note);
+      panelsEl.appendChild(panel);
+      return;
+    }
+
+    weeks.forEach(week => {
       const weekDone  = week.tasks.filter(t => isTaskDone(t.id)).length;
       const weekTotal = week.tasks.length;
       const weekAllDone  = weekDone === weekTotal && weekTotal > 0;
@@ -801,6 +1216,9 @@ function renderRoundsForLane(laneKey) {
 
       const weekEl = document.createElement("div");
       weekEl.className = "week-section";
+
+      const titleRow = document.createElement("div");
+      titleRow.className = "week-title-row";
 
       const titleEl = document.createElement("div");
       titleEl.className = "week-title" + (weekAllDone ? " completed" : "") + (isCollapsed ? " collapsed" : "");
@@ -816,6 +1234,20 @@ function renderRoundsForLane(laneKey) {
         setCollapsed(c);
         render();
       });
+      titleRow.appendChild(titleEl);
+
+      const exercisePath = findWeekExercisePath(week, round.id);
+      if (learnApiAvailable && exercisePath) {
+        const guideBtn = document.createElement("button");
+        guideBtn.type = "button";
+        guideBtn.className = "week-guide-btn";
+        guideBtn.textContent = "练习向导";
+        guideBtn.addEventListener("click", (e) => {
+          e.stopPropagation();
+          openExerciseModal(exercisePath);
+        });
+        titleRow.appendChild(guideBtn);
+      }
 
       const listEl = document.createElement("div");
       listEl.className = "task-list" + (isCollapsed ? " collapsed" : "");
@@ -839,10 +1271,52 @@ function renderRoundsForLane(laneKey) {
           </div>
           <span class="task-type ${task.type}">${typeLabel}</span>
         `;
+
+        if (learnApiAvailable) {
+          const actions = document.createElement("div");
+          actions.className = "task-actions";
+          const metaBtn = document.createElement("button");
+          metaBtn.className = "meta";
+          metaBtn.type = "button";
+          metaBtn.textContent = "历史";
+          metaBtn.addEventListener("click", () => openTaskMetaModal(task.id));
+          actions.appendChild(metaBtn);
+          if (task.file && task.file.endsWith(".md")) {
+            const readBtn = document.createElement("button");
+            readBtn.className = "read";
+            readBtn.type = "button";
+            readBtn.textContent = "阅读";
+            readBtn.addEventListener("click", () => openNotesModal(task.file, task.type === "reading" ? task.id : null));
+            actions.appendChild(readBtn);
+          }
+          if (task.file && /exercises\.(sh|py)$/.test(task.file)) {
+            const exBtn = document.createElement("button");
+            exBtn.type = "button";
+            exBtn.textContent = "向导";
+            exBtn.addEventListener("click", () => openExerciseModal(task.file));
+            actions.appendChild(exBtn);
+          }
+          if (!done) {
+            const doneBtn = document.createElement("button");
+            doneBtn.className = "primary";
+            doneBtn.type = "button";
+            doneBtn.textContent = "完成";
+            doneBtn.addEventListener("click", () => markTaskFromUI(task.id, false));
+            actions.appendChild(doneBtn);
+          } else {
+            const undoBtn = document.createElement("button");
+            undoBtn.type = "button";
+            undoBtn.textContent = "撤销";
+            undoBtn.addEventListener("click", () => markTaskFromUI(task.id, true));
+            actions.appendChild(undoBtn);
+          }
+          item.appendChild(actions);
+        }
+
         listEl.appendChild(item);
       });
 
-      weekEl.appendChild(titleEl);
+      weekEl.appendChild(titleRow);
       weekEl.appendChild(listEl);
       panel.appendChild(weekEl);
     });
@@ -914,12 +1388,12 @@ function updateCountdowns() {
 // ============================================================
 function expandAll() {
   const c = getCollapsed();
-  ROUNDS.forEach(r => r.weeks.forEach(w => { c[w.id] = false; }));
+  ROUNDS.forEach(r => (r.weeks || []).forEach(w => { c[w.id] = false; }));
   setCollapsed(c); render();
 }
 function collapseAll() {
   const c = getCollapsed();
-  ROUNDS.forEach(r => r.weeks.forEach(w => { c[w.id] = true; }));
+  ROUNDS.forEach(r => (r.weeks || []).forEach(w => { c[w.id] = true; }));
   setCollapsed(c); render();
 }
 
@@ -933,12 +1407,15 @@ if (window.location.protocol === "file:") {
   document.addEventListener("DOMContentLoaded", () => {
     const btn = document.getElementById("refreshBtn");
     btn.onclick = () => location.reload();
-    btn.title = "重新加载页面以读取最新 progress_data.js";
+    btn.title = "重新加载页面以读取最新 progress_data.js / progress_rounds.js";
   });
 }
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
   loadPersonal();
-  loadProgress();
+  await loadRoundsMeta();
+  learnApiAvailable = await probeLearnApi();
+  updateLearnModeBanner();
+  await loadProgress();
 });
 </script>
 </body>

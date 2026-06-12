@@ -1,6 +1,31 @@
 # Project State
 
-## 1. 项目概览
+## 0. 当前快照（动态扫描，2026-06-12）
+
+> **勿将下方 §1–§9 早期扫描结论当作现状**；它们记录 2026-04 首次入库时的历史判断。  
+> 轮次与进度以脚本输出为准：
+
+```bash
+python3 scripts/round_status.py --summary
+python3 scripts/check_user_journey.py   # 含 docs/CONSISTENCY_AUDIT_REPORT.md
+```
+
+| 指标 | 当前值（脚本扫描） |
+|------|-------------------|
+| 概览 md `round_00`–`round_21` | 22 份 |
+| 完整实操骨架 `rounds/round_XX/` | 22 个目录 |
+| `progress.json` 已接入 | Round 00–04（76 任务） |
+| 进度闭环（JSON + mark_done + 看板 weeks） | Round 00–04 |
+| 仅骨架未接入进度 | Round 05–21 |
+| 看板元数据 `progress_rounds.json` | 22 轮（5 有任务清单，17 骨架占位） |
+| 网页学习服务 `learn_server` | PW-0~6 已实现（PW-6 为 plans 阅读入口最小版） |
+
+---
+
+## 1. 项目概览（历史 · 2026-04-28 首次扫描）
+
+> ⚠️ 下列 §1–§9 保留作审计轨迹；**实现状态已过时**。见 §0。
+
 - **仓库名称**：`computer_study_plan`（基于当前目录名判断）。
 - **唯一本地工作副本**：`~/PycharmProjects/computer_study_plan`（绝对路径 `/Users/alalapi/PycharmProjects/computer_study_plan`）。IDE 工作区、文档中的「仓库根」、Git 操作均指此目录；详见 `docs/WORKSPACE.md`。
 - **练习沙盒（非仓库）**：Round 00 等终端练习使用 `~/cli-lab/round0`，与 Git 根分离。
@@ -916,3 +941,91 @@
 
 - `python3 scripts/agent_gate.py --verify`：通过。
 - Round 13–21 Python 练习脚本 `py_compile`：通过。
+
+## 38. 2026-06-12 描述一致性审计与动态轮次状态
+
+### 38.1 本轮新增
+
+- `scripts/round_status.py`：扫描概览 md / 实操骨架 / 进度接入 / 看板 UI，替代文档硬编码轮次表。
+- `scripts/check_user_journey.py`：16 项用户旅程测试 + 生成 `docs/CONSISTENCY_AUDIT_REPORT.md`。
+- `scripts/generate_progress_rounds.py`：维护 `progress_rounds.json` / `progress_rounds.js`。
+- `progress_rounds.json`、`progress_rounds.js`：看板 Round 元数据单一来源。
+
+### 38.2 本轮修改
+
+- `progress.html`：移除硬编码 ROUNDS 数组，动态加载 `progress_rounds`；骨架轮次显示「未接入进度」说明。
+- `mark_done.sh`：`resolve_round_id` 改为通用 `rNN-` 解析（修复仅识别 round_00/02 的 bug）。
+- `README.md`、`CONVERSION_PROTOCOL.md` §6/§8.3、`docs/governance/file_naming_rules.md`：去除误导性「全部已展开/已完成」表述。
+- `docs/PROJECT_STATE.md` §0 当前快照；`package.json` 新增 `check:journey`、`round:status`、`round:sync-ui`。
+
+### 38.3 验证
+
+- `python3 scripts/check_user_journey.py`：16/16 通过。
+- `npm run check:protocol`：通过。
+
+## 39. 2026-06-12 Progress 网页全学习闭环路线图
+
+- 新增 `docs/PROGRESS_WEB_LEARNING_ROADMAP.md`（PW-0 ~ PW-6）：目标在 `http://localhost:8000/progress.html` 完成读材料、练习、打卡、错题与复盘。
+- 同步：`MASTER_STUDY_ROADMAP.md`、`STAGE_PLAN.md` §13、`CODEX_LONG_TERM_PLAN.md` §0、`NEXT_ACTIONS.md` TASK-WEB-01 ~ 07（queued）、`README.md` §6.3。
+- **计划态**：尚未实现 `learn_server` 与网页内操作；当前仍依赖 `mark_done.sh` 与终端练习。
+
+## 40. 2026-06-12 PW-0 ~ PW-2 学习服务与网页打卡
+
+### 40.1 新增
+
+- `scripts/progress_store.py`：progress.json / progress_data.js / events.jsonl 统一写入。
+- `scripts/learn_server.py`：本地 HTTP + `/api/*`（健康、进度、打卡、读 notes）。
+- `scripts/content_paths.py`：内容路径白名单与简易 Markdown → HTML。
+- `docs/modules/progress_web_api.md`：API 说明。
+
+### 40.2 修改
+
+- `mark_done.sh`：委托 `progress_store.py`。
+- `progress.html`：学习服务模式下「完成/撤销」「阅读笔记」弹窗。
+- `package.json`：`npm run learn:server`。
+- `TASK-WEB-01` ~ `03` 标记 done。
+
+### 40.3 验证
+
+- `python3 scripts/check_user_journey.py`：17/17（含 learn_server API）。
+- `bash mark_done.sh` / API 打卡行为一致。
+
+### 40.4 未完成（路线图后续）
+
+- PW-3 练习工作区、PW-4 全路线进度、PW-5 错题、PW-6 四主线入口。
+
+## 41. 2026-06-12 PW-3 练习工作区
+
+### 41.1 新增
+
+- `scripts/exercise_guide.py`：解析 Shell 练习步骤、运行 Python 练习脚本。
+- API：`GET /api/exercise/guide`、`POST /api/exercise/run`。
+
+### 41.2 修改
+
+- `progress.html`：周次「练习向导」、步骤内「标记本步完成」、Python「运行脚本」。
+- `TASK-WEB-04` 标记 done。
+
+### 41.3 验证
+
+- `python3 scripts/check_user_journey.py`：18/18（含练习 API）。
+
+## 42. 2026-06-12 PW-4 ~ PW-6（全路线进度 + 反馈错题 + 四主线入口）
+
+### 42.1 新增
+
+- `scripts/skeleton_progress.py`、`scripts/sync_skeleton_progress.py`：`npm run sync:skeleton-progress` 为 Round 05–21 批量注册任务。
+- `scripts/learning_records.py`：任务 events / feedback 读取与错题笔记写入。
+
+### 42.2 修改
+
+- `progress.json`：280 任务（Round 00–21 各 12 + Round 00 额外任务）；`progress_rounds` 22 轮均 `progress_linked`。
+- `scripts/learn_server.py`：`GET /api/tasks/<id>/events|feedback`、`POST /api/error_notes`。
+- `scripts/content_paths.py`：允许只读 `docs/KNOWLEDGE_MAPPING.md`、`docs/ERROR_REVIEW_SYSTEM.md`。
+- `progress.html`：任务「历史」弹窗、快速记错题表单、四主线 `plans/` 阅读入口。
+- `TASK-WEB-05`、`TASK-WEB-06` 标记 done；`TASK-WEB-07` partial。
+
+### 42.3 验证
+
+- `python3 scripts/check_user_journey.py`：20/20（含全路线规模与错题 API）。
+- `npm run check:protocol`：通过。
