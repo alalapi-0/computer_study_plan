@@ -256,34 +256,25 @@
 
 ## 6. 当前轮次状态
 
-> 每次新增或修改轮次时更新此表
+> **禁止在本节手工维护完整轮次表**（易与 `progress.json` / 看板 / 实操目录脱节）。  
+> 单一事实源：运行下列命令生成最新状态。
 
-| 轮次 | 主题 | MD 状态 | 实操目录 | 所属主线 | 备注 |
-|------|------|---------|---------|---------|------|
-| Round 00 | Terminal 初见 | ✅ 完整 | ✅ 已展开 | engineering | 已完成最小闭环 |
-| Round 01 | 文件系统与基础命令 | ✅ 概览 | ✅ 已展开 | engineering | 2026-05-28 完成 Round 01 最小目录骨架 |
-| Round 02 | Shell、管道、Git | ✅ 概览 | ✅ 已展开 | engineering | 2026-05-28 完成 Round 02 目录骨架 |
-| Round 03 | Python 基础 + 复杂度 | ✅ 概览 | ✅ 已展开 | engineering | 2026-05-28 完成 Round 03 最小目录骨架 |
-| Round 04 | 核心数据结构 | ✅ 概览 | ✅ 已展开 | engineering + soft_exam + cs408 | 2026-05-28 完成 Round 04 最小目录骨架 |
-| Round 05 | 高频算法模式 | ✅ 概览 | ✅ 已展开 | engineering + soft_exam + cs408 | 2026-05-28 完成 Round 05 最小目录骨架 |
-| Round 06 | Linux 进阶与自动化 | ✅ 概览 | ✅ 已展开 | engineering | 2026-05-28 完成 Round 06 最小目录骨架 |
-| Round 07 | 面向 AI 项目综合练习 | ✅ 概览 | ✅ 已展开 | engineering | 2026-05-29 完成 Round 07 最小目录骨架 |
-| Round 08 | 总复盘与升级路线 | ✅ 概览 | ✅ 已展开 | engineering | 2026-05-29 完成 Round 08 最小目录骨架 |
-| Round 09 | 仓库规范化与测试（路线 A） | ✅ 概览 | ✅ 已展开 | engineering | 2026-05-29 完成 Round 09 最小目录骨架 |
-| Round 10 | Python 工程化基础（路线 A） | ✅ 概览 | ✅ 已展开 | engineering | 2026-05-31 完成 Round 10 最小目录骨架 |
-| Round 11 | 本地持久化（路线 A） | ✅ 概览 | ✅ 已展开 | engineering + soft_exam | 2026-05-31 完成 Round 11 最小目录骨架 |
-| Round 12 | 自动化流水线（路线 A） | ✅ 概览 | ✅ 已展开 | engineering | 2026-05-31 完成 Round 12 最小目录骨架 |
-| Round 13 | 环境复现与发布（路线 A） | ✅ 概览 | ✅ 已展开 | engineering | 2026-05-31 完成 Round 13 最小目录骨架 |
-| Round 14 | HTTP 与 API 设计（路线 B） | ✅ 概览 | ✅ 已展开 | engineering + soft_exam + cs408 | 2026-05-31 完成 Round 14 最小目录骨架 |
-| Round 15 | FastAPI 基础（路线 B） | ✅ 概览 | ✅ 已展开 | engineering | 2026-05-31 完成 Round 15 最小目录骨架 |
-| Round 16 | API 与数据层结合（路线 B） | ✅ 概览 | ✅ 已展开 | engineering | 2026-05-31 完成 Round 16 最小目录骨架 |
-| Round 17 | 服务化收口（路线 B） | ✅ 概览 | ✅ 已展开 | engineering | 2026-05-31 完成 Round 17 最小目录骨架 |
-| Round 18 | 数值计算与数据分析（路线 C） | ✅ 概览 | ✅ 已展开 | engineering | 2026-05-31 完成 Round 18 最小目录骨架 |
-| Round 19 | 机器学习最小闭环（路线 C） | ✅ 概览 | ✅ 已展开 | engineering | 2026-05-31 完成 Round 19 最小目录骨架 |
-| Round 20 | PyTorch 入门（路线 C） | ✅ 概览 | ✅ 已展开 | engineering | 2026-05-31 完成 Round 20 最小目录骨架 |
-| Round 21 | NLP 前置基础（路线 C） | ✅ 概览 | ✅ 已展开 | engineering | 2026-05-31 完成 Round 21 最小目录骨架 |
+```bash
+python3 scripts/round_status.py --markdown    # 人类可读表
+python3 scripts/round_status.py --summary     # JSON 摘要（full_loop_rounds / scaffold_only_rounds）
+python3 scripts/generate_progress_rounds.py   # 同步 progress_rounds.json → 看板
+```
 
-> "所属主线"是 v2.0 新增字段，用于把现有工程实操内容映射到新增的多目标体系（详见 `docs/KNOWLEDGE_MAPPING.md`）。
+| 层级 | 含义 |
+|------|------|
+| 概览 md | 根目录 `round_XX.md` 存在 |
+| 实操骨架 | `rounds/round_XX/` 含 week1–3 + final 完整结构 |
+| 进度已接入 | `progress.json` 含该轮任务 ID |
+| 进度闭环 | 已接入 + 练习脚本调用 `mark_done.sh` + 看板 `progress_rounds.json` 有 weeks 元数据 |
+
+新增或修改轮次后必须：`progress.json` 登记任务 → 更新 `progress_rounds.json`（生成脚本）→ `python3 scripts/check_user_journey.py`。
+
+> "所属主线"见各 `round_XX.md` 概览表；映射关系见 `docs/KNOWLEDGE_MAPPING.md`。
 
 ---
 
@@ -387,7 +378,9 @@ bash mark_done.sh <task-id> --undo
 bash mark_done.sh
 ```
 
-### 8.3 ROUNDS 数组（`progress.html` 中的静态元数据）
+### 8.3 Round 看板元数据（`progress_rounds.json` / `progress_rounds.js`）
+
+看板从 `progress_rounds.json` 加载 Round 列表（`file://` 回退 `progress_rounds.js`）。由 `scripts/generate_progress_rounds.py` 维护，**禁止在 `progress.html` 内硬编码完整 ROUNDS 数组**。
 
 每个 Round 对象格式：
 

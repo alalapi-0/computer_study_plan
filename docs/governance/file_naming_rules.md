@@ -12,7 +12,7 @@
 ## 2. 主线轮次（已存在体系，不改）
 
 - 主线 Round 概览文档：`round_XX.md`，XX 为两位数字（已存在 `round_00.md` ~ `round_21.md`）。
-- 主线 Round 实操目录：`rounds/round_XX/`（目前仅 `rounds/round_00/` 已展开）。
+- 主线 Round 实操目录：`rounds/round_XX/`（工程线 `round_00`–`round_21` 均有目录；**进度接入**与**进度闭环**层级见 `python3 scripts/round_status.py`）。
 - 已废弃命名：`plan_round_XX.txt`（22 份初版提示词文本于 2026-05-12 由用户授权删除，内容已被对应 `round_XX.md` 完整吸收。后续**不再新增**此类文件，新需求直接写 md）。
 
 > 这些命名是项目的"既成事实"，不主动重命名。新增主线 Round 仍延用相同格式。

@@ -169,10 +169,12 @@ with open(js_path, "w", encoding="utf-8") as f:
 
 # 追加动作事件日志（Phase 2 原型，JSONL）
 def resolve_round_id(tid: str) -> str:
-    if tid.startswith("r02-"):
-        return "round_02"
+    import re
     if tid.startswith(("w1-", "w2-", "w3-", "fin-")):
         return "round_00"
+    match = re.match(r"^r(\d+)-", tid)
+    if match:
+        return f"round_{int(match.group(1)):02d}"
     return "unknown"
 
 lane = tasks[task_id].get("lane", "engineering")
