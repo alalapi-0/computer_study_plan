@@ -409,6 +409,7 @@ M8–M12    Stage 3 + Stage 4
 | `docs/GRADUATE_SCHOOL_TRACKER.md` | Stage 6 |
 | `docs/PROJECT_PORTFOLIO_TRACK.md` | Stage 7 |
 | `progress.html` 四主线进度 | 全部 Stage（按 lane 展示） |
+| `docs/PROGRESS_WEB_LEARNING_ROADMAP.md` | 跨 Stage：将 `http://localhost:8000/progress.html` 升级为全学习操作入口（PW-0 ~ PW-6） |
 
 ---
 
@@ -422,6 +423,22 @@ M8–M12    Stage 3 + Stage 4
   - Stage 4 数学二同理，放进 `plans/math2/`
 
 > 决策原则：`rounds/round_XX/` 用于"可执行练习目录"；`plans/<scope>/` 用于"知识体系笔记 + 章节学习计划"；`records/<scope>/` 用于"真实发生过的学习记录"。
+
+---
+
+## 13. Progress 网页全学习闭环（工程线演进）
+
+> 详细分阶段路径见 **`docs/PROGRESS_WEB_LEARNING_ROADMAP.md`**。摘要：
+
+| 阶段 | 能力 | 与 Stage 关系 |
+|------|------|----------------|
+| PW-0 | `learn_server` 本地服务 + 只读 API | 延续 Stage 0 学习系统 |
+| PW-1 | 网页内打卡（等价 `mark_done.sh`） | 全部 Stage 的进度记录 |
+| PW-2 ~ PW-3 | 页面读 notes + 练习引导 | 支撑 Stage 1 Round 实操 |
+| PW-4 | Round 05–21 进度接入 | Stage 1 工程线收尾 |
+| PW-5 ~ PW-6 | 反馈 / 错题 / 四主线入口 | Stage 2–5 统一入口 |
+
+当前仍为**只读看板**；实现任务队列：`docs/NEXT_ACTIONS.md` 中 `TASK-WEB-01` ~ `TASK-WEB-07`（queued，不挤占软考内容填充的默认优先级）。
 
 ---
 

@@ -961,3 +961,9 @@ python3 scripts/check_user_journey.py   # 含 docs/CONSISTENCY_AUDIT_REPORT.md
 
 - `python3 scripts/check_user_journey.py`：16/16 通过。
 - `npm run check:protocol`：通过。
+
+## 39. 2026-06-12 Progress 网页全学习闭环路线图
+
+- 新增 `docs/PROGRESS_WEB_LEARNING_ROADMAP.md`（PW-0 ~ PW-6）：目标在 `http://localhost:8000/progress.html` 完成读材料、练习、打卡、错题与复盘。
+- 同步：`MASTER_STUDY_ROADMAP.md`、`STAGE_PLAN.md` §13、`CODEX_LONG_TERM_PLAN.md` §0、`NEXT_ACTIONS.md` TASK-WEB-01 ~ 07（queued）、`README.md` §6.3。
+- **计划态**：尚未实现 `learn_server` 与网页内操作；当前仍依赖 `mark_done.sh` 与终端练习。

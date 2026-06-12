@@ -424,6 +424,26 @@ TASK-011 实际产物：
 
 ---
 
+## Progress 网页全学习闭环（TASK-WEB · queued）
+
+> **路线图**：`docs/PROGRESS_WEB_LEARNING_ROADMAP.md`  
+> **目标**：在 `http://localhost:8000/progress.html` 完成读材料、练习引导、打卡、反馈、错题与周复盘，无需切换终端 `mark_done.sh`。  
+> **状态**：全部 **queued**（2026-06-12 写入路线图；**非**当前默认最高优先级，用户或 Agent 明确启动后再推进）。
+
+| 任务 ID | 阶段 | 目标摘要 | 状态 |
+|---------|------|----------|------|
+| TASK-WEB-01 | PW-0 | `scripts/learn_server.py` + 只读 API + `npm run learn:server` | queued |
+| TASK-WEB-02 | PW-1 | 网页打卡 / 撤销 + `progress_store` 与 `mark_done.sh` 共用写入 | queued |
+| TASK-WEB-03 | PW-2 | 页面内阅读 `notes.md`（路径白名单） | queued |
+| TASK-WEB-04 | PW-3 | 练习工作区（Shell 步骤引导 + Python 受限执行） | queued |
+| TASK-WEB-05 | PW-4 | Round 05–21 接入 `progress.json` 与看板 weeks | queued |
+| TASK-WEB-06 | PW-5 | 动作历史 / 反馈展示 + 错题表单写入 `records/` | queued |
+| TASK-WEB-07 | PW-6 | soft_exam / math2 / cs408 在同一页面的学习入口 | queued |
+
+启动条件建议：PW-0 → PW-1 可穿插维护轮；PW-4 可按 Round 拆子任务；实现前阅读路线图 §2 架构约束与 ADR-0001 ~ ADR-0005。
+
+---
+
 ## 推荐下一步（按优先级）
 
 1. 运行 `python3 scripts/agent_gate.py --json` 查看下一项可自动推进任务（已跳过 RR-05/06/07/08）。

@@ -290,6 +290,7 @@
 
 | 用途 | 文档 |
 |---|---|
+| **Progress 网页全学习闭环（localhost 路线图）** | `docs/PROGRESS_WEB_LEARNING_ROADMAP.md` |
 | 阶段计划（Stage 0–7） | `docs/STAGE_PLAN.md` |
 | 知识模块映射表（20 模块） | `docs/KNOWLEDGE_MAPPING.md` |
 | 周计划与时间预算（三种强度） | `docs/WEEKLY_EXECUTION_TEMPLATE.md` |
