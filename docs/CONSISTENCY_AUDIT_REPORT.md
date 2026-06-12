@@ -4,7 +4,7 @@
 
 ## 摘要
 
-- 测试用例：17 项，通过 17，失败 0
+- 测试用例：18 项，通过 18，失败 0
 - 概览 md：22 · 完整实操骨架：22
 - 进度已接入：round_00, round_01, round_02, round_03, round_04
 - 进度闭环（脚本+看板+JSON）：round_00, round_01, round_02, round_03, round_04
@@ -31,6 +31,7 @@
 | TC-15 | 仓库结构 | 工程线 round_00–21 概览 md 与 rounds 目录齐全 | ✅ | md=22, dirs=22 |
 | TC-16 | 进度一致性 | progress_store 能正确解析各 round 的 task_id | ✅ | resolve_round_id 抽样通过 |
 | TC-17 | 网页学习 | learn_server 健康检查与网页打卡 API | ✅ | health + mark + content OK |
+| TC-18 | 网页学习 | 练习向导 API（guide + Python run） | ✅ | guide_steps=4, py_run=True |
 
 ## 轮次状态（动态扫描，勿手工维护）
 

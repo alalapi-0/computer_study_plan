@@ -20,6 +20,8 @@ python3 scripts/learn_server.py
 | POST | `/api/tasks/<task_id>/done` | 标记完成 |
 | POST | `/api/tasks/<task_id>/undo` | 取消完成 |
 | GET | `/api/content?path=<rel>&format=json\|html` | 读取白名单内 Markdown（`rounds/`、`plans/`） |
+| GET | `/api/exercise/guide?path=<rel>` | 解析练习脚本步骤（Shell 引导 / Python 元数据） |
+| POST | `/api/exercise/run` | 运行非交互练习脚本，body: `{"path":"rounds/.../exercises.py"}` |
 
 ## 安全
 

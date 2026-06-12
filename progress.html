@@ -306,6 +306,27 @@
       padding: 0.65rem 1rem; border-top: 1px solid var(--border);
       display: flex; gap: 0.5rem; justify-content: flex-end;
     }
+
+    .week-title-row { display: flex; align-items: center; gap: 0.5rem; }
+    .week-title-row .week-title { flex: 1; }
+    .week-guide-btn {
+      padding: 0.2rem 0.55rem; border-radius: 6px; border: 1px solid var(--accent);
+      background: transparent; color: var(--accent); font-size: 0.72rem; cursor: pointer;
+      flex-shrink: 0;
+    }
+    .week-guide-btn:hover { background: rgba(108,99,255,0.15); }
+
+    .exercise-step {
+      border: 1px solid var(--border); border-radius: 8px; padding: 0.75rem 1rem; margin-bottom: 0.65rem;
+    }
+    .exercise-step h4 { font-size: 0.9rem; margin-bottom: 0.35rem; }
+    .exercise-step ul { margin: 0.35rem 0; padding-left: 1.2rem; font-size: 0.82rem; color: var(--text-muted); }
+    .exercise-step code { font-size: 0.78rem; }
+    .exercise-output {
+      background: #0b0d14; border-radius: 8px; padding: 0.75rem; font-size: 0.78rem;
+      max-height: 200px; overflow: auto; white-space: pre-wrap; margin-top: 0.5rem;
+    }
+    .sandbox-hint { font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.75rem; }
   </style>
 </head>
 
@@ -415,6 +436,20 @@
 </div>
 
 </div> <!-- /container -->
+
+<div class="notes-modal-backdrop" id="exerciseModalBackdrop" onclick="if(event.target===this) closeExerciseModal()">
+  <div class="notes-modal" role="dialog" aria-labelledby="exerciseModalTitle">
+    <header>
+      <strong id="exerciseModalTitle">练习向导</strong>
+      <button class="btn" type="button" onclick="closeExerciseModal()">关闭</button>
+    </header>
+    <div class="notes-body" id="exerciseModalBody">加载中…</div>
+    <div class="notes-footer">
+      <button class="btn" type="button" id="exerciseRunBtn" style="display:none">运行脚本</button>
+      <button class="btn" type="button" onclick="closeExerciseModal()">关闭</button>
+    </div>
+  </div>
+</div>
 
 <div class="notes-modal-backdrop" id="notesModalBackdrop" onclick="if(event.target===this) closeNotesModal()">
   <div class="notes-modal" role="dialog" aria-labelledby="notesModalTitle">
@@ -573,7 +608,7 @@ function updateLearnModeBanner() {
   if (learnApiAvailable) {
     el.style.display = "block";
     el.className = "learn-mode-banner";
-    el.textContent = "✅ 学习服务已连接：可在任务行点击「完成/撤销」与「阅读笔记」，无需终端 mark_done.sh。";
+    el.textContent = "✅ 学习服务已连接：可「完成/撤销」、阅读笔记、打开「练习向导」按步骤打卡。";
     intro.textContent = "学习服务已连接。进度来自 progress.json；可在本页直接打卡与阅读 notes。";
   } else if (window.location.protocol === "file:") {
     el.style.display = "block";
@@ -600,8 +635,10 @@ async function markTaskFromUI(taskId, undo) {
     progressData = data.tasks || progressData;
     lanesData = data.lanes || lanesData;
     render();
+    return data;
   } catch (e) {
     alert("打卡失败：" + (e.message || e));
+    throw e;
   }
 }
 
@@ -633,6 +670,102 @@ async function openNotesModal(filePath, taskId) {
 function closeNotesModal() {
   document.getElementById("notesModalBackdrop").classList.remove("open");
   notesModalTaskId = null;
+}
+
+function findWeekExercisePath(week, roundId) {
+  const tasks = week.tasks || [];
+  const hit = tasks.find(t => t.file && /exercises\.(sh|py)$/.test(t.file));
+  if (hit) return hit.file;
+  const m = (week.id || "").match(/week(\d+)/i);
+  const n = m ? m[1] : "1";
+  const num = roundId.replace("round_", "");
+  return `rounds/round_${num}/week${n}/exercises.sh`;
+}
+
+async function openExerciseModal(exercisePath) {
+  if (!learnApiAvailable) {
+    alert("请使用 learn_server 启动后再使用练习向导。");
+    return;
+  }
+  const backdrop = document.getElementById("exerciseModalBackdrop");
+  const body = document.getElementById("exerciseModalBody");
+  const title = document.getElementById("exerciseModalTitle");
+  const runBtn = document.getElementById("exerciseRunBtn");
+  title.textContent = exercisePath;
+  body.textContent = "加载练习步骤…";
+  runBtn.style.display = "none";
+  runBtn.onclick = () => runExerciseFromUI(exercisePath);
+  backdrop.classList.add("open");
+  try {
+    const res = await fetch(`/api/exercise/guide?path=${encodeURIComponent(exercisePath)}`);
+    const data = await res.json();
+    if (!res.ok || !data.ok) throw new Error(data.error || "加载失败");
+    let html = `<div class="sandbox-hint">练习沙盒：<code>${data.sandbox}</code>（在终端手敲命令，完成后在下方步骤点「完成」）</div>`;
+    if (data.interactive_shell) {
+      html += `<p style="font-size:0.82rem;color:var(--yellow)">本练习含交互确认（read），请按步骤在终端操作，勿一键运行脚本。</p>`;
+    }
+    data.steps.forEach((step, i) => {
+      const done = step.task_id && isTaskDone(step.task_id);
+      html += `<div class="exercise-step"><h4>步骤 ${i + 1}：${step.title}</h4>`;
+      if (step.hints.length) {
+        html += "<ul>" + step.hints.map(h => `<li>${h}</li>`).join("") + "</ul>";
+      }
+      if (step.commands.length) {
+        html += "<p style='font-size:0.78rem;color:var(--text-muted)'>参考命令：</p><ul>";
+        html += step.commands.map(c => `<li><code>${c}</code></li>`).join("");
+        html += "</ul>";
+      }
+      if (step.task_id && learnApiAvailable) {
+        html += `<button class="btn ${done ? "" : "primary"}" type="button" data-task="${step.task_id}" data-done="${done}">`;
+        html += done ? "撤销完成" : "标记本步完成";
+        html += "</button>";
+      }
+      html += "</div>";
+    });
+    body.innerHTML = html;
+    body.querySelectorAll("button[data-task]").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const tid = btn.getAttribute("data-task");
+        const undo = btn.getAttribute("data-done") === "true";
+        markTaskFromUI(tid, undo).then(() => openExerciseModal(exercisePath));
+      });
+    });
+    if (data.can_run) {
+      runBtn.style.display = "inline-block";
+      runBtn.textContent = data.kind === "python" ? "运行 Python 脚本" : "运行练习脚本";
+    }
+  } catch (e) {
+    body.textContent = "加载失败：" + (e.message || e);
+  }
+}
+
+function closeExerciseModal() {
+  document.getElementById("exerciseModalBackdrop").classList.remove("open");
+}
+
+async function runExerciseFromUI(exercisePath) {
+  const body = document.getElementById("exerciseModalBody");
+  try {
+    const res = await fetch("/api/exercise/run", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ path: exercisePath }),
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || "运行失败");
+    if (data.progress && data.progress.tasks) {
+      progressData = data.progress.tasks;
+      lanesData = data.progress.lanes || lanesData;
+      render();
+    }
+    const out = document.createElement("div");
+    out.className = "exercise-output";
+    out.textContent = (data.stdout || "") + (data.stderr ? "\n[stderr]\n" + data.stderr : "");
+    body.appendChild(out);
+    if (!data.ok) out.style.border = "1px solid var(--red)";
+  } catch (e) {
+    alert("运行失败：" + (e.message || e));
+  }
 }
 
 // ============================================================
@@ -828,6 +961,9 @@ function renderRoundsForLane(laneKey) {
       const weekEl = document.createElement("div");
       weekEl.className = "week-section";
 
+      const titleRow = document.createElement("div");
+      titleRow.className = "week-title-row";
+
       const titleEl = document.createElement("div");
       titleEl.className = "week-title" + (weekAllDone ? " completed" : "") + (isCollapsed ? " collapsed" : "");
       titleEl.innerHTML = `
@@ -842,6 +978,20 @@ function renderRoundsForLane(laneKey) {
         setCollapsed(c);
         render();
       });
+      titleRow.appendChild(titleEl);
+
+      const exercisePath = findWeekExercisePath(week, round.id);
+      if (learnApiAvailable && exercisePath) {
+        const guideBtn = document.createElement("button");
+        guideBtn.type = "button";
+        guideBtn.className = "week-guide-btn";
+        guideBtn.textContent = "练习向导";
+        guideBtn.addEventListener("click", (e) => {
+          e.stopPropagation();
+          openExerciseModal(exercisePath);
+        });
+        titleRow.appendChild(guideBtn);
+      }
 
       const listEl = document.createElement("div");
       listEl.className = "task-list" + (isCollapsed ? " collapsed" : "");
@@ -877,6 +1027,13 @@ function renderRoundsForLane(laneKey) {
             readBtn.addEventListener("click", () => openNotesModal(task.file, task.type === "reading" ? task.id : null));
             actions.appendChild(readBtn);
           }
+          if (task.file && /exercises\.(sh|py)$/.test(task.file)) {
+            const exBtn = document.createElement("button");
+            exBtn.type = "button";
+            exBtn.textContent = "向导";
+            exBtn.addEventListener("click", () => openExerciseModal(task.file));
+            actions.appendChild(exBtn);
+          }
           if (!done) {
             const doneBtn = document.createElement("button");
             doneBtn.className = "primary";
@@ -897,7 +1054,7 @@ function renderRoundsForLane(laneKey) {
         listEl.appendChild(item);
       });
 
-      weekEl.appendChild(titleEl);
+      weekEl.appendChild(titleRow);
       weekEl.appendChild(listEl);
       panel.appendChild(weekEl);
     });

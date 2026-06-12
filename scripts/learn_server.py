@@ -24,6 +24,7 @@ REPO_ROOT = SCRIPT_DIR.parent
 
 sys.path.insert(0, str(SCRIPT_DIR))
 from content_paths import markdown_to_html, resolve_content_path  # noqa: E402
+from exercise_guide import build_guide, run_exercise  # noqa: E402
 from progress_store import load_progress, set_task_done  # noqa: E402
 
 TASK_API_RE = re.compile(r"^/api/tasks/([^/]+)/(done|undo)$")
@@ -55,7 +56,13 @@ class LearnHTTPRequestHandler(SimpleHTTPRequestHandler):
                     "ok": True,
                     "service": "learn_server",
                     "repo_root": str(REPO_ROOT),
-                    "features": ["progress_read", "task_mark", "content_read"],
+                    "features": [
+                        "progress_read",
+                        "task_mark",
+                        "content_read",
+                        "exercise_guide",
+                        "exercise_run",
+                    ],
                 },
             )
             return
@@ -99,6 +106,19 @@ class LearnHTTPRequestHandler(SimpleHTTPRequestHandler):
             )
             return
 
+        if path == "/api/exercise/guide":
+            params = parse_qs(parsed.query)
+            rel = params.get("path", [""])[0]
+            try:
+                guide = build_guide(REPO_ROOT, rel)
+                self._json_response(HTTPStatus.OK, guide)
+            except ValueError as exc:
+                self._json_response(
+                    HTTPStatus.BAD_REQUEST,
+                    {"ok": False, "error": str(exc)},
+                )
+            return
+
         if path.startswith("/api/"):
             self._json_response(HTTPStatus.NOT_FOUND, {"ok": False, "error": "not found"})
             return
@@ -107,6 +127,27 @@ class LearnHTTPRequestHandler(SimpleHTTPRequestHandler):
 
     def do_POST(self) -> None:
         parsed = urlparse(self.path)
+        if parsed.path == "/api/exercise/run":
+            length = int(self.headers.get("Content-Length", 0))
+            raw = self.rfile.read(length) if length else b"{}"
+            try:
+                body = json.loads(raw.decode("utf-8") or "{}")
+            except json.JSONDecodeError:
+                body = {}
+            rel = body.get("path", "")
+            try:
+                result = run_exercise(REPO_ROOT, rel)
+                # Shell/Python 脚本可能已调用 mark_done；刷新进度供前端同步
+                if result.get("ok"):
+                    result["progress"] = load_progress(REPO_ROOT)
+                self._json_response(HTTPStatus.OK, result)
+            except ValueError as exc:
+                self._json_response(
+                    HTTPStatus.BAD_REQUEST,
+                    {"ok": False, "error": str(exc)},
+                )
+            return
+
         match = TASK_API_RE.match(parsed.path)
         if not match:
             self._json_response(HTTPStatus.NOT_FOUND, {"ok": False, "error": "not found"})
@@ -149,7 +190,10 @@ def main() -> int:
     server = ThreadingHTTPServer((args.host, args.port), LearnHTTPRequestHandler)
     url = f"http://{args.host}:{args.port}/progress.html"
     print(f"Learn server at {url}")
-    print("API: /api/health /api/progress /api/tasks/<id>/done|undo /api/content?path=...")
+    print(
+        "API: /api/health /api/progress /api/tasks/<id>/done|undo "
+        "/api/content?path=... /api/exercise/guide?path=... POST /api/exercise/run"
+    )
     try:
         server.serve_forever()
     except KeyboardInterrupt:

@@ -18,6 +18,7 @@ python3 scripts/check_user_journey.py   # 含 docs/CONSISTENCY_AUDIT_REPORT.md
 | 进度闭环（JSON + mark_done + 看板 weeks） | Round 00–04 |
 | 仅骨架未接入进度 | Round 05–21 |
 | 看板元数据 `progress_rounds.json` | 22 轮（5 有任务清单，17 骨架占位） |
+| 网页学习服务 `learn_server` | PW-0~3 已实现；PW-4~6 待做 |
 
 ---
 
@@ -992,3 +993,19 @@ python3 scripts/check_user_journey.py   # 含 docs/CONSISTENCY_AUDIT_REPORT.md
 ### 40.4 未完成（路线图后续）
 
 - PW-3 练习工作区、PW-4 全路线进度、PW-5 错题、PW-6 四主线入口。
+
+## 41. 2026-06-12 PW-3 练习工作区
+
+### 41.1 新增
+
+- `scripts/exercise_guide.py`：解析 Shell 练习步骤、运行 Python 练习脚本。
+- API：`GET /api/exercise/guide`、`POST /api/exercise/run`。
+
+### 41.2 修改
+
+- `progress.html`：周次「练习向导」、步骤内「标记本步完成」、Python「运行脚本」。
+- `TASK-WEB-04` 标记 done。
+
+### 41.3 验证
+
+- `python3 scripts/check_user_journey.py`：18/18（含练习 API）。

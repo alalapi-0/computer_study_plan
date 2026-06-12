@@ -29,6 +29,7 @@ REQUIRED_PATHS = [
     "scripts/progress_store.py",
     "scripts/learn_server.py",
     "scripts/content_paths.py",
+    "scripts/exercise_guide.py",
     "rounds/round_00/final/comprehensive_exercise.sh",
 ]
 

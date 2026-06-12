@@ -325,6 +325,64 @@ def check_mark_done_round_resolver(report: TestReport) -> None:
     report.add(case)
 
 
+def check_exercise_guide_api(report: TestReport) -> None:
+    case = TestCase(
+        "TC-18",
+        "网页学习",
+        "练习向导 API（guide + Python run）",
+        "GET /api/exercise/guide + POST /api/exercise/run",
+    )
+    import subprocess
+    import time
+    import urllib.error
+    import urllib.request
+
+    port = 18081
+    proc = subprocess.Popen(
+        [sys.executable, "scripts/learn_server.py", "--port", str(port)],
+        cwd=REPO,
+        stdout=subprocess.DEVNULL,
+        stderr=subprocess.DEVNULL,
+    )
+    try:
+        time.sleep(0.6)
+        guide_url = (
+            f"http://127.0.0.1:{port}/api/exercise/guide"
+            "?path=rounds/round_00/week1/exercises.sh"
+        )
+        with urllib.request.urlopen(guide_url, timeout=3) as resp:
+            guide = json.loads(resp.read().decode())
+        run_body = json.dumps(
+            {"path": "rounds/round_07/week1/exercises.py"}
+        ).encode()
+        req = urllib.request.Request(
+            f"http://127.0.0.1:{port}/api/exercise/run",
+            data=run_body,
+            method="POST",
+            headers={"Content-Type": "application/json"},
+        )
+        with urllib.request.urlopen(req, timeout=30) as resp:
+            run = json.loads(resp.read().decode())
+        ok = (
+            guide.get("ok")
+            and len(guide.get("steps", [])) >= 3
+            and run.get("ok")
+            and "cli-lab" in (run.get("stdout") or "")
+        )
+        case.passed = ok
+        case.detail = f"guide_steps={len(guide.get('steps', []))}, py_run={run.get('ok')}"
+    except (urllib.error.URLError, TimeoutError, json.JSONDecodeError) as exc:
+        case.passed = False
+        case.detail = str(exc)
+    finally:
+        proc.terminate()
+        try:
+            proc.wait(timeout=3)
+        except subprocess.TimeoutExpired:
+            proc.kill()
+    report.add(case)
+
+
 def check_learn_server_api(report: TestReport) -> None:
     case = TestCase(
         "TC-17",
@@ -455,6 +513,7 @@ def main() -> int:
     check_scaffold_rounds_exist(report)
     check_mark_done_round_resolver(report)
     check_learn_server_api(report)
+    check_exercise_guide_api(report)
 
     write_report(report)
 
