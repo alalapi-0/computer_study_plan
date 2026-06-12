@@ -967,3 +967,28 @@ python3 scripts/check_user_journey.py   # 含 docs/CONSISTENCY_AUDIT_REPORT.md
 - 新增 `docs/PROGRESS_WEB_LEARNING_ROADMAP.md`（PW-0 ~ PW-6）：目标在 `http://localhost:8000/progress.html` 完成读材料、练习、打卡、错题与复盘。
 - 同步：`MASTER_STUDY_ROADMAP.md`、`STAGE_PLAN.md` §13、`CODEX_LONG_TERM_PLAN.md` §0、`NEXT_ACTIONS.md` TASK-WEB-01 ~ 07（queued）、`README.md` §6.3。
 - **计划态**：尚未实现 `learn_server` 与网页内操作；当前仍依赖 `mark_done.sh` 与终端练习。
+
+## 40. 2026-06-12 PW-0 ~ PW-2 学习服务与网页打卡
+
+### 40.1 新增
+
+- `scripts/progress_store.py`：progress.json / progress_data.js / events.jsonl 统一写入。
+- `scripts/learn_server.py`：本地 HTTP + `/api/*`（健康、进度、打卡、读 notes）。
+- `scripts/content_paths.py`：内容路径白名单与简易 Markdown → HTML。
+- `docs/modules/progress_web_api.md`：API 说明。
+
+### 40.2 修改
+
+- `mark_done.sh`：委托 `progress_store.py`。
+- `progress.html`：学习服务模式下「完成/撤销」「阅读笔记」弹窗。
+- `package.json`：`npm run learn:server`。
+- `TASK-WEB-01` ~ `03` 标记 done。
+
+### 40.3 验证
+
+- `python3 scripts/check_user_journey.py`：17/17（含 learn_server API）。
+- `bash mark_done.sh` / API 打卡行为一致。
+
+### 40.4 未完成（路线图后续）
+
+- PW-3 练习工作区、PW-4 全路线进度、PW-5 错题、PW-6 四主线入口。

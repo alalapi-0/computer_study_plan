@@ -8,6 +8,7 @@
     "check:protocol": "python3 scripts/check_protocol_sync.py && python3 scripts/validate_learning_data.py",
     "check:journey": "python3 scripts/check_user_journey.py",
     "round:status": "python3 scripts/round_status.py --markdown",
-    "round:sync-ui": "python3 scripts/generate_progress_rounds.py"
+    "round:sync-ui": "python3 scripts/generate_progress_rounds.py",
+    "learn:server": "python3 scripts/learn_server.py"
   }
 }

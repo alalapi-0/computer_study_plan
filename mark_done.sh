@@ -1,28 +1,19 @@
 #!/bin/bash
 # =============================================================
-# mark_done.sh — 标记任务完成，同时写入 progress.json 和 progress_data.js
+# mark_done.sh — 标记任务完成（写入 progress.json / progress_data.js）
 #
 # 用法：
 #   bash mark_done.sh <task-id>           标记完成
 #   bash mark_done.sh <task-id> --undo    取消完成
 #   bash mark_done.sh                     查看所有任务状态（按 lane 分组）
 #
-# 示例：
-#   bash mark_done.sh w1-read
-#   bash mark_done.sh w1-ex1 --undo
-#
-# 兼容性：
-#   - 支持 progress.json v1（无 lanes、tasks 项无 lane）与 v2 结构
-#   - 读取时若发现 v1 数据会自动当作 v2 处理，缺失字段默认补 engineering
-#   - 写入时统一写出 v2 结构
+# 写入逻辑与 learn_server API 共用 scripts/progress_store.py
 # =============================================================
 
 set -e
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 PROGRESS_FILE="$SCRIPT_DIR/progress.json"
-PROGRESS_JS="$SCRIPT_DIR/progress_data.js"
-ACTION_LOG_FILE="$SCRIPT_DIR/records/action_logs/events.jsonl"
 
 if [ ! -f "$PROGRESS_FILE" ]; then
   echo "❌ 找不到 progress.json。请在仓库根目录执行（见 docs/WORKSPACE.md）："
@@ -33,168 +24,15 @@ fi
 TASK_ID="$1"
 MODE="${2:-}"
 
-# ── 无参数：按 lane 分组显示状态概览 ──────────────────────────────────────
 if [ -z "$TASK_ID" ]; then
   echo "用法：bash mark_done.sh <task-id> [--undo]"
   echo ""
-  python3 - "$SCRIPT_DIR" <<'PYEOF'
-import json, sys, collections
-
-script_dir = sys.argv[1]
-with open(f"{script_dir}/progress.json", "r", encoding="utf-8") as f:
-    data = json.load(f)
-
-# 兼容 v1：补 lanes 默认值
-default_lanes = {
-    "engineering": {"title": "工程实操线", "description": ""},
-    "soft_exam":   {"title": "软考中级线",  "description": ""},
-    "math2":       {"title": "数学二线",     "description": ""},
-    "cs408":       {"title": "408/0854 线",  "description": ""},
-}
-lanes = data.get("lanes", default_lanes)
-tasks = data.get("tasks", {})
-
-# 按 lane 分组
-by_lane = collections.defaultdict(list)
-for tid, info in tasks.items():
-    lane = info.get("lane", "engineering")  # v1 兼容
-    by_lane[lane].append((tid, info))
-
-total_done = sum(1 for v in tasks.values() if v.get("done"))
-total      = len(tasks)
-print(f"📊 总进度：{total_done}/{total}\n")
-
-# 按 lanes 中预设顺序输出，再处理未列出的 lane
-ordered_keys = list(lanes.keys()) + [k for k in by_lane.keys() if k not in lanes]
-for lane_key in ordered_keys:
-    items = by_lane.get(lane_key, [])
-    if not items:
-        continue
-    title = lanes.get(lane_key, {}).get("title", lane_key)
-    done = [x for x in items if x[1].get("done")]
-    print(f"─── {title}（{lane_key}）  {len(done)}/{len(items)} ───")
-    for tid, info in items:
-        if info.get("done"):
-            ts = info.get("done_at")
-            print(f"  ✅ {tid}  ({ts})")
-        else:
-            print(f"  ⬜ {tid}")
-    print()
-PYEOF
+  python3 "$SCRIPT_DIR/scripts/progress_store.py" list
   exit 0
 fi
 
-# ── 标记 / 取消 ───────────────────────────────────────────────
-python3 - "$SCRIPT_DIR" "$TASK_ID" "$MODE" "$ACTION_LOG_FILE" <<'PYEOF'
-import datetime
-import json
-import os
-import sys
-import uuid
-
-script_dir = sys.argv[1]
-task_id    = sys.argv[2]
-mode       = sys.argv[3] if len(sys.argv) > 3 else ""
-action_log_file = sys.argv[4]
-
-json_path = f"{script_dir}/progress.json"
-js_path   = f"{script_dir}/progress_data.js"
-
-with open(json_path, "r", encoding="utf-8") as f:
-    data = json.load(f)
-
-# 兼容 v1：补充 version / lanes / 每个任务的 lane 字段（默认 engineering）
-data["version"] = 2
-default_lanes = {
-    "engineering": {"title": "工程实操线", "description": "Linux/Shell/Git/Python/工程化/服务化/AI 工程/VPS"},
-    "soft_exam":   {"title": "软考中级线",  "description": "默认软件设计师，高分/满分导向"},
-    "math2":       {"title": "数学二线",     "description": "高等数学 + 线性代数（长期低强度）"},
-    "cs408":       {"title": "408/0854 线",  "description": "数据结构 + 计组 + 操作系统 + 计算机网络"},
-}
-if "lanes" not in data:
-    data["lanes"] = default_lanes
-else:
-    # 缺失的标准 lane 补回
-    for k, v in default_lanes.items():
-        data["lanes"].setdefault(k, v)
-
-tasks = data.get("tasks", {})
-
-if task_id not in tasks:
-    print(f"❌ 未知任务 ID：{task_id}")
-    print("   已知 ID：" + ", ".join(tasks.keys()))
-    sys.exit(1)
-
-# 单条任务也补 lane
-if "lane" not in tasks[task_id]:
-    tasks[task_id]["lane"] = "engineering"
-
-action_type = "mark_done"
-result = "ok"
-
-if mode == "--undo":
-    action_type = "undo_done"
-    tasks[task_id]["done"]    = False
-    tasks[task_id]["done_at"] = None
-    print(f"↩️  已取消完成：{task_id}")
-else:
-    if tasks[task_id].get("done"):
-        result = "noop_already_done"
-        ts = tasks[task_id].get("done_at")
-        print(f"✅ 已是完成状态（{ts}），无需重复标记")
-    else:
-        now = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
-        tasks[task_id]["done"]    = True
-        tasks[task_id]["done_at"] = now
-        print(f"✅ 已标记完成：{task_id}  ({now})")
-
-# 写回 progress.json
-with open(json_path, "w", encoding="utf-8") as f:
-    json.dump(data, f, ensure_ascii=False, indent=2)
-
-# 同步写 progress_data.js（供 file:// 双击打开 progress.html 使用）
-js_payload = {
-    "version": data.get("version", 2),
-    "lanes":   data.get("lanes", {}),
-    "tasks":   data.get("tasks", {}),
-}
-js_body = json.dumps(js_payload, ensure_ascii=False, indent=2)
-js_content = (
-    "// Auto-generated by mark_done.sh — DO NOT edit manually\n"
-    "// Source of truth: progress.json\n"
-    f"window.PROGRESS_DATA = {js_body};\n"
-)
-with open(js_path, "w", encoding="utf-8") as f:
-    f.write(js_content)
-
-# 追加动作事件日志（Phase 2 原型，JSONL）
-def resolve_round_id(tid: str) -> str:
-    import re
-    if tid.startswith(("w1-", "w2-", "w3-", "fin-")):
-        return "round_00"
-    match = re.match(r"^r(\d+)-", tid)
-    if match:
-        return f"round_{int(match.group(1)):02d}"
-    return "unknown"
-
-lane = tasks[task_id].get("lane", "engineering")
-event = {
-    "action_id": str(uuid.uuid4()),
-    "task_id": task_id,
-    "round_id": resolve_round_id(task_id),
-    "lane": lane,
-    "action_type": action_type,
-    "timestamp": datetime.datetime.now().isoformat(timespec="seconds"),
-    "result": result,
-    "note": "",
-    "evidence_path": "",
-}
-os.makedirs(os.path.dirname(action_log_file), exist_ok=True)
-with open(action_log_file, "a", encoding="utf-8") as f:
-    f.write(json.dumps(event, ensure_ascii=False) + "\n")
-
-total      = len(tasks)
-done_count = sum(1 for v in tasks.values() if v.get("done"))
-print(f"📊 总进度：{done_count}/{total}")
-print(f"📝 已记录事件：{event['action_id']}")
-PYEOF
+if [ "$MODE" = "--undo" ]; then
+  python3 "$SCRIPT_DIR/scripts/progress_store.py" undo "$TASK_ID"
+else
+  python3 "$SCRIPT_DIR/scripts/progress_store.py" mark "$TASK_ID"
+fi

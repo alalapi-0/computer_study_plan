@@ -4,7 +4,7 @@
 
 ## 摘要
 
-- 测试用例：16 项，通过 16，失败 0
+- 测试用例：17 项，通过 17，失败 0
 - 概览 md：22 · 完整实操骨架：22
 - 进度已接入：round_00, round_01, round_02, round_03, round_04
 - 进度闭环（脚本+看板+JSON）：round_00, round_01, round_02, round_03, round_04
@@ -29,7 +29,8 @@
 | TC-13 | 校验脚本 | check_protocol_sync.py 通过 | ✅ | Protocol sync check PASSED |
 | TC-14 | Agent 协作 | agent_gate --verify 通过 | ✅ | Protocol sync check PASSED |
 | TC-15 | 仓库结构 | 工程线 round_00–21 概览 md 与 rounds 目录齐全 | ✅ | md=22, dirs=22 |
-| TC-16 | 进度一致性 | mark_done.sh 能正确解析各 round 的 task_id（非仅 round_00/02） | ✅ | resolve_round_id 使用通用 round 编号解析 |
+| TC-16 | 进度一致性 | progress_store 能正确解析各 round 的 task_id | ✅ | resolve_round_id 抽样通过 |
+| TC-17 | 网页学习 | learn_server 健康检查与网页打卡 API | ✅ | health + mark + content OK |
 
 ## 轮次状态（动态扫描，勿手工维护）
 

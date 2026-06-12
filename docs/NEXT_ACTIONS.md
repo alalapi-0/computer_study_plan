@@ -432,9 +432,9 @@ TASK-011 实际产物：
 
 | 任务 ID | 阶段 | 目标摘要 | 状态 |
 |---------|------|----------|------|
-| TASK-WEB-01 | PW-0 | `scripts/learn_server.py` + 只读 API + `npm run learn:server` | queued |
-| TASK-WEB-02 | PW-1 | 网页打卡 / 撤销 + `progress_store` 与 `mark_done.sh` 共用写入 | queued |
-| TASK-WEB-03 | PW-2 | 页面内阅读 `notes.md`（路径白名单） | queued |
+| TASK-WEB-01 | PW-0 | `scripts/learn_server.py` + 只读 API + `npm run learn:server` | **done**（2026-06-12） |
+| TASK-WEB-02 | PW-1 | 网页打卡 / 撤销 + `progress_store` 与 `mark_done.sh` 共用写入 | **done**（2026-06-12） |
+| TASK-WEB-03 | PW-2 | 页面内阅读 `notes.md`（路径白名单） | **done**（2026-06-12） |
 | TASK-WEB-04 | PW-3 | 练习工作区（Shell 步骤引导 + Python 受限执行） | queued |
 | TASK-WEB-05 | PW-4 | Round 05–21 接入 `progress.json` 与看板 weeks | queued |
 | TASK-WEB-06 | PW-5 | 动作历史 / 反馈展示 + 错题表单写入 `records/` | queued |

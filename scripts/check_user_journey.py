@@ -309,17 +309,83 @@ def check_mark_done_round_resolver(report: TestReport) -> None:
     case = TestCase(
         "TC-16",
         "进度一致性",
-        "mark_done.sh 能正确解析各 round 的 task_id（非仅 round_00/02）",
+        "progress_store 能正确解析各 round 的 task_id",
         "检查 resolve_round_id 逻辑",
     )
-    sh_text = (REPO / "mark_done.sh").read_text(encoding="utf-8")
-    bad = "if tid.startswith(\"r02-\")" in sh_text
-    good = "TASK_ROUND_RE" in sh_text or "r(\\d+)" in sh_text
-    case.passed = not bad or good
-    if bad and not good:
-        case.detail = "仍硬编码 r02- 分支，其他 round 事件 round_id 会错误"
-    else:
-        case.detail = "resolve_round_id 使用通用 round 编号解析"
+    from progress_store import resolve_round_id
+
+    samples = {
+        "w1-read": "round_00",
+        "r04-w1-read": "round_04",
+        "r02-w1-read": "round_02",
+    }
+    ok = all(resolve_round_id(k) == v for k, v in samples.items())
+    case.passed = ok
+    case.detail = "resolve_round_id 抽样通过" if ok else "resolve_round_id 抽样失败"
+    report.add(case)
+
+
+def check_learn_server_api(report: TestReport) -> None:
+    case = TestCase(
+        "TC-17",
+        "网页学习",
+        "learn_server 健康检查与网页打卡 API",
+        "启动 learn_server 临时端口并 POST /api/tasks",
+    )
+    import subprocess
+    import time
+    import urllib.error
+    import urllib.request
+
+    port = 18080
+    proc = subprocess.Popen(
+        [sys.executable, "scripts/learn_server.py", "--port", str(port)],
+        cwd=REPO,
+        stdout=subprocess.DEVNULL,
+        stderr=subprocess.DEVNULL,
+    )
+    try:
+        time.sleep(0.6)
+        with urllib.request.urlopen(f"http://127.0.0.1:{port}/api/health", timeout=3) as resp:
+            health = json.loads(resp.read().decode())
+        if not health.get("ok"):
+            case.passed = False
+            case.detail = "health not ok"
+            report.add(case)
+            return
+
+        def post(path: str) -> dict:
+            req = urllib.request.Request(
+                f"http://127.0.0.1:{port}{path}",
+                method="POST",
+                headers={"Content-Type": "application/json"},
+                data=b"{}",
+            )
+            with urllib.request.urlopen(req, timeout=3) as resp:
+                return json.loads(resp.read().decode())
+
+        post("/api/tasks/w1-read/undo")
+        marked = post("/api/tasks/w1-read/done")
+        post("/api/tasks/w1-read/undo")
+
+        with urllib.request.urlopen(
+            f"http://127.0.0.1:{port}/api/content?path=rounds/round_00/week1/notes.md",
+            timeout=3,
+        ) as resp:
+            content = json.loads(resp.read().decode())
+
+        ok = marked.get("done") is True and content.get("ok") and content.get("html")
+        case.passed = ok
+        case.detail = "health + mark + content OK" if ok else "API 响应不完整"
+    except (urllib.error.URLError, TimeoutError, json.JSONDecodeError) as exc:
+        case.passed = False
+        case.detail = str(exc)
+    finally:
+        proc.terminate()
+        try:
+            proc.wait(timeout=3)
+        except subprocess.TimeoutExpired:
+            proc.kill()
     report.add(case)
 
 
@@ -388,6 +454,7 @@ def main() -> int:
     check_agent_gate_verify(report)
     check_scaffold_rounds_exist(report)
     check_mark_done_round_resolver(report)
+    check_learn_server_api(report)
 
     write_report(report)
 

@@ -266,6 +266,46 @@
     .weak-list .weak-item.alert { border-color: var(--red); color: #fca5a5; }
     .weak-list .weak-item .lane-name { font-weight: 600; color: var(--text); }
     .weak-empty { color: var(--text-muted); font-size: 0.8rem; }
+
+    /* ── Learn server actions ── */
+    .task-actions { display: flex; flex-direction: column; gap: 0.25rem; align-items: flex-end; }
+    .task-actions button {
+      padding: 0.2rem 0.55rem; border-radius: 6px; border: 1px solid var(--border);
+      background: var(--card-hover); color: var(--text); font-size: 0.72rem; cursor: pointer;
+    }
+    .task-actions button:hover { border-color: var(--accent); }
+    .task-actions button.primary { border-color: var(--green); color: var(--green); }
+    .task-actions button.read { border-color: var(--accent2); color: var(--accent2); }
+
+    .learn-mode-banner {
+      padding: 0.65rem 1rem; margin-bottom: 1rem; border-radius: var(--radius);
+      border: 1px solid var(--border); background: rgba(108, 99, 255, 0.12); font-size: 0.85rem;
+    }
+    .learn-mode-banner.off { background: rgba(245, 158, 11, 0.1); border-color: var(--yellow); }
+
+    .notes-modal-backdrop {
+      position: fixed; inset: 0; background: rgba(0,0,0,0.65); z-index: 1000;
+      display: none; align-items: center; justify-content: center; padding: 1rem;
+    }
+    .notes-modal-backdrop.open { display: flex; }
+    .notes-modal {
+      background: var(--card); border: 1px solid var(--border); border-radius: var(--radius);
+      max-width: 820px; width: 100%; max-height: 85vh; overflow: hidden; display: flex; flex-direction: column;
+    }
+    .notes-modal header {
+      padding: 0.75rem 1rem; border-bottom: 1px solid var(--border);
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .notes-modal .notes-body {
+      padding: 1rem 1.25rem; overflow-y: auto; font-size: 0.9rem; line-height: 1.55;
+    }
+    .notes-modal .notes-body h1, .notes-modal .notes-body h2 { margin: 0.6rem 0 0.35rem; }
+    .notes-modal .notes-body code { background: rgba(255,255,255,0.08); padding: 0.1em 0.35em; border-radius: 4px; }
+    .notes-modal .notes-body pre { background: #0b0d14; padding: 0.75rem; border-radius: 8px; overflow-x: auto; }
+    .notes-modal .notes-footer {
+      padding: 0.65rem 1rem; border-top: 1px solid var(--border);
+      display: flex; gap: 0.5rem; justify-content: flex-end;
+    }
   </style>
 </head>
 
@@ -275,8 +315,10 @@
 
 <header>
   <h1>📚 学习进度看板 · <span>四主线</span></h1>
-  <p>状态从 <code style="background:rgba(255,255,255,0.1);padding:0.1em 0.4em;border-radius:4px;font-family:monospace">progress.json</code> / <code style="background:rgba(255,255,255,0.1);padding:0.1em 0.4em;border-radius:4px;font-family:monospace">progress_data.js</code> 读取。完成练习后运行 <code style="background:rgba(255,255,255,0.1);padding:0.1em 0.4em;border-radius:4px;font-family:monospace">bash mark_done.sh &lt;id&gt;</code> 再刷新。</p>
+  <p id="headerIntro">状态从 <code style="background:rgba(255,255,255,0.1);padding:0.1em 0.4em;border-radius:4px;font-family:monospace">progress.json</code> 读取。启动 <code style="background:rgba(255,255,255,0.1);padding:0.1em 0.4em;border-radius:4px;font-family:monospace">python3 scripts/learn_server.py</code> 后可在本页打卡与阅读笔记。</p>
 </header>
+
+<div class="learn-mode-banner off" id="learnModeBanner" style="display:none;"></div>
 
 <!-- Banner -->
 <div class="banner error" id="errorBanner"></div>
@@ -374,6 +416,20 @@
 
 </div> <!-- /container -->
 
+<div class="notes-modal-backdrop" id="notesModalBackdrop" onclick="if(event.target===this) closeNotesModal()">
+  <div class="notes-modal" role="dialog" aria-labelledby="notesModalTitle">
+    <header>
+      <strong id="notesModalTitle">学习笔记</strong>
+      <button class="btn" type="button" onclick="closeNotesModal()">关闭</button>
+    </header>
+    <div class="notes-body" id="notesModalBody">加载中…</div>
+    <div class="notes-footer">
+      <button class="btn" type="button" id="notesMarkDoneBtn" style="display:none">标记阅读完成</button>
+      <button class="btn" type="button" onclick="closeNotesModal()">关闭</button>
+    </div>
+  </div>
+</div>
+
 <script src="progress_rounds.js"></script>
 <script src="progress_data.js"></script>
 <script>
@@ -442,6 +498,8 @@ let activeLane  = "engineering";
 let activeRound = "round_00";
 let progressData = {};
 let lanesData    = {};
+let learnApiAvailable = false;
+let notesModalTaskId = null;
 
 // ============================================================
 // Load progress
@@ -489,9 +547,92 @@ async function loadProgress() {
   }
 
   const now = new Date().toLocaleTimeString("zh-CN");
-  document.getElementById("lastUpdated").textContent =
-    `上次读取：${now}${window.location.protocol === "file:" ? "（本地文件模式，需手动刷新页面）" : ""}`;
+  const modeHint = learnApiAvailable
+    ? "（学习服务模式，可网页打卡）"
+    : (window.location.protocol === "file:" ? "（file:// 模式，请用 learn_server）" : "");
+  document.getElementById("lastUpdated").textContent = `上次读取：${now}${modeHint}`;
   render();
+}
+
+async function probeLearnApi() {
+  if (window.location.protocol === "file:") return false;
+  try {
+    const res = await fetch("/api/health?_=" + Date.now());
+    if (!res.ok) return false;
+    const data = await res.json();
+    return data && data.ok === true;
+  } catch (e) {
+    return false;
+  }
+}
+
+function updateLearnModeBanner() {
+  const el = document.getElementById("learnModeBanner");
+  const intro = document.getElementById("headerIntro");
+  if (!el || !intro) return;
+  if (learnApiAvailable) {
+    el.style.display = "block";
+    el.className = "learn-mode-banner";
+    el.textContent = "✅ 学习服务已连接：可在任务行点击「完成/撤销」与「阅读笔记」，无需终端 mark_done.sh。";
+    intro.textContent = "学习服务已连接。进度来自 progress.json；可在本页直接打卡与阅读 notes。";
+  } else if (window.location.protocol === "file:") {
+    el.style.display = "block";
+    el.className = "learn-mode-banner off";
+    el.innerHTML = "⚠️ 当前为 file:// 打开。请运行 <code>python3 scripts/learn_server.py</code>，访问 <code>http://127.0.0.1:8000/progress.html</code> 以启用网页打卡。";
+  } else {
+    el.style.display = "none";
+    intro.textContent = "只读 HTTP 模式。交互打卡请使用 python3 scripts/learn_server.py（非 python3 -m http.server）。";
+  }
+}
+
+async function markTaskFromUI(taskId, undo) {
+  if (!learnApiAvailable) {
+    alert("请使用 learn_server 启动后再网页打卡。");
+    return;
+  }
+  const path = undo
+    ? `/api/tasks/${encodeURIComponent(taskId)}/undo`
+    : `/api/tasks/${encodeURIComponent(taskId)}/done`;
+  try {
+    const res = await fetch(path, { method: "POST" });
+    const data = await res.json();
+    if (!res.ok || !data.ok) throw new Error(data.error || "操作失败");
+    progressData = data.tasks || progressData;
+    lanesData = data.lanes || lanesData;
+    render();
+  } catch (e) {
+    alert("打卡失败：" + (e.message || e));
+  }
+}
+
+async function openNotesModal(filePath, taskId) {
+  if (!learnApiAvailable) {
+    alert("请使用 learn_server 启动后再在页面内阅读笔记。");
+    return;
+  }
+  notesModalTaskId = taskId || null;
+  const backdrop = document.getElementById("notesModalBackdrop");
+  const body = document.getElementById("notesModalBody");
+  const title = document.getElementById("notesModalTitle");
+  const markBtn = document.getElementById("notesMarkDoneBtn");
+  title.textContent = filePath;
+  body.textContent = "加载中…";
+  markBtn.style.display = taskId ? "inline-block" : "none";
+  markBtn.onclick = () => { if (notesModalTaskId) markTaskFromUI(notesModalTaskId, false); closeNotesModal(); };
+  backdrop.classList.add("open");
+  try {
+    const res = await fetch(`/api/content?path=${encodeURIComponent(filePath)}&format=json`);
+    const data = await res.json();
+    if (!res.ok || !data.ok) throw new Error(data.error || "无法读取");
+    body.innerHTML = data.html || data.markdown || "";
+  } catch (e) {
+    body.textContent = "读取失败：" + (e.message || e);
+  }
+}
+
+function closeNotesModal() {
+  document.getElementById("notesModalBackdrop").classList.remove("open");
+  notesModalTaskId = null;
 }
 
 // ============================================================
@@ -724,6 +865,35 @@ function renderRoundsForLane(laneKey) {
           </div>
           <span class="task-type ${task.type}">${typeLabel}</span>
         `;
+
+        if (learnApiAvailable) {
+          const actions = document.createElement("div");
+          actions.className = "task-actions";
+          if (task.file && task.file.endsWith(".md")) {
+            const readBtn = document.createElement("button");
+            readBtn.className = "read";
+            readBtn.type = "button";
+            readBtn.textContent = "阅读";
+            readBtn.addEventListener("click", () => openNotesModal(task.file, task.type === "reading" ? task.id : null));
+            actions.appendChild(readBtn);
+          }
+          if (!done) {
+            const doneBtn = document.createElement("button");
+            doneBtn.className = "primary";
+            doneBtn.type = "button";
+            doneBtn.textContent = "完成";
+            doneBtn.addEventListener("click", () => markTaskFromUI(task.id, false));
+            actions.appendChild(doneBtn);
+          } else {
+            const undoBtn = document.createElement("button");
+            undoBtn.type = "button";
+            undoBtn.textContent = "撤销";
+            undoBtn.addEventListener("click", () => markTaskFromUI(task.id, true));
+            actions.appendChild(undoBtn);
+          }
+          item.appendChild(actions);
+        }
+
         listEl.appendChild(item);
       });
 
@@ -824,6 +994,8 @@ if (window.location.protocol === "file:") {
 document.addEventListener("DOMContentLoaded", async () => {
   loadPersonal();
   await loadRoundsMeta();
+  learnApiAvailable = await probeLearnApi();
+  updateLearnModeBanner();
   await loadProgress();
 });
 </script>

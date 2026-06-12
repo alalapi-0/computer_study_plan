@@ -26,6 +26,9 @@ REQUIRED_PATHS = [
     "scripts/round_status.py",
     "scripts/generate_progress_rounds.py",
     "scripts/check_user_journey.py",
+    "scripts/progress_store.py",
+    "scripts/learn_server.py",
+    "scripts/content_paths.py",
     "rounds/round_00/final/comprehensive_exercise.sh",
 ]
 
