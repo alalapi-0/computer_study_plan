@@ -18,7 +18,7 @@ python3 scripts/check_user_journey.py   # 含 docs/CONSISTENCY_AUDIT_REPORT.md
 | 进度闭环（JSON + mark_done + 看板 weeks） | Round 00–04 |
 | 仅骨架未接入进度 | Round 05–21 |
 | 看板元数据 `progress_rounds.json` | 22 轮（5 有任务清单，17 骨架占位） |
-| 网页学习服务 `learn_server` | PW-0~3 已实现；PW-4~6 待做 |
+| 网页学习服务 `learn_server` | PW-0~6 已实现（PW-6 为 plans 阅读入口最小版） |
 
 ---
 
@@ -1009,3 +1009,23 @@ python3 scripts/check_user_journey.py   # 含 docs/CONSISTENCY_AUDIT_REPORT.md
 ### 41.3 验证
 
 - `python3 scripts/check_user_journey.py`：18/18（含练习 API）。
+
+## 42. 2026-06-12 PW-4 ~ PW-6（全路线进度 + 反馈错题 + 四主线入口）
+
+### 42.1 新增
+
+- `scripts/skeleton_progress.py`、`scripts/sync_skeleton_progress.py`：`npm run sync:skeleton-progress` 为 Round 05–21 批量注册任务。
+- `scripts/learning_records.py`：任务 events / feedback 读取与错题笔记写入。
+
+### 42.2 修改
+
+- `progress.json`：280 任务（Round 00–21 各 12 + Round 00 额外任务）；`progress_rounds` 22 轮均 `progress_linked`。
+- `scripts/learn_server.py`：`GET /api/tasks/<id>/events|feedback`、`POST /api/error_notes`。
+- `scripts/content_paths.py`：允许只读 `docs/KNOWLEDGE_MAPPING.md`、`docs/ERROR_REVIEW_SYSTEM.md`。
+- `progress.html`：任务「历史」弹窗、快速记错题表单、四主线 `plans/` 阅读入口。
+- `TASK-WEB-05`、`TASK-WEB-06` 标记 done；`TASK-WEB-07` partial。
+
+### 42.3 验证
+
+- `python3 scripts/check_user_journey.py`：20/20（含全路线规模与错题 API）。
+- `npm run check:protocol`：通过。

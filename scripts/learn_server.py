@@ -25,9 +25,15 @@ REPO_ROOT = SCRIPT_DIR.parent
 sys.path.insert(0, str(SCRIPT_DIR))
 from content_paths import markdown_to_html, resolve_content_path  # noqa: E402
 from exercise_guide import build_guide, run_exercise  # noqa: E402
+from learning_records import (  # noqa: E402
+    get_task_events,
+    get_task_feedback,
+    save_error_note,
+)
 from progress_store import load_progress, set_task_done  # noqa: E402
 
 TASK_API_RE = re.compile(r"^/api/tasks/([^/]+)/(done|undo)$")
+TASK_META_RE = re.compile(r"^/api/tasks/([^/]+)/(events|feedback)$")
 
 
 class LearnHTTPRequestHandler(SimpleHTTPRequestHandler):
@@ -62,6 +68,9 @@ class LearnHTTPRequestHandler(SimpleHTTPRequestHandler):
                         "content_read",
                         "exercise_guide",
                         "exercise_run",
+                        "task_events",
+                        "task_feedback",
+                        "error_notes",
                     ],
                 },
             )
@@ -106,6 +115,21 @@ class LearnHTTPRequestHandler(SimpleHTTPRequestHandler):
             )
             return
 
+        meta_match = TASK_META_RE.match(path)
+        if meta_match:
+            task_id = meta_match.group(1)
+            kind = meta_match.group(2)
+            if kind == "events":
+                events = get_task_events(REPO_ROOT, task_id)
+                self._json_response(HTTPStatus.OK, {"ok": True, "task_id": task_id, "events": events})
+            else:
+                feedback = get_task_feedback(REPO_ROOT, task_id)
+                self._json_response(
+                    HTTPStatus.OK,
+                    {"ok": True, "task_id": task_id, "feedback": feedback},
+                )
+            return
+
         if path == "/api/exercise/guide":
             params = parse_qs(parsed.query)
             rel = params.get("path", [""])[0]
@@ -127,6 +151,28 @@ class LearnHTTPRequestHandler(SimpleHTTPRequestHandler):
 
     def do_POST(self) -> None:
         parsed = urlparse(self.path)
+        if parsed.path == "/api/error_notes":
+            length = int(self.headers.get("Content-Length", 0))
+            raw = self.rfile.read(length) if length else b"{}"
+            try:
+                body = json.loads(raw.decode("utf-8") or "{}")
+            except json.JSONDecodeError:
+                body = {}
+            try:
+                result = save_error_note(
+                    REPO_ROOT,
+                    lane=body.get("lane", "engineering"),
+                    module=body.get("module", "general"),
+                    title=body.get("title", ""),
+                    wrong_answer=body.get("wrong_answer", ""),
+                    correct_answer=body.get("correct_answer", ""),
+                    note=body.get("note", ""),
+                )
+                self._json_response(HTTPStatus.OK, result)
+            except ValueError as exc:
+                self._json_response(HTTPStatus.BAD_REQUEST, {"ok": False, "error": str(exc)})
+            return
+
         if parsed.path == "/api/exercise/run":
             length = int(self.headers.get("Content-Length", 0))
             raw = self.rfile.read(length) if length else b"{}"
@@ -191,8 +237,9 @@ def main() -> int:
     url = f"http://{args.host}:{args.port}/progress.html"
     print(f"Learn server at {url}")
     print(
-        "API: /api/health /api/progress /api/tasks/<id>/done|undo "
-        "/api/content?path=... /api/exercise/guide?path=... POST /api/exercise/run"
+        "API: /api/health /api/progress /api/tasks/<id>/done|undo|events|feedback "
+        "/api/content?path=... /api/exercise/guide?path=... "
+        "POST /api/exercise/run POST /api/error_notes"
     )
     try:
         server.serve_forever()

@@ -739,11 +739,120 @@ window.PROGRESS_ROUNDS = {
       ],
       "difficulty": "⭐⭐⭐☆☆",
       "duration": "3 周",
-      "tier": "最小骨架",
-      "progress_linked": false,
-      "scaffold_only": true,
+      "tier": "进度已接入",
+      "progress_linked": true,
+      "scaffold_only": false,
       "readme": "rounds/round_05/README.md",
-      "weeks": []
+      "weeks": [
+        {
+          "id": "round05-week1",
+          "title": "Round 05 · Week 1 笔记（双指针 / 滑动窗口 / 二分）",
+          "tasks": [
+            {
+              "id": "r05-w1-read",
+              "type": "reading",
+              "title": "阅读 week1/notes.md",
+              "cmd": "bash mark_done.sh r05-w1-read",
+              "file": "rounds/round_05/week1/notes.md"
+            },
+            {
+              "id": "r05-w1-ex1",
+              "type": "exercise",
+              "title": "练习：执行 week1 脚本",
+              "cmd": "自动",
+              "file": "rounds/round_05/week1/exercises.sh"
+            },
+            {
+              "id": "r05-w1-self",
+              "type": "test",
+              "title": "第1周自测",
+              "cmd": "自动",
+              "file": "rounds/round_05/week1/exercises.sh"
+            }
+          ]
+        },
+        {
+          "id": "round05-week2",
+          "title": "Round 05 · Week 2 笔记（分治 / DFS / BFS / 回溯）",
+          "tasks": [
+            {
+              "id": "r05-w2-read",
+              "type": "reading",
+              "title": "阅读 week2/notes.md",
+              "cmd": "bash mark_done.sh r05-w2-read",
+              "file": "rounds/round_05/week2/notes.md"
+            },
+            {
+              "id": "r05-w2-ex2",
+              "type": "exercise",
+              "title": "练习：执行 week2 脚本",
+              "cmd": "自动",
+              "file": "rounds/round_05/week2/exercises.sh"
+            },
+            {
+              "id": "r05-w2-self",
+              "type": "test",
+              "title": "第2周自测",
+              "cmd": "自动",
+              "file": "rounds/round_05/week2/exercises.sh"
+            }
+          ]
+        },
+        {
+          "id": "round05-week3",
+          "title": "Round 05 · Week 3 笔记（贪心 / DP 入门）",
+          "tasks": [
+            {
+              "id": "r05-w3-read",
+              "type": "reading",
+              "title": "阅读 week3/notes.md",
+              "cmd": "bash mark_done.sh r05-w3-read",
+              "file": "rounds/round_05/week3/notes.md"
+            },
+            {
+              "id": "r05-w3-ex3",
+              "type": "exercise",
+              "title": "练习：执行 week3 脚本",
+              "cmd": "自动",
+              "file": "rounds/round_05/week3/exercises.sh"
+            },
+            {
+              "id": "r05-w3-self",
+              "type": "test",
+              "title": "第3周自测",
+              "cmd": "自动",
+              "file": "rounds/round_05/week3/exercises.sh"
+            }
+          ]
+        },
+        {
+          "id": "round05-final",
+          "title": "最终验收",
+          "tasks": [
+            {
+              "id": "r05-fin-comp",
+              "type": "exercise",
+              "title": "综合练习",
+              "cmd": "自动",
+              "file": "rounds/round_05/final/comprehensive_exercise.sh"
+            },
+            {
+              "id": "r05-fin-sheet",
+              "type": "output",
+              "title": "完成本轮小抄",
+              "cmd": "自动",
+              "file": "rounds/round_05/final/algorithm_patterns_cheatsheet.md"
+            },
+            {
+              "id": "r05-fin-acc1",
+              "type": "test",
+              "title": "验收：对照 round_05.md",
+              "cmd": "自动",
+              "file": "round_05.md"
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "round_06",
@@ -754,11 +863,120 @@ window.PROGRESS_ROUNDS = {
       ],
       "difficulty": "⭐⭐⭐☆☆",
       "duration": "3 周",
-      "tier": "最小骨架",
-      "progress_linked": false,
-      "scaffold_only": true,
+      "tier": "进度已接入",
+      "progress_linked": true,
+      "scaffold_only": false,
       "readme": "rounds/round_06/README.md",
-      "weeks": []
+      "weeks": [
+        {
+          "id": "round06-week1",
+          "title": "Round 06 · Week 1 笔记（find/xargs/sed/awk）",
+          "tasks": [
+            {
+              "id": "r06-w1-read",
+              "type": "reading",
+              "title": "阅读 week1/notes.md",
+              "cmd": "bash mark_done.sh r06-w1-read",
+              "file": "rounds/round_06/week1/notes.md"
+            },
+            {
+              "id": "r06-w1-ex1",
+              "type": "exercise",
+              "title": "练习：执行 week1 脚本",
+              "cmd": "自动",
+              "file": "rounds/round_06/week1/exercises.sh"
+            },
+            {
+              "id": "r06-w1-self",
+              "type": "test",
+              "title": "第1周自测",
+              "cmd": "自动",
+              "file": "rounds/round_06/week1/exercises.sh"
+            }
+          ]
+        },
+        {
+          "id": "round06-week2",
+          "title": "Round 06 · Week 2 笔记（进程管理与长任务）",
+          "tasks": [
+            {
+              "id": "r06-w2-read",
+              "type": "reading",
+              "title": "阅读 week2/notes.md",
+              "cmd": "bash mark_done.sh r06-w2-read",
+              "file": "rounds/round_06/week2/notes.md"
+            },
+            {
+              "id": "r06-w2-ex2",
+              "type": "exercise",
+              "title": "练习：执行 week2 脚本",
+              "cmd": "自动",
+              "file": "rounds/round_06/week2/exercises.sh"
+            },
+            {
+              "id": "r06-w2-self",
+              "type": "test",
+              "title": "第2周自测",
+              "cmd": "自动",
+              "file": "rounds/round_06/week2/exercises.sh"
+            }
+          ]
+        },
+        {
+          "id": "round06-week3",
+          "title": "Round 06 · Week 3 笔记（SSH/rsync/crontab）",
+          "tasks": [
+            {
+              "id": "r06-w3-read",
+              "type": "reading",
+              "title": "阅读 week3/notes.md",
+              "cmd": "bash mark_done.sh r06-w3-read",
+              "file": "rounds/round_06/week3/notes.md"
+            },
+            {
+              "id": "r06-w3-ex3",
+              "type": "exercise",
+              "title": "练习：执行 week3 脚本",
+              "cmd": "自动",
+              "file": "rounds/round_06/week3/exercises.sh"
+            },
+            {
+              "id": "r06-w3-self",
+              "type": "test",
+              "title": "第3周自测",
+              "cmd": "自动",
+              "file": "rounds/round_06/week3/exercises.sh"
+            }
+          ]
+        },
+        {
+          "id": "round06-final",
+          "title": "最终验收",
+          "tasks": [
+            {
+              "id": "r06-fin-comp",
+              "type": "exercise",
+              "title": "综合练习",
+              "cmd": "自动",
+              "file": "rounds/round_06/final/comprehensive_exercise.sh"
+            },
+            {
+              "id": "r06-fin-sheet",
+              "type": "output",
+              "title": "完成本轮小抄",
+              "cmd": "自动",
+              "file": "rounds/round_06/final/linux_automation_cheatsheet.md"
+            },
+            {
+              "id": "r06-fin-acc1",
+              "type": "test",
+              "title": "验收：对照 round_06.md",
+              "cmd": "自动",
+              "file": "round_06.md"
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "round_07",
@@ -769,11 +987,120 @@ window.PROGRESS_ROUNDS = {
       ],
       "difficulty": "⭐⭐⭐☆☆",
       "duration": "3 周",
-      "tier": "最小骨架",
-      "progress_linked": false,
-      "scaffold_only": true,
+      "tier": "进度已接入",
+      "progress_linked": true,
+      "scaffold_only": false,
       "readme": "rounds/round_07/README.md",
-      "weeks": []
+      "weeks": [
+        {
+          "id": "round07-week1",
+          "title": "Round 07 · Week 1 笔记（pathlib + 多格式读写）",
+          "tasks": [
+            {
+              "id": "r07-w1-read",
+              "type": "reading",
+              "title": "阅读 week1/notes.md",
+              "cmd": "bash mark_done.sh r07-w1-read",
+              "file": "rounds/round_07/week1/notes.md"
+            },
+            {
+              "id": "r07-w1-ex1",
+              "type": "exercise",
+              "title": "练习：执行 week1 脚本",
+              "cmd": "自动",
+              "file": "rounds/round_07/week1/exercises.py"
+            },
+            {
+              "id": "r07-w1-self",
+              "type": "test",
+              "title": "第1周自测",
+              "cmd": "自动",
+              "file": "rounds/round_07/week1/exercises.py"
+            }
+          ]
+        },
+        {
+          "id": "round07-week2",
+          "title": "Round 07 · Week 2 笔记（argparse + logging）",
+          "tasks": [
+            {
+              "id": "r07-w2-read",
+              "type": "reading",
+              "title": "阅读 week2/notes.md",
+              "cmd": "bash mark_done.sh r07-w2-read",
+              "file": "rounds/round_07/week2/notes.md"
+            },
+            {
+              "id": "r07-w2-ex2",
+              "type": "exercise",
+              "title": "练习：执行 week2 脚本",
+              "cmd": "自动",
+              "file": "rounds/round_07/week2/exercises.py"
+            },
+            {
+              "id": "r07-w2-self",
+              "type": "test",
+              "title": "第2周自测",
+              "cmd": "自动",
+              "file": "rounds/round_07/week2/exercises.py"
+            }
+          ]
+        },
+        {
+          "id": "round07-week3",
+          "title": "Round 07 · Week 3 笔记（整合 ai_prep_tool）",
+          "tasks": [
+            {
+              "id": "r07-w3-read",
+              "type": "reading",
+              "title": "阅读 week3/notes.md",
+              "cmd": "bash mark_done.sh r07-w3-read",
+              "file": "rounds/round_07/week3/notes.md"
+            },
+            {
+              "id": "r07-w3-ex3",
+              "type": "exercise",
+              "title": "练习：执行 week3 脚本",
+              "cmd": "自动",
+              "file": "rounds/round_07/week3/exercises.py"
+            },
+            {
+              "id": "r07-w3-self",
+              "type": "test",
+              "title": "第3周自测",
+              "cmd": "自动",
+              "file": "rounds/round_07/week3/exercises.py"
+            }
+          ]
+        },
+        {
+          "id": "round07-final",
+          "title": "最终验收",
+          "tasks": [
+            {
+              "id": "r07-fin-comp",
+              "type": "exercise",
+              "title": "综合练习",
+              "cmd": "自动",
+              "file": "rounds/round_07/final/comprehensive_exercise.py"
+            },
+            {
+              "id": "r07-fin-sheet",
+              "type": "output",
+              "title": "完成本轮小抄",
+              "cmd": "自动",
+              "file": "rounds/round_07/final/ai_prep_tool_cheatsheet.md"
+            },
+            {
+              "id": "r07-fin-acc1",
+              "type": "test",
+              "title": "验收：对照 round_07.md",
+              "cmd": "自动",
+              "file": "round_07.md"
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "round_08",
@@ -784,11 +1111,120 @@ window.PROGRESS_ROUNDS = {
       ],
       "difficulty": "⭐⭐⭐☆☆",
       "duration": "3 周",
-      "tier": "最小骨架",
-      "progress_linked": false,
-      "scaffold_only": true,
+      "tier": "进度已接入",
+      "progress_linked": true,
+      "scaffold_only": false,
       "readme": "rounds/round_08/README.md",
-      "weeks": []
+      "weeks": [
+        {
+          "id": "round08-week1",
+          "title": "Round 08 · Week 1 笔记（项目收口 + pytest）",
+          "tasks": [
+            {
+              "id": "r08-w1-read",
+              "type": "reading",
+              "title": "阅读 week1/notes.md",
+              "cmd": "bash mark_done.sh r08-w1-read",
+              "file": "rounds/round_08/week1/notes.md"
+            },
+            {
+              "id": "r08-w1-ex1",
+              "type": "exercise",
+              "title": "练习：执行 week1 脚本",
+              "cmd": "自动",
+              "file": "rounds/round_08/week1/exercises.py"
+            },
+            {
+              "id": "r08-w1-self",
+              "type": "test",
+              "title": "第1周自测",
+              "cmd": "自动",
+              "file": "rounds/round_08/week1/exercises.py"
+            }
+          ]
+        },
+        {
+          "id": "round08-week2",
+          "title": "Round 08 · Week 2 笔记（sqlite3 最小持久化）",
+          "tasks": [
+            {
+              "id": "r08-w2-read",
+              "type": "reading",
+              "title": "阅读 week2/notes.md",
+              "cmd": "bash mark_done.sh r08-w2-read",
+              "file": "rounds/round_08/week2/notes.md"
+            },
+            {
+              "id": "r08-w2-ex2",
+              "type": "exercise",
+              "title": "练习：执行 week2 脚本",
+              "cmd": "自动",
+              "file": "rounds/round_08/week2/exercises.py"
+            },
+            {
+              "id": "r08-w2-self",
+              "type": "test",
+              "title": "第2周自测",
+              "cmd": "自动",
+              "file": "rounds/round_08/week2/exercises.py"
+            }
+          ]
+        },
+        {
+          "id": "round08-week3",
+          "title": "Round 08 · Week 3 笔记（FastAPI 最小服务）",
+          "tasks": [
+            {
+              "id": "r08-w3-read",
+              "type": "reading",
+              "title": "阅读 week3/notes.md",
+              "cmd": "bash mark_done.sh r08-w3-read",
+              "file": "rounds/round_08/week3/notes.md"
+            },
+            {
+              "id": "r08-w3-ex3",
+              "type": "exercise",
+              "title": "练习：执行 week3 脚本",
+              "cmd": "自动",
+              "file": "rounds/round_08/week3/exercises.py"
+            },
+            {
+              "id": "r08-w3-self",
+              "type": "test",
+              "title": "第3周自测",
+              "cmd": "自动",
+              "file": "rounds/round_08/week3/exercises.py"
+            }
+          ]
+        },
+        {
+          "id": "round08-final",
+          "title": "最终验收",
+          "tasks": [
+            {
+              "id": "r08-fin-comp",
+              "type": "exercise",
+              "title": "综合练习",
+              "cmd": "自动",
+              "file": "rounds/round_08/final/comprehensive_exercise.py"
+            },
+            {
+              "id": "r08-fin-sheet",
+              "type": "output",
+              "title": "完成本轮小抄",
+              "cmd": "自动",
+              "file": "rounds/round_08/final/upgrade_route_cheatsheet.md"
+            },
+            {
+              "id": "r08-fin-acc1",
+              "type": "test",
+              "title": "验收：对照 round_08.md",
+              "cmd": "自动",
+              "file": "round_08.md"
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "round_09",
@@ -799,11 +1235,120 @@ window.PROGRESS_ROUNDS = {
       ],
       "difficulty": "⭐⭐⭐☆☆",
       "duration": "3 周",
-      "tier": "最小骨架",
-      "progress_linked": false,
-      "scaffold_only": true,
+      "tier": "进度已接入",
+      "progress_linked": true,
+      "scaffold_only": false,
       "readme": "rounds/round_09/README.md",
-      "weeks": []
+      "weeks": [
+        {
+          "id": "round09-week1",
+          "title": "Round 09 · Week 1 笔记（仓库结构与文档）",
+          "tasks": [
+            {
+              "id": "r09-w1-read",
+              "type": "reading",
+              "title": "阅读 week1/notes.md",
+              "cmd": "bash mark_done.sh r09-w1-read",
+              "file": "rounds/round_09/week1/notes.md"
+            },
+            {
+              "id": "r09-w1-ex1",
+              "type": "exercise",
+              "title": "练习：执行 week1 脚本",
+              "cmd": "自动",
+              "file": "rounds/round_09/week1/exercises.py"
+            },
+            {
+              "id": "r09-w1-self",
+              "type": "test",
+              "title": "第1周自测",
+              "cmd": "自动",
+              "file": "rounds/round_09/week1/exercises.py"
+            }
+          ]
+        },
+        {
+          "id": "round09-week2",
+          "title": "Round 09 · Week 2 笔记（Git 分支工作流）",
+          "tasks": [
+            {
+              "id": "r09-w2-read",
+              "type": "reading",
+              "title": "阅读 week2/notes.md",
+              "cmd": "bash mark_done.sh r09-w2-read",
+              "file": "rounds/round_09/week2/notes.md"
+            },
+            {
+              "id": "r09-w2-ex2",
+              "type": "exercise",
+              "title": "练习：执行 week2 脚本",
+              "cmd": "自动",
+              "file": "rounds/round_09/week2/exercises.py"
+            },
+            {
+              "id": "r09-w2-self",
+              "type": "test",
+              "title": "第2周自测",
+              "cmd": "自动",
+              "file": "rounds/round_09/week2/exercises.py"
+            }
+          ]
+        },
+        {
+          "id": "round09-week3",
+          "title": "Round 09 · Week 3 笔记（pytest 入门）",
+          "tasks": [
+            {
+              "id": "r09-w3-read",
+              "type": "reading",
+              "title": "阅读 week3/notes.md",
+              "cmd": "bash mark_done.sh r09-w3-read",
+              "file": "rounds/round_09/week3/notes.md"
+            },
+            {
+              "id": "r09-w3-ex3",
+              "type": "exercise",
+              "title": "练习：执行 week3 脚本",
+              "cmd": "自动",
+              "file": "rounds/round_09/week3/exercises.py"
+            },
+            {
+              "id": "r09-w3-self",
+              "type": "test",
+              "title": "第3周自测",
+              "cmd": "自动",
+              "file": "rounds/round_09/week3/exercises.py"
+            }
+          ]
+        },
+        {
+          "id": "round09-final",
+          "title": "最终验收",
+          "tasks": [
+            {
+              "id": "r09-fin-comp",
+              "type": "exercise",
+              "title": "综合练习",
+              "cmd": "自动",
+              "file": "rounds/round_09/final/comprehensive_exercise.py"
+            },
+            {
+              "id": "r09-fin-sheet",
+              "type": "output",
+              "title": "完成本轮小抄",
+              "cmd": "自动",
+              "file": "rounds/round_09/final/repo_testing_cheatsheet.md"
+            },
+            {
+              "id": "r09-fin-acc1",
+              "type": "test",
+              "title": "验收：对照 round_09.md",
+              "cmd": "自动",
+              "file": "round_09.md"
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "round_10",
@@ -814,11 +1359,120 @@ window.PROGRESS_ROUNDS = {
       ],
       "difficulty": "⭐⭐⭐☆☆",
       "duration": "3 周",
-      "tier": "最小骨架",
-      "progress_linked": false,
-      "scaffold_only": true,
+      "tier": "进度已接入",
+      "progress_linked": true,
+      "scaffold_only": false,
       "readme": "rounds/round_10/README.md",
-      "weeks": []
+      "weeks": [
+        {
+          "id": "round10-week1",
+          "title": "Round 10 · Week 1 笔记（拆分入口与核心逻辑）",
+          "tasks": [
+            {
+              "id": "r10-w1-read",
+              "type": "reading",
+              "title": "阅读 week1/notes.md",
+              "cmd": "bash mark_done.sh r10-w1-read",
+              "file": "rounds/round_10/week1/notes.md"
+            },
+            {
+              "id": "r10-w1-ex1",
+              "type": "exercise",
+              "title": "练习：执行 week1 脚本",
+              "cmd": "自动",
+              "file": "rounds/round_10/week1/exercises.py"
+            },
+            {
+              "id": "r10-w1-self",
+              "type": "test",
+              "title": "第1周自测",
+              "cmd": "自动",
+              "file": "rounds/round_10/week1/exercises.py"
+            }
+          ]
+        },
+        {
+          "id": "round10-week2",
+          "title": "Round 10 · Week 2 笔记（配置与日志）",
+          "tasks": [
+            {
+              "id": "r10-w2-read",
+              "type": "reading",
+              "title": "阅读 week2/notes.md",
+              "cmd": "bash mark_done.sh r10-w2-read",
+              "file": "rounds/round_10/week2/notes.md"
+            },
+            {
+              "id": "r10-w2-ex2",
+              "type": "exercise",
+              "title": "练习：执行 week2 脚本",
+              "cmd": "自动",
+              "file": "rounds/round_10/week2/exercises.py"
+            },
+            {
+              "id": "r10-w2-self",
+              "type": "test",
+              "title": "第2周自测",
+              "cmd": "自动",
+              "file": "rounds/round_10/week2/exercises.py"
+            }
+          ]
+        },
+        {
+          "id": "round10-week3",
+          "title": "Round 10 · Week 3 笔记（错误处理与收口）",
+          "tasks": [
+            {
+              "id": "r10-w3-read",
+              "type": "reading",
+              "title": "阅读 week3/notes.md",
+              "cmd": "bash mark_done.sh r10-w3-read",
+              "file": "rounds/round_10/week3/notes.md"
+            },
+            {
+              "id": "r10-w3-ex3",
+              "type": "exercise",
+              "title": "练习：执行 week3 脚本",
+              "cmd": "自动",
+              "file": "rounds/round_10/week3/exercises.py"
+            },
+            {
+              "id": "r10-w3-self",
+              "type": "test",
+              "title": "第3周自测",
+              "cmd": "自动",
+              "file": "rounds/round_10/week3/exercises.py"
+            }
+          ]
+        },
+        {
+          "id": "round10-final",
+          "title": "最终验收",
+          "tasks": [
+            {
+              "id": "r10-fin-comp",
+              "type": "exercise",
+              "title": "综合练习",
+              "cmd": "自动",
+              "file": "rounds/round_10/final/comprehensive_exercise.py"
+            },
+            {
+              "id": "r10-fin-sheet",
+              "type": "output",
+              "title": "完成本轮小抄",
+              "cmd": "自动",
+              "file": "rounds/round_10/final/python_engineering_cheatsheet.md"
+            },
+            {
+              "id": "r10-fin-acc1",
+              "type": "test",
+              "title": "验收：对照 round_10.md",
+              "cmd": "自动",
+              "file": "round_10.md"
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "round_11",
@@ -829,11 +1483,120 @@ window.PROGRESS_ROUNDS = {
       ],
       "difficulty": "⭐⭐⭐☆☆",
       "duration": "3 周",
-      "tier": "最小骨架",
-      "progress_linked": false,
-      "scaffold_only": true,
+      "tier": "进度已接入",
+      "progress_linked": true,
+      "scaffold_only": false,
       "readme": "rounds/round_11/README.md",
-      "weeks": []
+      "weeks": [
+        {
+          "id": "round11-week1",
+          "title": "Round 11 · Week 1 笔记（建表与初始化）",
+          "tasks": [
+            {
+              "id": "r11-w1-read",
+              "type": "reading",
+              "title": "阅读 week1/notes.md",
+              "cmd": "bash mark_done.sh r11-w1-read",
+              "file": "rounds/round_11/week1/notes.md"
+            },
+            {
+              "id": "r11-w1-ex1",
+              "type": "exercise",
+              "title": "练习：执行 week1 脚本",
+              "cmd": "自动",
+              "file": "rounds/round_11/week1/exercises.py"
+            },
+            {
+              "id": "r11-w1-self",
+              "type": "test",
+              "title": "第1周自测",
+              "cmd": "自动",
+              "file": "rounds/round_11/week1/exercises.py"
+            }
+          ]
+        },
+        {
+          "id": "round11-week2",
+          "title": "Round 11 · Week 2 笔记（插入与查询）",
+          "tasks": [
+            {
+              "id": "r11-w2-read",
+              "type": "reading",
+              "title": "阅读 week2/notes.md",
+              "cmd": "bash mark_done.sh r11-w2-read",
+              "file": "rounds/round_11/week2/notes.md"
+            },
+            {
+              "id": "r11-w2-ex2",
+              "type": "exercise",
+              "title": "练习：执行 week2 脚本",
+              "cmd": "自动",
+              "file": "rounds/round_11/week2/exercises.py"
+            },
+            {
+              "id": "r11-w2-self",
+              "type": "test",
+              "title": "第2周自测",
+              "cmd": "自动",
+              "file": "rounds/round_11/week2/exercises.py"
+            }
+          ]
+        },
+        {
+          "id": "round11-week3",
+          "title": "Round 11 · Week 3 笔记（收口与复盘）",
+          "tasks": [
+            {
+              "id": "r11-w3-read",
+              "type": "reading",
+              "title": "阅读 week3/notes.md",
+              "cmd": "bash mark_done.sh r11-w3-read",
+              "file": "rounds/round_11/week3/notes.md"
+            },
+            {
+              "id": "r11-w3-ex3",
+              "type": "exercise",
+              "title": "练习：执行 week3 脚本",
+              "cmd": "自动",
+              "file": "rounds/round_11/week3/exercises.py"
+            },
+            {
+              "id": "r11-w3-self",
+              "type": "test",
+              "title": "第3周自测",
+              "cmd": "自动",
+              "file": "rounds/round_11/week3/exercises.py"
+            }
+          ]
+        },
+        {
+          "id": "round11-final",
+          "title": "最终验收",
+          "tasks": [
+            {
+              "id": "r11-fin-comp",
+              "type": "exercise",
+              "title": "综合练习",
+              "cmd": "自动",
+              "file": "rounds/round_11/final/comprehensive_exercise.py"
+            },
+            {
+              "id": "r11-fin-sheet",
+              "type": "output",
+              "title": "完成本轮小抄",
+              "cmd": "自动",
+              "file": "rounds/round_11/final/sqlite_persistence_cheatsheet.md"
+            },
+            {
+              "id": "r11-fin-acc1",
+              "type": "test",
+              "title": "验收：对照 round_11.md",
+              "cmd": "自动",
+              "file": "round_11.md"
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "round_12",
@@ -844,11 +1607,120 @@ window.PROGRESS_ROUNDS = {
       ],
       "difficulty": "⭐⭐⭐☆☆",
       "duration": "3 周",
-      "tier": "最小骨架",
-      "progress_linked": false,
-      "scaffold_only": true,
+      "tier": "进度已接入",
+      "progress_linked": true,
+      "scaffold_only": false,
       "readme": "rounds/round_12/README.md",
-      "weeks": []
+      "weeks": [
+        {
+          "id": "round12-week1",
+          "title": "Round 12 · Week 1 笔记（批量遍历与失败记录）",
+          "tasks": [
+            {
+              "id": "r12-w1-read",
+              "type": "reading",
+              "title": "阅读 week1/notes.md",
+              "cmd": "bash mark_done.sh r12-w1-read",
+              "file": "rounds/round_12/week1/notes.md"
+            },
+            {
+              "id": "r12-w1-ex1",
+              "type": "exercise",
+              "title": "练习：执行 week1 脚本",
+              "cmd": "自动",
+              "file": "rounds/round_12/week1/exercises.py"
+            },
+            {
+              "id": "r12-w1-self",
+              "type": "test",
+              "title": "第1周自测",
+              "cmd": "自动",
+              "file": "rounds/round_12/week1/exercises.py"
+            }
+          ]
+        },
+        {
+          "id": "round12-week2",
+          "title": "Round 12 · Week 2 笔记（子进程与归档）",
+          "tasks": [
+            {
+              "id": "r12-w2-read",
+              "type": "reading",
+              "title": "阅读 week2/notes.md",
+              "cmd": "bash mark_done.sh r12-w2-read",
+              "file": "rounds/round_12/week2/notes.md"
+            },
+            {
+              "id": "r12-w2-ex2",
+              "type": "exercise",
+              "title": "练习：执行 week2 脚本",
+              "cmd": "自动",
+              "file": "rounds/round_12/week2/exercises.py"
+            },
+            {
+              "id": "r12-w2-self",
+              "type": "test",
+              "title": "第2周自测",
+              "cmd": "自动",
+              "file": "rounds/round_12/week2/exercises.py"
+            }
+          ]
+        },
+        {
+          "id": "round12-week3",
+          "title": "Round 12 · Week 3 笔记（日志轮转与定时入口）",
+          "tasks": [
+            {
+              "id": "r12-w3-read",
+              "type": "reading",
+              "title": "阅读 week3/notes.md",
+              "cmd": "bash mark_done.sh r12-w3-read",
+              "file": "rounds/round_12/week3/notes.md"
+            },
+            {
+              "id": "r12-w3-ex3",
+              "type": "exercise",
+              "title": "练习：执行 week3 脚本",
+              "cmd": "自动",
+              "file": "rounds/round_12/week3/exercises.py"
+            },
+            {
+              "id": "r12-w3-self",
+              "type": "test",
+              "title": "第3周自测",
+              "cmd": "自动",
+              "file": "rounds/round_12/week3/exercises.py"
+            }
+          ]
+        },
+        {
+          "id": "round12-final",
+          "title": "最终验收",
+          "tasks": [
+            {
+              "id": "r12-fin-comp",
+              "type": "exercise",
+              "title": "综合练习",
+              "cmd": "自动",
+              "file": "rounds/round_12/final/comprehensive_exercise.py"
+            },
+            {
+              "id": "r12-fin-sheet",
+              "type": "output",
+              "title": "完成本轮小抄",
+              "cmd": "自动",
+              "file": "rounds/round_12/final/pipeline_automation_cheatsheet.md"
+            },
+            {
+              "id": "r12-fin-acc1",
+              "type": "test",
+              "title": "验收：对照 round_12.md",
+              "cmd": "自动",
+              "file": "round_12.md"
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "round_13",
@@ -859,11 +1731,120 @@ window.PROGRESS_ROUNDS = {
       ],
       "difficulty": "⭐⭐⭐☆☆",
       "duration": "3 周",
-      "tier": "最小骨架",
-      "progress_linked": false,
-      "scaffold_only": true,
+      "tier": "进度已接入",
+      "progress_linked": true,
+      "scaffold_only": false,
       "readme": "rounds/round_13/README.md",
-      "weeks": []
+      "weeks": [
+        {
+          "id": "round13-week1",
+          "title": "Round 13 · Week 1 笔记（虚拟环境与依赖锁定）",
+          "tasks": [
+            {
+              "id": "r13-w1-read",
+              "type": "reading",
+              "title": "阅读 week1/notes.md",
+              "cmd": "bash mark_done.sh r13-w1-read",
+              "file": "rounds/round_13/week1/notes.md"
+            },
+            {
+              "id": "r13-w1-ex1",
+              "type": "exercise",
+              "title": "练习：执行 week1 脚本",
+              "cmd": "自动",
+              "file": "rounds/round_13/week1/exercises.py"
+            },
+            {
+              "id": "r13-w1-self",
+              "type": "test",
+              "title": "第1周自测",
+              "cmd": "自动",
+              "file": "rounds/round_13/week1/exercises.py"
+            }
+          ]
+        },
+        {
+          "id": "round13-week2",
+          "title": "Round 13 · Week 2 笔记（`.env.example` 与配置分层）",
+          "tasks": [
+            {
+              "id": "r13-w2-read",
+              "type": "reading",
+              "title": "阅读 week2/notes.md",
+              "cmd": "bash mark_done.sh r13-w2-read",
+              "file": "rounds/round_13/week2/notes.md"
+            },
+            {
+              "id": "r13-w2-ex2",
+              "type": "exercise",
+              "title": "练习：执行 week2 脚本",
+              "cmd": "自动",
+              "file": "rounds/round_13/week2/exercises.py"
+            },
+            {
+              "id": "r13-w2-self",
+              "type": "test",
+              "title": "第2周自测",
+              "cmd": "自动",
+              "file": "rounds/round_13/week2/exercises.py"
+            }
+          ]
+        },
+        {
+          "id": "round13-week3",
+          "title": "Round 13 · Week 3 笔记（发布前自检清单）",
+          "tasks": [
+            {
+              "id": "r13-w3-read",
+              "type": "reading",
+              "title": "阅读 week3/notes.md",
+              "cmd": "bash mark_done.sh r13-w3-read",
+              "file": "rounds/round_13/week3/notes.md"
+            },
+            {
+              "id": "r13-w3-ex3",
+              "type": "exercise",
+              "title": "练习：执行 week3 脚本",
+              "cmd": "自动",
+              "file": "rounds/round_13/week3/exercises.py"
+            },
+            {
+              "id": "r13-w3-self",
+              "type": "test",
+              "title": "第3周自测",
+              "cmd": "自动",
+              "file": "rounds/round_13/week3/exercises.py"
+            }
+          ]
+        },
+        {
+          "id": "round13-final",
+          "title": "最终验收",
+          "tasks": [
+            {
+              "id": "r13-fin-comp",
+              "type": "exercise",
+              "title": "综合练习",
+              "cmd": "自动",
+              "file": "rounds/round_13/final/comprehensive_exercise.py"
+            },
+            {
+              "id": "r13-fin-sheet",
+              "type": "output",
+              "title": "完成本轮小抄",
+              "cmd": "自动",
+              "file": "rounds/round_13/final/env_repro_cheatsheet.md"
+            },
+            {
+              "id": "r13-fin-acc1",
+              "type": "test",
+              "title": "验收：对照 round_13.md",
+              "cmd": "自动",
+              "file": "round_13.md"
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "round_14",
@@ -874,11 +1855,120 @@ window.PROGRESS_ROUNDS = {
       ],
       "difficulty": "⭐⭐⭐☆☆",
       "duration": "3 周",
-      "tier": "最小骨架",
-      "progress_linked": false,
-      "scaffold_only": true,
+      "tier": "进度已接入",
+      "progress_linked": true,
+      "scaffold_only": false,
       "readme": "rounds/round_14/README.md",
-      "weeks": []
+      "weeks": [
+        {
+          "id": "round14-week1",
+          "title": "Round 14 · Week 1 笔记（HTTP 动词与状态码）",
+          "tasks": [
+            {
+              "id": "r14-w1-read",
+              "type": "reading",
+              "title": "阅读 week1/notes.md",
+              "cmd": "bash mark_done.sh r14-w1-read",
+              "file": "rounds/round_14/week1/notes.md"
+            },
+            {
+              "id": "r14-w1-ex1",
+              "type": "exercise",
+              "title": "练习：执行 week1 脚本",
+              "cmd": "自动",
+              "file": "rounds/round_14/week1/exercises.py"
+            },
+            {
+              "id": "r14-w1-self",
+              "type": "test",
+              "title": "第1周自测",
+              "cmd": "自动",
+              "file": "rounds/round_14/week1/exercises.py"
+            }
+          ]
+        },
+        {
+          "id": "round14-week2",
+          "title": "Round 14 · Week 2 笔记（请求/响应 JSON 约定）",
+          "tasks": [
+            {
+              "id": "r14-w2-read",
+              "type": "reading",
+              "title": "阅读 week2/notes.md",
+              "cmd": "bash mark_done.sh r14-w2-read",
+              "file": "rounds/round_14/week2/notes.md"
+            },
+            {
+              "id": "r14-w2-ex2",
+              "type": "exercise",
+              "title": "练习：执行 week2 脚本",
+              "cmd": "自动",
+              "file": "rounds/round_14/week2/exercises.py"
+            },
+            {
+              "id": "r14-w2-self",
+              "type": "test",
+              "title": "第2周自测",
+              "cmd": "自动",
+              "file": "rounds/round_14/week2/exercises.py"
+            }
+          ]
+        },
+        {
+          "id": "round14-week3",
+          "title": "Round 14 · Week 3 笔记（最小 REST 路由草图）",
+          "tasks": [
+            {
+              "id": "r14-w3-read",
+              "type": "reading",
+              "title": "阅读 week3/notes.md",
+              "cmd": "bash mark_done.sh r14-w3-read",
+              "file": "rounds/round_14/week3/notes.md"
+            },
+            {
+              "id": "r14-w3-ex3",
+              "type": "exercise",
+              "title": "练习：执行 week3 脚本",
+              "cmd": "自动",
+              "file": "rounds/round_14/week3/exercises.py"
+            },
+            {
+              "id": "r14-w3-self",
+              "type": "test",
+              "title": "第3周自测",
+              "cmd": "自动",
+              "file": "rounds/round_14/week3/exercises.py"
+            }
+          ]
+        },
+        {
+          "id": "round14-final",
+          "title": "最终验收",
+          "tasks": [
+            {
+              "id": "r14-fin-comp",
+              "type": "exercise",
+              "title": "综合练习",
+              "cmd": "自动",
+              "file": "rounds/round_14/final/comprehensive_exercise.py"
+            },
+            {
+              "id": "r14-fin-sheet",
+              "type": "output",
+              "title": "完成本轮小抄",
+              "cmd": "自动",
+              "file": "rounds/round_14/final/http_api_cheatsheet.md"
+            },
+            {
+              "id": "r14-fin-acc1",
+              "type": "test",
+              "title": "验收：对照 round_14.md",
+              "cmd": "自动",
+              "file": "round_14.md"
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "round_15",
@@ -889,11 +1979,120 @@ window.PROGRESS_ROUNDS = {
       ],
       "difficulty": "⭐⭐⭐☆☆",
       "duration": "3 周",
-      "tier": "最小骨架",
-      "progress_linked": false,
-      "scaffold_only": true,
+      "tier": "进度已接入",
+      "progress_linked": true,
+      "scaffold_only": false,
       "readme": "rounds/round_15/README.md",
-      "weeks": []
+      "weeks": [
+        {
+          "id": "round15-week1",
+          "title": "Round 15 · Week 1 笔记（FastAPI 应用入口）",
+          "tasks": [
+            {
+              "id": "r15-w1-read",
+              "type": "reading",
+              "title": "阅读 week1/notes.md",
+              "cmd": "bash mark_done.sh r15-w1-read",
+              "file": "rounds/round_15/week1/notes.md"
+            },
+            {
+              "id": "r15-w1-ex1",
+              "type": "exercise",
+              "title": "练习：执行 week1 脚本",
+              "cmd": "自动",
+              "file": "rounds/round_15/week1/exercises.py"
+            },
+            {
+              "id": "r15-w1-self",
+              "type": "test",
+              "title": "第1周自测",
+              "cmd": "自动",
+              "file": "rounds/round_15/week1/exercises.py"
+            }
+          ]
+        },
+        {
+          "id": "round15-week2",
+          "title": "Round 15 · Week 2 笔记（路径参数与查询参数）",
+          "tasks": [
+            {
+              "id": "r15-w2-read",
+              "type": "reading",
+              "title": "阅读 week2/notes.md",
+              "cmd": "bash mark_done.sh r15-w2-read",
+              "file": "rounds/round_15/week2/notes.md"
+            },
+            {
+              "id": "r15-w2-ex2",
+              "type": "exercise",
+              "title": "练习：执行 week2 脚本",
+              "cmd": "自动",
+              "file": "rounds/round_15/week2/exercises.py"
+            },
+            {
+              "id": "r15-w2-self",
+              "type": "test",
+              "title": "第2周自测",
+              "cmd": "自动",
+              "file": "rounds/round_15/week2/exercises.py"
+            }
+          ]
+        },
+        {
+          "id": "round15-week3",
+          "title": "Round 15 · Week 3 笔记（Pydantic 模型骨架）",
+          "tasks": [
+            {
+              "id": "r15-w3-read",
+              "type": "reading",
+              "title": "阅读 week3/notes.md",
+              "cmd": "bash mark_done.sh r15-w3-read",
+              "file": "rounds/round_15/week3/notes.md"
+            },
+            {
+              "id": "r15-w3-ex3",
+              "type": "exercise",
+              "title": "练习：执行 week3 脚本",
+              "cmd": "自动",
+              "file": "rounds/round_15/week3/exercises.py"
+            },
+            {
+              "id": "r15-w3-self",
+              "type": "test",
+              "title": "第3周自测",
+              "cmd": "自动",
+              "file": "rounds/round_15/week3/exercises.py"
+            }
+          ]
+        },
+        {
+          "id": "round15-final",
+          "title": "最终验收",
+          "tasks": [
+            {
+              "id": "r15-fin-comp",
+              "type": "exercise",
+              "title": "综合练习",
+              "cmd": "自动",
+              "file": "rounds/round_15/final/comprehensive_exercise.py"
+            },
+            {
+              "id": "r15-fin-sheet",
+              "type": "output",
+              "title": "完成本轮小抄",
+              "cmd": "自动",
+              "file": "rounds/round_15/final/fastapi_basics_cheatsheet.md"
+            },
+            {
+              "id": "r15-fin-acc1",
+              "type": "test",
+              "title": "验收：对照 round_15.md",
+              "cmd": "自动",
+              "file": "round_15.md"
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "round_16",
@@ -904,11 +2103,120 @@ window.PROGRESS_ROUNDS = {
       ],
       "difficulty": "⭐⭐⭐⭐☆",
       "duration": "3 周",
-      "tier": "最小骨架",
-      "progress_linked": false,
-      "scaffold_only": true,
+      "tier": "进度已接入",
+      "progress_linked": true,
+      "scaffold_only": false,
       "readme": "rounds/round_16/README.md",
-      "weeks": []
+      "weeks": [
+        {
+          "id": "round16-week1",
+          "title": "Round 16 · Week 1 笔记（路由调用 db 模块）",
+          "tasks": [
+            {
+              "id": "r16-w1-read",
+              "type": "reading",
+              "title": "阅读 week1/notes.md",
+              "cmd": "bash mark_done.sh r16-w1-read",
+              "file": "rounds/round_16/week1/notes.md"
+            },
+            {
+              "id": "r16-w1-ex1",
+              "type": "exercise",
+              "title": "练习：执行 week1 脚本",
+              "cmd": "自动",
+              "file": "rounds/round_16/week1/exercises.py"
+            },
+            {
+              "id": "r16-w1-self",
+              "type": "test",
+              "title": "第1周自测",
+              "cmd": "自动",
+              "file": "rounds/round_16/week1/exercises.py"
+            }
+          ]
+        },
+        {
+          "id": "round16-week2",
+          "title": "Round 16 · Week 2 笔记（列表/详情接口草图）",
+          "tasks": [
+            {
+              "id": "r16-w2-read",
+              "type": "reading",
+              "title": "阅读 week2/notes.md",
+              "cmd": "bash mark_done.sh r16-w2-read",
+              "file": "rounds/round_16/week2/notes.md"
+            },
+            {
+              "id": "r16-w2-ex2",
+              "type": "exercise",
+              "title": "练习：执行 week2 脚本",
+              "cmd": "自动",
+              "file": "rounds/round_16/week2/exercises.py"
+            },
+            {
+              "id": "r16-w2-self",
+              "type": "test",
+              "title": "第2周自测",
+              "cmd": "自动",
+              "file": "rounds/round_16/week2/exercises.py"
+            }
+          ]
+        },
+        {
+          "id": "round16-week3",
+          "title": "Round 16 · Week 3 笔记（错误响应约定）",
+          "tasks": [
+            {
+              "id": "r16-w3-read",
+              "type": "reading",
+              "title": "阅读 week3/notes.md",
+              "cmd": "bash mark_done.sh r16-w3-read",
+              "file": "rounds/round_16/week3/notes.md"
+            },
+            {
+              "id": "r16-w3-ex3",
+              "type": "exercise",
+              "title": "练习：执行 week3 脚本",
+              "cmd": "自动",
+              "file": "rounds/round_16/week3/exercises.py"
+            },
+            {
+              "id": "r16-w3-self",
+              "type": "test",
+              "title": "第3周自测",
+              "cmd": "自动",
+              "file": "rounds/round_16/week3/exercises.py"
+            }
+          ]
+        },
+        {
+          "id": "round16-final",
+          "title": "最终验收",
+          "tasks": [
+            {
+              "id": "r16-fin-comp",
+              "type": "exercise",
+              "title": "综合练习",
+              "cmd": "自动",
+              "file": "rounds/round_16/final/comprehensive_exercise.py"
+            },
+            {
+              "id": "r16-fin-sheet",
+              "type": "output",
+              "title": "完成本轮小抄",
+              "cmd": "自动",
+              "file": "rounds/round_16/final/api_data_layer_cheatsheet.md"
+            },
+            {
+              "id": "r16-fin-acc1",
+              "type": "test",
+              "title": "验收：对照 round_16.md",
+              "cmd": "自动",
+              "file": "round_16.md"
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "round_17",
@@ -919,11 +2227,120 @@ window.PROGRESS_ROUNDS = {
       ],
       "difficulty": "⭐⭐⭐⭐☆",
       "duration": "3 周",
-      "tier": "最小骨架",
-      "progress_linked": false,
-      "scaffold_only": true,
+      "tier": "进度已接入",
+      "progress_linked": true,
+      "scaffold_only": false,
       "readme": "rounds/round_17/README.md",
-      "weeks": []
+      "weeks": [
+        {
+          "id": "round17-week1",
+          "title": "Round 17 · Week 1 笔记（启动脚本与健康检查）",
+          "tasks": [
+            {
+              "id": "r17-w1-read",
+              "type": "reading",
+              "title": "阅读 week1/notes.md",
+              "cmd": "bash mark_done.sh r17-w1-read",
+              "file": "rounds/round_17/week1/notes.md"
+            },
+            {
+              "id": "r17-w1-ex1",
+              "type": "exercise",
+              "title": "练习：执行 week1 脚本",
+              "cmd": "自动",
+              "file": "rounds/round_17/week1/exercises.py"
+            },
+            {
+              "id": "r17-w1-self",
+              "type": "test",
+              "title": "第1周自测",
+              "cmd": "自动",
+              "file": "rounds/round_17/week1/exercises.py"
+            }
+          ]
+        },
+        {
+          "id": "round17-week2",
+          "title": "Round 17 · Week 2 笔记（日志与配置收口）",
+          "tasks": [
+            {
+              "id": "r17-w2-read",
+              "type": "reading",
+              "title": "阅读 week2/notes.md",
+              "cmd": "bash mark_done.sh r17-w2-read",
+              "file": "rounds/round_17/week2/notes.md"
+            },
+            {
+              "id": "r17-w2-ex2",
+              "type": "exercise",
+              "title": "练习：执行 week2 脚本",
+              "cmd": "自动",
+              "file": "rounds/round_17/week2/exercises.py"
+            },
+            {
+              "id": "r17-w2-self",
+              "type": "test",
+              "title": "第2周自测",
+              "cmd": "自动",
+              "file": "rounds/round_17/week2/exercises.py"
+            }
+          ]
+        },
+        {
+          "id": "round17-week3",
+          "title": "Round 17 · Week 3 笔记（部署前检查表）",
+          "tasks": [
+            {
+              "id": "r17-w3-read",
+              "type": "reading",
+              "title": "阅读 week3/notes.md",
+              "cmd": "bash mark_done.sh r17-w3-read",
+              "file": "rounds/round_17/week3/notes.md"
+            },
+            {
+              "id": "r17-w3-ex3",
+              "type": "exercise",
+              "title": "练习：执行 week3 脚本",
+              "cmd": "自动",
+              "file": "rounds/round_17/week3/exercises.py"
+            },
+            {
+              "id": "r17-w3-self",
+              "type": "test",
+              "title": "第3周自测",
+              "cmd": "自动",
+              "file": "rounds/round_17/week3/exercises.py"
+            }
+          ]
+        },
+        {
+          "id": "round17-final",
+          "title": "最终验收",
+          "tasks": [
+            {
+              "id": "r17-fin-comp",
+              "type": "exercise",
+              "title": "综合练习",
+              "cmd": "自动",
+              "file": "rounds/round_17/final/comprehensive_exercise.py"
+            },
+            {
+              "id": "r17-fin-sheet",
+              "type": "output",
+              "title": "完成本轮小抄",
+              "cmd": "自动",
+              "file": "rounds/round_17/final/service_wrapup_cheatsheet.md"
+            },
+            {
+              "id": "r17-fin-acc1",
+              "type": "test",
+              "title": "验收：对照 round_17.md",
+              "cmd": "自动",
+              "file": "round_17.md"
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "round_18",
@@ -934,11 +2351,120 @@ window.PROGRESS_ROUNDS = {
       ],
       "difficulty": "⭐⭐⭐☆☆",
       "duration": "3 周",
-      "tier": "最小骨架",
-      "progress_linked": false,
-      "scaffold_only": true,
+      "tier": "进度已接入",
+      "progress_linked": true,
+      "scaffold_only": false,
       "readme": "rounds/round_18/README.md",
-      "weeks": []
+      "weeks": [
+        {
+          "id": "round18-week1",
+          "title": "Round 18 · Week 1 笔记（numpy 数组入门）",
+          "tasks": [
+            {
+              "id": "r18-w1-read",
+              "type": "reading",
+              "title": "阅读 week1/notes.md",
+              "cmd": "bash mark_done.sh r18-w1-read",
+              "file": "rounds/round_18/week1/notes.md"
+            },
+            {
+              "id": "r18-w1-ex1",
+              "type": "exercise",
+              "title": "练习：执行 week1 脚本",
+              "cmd": "自动",
+              "file": "rounds/round_18/week1/exercises.py"
+            },
+            {
+              "id": "r18-w1-self",
+              "type": "test",
+              "title": "第1周自测",
+              "cmd": "自动",
+              "file": "rounds/round_18/week1/exercises.py"
+            }
+          ]
+        },
+        {
+          "id": "round18-week2",
+          "title": "Round 18 · Week 2 笔记（pandas 读取 CSV）",
+          "tasks": [
+            {
+              "id": "r18-w2-read",
+              "type": "reading",
+              "title": "阅读 week2/notes.md",
+              "cmd": "bash mark_done.sh r18-w2-read",
+              "file": "rounds/round_18/week2/notes.md"
+            },
+            {
+              "id": "r18-w2-ex2",
+              "type": "exercise",
+              "title": "练习：执行 week2 脚本",
+              "cmd": "自动",
+              "file": "rounds/round_18/week2/exercises.py"
+            },
+            {
+              "id": "r18-w2-self",
+              "type": "test",
+              "title": "第2周自测",
+              "cmd": "自动",
+              "file": "rounds/round_18/week2/exercises.py"
+            }
+          ]
+        },
+        {
+          "id": "round18-week3",
+          "title": "Round 18 · Week 3 笔记（简单聚合统计）",
+          "tasks": [
+            {
+              "id": "r18-w3-read",
+              "type": "reading",
+              "title": "阅读 week3/notes.md",
+              "cmd": "bash mark_done.sh r18-w3-read",
+              "file": "rounds/round_18/week3/notes.md"
+            },
+            {
+              "id": "r18-w3-ex3",
+              "type": "exercise",
+              "title": "练习：执行 week3 脚本",
+              "cmd": "自动",
+              "file": "rounds/round_18/week3/exercises.py"
+            },
+            {
+              "id": "r18-w3-self",
+              "type": "test",
+              "title": "第3周自测",
+              "cmd": "自动",
+              "file": "rounds/round_18/week3/exercises.py"
+            }
+          ]
+        },
+        {
+          "id": "round18-final",
+          "title": "最终验收",
+          "tasks": [
+            {
+              "id": "r18-fin-comp",
+              "type": "exercise",
+              "title": "综合练习",
+              "cmd": "自动",
+              "file": "rounds/round_18/final/comprehensive_exercise.py"
+            },
+            {
+              "id": "r18-fin-sheet",
+              "type": "output",
+              "title": "完成本轮小抄",
+              "cmd": "自动",
+              "file": "rounds/round_18/final/numerics_analytics_cheatsheet.md"
+            },
+            {
+              "id": "r18-fin-acc1",
+              "type": "test",
+              "title": "验收：对照 round_18.md",
+              "cmd": "自动",
+              "file": "round_18.md"
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "round_19",
@@ -949,11 +2475,120 @@ window.PROGRESS_ROUNDS = {
       ],
       "difficulty": "⭐⭐⭐☆☆",
       "duration": "3 周",
-      "tier": "最小骨架",
-      "progress_linked": false,
-      "scaffold_only": true,
+      "tier": "进度已接入",
+      "progress_linked": true,
+      "scaffold_only": false,
       "readme": "rounds/round_19/README.md",
-      "weeks": []
+      "weeks": [
+        {
+          "id": "round19-week1",
+          "title": "Round 19 · Week 1 笔记（训练/验证划分）",
+          "tasks": [
+            {
+              "id": "r19-w1-read",
+              "type": "reading",
+              "title": "阅读 week1/notes.md",
+              "cmd": "bash mark_done.sh r19-w1-read",
+              "file": "rounds/round_19/week1/notes.md"
+            },
+            {
+              "id": "r19-w1-ex1",
+              "type": "exercise",
+              "title": "练习：执行 week1 脚本",
+              "cmd": "自动",
+              "file": "rounds/round_19/week1/exercises.py"
+            },
+            {
+              "id": "r19-w1-self",
+              "type": "test",
+              "title": "第1周自测",
+              "cmd": "自动",
+              "file": "rounds/round_19/week1/exercises.py"
+            }
+          ]
+        },
+        {
+          "id": "round19-week2",
+          "title": "Round 19 · Week 2 笔记（基线模型拟合）",
+          "tasks": [
+            {
+              "id": "r19-w2-read",
+              "type": "reading",
+              "title": "阅读 week2/notes.md",
+              "cmd": "bash mark_done.sh r19-w2-read",
+              "file": "rounds/round_19/week2/notes.md"
+            },
+            {
+              "id": "r19-w2-ex2",
+              "type": "exercise",
+              "title": "练习：执行 week2 脚本",
+              "cmd": "自动",
+              "file": "rounds/round_19/week2/exercises.py"
+            },
+            {
+              "id": "r19-w2-self",
+              "type": "test",
+              "title": "第2周自测",
+              "cmd": "自动",
+              "file": "rounds/round_19/week2/exercises.py"
+            }
+          ]
+        },
+        {
+          "id": "round19-week3",
+          "title": "Round 19 · Week 3 笔记（指标记录骨架）",
+          "tasks": [
+            {
+              "id": "r19-w3-read",
+              "type": "reading",
+              "title": "阅读 week3/notes.md",
+              "cmd": "bash mark_done.sh r19-w3-read",
+              "file": "rounds/round_19/week3/notes.md"
+            },
+            {
+              "id": "r19-w3-ex3",
+              "type": "exercise",
+              "title": "练习：执行 week3 脚本",
+              "cmd": "自动",
+              "file": "rounds/round_19/week3/exercises.py"
+            },
+            {
+              "id": "r19-w3-self",
+              "type": "test",
+              "title": "第3周自测",
+              "cmd": "自动",
+              "file": "rounds/round_19/week3/exercises.py"
+            }
+          ]
+        },
+        {
+          "id": "round19-final",
+          "title": "最终验收",
+          "tasks": [
+            {
+              "id": "r19-fin-comp",
+              "type": "exercise",
+              "title": "综合练习",
+              "cmd": "自动",
+              "file": "rounds/round_19/final/comprehensive_exercise.py"
+            },
+            {
+              "id": "r19-fin-sheet",
+              "type": "output",
+              "title": "完成本轮小抄",
+              "cmd": "自动",
+              "file": "rounds/round_19/final/ml_minimal_loop_cheatsheet.md"
+            },
+            {
+              "id": "r19-fin-acc1",
+              "type": "test",
+              "title": "验收：对照 round_19.md",
+              "cmd": "自动",
+              "file": "round_19.md"
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "round_20",
@@ -964,11 +2599,120 @@ window.PROGRESS_ROUNDS = {
       ],
       "difficulty": "⭐⭐⭐⭐☆",
       "duration": "3 周",
-      "tier": "最小骨架",
-      "progress_linked": false,
-      "scaffold_only": true,
+      "tier": "进度已接入",
+      "progress_linked": true,
+      "scaffold_only": false,
       "readme": "rounds/round_20/README.md",
-      "weeks": []
+      "weeks": [
+        {
+          "id": "round20-week1",
+          "title": "Round 20 · Week 1 笔记（Tensor 与 Dataset）",
+          "tasks": [
+            {
+              "id": "r20-w1-read",
+              "type": "reading",
+              "title": "阅读 week1/notes.md",
+              "cmd": "bash mark_done.sh r20-w1-read",
+              "file": "rounds/round_20/week1/notes.md"
+            },
+            {
+              "id": "r20-w1-ex1",
+              "type": "exercise",
+              "title": "练习：执行 week1 脚本",
+              "cmd": "自动",
+              "file": "rounds/round_20/week1/exercises.py"
+            },
+            {
+              "id": "r20-w1-self",
+              "type": "test",
+              "title": "第1周自测",
+              "cmd": "自动",
+              "file": "rounds/round_20/week1/exercises.py"
+            }
+          ]
+        },
+        {
+          "id": "round20-week2",
+          "title": "Round 20 · Week 2 笔记（最小训练循环）",
+          "tasks": [
+            {
+              "id": "r20-w2-read",
+              "type": "reading",
+              "title": "阅读 week2/notes.md",
+              "cmd": "bash mark_done.sh r20-w2-read",
+              "file": "rounds/round_20/week2/notes.md"
+            },
+            {
+              "id": "r20-w2-ex2",
+              "type": "exercise",
+              "title": "练习：执行 week2 脚本",
+              "cmd": "自动",
+              "file": "rounds/round_20/week2/exercises.py"
+            },
+            {
+              "id": "r20-w2-self",
+              "type": "test",
+              "title": "第2周自测",
+              "cmd": "自动",
+              "file": "rounds/round_20/week2/exercises.py"
+            }
+          ]
+        },
+        {
+          "id": "round20-week3",
+          "title": "Round 20 · Week 3 笔记（checkpoint 路径约定）",
+          "tasks": [
+            {
+              "id": "r20-w3-read",
+              "type": "reading",
+              "title": "阅读 week3/notes.md",
+              "cmd": "bash mark_done.sh r20-w3-read",
+              "file": "rounds/round_20/week3/notes.md"
+            },
+            {
+              "id": "r20-w3-ex3",
+              "type": "exercise",
+              "title": "练习：执行 week3 脚本",
+              "cmd": "自动",
+              "file": "rounds/round_20/week3/exercises.py"
+            },
+            {
+              "id": "r20-w3-self",
+              "type": "test",
+              "title": "第3周自测",
+              "cmd": "自动",
+              "file": "rounds/round_20/week3/exercises.py"
+            }
+          ]
+        },
+        {
+          "id": "round20-final",
+          "title": "最终验收",
+          "tasks": [
+            {
+              "id": "r20-fin-comp",
+              "type": "exercise",
+              "title": "综合练习",
+              "cmd": "自动",
+              "file": "rounds/round_20/final/comprehensive_exercise.py"
+            },
+            {
+              "id": "r20-fin-sheet",
+              "type": "output",
+              "title": "完成本轮小抄",
+              "cmd": "自动",
+              "file": "rounds/round_20/final/pytorch_intro_cheatsheet.md"
+            },
+            {
+              "id": "r20-fin-acc1",
+              "type": "test",
+              "title": "验收：对照 round_20.md",
+              "cmd": "自动",
+              "file": "round_20.md"
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "round_21",
@@ -979,11 +2723,120 @@ window.PROGRESS_ROUNDS = {
       ],
       "difficulty": "⭐⭐⭐⭐☆",
       "duration": "3 周",
-      "tier": "最小骨架",
-      "progress_linked": false,
-      "scaffold_only": true,
+      "tier": "进度已接入",
+      "progress_linked": true,
+      "scaffold_only": false,
       "readme": "rounds/round_21/README.md",
-      "weeks": []
+      "weeks": [
+        {
+          "id": "round21-week1",
+          "title": "Round 21 · Week 1 笔记（分词与词表）",
+          "tasks": [
+            {
+              "id": "r21-w1-read",
+              "type": "reading",
+              "title": "阅读 week1/notes.md",
+              "cmd": "bash mark_done.sh r21-w1-read",
+              "file": "rounds/round_21/week1/notes.md"
+            },
+            {
+              "id": "r21-w1-ex1",
+              "type": "exercise",
+              "title": "练习：执行 week1 脚本",
+              "cmd": "自动",
+              "file": "rounds/round_21/week1/exercises.py"
+            },
+            {
+              "id": "r21-w1-self",
+              "type": "test",
+              "title": "第1周自测",
+              "cmd": "自动",
+              "file": "rounds/round_21/week1/exercises.py"
+            }
+          ]
+        },
+        {
+          "id": "round21-week2",
+          "title": "Round 21 · Week 2 笔记（文本张量批处理）",
+          "tasks": [
+            {
+              "id": "r21-w2-read",
+              "type": "reading",
+              "title": "阅读 week2/notes.md",
+              "cmd": "bash mark_done.sh r21-w2-read",
+              "file": "rounds/round_21/week2/notes.md"
+            },
+            {
+              "id": "r21-w2-ex2",
+              "type": "exercise",
+              "title": "练习：执行 week2 脚本",
+              "cmd": "自动",
+              "file": "rounds/round_21/week2/exercises.py"
+            },
+            {
+              "id": "r21-w2-self",
+              "type": "test",
+              "title": "第2周自测",
+              "cmd": "自动",
+              "file": "rounds/round_21/week2/exercises.py"
+            }
+          ]
+        },
+        {
+          "id": "round21-week3",
+          "title": "Round 21 · Week 3 笔记（推理脚本入口骨架）",
+          "tasks": [
+            {
+              "id": "r21-w3-read",
+              "type": "reading",
+              "title": "阅读 week3/notes.md",
+              "cmd": "bash mark_done.sh r21-w3-read",
+              "file": "rounds/round_21/week3/notes.md"
+            },
+            {
+              "id": "r21-w3-ex3",
+              "type": "exercise",
+              "title": "练习：执行 week3 脚本",
+              "cmd": "自动",
+              "file": "rounds/round_21/week3/exercises.py"
+            },
+            {
+              "id": "r21-w3-self",
+              "type": "test",
+              "title": "第3周自测",
+              "cmd": "自动",
+              "file": "rounds/round_21/week3/exercises.py"
+            }
+          ]
+        },
+        {
+          "id": "round21-final",
+          "title": "最终验收",
+          "tasks": [
+            {
+              "id": "r21-fin-comp",
+              "type": "exercise",
+              "title": "综合练习",
+              "cmd": "自动",
+              "file": "rounds/round_21/final/comprehensive_exercise.py"
+            },
+            {
+              "id": "r21-fin-sheet",
+              "type": "output",
+              "title": "完成本轮小抄",
+              "cmd": "自动",
+              "file": "rounds/round_21/final/nlp_prereq_cheatsheet.md"
+            },
+            {
+              "id": "r21-fin-acc1",
+              "type": "test",
+              "title": "验收：对照 round_21.md",
+              "cmd": "自动",
+              "file": "round_21.md"
+            }
+          ]
+        }
+      ]
     }
   ]
 };

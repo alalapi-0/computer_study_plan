@@ -7,6 +7,12 @@ import re
 from pathlib import Path
 
 ALLOWED_PREFIXES = ("rounds/", "plans/")
+ALLOWED_DOC_PATHS = frozenset(
+    {
+        "docs/KNOWLEDGE_MAPPING.md",
+        "docs/ERROR_REVIEW_SYSTEM.md",
+    }
+)
 ALLOWED_SUFFIXES = (".md", ".txt")
 
 ROUND_NOTES_RE = re.compile(
@@ -19,7 +25,7 @@ def resolve_content_path(repo_root: Path, rel_path: str) -> Path | None:
     rel = rel_path.strip().replace("\\", "/").lstrip("/")
     if not rel or ".." in rel.split("/"):
         return None
-    if not any(rel.startswith(p) for p in ALLOWED_PREFIXES):
+    if rel not in ALLOWED_DOC_PATHS and not any(rel.startswith(p) for p in ALLOWED_PREFIXES):
         return None
     if not any(rel.endswith(s) for s in ALLOWED_SUFFIXES):
         return None

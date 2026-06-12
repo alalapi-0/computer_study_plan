@@ -447,6 +447,100 @@ def check_learn_server_api(report: TestReport) -> None:
     report.add(case)
 
 
+def check_skeleton_progress_scale(report: TestReport) -> None:
+    case = TestCase(
+        "TC-18",
+        "看进度",
+        "Round 05–21 已接入 progress.json（任务数 ≥ 280）",
+        "统计 progress.json tasks 与 progress_rounds progress_linked",
+    )
+    data = json.loads((REPO / "progress.json").read_text(encoding="utf-8"))
+    tasks = data.get("tasks", {})
+    pr = json.loads((REPO / "progress_rounds.json").read_text(encoding="utf-8"))
+    linked = [r for r in pr.get("rounds", []) if r.get("progress_linked")]
+    ok = len(tasks) >= 280 and len(linked) >= 22
+    case.passed = ok
+    case.detail = f"tasks={len(tasks)}, linked_rounds={len(linked)}"
+    report.add(case)
+
+
+def check_learning_records_api(report: TestReport) -> None:
+    case = TestCase(
+        "TC-19",
+        "网页学习",
+        "learn_server 任务 events/feedback 与错题写入 API",
+        "GET events/feedback + POST /api/error_notes",
+    )
+    import subprocess
+    import time
+    import urllib.error
+    import urllib.request
+
+    port = 18081
+    proc = subprocess.Popen(
+        [sys.executable, "scripts/learn_server.py", "--port", str(port)],
+        cwd=REPO,
+        stdout=subprocess.DEVNULL,
+        stderr=subprocess.DEVNULL,
+    )
+    try:
+        time.sleep(0.6)
+        with urllib.request.urlopen(
+            f"http://127.0.0.1:{port}/api/tasks/w1-read/events",
+            timeout=3,
+        ) as resp:
+            events = json.loads(resp.read().decode())
+        with urllib.request.urlopen(
+            f"http://127.0.0.1:{port}/api/tasks/w1-read/feedback",
+            timeout=3,
+        ) as resp:
+            feedback = json.loads(resp.read().decode())
+        body = json.dumps(
+            {
+                "lane": "engineering",
+                "module": "journey_test",
+                "title": "审计脚本占位错题",
+                "wrong_answer": "test wrong",
+                "correct_answer": "test correct",
+                "note": "auto check",
+            }
+        ).encode()
+        req = urllib.request.Request(
+            f"http://127.0.0.1:{port}/api/error_notes",
+            data=body,
+            method="POST",
+            headers={"Content-Type": "application/json"},
+        )
+        with urllib.request.urlopen(req, timeout=3) as resp:
+            note = json.loads(resp.read().decode())
+        note_path = REPO / note.get("path", "")
+        ok = (
+            events.get("ok")
+            and isinstance(events.get("events"), list)
+            and feedback.get("ok")
+            and note.get("ok")
+            and note_path.is_file()
+        )
+        case.passed = ok
+        case.detail = f"events={len(events.get('events', []))}, note={note.get('path')}"
+        if note_path.is_file():
+            note_path.unlink()
+            try:
+                note_path.parent.rmdir()
+            except OSError:
+                pass
+    except (urllib.error.URLError, TimeoutError, json.JSONDecodeError) as exc:
+        case.passed = False
+        case.detail = str(exc)
+    finally:
+        proc.terminate()
+        try:
+            proc.wait(timeout=3)
+        except subprocess.TimeoutExpired:
+            proc.kill()
+    report.add(case)
+
+
 def write_report(report: TestReport) -> None:
     statuses = scan_rounds(REPO)
     summ = summary(statuses)
@@ -514,6 +608,8 @@ def main() -> int:
     check_mark_done_round_resolver(report)
     check_learn_server_api(report)
     check_exercise_guide_api(report)
+    check_skeleton_progress_scale(report)
+    check_learning_records_api(report)
 
     write_report(report)
 

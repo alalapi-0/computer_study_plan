@@ -327,6 +327,50 @@
       max-height: 200px; overflow: auto; white-space: pre-wrap; margin-top: 0.5rem;
     }
     .sandbox-hint { font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.75rem; }
+
+    .error-note-form label {
+      display: block; font-size: 0.78rem; color: var(--text-muted); margin-bottom: 0.25rem;
+    }
+    .error-note-form input, .error-note-form select, .error-note-form textarea {
+      width: 100%; background: var(--bg); color: var(--text);
+      border: 1px solid var(--border); border-radius: 6px;
+      padding: 0.45rem 0.6rem; font-size: 0.82rem; font-family: inherit; margin-bottom: 0.55rem;
+    }
+    .error-note-form textarea { min-height: 3.5rem; resize: vertical; }
+    .error-note-form .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem; }
+    @media (max-width: 720px) { .error-note-form .form-row { grid-template-columns: 1fr; } }
+    .error-note-status { font-size: 0.78rem; margin-top: 0.35rem; }
+    .error-note-status.ok { color: var(--green); }
+    .error-note-status.err { color: var(--red); }
+
+    .lane-study-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 0.75rem;
+    }
+    .lane-study-item {
+      border: 1px solid var(--border); border-radius: 8px; padding: 0.75rem 0.9rem;
+      background: rgba(255,255,255,0.02);
+    }
+    .lane-study-item h3 { font-size: 0.88rem; margin-bottom: 0.35rem; }
+    .lane-study-item .lane-study-meta { font-size: 0.72rem; color: var(--text-muted); margin-bottom: 0.5rem; }
+    .lane-study-links { display: flex; flex-direction: column; gap: 0.35rem; }
+    .lane-study-links button {
+      text-align: left; padding: 0.25rem 0.5rem; border-radius: 6px;
+      border: 1px solid var(--border); background: transparent; color: var(--accent2);
+      font-size: 0.78rem; cursor: pointer;
+    }
+    .lane-study-links button:hover { border-color: var(--accent2); background: rgba(56,189,248,0.08); }
+
+    .meta-event-list { list-style: none; padding: 0; margin: 0; }
+    .meta-event-list li {
+      padding: 0.45rem 0; border-bottom: 1px solid var(--border);
+      font-size: 0.82rem; color: var(--text-muted);
+    }
+    .meta-event-list li:last-child { border-bottom: none; }
+    .meta-feedback-box {
+      background: rgba(255,255,255,0.03); border: 1px solid var(--border);
+      border-radius: 8px; padding: 0.75rem; font-size: 0.82rem; margin-top: 0.5rem;
+    }
+    .task-actions button.meta { border-color: var(--yellow); color: var(--yellow); }
   </style>
 </head>
 
@@ -420,6 +464,46 @@
   <div class="weak-list" id="weakList"></div>
 </div>
 
+<!-- ── Block 5b: 快速记错题（需 learn_server） ── -->
+<div class="card" id="errorNoteCard" style="display:none">
+  <h2>📝 快速记错题</h2>
+  <div class="card-sub">写入 <code>records/error_notes/&lt;lane&gt;/&lt;module&gt;/</code>，字段约定见 <code>docs/ERROR_REVIEW_SYSTEM.md</code>。</div>
+  <form class="error-note-form" id="errorNoteForm" onsubmit="submitErrorNote(event)">
+    <div class="form-row">
+      <div>
+        <label for="errorLane">主线 lane</label>
+        <select id="errorLane" name="lane">
+          <option value="soft_exam">软考中级线</option>
+          <option value="math2">数学二线</option>
+          <option value="cs408">408/0854 线</option>
+          <option value="engineering">工程实操线</option>
+        </select>
+      </div>
+      <div>
+        <label for="errorModule">模块 module</label>
+        <input id="errorModule" name="module" type="text" placeholder="例如 os、limits、general" required />
+      </div>
+    </div>
+    <label for="errorTitle">题面 / 知识点摘要</label>
+    <input id="errorTitle" name="title" type="text" placeholder="一句话概括错题" required />
+    <label for="errorWrong">我的错误思路或答案</label>
+    <textarea id="errorWrong" name="wrong_answer" placeholder="错在哪里、当时怎么想的"></textarea>
+    <label for="errorCorrect">正确思路或答案</label>
+    <textarea id="errorCorrect" name="correct_answer" placeholder="正确做法或要点"></textarea>
+    <label for="errorNote">复盘备注</label>
+    <textarea id="errorNote" name="note" placeholder="下次如何避免、关联章节"></textarea>
+    <button class="save-btn" type="submit">保存错题笔记</button>
+    <div class="error-note-status" id="errorNoteStatus"></div>
+  </form>
+</div>
+
+<!-- ── Block 5c: 四主线学习材料（PW-6） ── -->
+<div class="card" id="laneStudyCard">
+  <h2>📖 四主线学习材料</h2>
+  <div class="card-sub">engineering 以外 lane 的本周可推进入口：阅读 <code>plans/</code> 模块笔记（与 Round 实操并列）。</div>
+  <div class="lane-study-grid" id="laneStudyGrid"></div>
+</div>
+
 <!-- ── Block 6: 按 lane / Round 浏览 ── -->
 <div class="card">
   <h2>📦 按主线查看 Round</h2>
@@ -447,6 +531,19 @@
     <div class="notes-footer">
       <button class="btn" type="button" id="exerciseRunBtn" style="display:none">运行脚本</button>
       <button class="btn" type="button" onclick="closeExerciseModal()">关闭</button>
+    </div>
+  </div>
+</div>
+
+<div class="notes-modal-backdrop" id="taskMetaModalBackdrop" onclick="if(event.target===this) closeTaskMetaModal()">
+  <div class="notes-modal" role="dialog" aria-labelledby="taskMetaModalTitle">
+    <header>
+      <strong id="taskMetaModalTitle">任务历史与反馈</strong>
+      <button class="btn" type="button" onclick="closeTaskMetaModal()">关闭</button>
+    </header>
+    <div class="notes-body" id="taskMetaModalBody">加载中…</div>
+    <div class="notes-footer">
+      <button class="btn" type="button" onclick="closeTaskMetaModal()">关闭</button>
     </div>
   </div>
 </div>
@@ -508,6 +605,43 @@ function updateRoundBrowseSub() {
 // 进度算法：取该 Stage 的"主 lane"的完成率作为近似值。
 // 这是当前阶段的最小实现；后续若有 stage→具体 task 列表，可替换。
 // ============================================================
+const LANE_STUDY_PLANS = {
+  engineering: {
+    title: "工程实操线",
+    hint: "Round 实操见下方「按主线查看 Round」；此处为 Linux 线总览。",
+    plans: [
+      { path: "plans/linux/README.md", label: "Linux 线总览" },
+    ],
+  },
+  soft_exam: {
+    title: "软考中级线",
+    hint: "模块笔记骨架；考点以最新官方大纲为准。",
+    plans: [
+      { path: "plans/soft_exam/README.md", label: "软考总览" },
+      { path: "plans/soft_exam/ds.md", label: "数据结构" },
+      { path: "plans/soft_exam/os.md", label: "操作系统" },
+      { path: "plans/soft_exam/db.md", label: "数据库" },
+    ],
+  },
+  math2: {
+    title: "数学二线",
+    hint: "保底节奏：每周至少一题；下方可阅读模块笔记。",
+    plans: [
+      { path: "plans/math2/README.md", label: "数学二总览" },
+      { path: "plans/math2/limits.md", label: "极限" },
+      { path: "plans/math2/la_matrix.md", label: "线性代数 / 矩阵" },
+    ],
+  },
+  cs408: {
+    title: "408/0854 线",
+    hint: "阅读 plans 并与 KNOWLEDGE_MAPPING 对照。",
+    plans: [
+      { path: "plans/408/README.md", label: "408 总览" },
+      { path: "docs/KNOWLEDGE_MAPPING.md", label: "知识映射（docs）" },
+    ],
+  },
+};
+
 const STAGES = [
   { id: "stage_0", name: "Stage 0 · 治理准备",   lane: null,           note: "治理任务，不进度统计" },
   { id: "stage_1", name: "Stage 1 · Linux/Git/Shell", lane: "engineering" },
@@ -605,11 +739,12 @@ function updateLearnModeBanner() {
   const el = document.getElementById("learnModeBanner");
   const intro = document.getElementById("headerIntro");
   if (!el || !intro) return;
+  updateErrorNoteCard();
   if (learnApiAvailable) {
     el.style.display = "block";
     el.className = "learn-mode-banner";
-    el.textContent = "✅ 学习服务已连接：可「完成/撤销」、阅读笔记、打开「练习向导」按步骤打卡。";
-    intro.textContent = "学习服务已连接。进度来自 progress.json；可在本页直接打卡与阅读 notes。";
+    el.textContent = "✅ 学习服务已连接：可打卡、阅读笔记与 plans、练习向导、查看任务历史/反馈、快速记错题。";
+    intro.textContent = "学习服务已连接。可在本页打卡、阅读材料、记错题与查看四主线 plans。";
   } else if (window.location.protocol === "file:") {
     el.style.display = "block";
     el.className = "learn-mode-banner off";
@@ -670,6 +805,126 @@ async function openNotesModal(filePath, taskId) {
 function closeNotesModal() {
   document.getElementById("notesModalBackdrop").classList.remove("open");
   notesModalTaskId = null;
+}
+
+async function openTaskMetaModal(taskId) {
+  if (!learnApiAvailable) {
+    alert("请使用 learn_server 启动后再查看任务历史。");
+    return;
+  }
+  const backdrop = document.getElementById("taskMetaModalBackdrop");
+  const body = document.getElementById("taskMetaModalBody");
+  const title = document.getElementById("taskMetaModalTitle");
+  title.textContent = `任务：${taskId}`;
+  body.textContent = "加载中…";
+  backdrop.classList.add("open");
+  try {
+    const [evRes, fbRes] = await Promise.all([
+      fetch(`/api/tasks/${encodeURIComponent(taskId)}/events`),
+      fetch(`/api/tasks/${encodeURIComponent(taskId)}/feedback`),
+    ]);
+    const evData = await evRes.json();
+    const fbData = await fbRes.json();
+    if (!evRes.ok || !evData.ok) throw new Error(evData.error || "无法读取 events");
+    if (!fbRes.ok || !fbData.ok) throw new Error(fbData.error || "无法读取 feedback");
+    const events = evData.events || [];
+    let html = "<h3 style='font-size:0.95rem;margin-bottom:0.5rem'>动作历史</h3>";
+    if (!events.length) {
+      html += "<p style='color:var(--text-muted);font-size:0.82rem'>尚无 events.jsonl 记录。</p>";
+    } else {
+      html += "<ul class='meta-event-list'>";
+      events.forEach(e => {
+        const ts = e.timestamp || e.time || "";
+        const action = e.action || e.event || "—";
+        html += `<li><strong>${action}</strong> · ${ts}</li>`;
+      });
+      html += "</ul>";
+    }
+    html += "<h3 style='font-size:0.95rem;margin:1rem 0 0.5rem'>任务反馈</h3>";
+    const fb = fbData.feedback;
+    if (!fb) {
+      html += "<p style='color:var(--text-muted);font-size:0.82rem'>暂无 task_feedback 条目。</p>";
+    } else {
+      html += "<div class='meta-feedback-box'><pre style='white-space:pre-wrap;margin:0'>";
+      html += JSON.stringify(fb, null, 2);
+      html += "</pre></div>";
+    }
+    body.innerHTML = html;
+  } catch (e) {
+    body.textContent = "加载失败：" + (e.message || e);
+  }
+}
+
+function closeTaskMetaModal() {
+  document.getElementById("taskMetaModalBackdrop").classList.remove("open");
+}
+
+async function submitErrorNote(ev) {
+  ev.preventDefault();
+  if (!learnApiAvailable) {
+    alert("请使用 learn_server 启动后再记错题。");
+    return;
+  }
+  const statusEl = document.getElementById("errorNoteStatus");
+  statusEl.className = "error-note-status";
+  statusEl.textContent = "提交中…";
+  const payload = {
+    lane: document.getElementById("errorLane").value,
+    module: document.getElementById("errorModule").value,
+    title: document.getElementById("errorTitle").value,
+    wrong_answer: document.getElementById("errorWrong").value,
+    correct_answer: document.getElementById("errorCorrect").value,
+    note: document.getElementById("errorNote").value,
+  };
+  try {
+    const res = await fetch("/api/error_notes", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    });
+    const data = await res.json();
+    if (!res.ok || !data.ok) throw new Error(data.error || "保存失败");
+    statusEl.className = "error-note-status ok";
+    statusEl.textContent = `已保存：${data.path}`;
+    document.getElementById("errorNoteForm").reset();
+  } catch (e) {
+    statusEl.className = "error-note-status err";
+    statusEl.textContent = "保存失败：" + (e.message || e);
+  }
+}
+
+function renderLaneStudyGrid() {
+  const grid = document.getElementById("laneStudyGrid");
+  if (!grid) return;
+  grid.innerHTML = "";
+  Object.entries(LANE_STUDY_PLANS).forEach(([laneKey, meta]) => {
+    const s = laneStats(laneKey);
+    const item = document.createElement("div");
+    item.className = "lane-study-item " + laneKey;
+    item.innerHTML = `
+      <h3>${meta.title}</h3>
+      <div class="lane-study-meta">${meta.hint} · 进度 ${s.done}/${s.total}</div>
+    `;
+    const links = document.createElement("div");
+    links.className = "lane-study-links";
+    (meta.plans || []).forEach(p => {
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.textContent = "📄 " + p.label;
+      btn.addEventListener("click", () => {
+        if (learnApiAvailable) openNotesModal(p.path, null);
+        else alert("请使用 learn_server 在页面内阅读 plans。");
+      });
+      links.appendChild(btn);
+    });
+    item.appendChild(links);
+    grid.appendChild(item);
+  });
+}
+
+function updateErrorNoteCard() {
+  const card = document.getElementById("errorNoteCard");
+  if (card) card.style.display = learnApiAvailable ? "block" : "none";
 }
 
 function findWeekExercisePath(week, roundId) {
@@ -792,6 +1047,7 @@ function render() {
   renderLanes();
   renderStages();
   renderWeak();
+  renderLaneStudyGrid();
   renderLaneTabs();
   renderRoundsForLane(activeLane);
 }
@@ -1019,6 +1275,12 @@ function renderRoundsForLane(laneKey) {
         if (learnApiAvailable) {
           const actions = document.createElement("div");
           actions.className = "task-actions";
+          const metaBtn = document.createElement("button");
+          metaBtn.className = "meta";
+          metaBtn.type = "button";
+          metaBtn.textContent = "历史";
+          metaBtn.addEventListener("click", () => openTaskMetaModal(task.id));
+          actions.appendChild(metaBtn);
           if (task.file && task.file.endsWith(".md")) {
             const readBtn = document.createElement("button");
             readBtn.className = "read";
