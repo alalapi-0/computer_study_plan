@@ -916,3 +916,30 @@
 
 - `python3 scripts/agent_gate.py --verify`：通过。
 - Round 13–21 Python 练习脚本 `py_compile`：通过。
+
+## 38. 2026-06-13 TASK-RR-28 软考 network / composition 两模块骨架
+
+### 38.1 本轮新增
+
+- 新增 `plans/soft_exam/network.md`（计算机网络模块骨架）。
+- 新增 `plans/soft_exam/composition.md`（计算机组成基础模块骨架）。
+
+### 38.2 内容范围
+
+- 两份文件均仅包含：建议章节清单、与 408 差异提示、首轮推进节奏、启动级易错提醒。
+- 每份文件顶部均添加"以官方最新大纲为准"的提示；未写入具体考题与考点原文。
+
+### 38.3 同步更新
+
+- `docs/NEXT_ACTIONS.md`：新增并完成 `TASK-RR-28`，推荐下一步更新为 RR-29 候选。
+
+### 38.4 验证
+
+- `python3 scripts/check_protocol_sync.py`：通过。
+- `python3 scripts/validate_learning_data.py`：通过。
+- `python3 -m json.tool progress.json`：通过。
+
+### 38.5 风险边界核对
+
+- 未改动 `rounds/round_00/`。
+- 未改动 `records/` 下真实学习记录。
