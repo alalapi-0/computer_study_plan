@@ -347,6 +347,23 @@
 
 ---
 
+## TASK-RR-26：Stage 2 软考 · 软件工程 + UML + 面向对象 三模块骨架
+
+- 状态：**done**（2026-06-13）
+- 背景：`TASK-RR-01` 已完成 ds / os / db 三模块；按 `plans/soft_exam/README.md` §3 推进顺序第 2 步，下一批为软考独有高回报模块。
+- 目标：新增 `plans/soft_exam/se.md`、`plans/soft_exam/uml.md`、`plans/soft_exam/oo.md` 三份笔记骨架（章节列表 + 408 差异 + 官方大纲提示），**不缓存具体考点**。
+- 要修改：新增上述 3 份文件；同步 `docs/NEXT_ACTIONS.md`、`docs/PROJECT_STATE.md`。
+- 不要修改：不要预写具体考题；不要复制教材整段；不要重新规划 Stage Plan。
+- 验收标准：3 份文件存在；每份顶部有官方大纲提示；列出建议章节清单与 408 / 软考差异说明。
+- 风险：把"建议章节"误写为"官方考点"。
+- 是否需要用户介入：否。
+- 实际产物：
+  - `plans/soft_exam/se.md`
+  - `plans/soft_exam/uml.md`
+  - `plans/soft_exam/oo.md`
+
+---
+
 # VPS 实操支线任务（编号 TASK-VPS-XX）
 
 > 主线 TASK-RR-XX 与 VPS 支线 TASK-VPS-XX **可并行推进**，编号空间互不冲突。
@@ -427,7 +444,7 @@ TASK-011 实际产物：
 ## 推荐下一步（按优先级）
 
 1. 运行 `python3 scripts/agent_gate.py --json` 查看下一项可自动推进任务（已跳过 RR-05/06/07/08）。
-2. （自动）Stage 1 Round 00–21 最小骨架已全部展开；下一候选见 `agent_gate --json`（可能为 VPS/历史 TASK 或无可自动项）。
+2. （自动）**TASK-RR-27 候选**：Stage 2 软考 · 计算机网络 + 计算机组成 两模块骨架（`network.md` + `composition.md`），或 Stage 1 Round 05–21 进度系统接入。
 3. （可选）用户自行恢复 RR-05 官网核验或 RR-08 作品集决策时，在队列中改回 `pending` 并移出 `SKIP_TASK_IDS`。
 
 > 主线推进、VPS 支线推进、考试日期录入**互不阻塞**；用户可根据当下心情与可用时间选择。
