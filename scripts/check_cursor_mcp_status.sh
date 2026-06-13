@@ -42,6 +42,7 @@ echo ""
 SERVERS=(
   chrome-devtools
   playwright
+  stitch
   filesystem
   context7
   github

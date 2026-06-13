@@ -8,12 +8,13 @@ alwaysApply: true
 
 1. **任何 UI 优化任务必须先打开真实页面检查**——启动本地服务或用 MCP 打开目标 URL，不得跳过。
 2. **不允许只凭代码判断 UI 已完成**——必须经浏览器目视或截图确认。
-3. **实现后必须再次使用浏览器检查**——修改代码后重新打开页面验证。
-4. **必须检查 console 和 network**——记录错误、警告与关键请求失败。
-5. **必须保存 before / after 观察记录**——截图或文字描述变更前后状态。
-6. **必须运行可用测试**——如 `npm run check:mcp`、`npm run check:cursor-mcp`、项目既有校验脚本。
-7. **浏览器工具未暴露时必须 BLOCKED**——输出 `BLOCKED: MISSING_FROM_THREAD_TOOL_REGISTRY`，不得假装执行。
-8. **UI 改造每轮只改一个主要切片**——避免大范围无关改动。
-9. **不允许为了美观破坏业务功能**——进度看板、mark_done 闭环等核心行为不得因 UI 改造而失效。
+3. **Stitch 只能作为设计输入**——不得无审查地用 Stitch 输出直接覆盖现有代码。
+4. **实现后必须再次使用浏览器检查**——修改代码后重新打开页面验证。
+5. **必须检查 console 和 network**——记录错误、警告与关键请求失败。
+6. **必须保存 before / after 观察记录**——截图或文字描述变更前后状态。
+7. **必须运行可用测试**——如 `npm run check:mcp`、`npm run check:cursor-mcp`、项目既有校验脚本。
+8. **浏览器工具未暴露时必须 BLOCKED**——输出 `BLOCKED: MISSING_FROM_THREAD_TOOL_REGISTRY`，不得假装执行。
+9. **UI 改造每轮只改一个主要切片**——避免大范围无关改动。
+10. **不允许为了美观破坏业务功能**——进度看板、mark_done 闭环等核心行为不得因 UI 改造而失效。
 
 详细流程见 `docs/cursor_browser_ui_runbook.md`。

@@ -10,10 +10,10 @@
    `cursor-agent mcp list` 或 Settings 绿点，只表示 MCP server 进程/配置层面就绪，**不等于**当前 Agent 对话已注册这些工具。
 
 2. **当前 Agent 对话必须实际暴露工具**  
-   Agent 能否调用 `browser_navigate`、`playwright_*` 等，取决于**当前对话线程**的工具注册表，必须在该对话中实际可见。
+   Agent 能否调用 `browser_navigate`、`playwright_*`、`stitch_*` 等，取决于**当前对话线程**的工具注册表，必须在该对话中实际可见。
 
 3. **Multitask 子 Agent 可能没有继承 Workspace MCP**  
-   后台子 Agent / Multitask 模式下的子任务，经常**无法访问** Workspace 级 MCP 工具（含 chrome-devtools、playwright 等）。
+   后台子 Agent / Multitask 模式下的子任务，经常**无法访问** Workspace 级 MCP 工具（含 chrome-devtools、playwright、stitch 等）。
 
 4. **旧对话可能仍停留在批准前的工具注册表**  
    在 Settings 批准 MCP **之前**已打开的对话，可能永久缺少新工具，直到重启 Cursor 并新建对话。
