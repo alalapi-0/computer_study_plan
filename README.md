@@ -27,16 +27,14 @@
 - filesystem
 - github
 - playwright
-- stitch
 
 说明：
 
 1. `.cursor/mcp.json` 是当前项目的 Workspace MCP 配置。
 2. Cursor 可能需要**重启**或**重新加载窗口**后才能识别新配置；**批准 MCP 后建议完全退出 Cursor 并重开仓库**。
 3. GitHub MCP 需要通过环境变量 `GITHUB_PERSONAL_ACCESS_TOKEN` 提供 token，**不允许写进仓库**。
-4. Stitch MCP 需要通过环境变量 `STITCH_API_KEY` 提供 key，**不允许写进仓库**（见 `.env.example`）。
-5. filesystem MCP 只授权当前项目目录（`.`，即仓库根）。
-6. 可运行 `npm run check:mcp` 检查静态配置；`npm run check:cursor-mcp` 检查 CLI 层 MCP 状态（**均不代表当前 Agent 线程已暴露工具**）。
+4. filesystem MCP 只授权当前项目目录（`.`，即仓库根）。
+5. 可运行 `npm run check:mcp` 检查静态配置；`npm run check:cursor-mcp` 检查 CLI 层 MCP 状态（**均不代表当前 Agent 线程已暴露工具**）。
 
 ---
 
@@ -65,21 +63,12 @@ npm run check:mcp
 
 1. 启动项目（如 `python3 -m http.server 8000`）
 2. 打开页面 → 截图（before）
-3. Stitch 设计输入（可选）
-4. 修改代码（每轮一个 UI 切片）
-5. 再打开页面 → console / network 检查
-6. 截图（after）→ 运行测试
-7. commit / push（独立分支）
+3. 修改代码（每轮一个 UI 切片）
+4. 再打开页面 → console / network 检查
+5. 截图（after）→ 运行测试
+6. commit / push（独立分支）
 
-完整 14 步见 [`docs/cursor_browser_ui_runbook.md`](docs/cursor_browser_ui_runbook.md)。
-
-### 4. 微信页面特殊说明
-
-本仓库**不是**微信相关项目。若在其他场景操作微信公众号已登录页面：
-
-- 必须使用 **wechat-chrome-session**
-- 不允许用 Playwright 新开页面替代
-- 遇到扫码 / 风控时停止，等待用户手动处理
+完整流程见 [`docs/cursor_browser_ui_runbook.md`](docs/cursor_browser_ui_runbook.md)。
 
 下一轮 UI 推进 Prompt：[`docs/prompts/CURSOR_UI_IMPLEMENTATION_PROMPT.md`](docs/prompts/CURSOR_UI_IMPLEMENTATION_PROMPT.md)
 

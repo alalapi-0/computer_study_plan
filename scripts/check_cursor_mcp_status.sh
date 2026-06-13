@@ -42,15 +42,10 @@ echo ""
 SERVERS=(
   chrome-devtools
   playwright
-  stitch
   filesystem
   context7
   github
 )
-
-if [[ -f "${MCP_JSON}" ]] && grep -q '"wechat-chrome-session"' "${MCP_JSON}"; then
-  SERVERS+=(wechat-chrome-session wechat_chrome_session)
-fi
 
 for server in "${SERVERS[@]}"; do
   echo "--- cursor-agent mcp list-tools ${server} ---"

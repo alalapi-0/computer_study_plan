@@ -21,33 +21,15 @@
 
 ## 2. 工具选择规则
 
-### 普通本地 Web 项目 UI 优化
-
-本仓库（如 `progress.html`、本地静态页）属于此类。优先使用：
+本仓库（如 `progress.html`、本地静态页）UI 优化优先使用：
 
 | 工具 | 用途 |
 |---|---|
-| **stitch** | 生成 UI 设计依据、设计变体参考 |
 | **chrome-devtools** | 检查页面、console、network、截图 |
 | **playwright** | E2E 与稳定回归 |
 | **filesystem** | 检查代码与产物（仅限当前项目目录） |
 | **context7** | 查询前端库 / 框架文档 |
 | **github** | commit / push / issue / PR |
-
-### 微信公众号已登录页面操作
-
-> **本仓库不是微信相关项目**，通常不需要 `wechat-chrome-session`。若你在其他仓库操作微信已登录页面，遵守以下规则：
-
-**只使用：**
-
-- `wechat-chrome-session`
-
-**禁止使用：**
-
-- ordinary chrome-devtools
-- playwright
-- `browser_tabs` / `new_page` / `navigate_page`
-- 任何会新开**未登录**浏览器实例的工具
 
 ### 真实页面 UI 优化（必做检查项）
 
@@ -68,22 +50,21 @@
 
 ## 3. 标准 UI 优化流程
 
-固定 14 步，每轮只推进一个主要 UI 切片：
+固定 13 步，每轮只推进一个主要 UI 切片：
 
 1. 读取 `README.md`、`AGENTS.md`、`docs/MASTER_STUDY_ROADMAP.md` 及 `docs/design/`（若存在）
 2. 启动项目（如 `python3 -m http.server 8000` 打开 `progress.html`）
 3. 用 browser / chrome-devtools / playwright 打开目标页面
 4. 保存 **before** screenshot
-5. 读取 Stitch 设计文档或调用 Stitch MCP 获取设计输入
-6. 选择一个 UI 改造切片（每轮一个）
-7. 修改代码（不改变业务逻辑）
-8. 重新打开页面
-9. 检查 console / network
-10. 检查响应式（常见 viewport）
-11. 运行可用测试（`npm run check:mcp`、`npm run check:cursor-mcp`、相关 Python 校验等）
-12. 保存 **after** screenshot
-13. 更新相关文档（如 `docs/PROJECT_STATE.md`）
-14. commit / push（独立分支，不直接 push main）
+5. 选择一个 UI 改造切片（每轮一个）
+6. 修改代码（不改变业务逻辑）
+7. 重新打开页面
+8. 检查 console / network
+9. 检查响应式（常见 viewport）
+10. 运行可用测试（`npm run check:mcp`、`npm run check:cursor-mcp`、相关 Python 校验等）
+11. 保存 **after** screenshot
+12. 更新相关文档（如 `docs/PROJECT_STATE.md`）
+13. commit / push（独立分支，不直接 push main）
 
 ---
 
@@ -130,7 +111,6 @@ npm run check:mcp
 2. 批准/启用本仓库 `.cursor/mcp.json` 中的 server
 3. 为需要的环境变量在本地配置（见 `.env.example`，**不要提交 `.env`**）：
    - `GITHUB_PERSONAL_ACCESS_TOKEN`（github MCP）
-   - `STITCH_API_KEY`（stitch MCP）
 4. **完全退出 Cursor 并重新打开项目**
 5. 新建**普通前台 Agent** 对话后再执行 UI 任务
 

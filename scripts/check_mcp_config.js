@@ -16,7 +16,6 @@ const REQUIRED_SERVERS = [
   "filesystem",
   "github",
   "playwright",
-  "stitch",
 ];
 
 const DANGEROUS_PATH_PATTERNS = [

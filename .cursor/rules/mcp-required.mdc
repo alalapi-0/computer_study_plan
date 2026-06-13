@@ -6,14 +6,13 @@ alwaysApply: true
 
 # MCP Required
 
-当前仓库默认需要以下 6 个 Workspace MCP Servers：
+当前仓库默认需要以下 5 个 Workspace MCP Servers：
 
 - chrome-devtools
 - context7
 - filesystem
 - github
 - playwright
-- stitch
 
 ## 启动前检查
 

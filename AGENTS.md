@@ -49,7 +49,6 @@
 - filesystem
 - github
 - playwright
-- stitch
 
 用途：
 
@@ -58,7 +57,6 @@
 - **filesystem**：用于安全读取和检查当前项目文件。
 - **github**：用于仓库、提交、分支、issue、PR 等相关操作。
 - **playwright**：用于浏览器自动化、页面操作、E2E 检查。
-- **stitch**：用于 UI 设计输入与设计变体参考（需 `STITCH_API_KEY` 环境变量）。
 
 自动推进轮开始前，Agent 必须确认这些 MCP 已加载。
 
@@ -76,14 +74,12 @@ Cursor 执行 UI 优化（如 `progress.html`）时必须遵守：
 2. **禁止 Multitask 控制浏览器**——子 Agent 通常不继承 Workspace MCP。
 3. **每轮 UI 实现必须先检查真实页面**——启动本地服务并打开目标 URL。
 4. **每轮 UI 实现必须使用 before / after 浏览器检查**——截图或记录观察结果。
-5. **Stitch 用作设计输入**——不得无审查覆盖代码。
-6. **chrome-devtools 用作页面调试**——console、network、截图。
-7. **playwright 用作回归测试**——稳定 E2E 验证。
-8. **filesystem 用作文件真值检查**——仅限当前项目目录。
-9. **context7 用作文档查询**——前端库与框架文档。
-10. **github 用作提交和远程状态**——token 仅通过环境变量。
-11. **微信已登录页面只允许 wechat-chrome-session**——本仓库非微信项目，普通 Web UI 不得使用该 server。
-12. **当前线程缺工具时必须 BLOCKED**——输出 `BLOCKED: MISSING_FROM_THREAD_TOOL_REGISTRY`，不要继续假装执行。
+5. **chrome-devtools 用作页面调试**——console、network、截图。
+6. **playwright 用作回归测试**——稳定 E2E 验证。
+7. **filesystem 用作文件真值检查**——仅限当前项目目录。
+8. **context7 用作文档查询**——前端库与框架文档。
+9. **github 用作提交和远程状态**——token 仅通过环境变量。
+10. **当前线程缺工具时必须 BLOCKED**——输出 `BLOCKED: MISSING_FROM_THREAD_TOOL_REGISTRY`，不要继续假装执行。
 
 详细 runbook：`docs/cursor_browser_ui_runbook.md`  
 工具注册排查：`docs/cursor_tool_registry_check.md`  
