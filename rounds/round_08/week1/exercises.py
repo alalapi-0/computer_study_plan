@@ -1,7 +1,15 @@
 #!/usr/bin/env python3
 """Round 08 · Week 1 exercises: project cleanup and test stubs."""
 
+import subprocess
 from pathlib import Path
+
+def _repo_root() -> "Path":
+    return Path(__file__).resolve().parents[3]
+
+
+def mark(task_id: str) -> None:
+    subprocess.run(["bash", str(_repo_root() / "mark_done.sh"), task_id], check=False)
 
 
 def main() -> None:
@@ -20,6 +28,10 @@ def main() -> None:
 
     print("已生成最小项目骨架:", base)
     print("下一步可在本地安装 pytest 后运行 tests。")
+
+    mark("r08-w1-ex1")
+    input("请手动完成第1周自测后按回车继续...")
+    mark("r08-w1-self")
 
 
 if __name__ == "__main__":

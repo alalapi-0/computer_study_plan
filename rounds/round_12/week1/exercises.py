@@ -1,7 +1,15 @@
 #!/usr/bin/env python3
 """Round 12 · Week 1 exercises: batch scan input directory."""
 
+import subprocess
 from pathlib import Path
+
+def _repo_root() -> "Path":
+    return Path(__file__).resolve().parents[3]
+
+
+def mark(task_id: str) -> None:
+    subprocess.run(["bash", str(_repo_root() / "mark_done.sh"), task_id], check=False)
 
 
 def scan_inputs(input_dir: Path) -> list[Path]:
@@ -36,6 +44,10 @@ def main() -> None:
 
     print(f"扫描 {len(files)} 个文件，成功 {processed}，失败 {len(failures)}")
     print("沙盒目录:", base)
+
+    mark("r12-w1-ex1")
+    input("请手动完成第1周自测后按回车继续...")
+    mark("r12-w1-self")
 
 
 if __name__ == "__main__":

@@ -6,6 +6,13 @@ import subprocess
 import sys
 from pathlib import Path
 
+def _repo_root() -> "Path":
+    return Path(__file__).resolve().parents[3]
+
+
+def mark(task_id: str) -> None:
+    subprocess.run(["bash", str(_repo_root() / "mark_done.sh"), task_id], check=False)
+
 
 def archive_summary(base: Path) -> Path:
     archive_dir = base / "archive"
@@ -36,6 +43,10 @@ def main() -> None:
 
     archived = archive_summary(base)
     print("已归档摘要:", archived)
+
+    mark("r12-w2-ex2")
+    input("请手动完成第2周自测后按回车继续...")
+    mark("r12-w2-self")
 
 
 if __name__ == "__main__":

@@ -1,7 +1,15 @@
 #!/usr/bin/env python3
 """Round 10 · Week 1 exercises: split cli/core/io modules."""
 
+import subprocess
 from pathlib import Path
+
+def _repo_root() -> "Path":
+    return Path(__file__).resolve().parents[3]
+
+
+def mark(task_id: str) -> None:
+    subprocess.run(["bash", str(_repo_root() / "mark_done.sh"), task_id], check=False)
 
 
 CLI_TEMPLATE = '''"""CLI entry for ai_prep_tool sandbox."""
@@ -19,6 +27,10 @@ def main() -> None:
     args = build_parser().parse_args()
     print("CLI ready, input =", args.input)
 
+    mark("r10-w1-ex1")
+    input("请手动完成第1周自测后按回车继续...")
+    mark("r10-w1-self")
+
 
 if __name__ == "__main__":
     main()
@@ -33,6 +45,10 @@ def run_pipeline(text: str) -> str:
 
 def main() -> None:
     print(run_pipeline("hello round10"))
+
+    mark("r10-w1-ex1")
+    input("请手动完成第1周自测后按回车继续...")
+    mark("r10-w1-self")
 
 
 if __name__ == "__main__":
@@ -66,6 +82,10 @@ def main() -> None:
 
     print("已生成 Round 10 Week 1 模块骨架:", base)
     print("建议依次运行: python3 cli.py  与  python3 core.py")
+
+    mark("r10-w1-ex1")
+    input("请手动完成第1周自测后按回车继续...")
+    mark("r10-w1-self")
 
 
 if __name__ == "__main__":

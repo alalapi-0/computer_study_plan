@@ -1,7 +1,15 @@
 #!/usr/bin/env python3
 """Round 10 · Week 2 exercises: config.ini and logging setup."""
 
+import subprocess
 from pathlib import Path
+
+def _repo_root() -> "Path":
+    return Path(__file__).resolve().parents[3]
+
+
+def mark(task_id: str) -> None:
+    subprocess.run(["bash", str(_repo_root() / "mark_done.sh"), task_id], check=False)
 
 
 CONFIG_TEMPLATE = """[app]
@@ -33,6 +41,10 @@ def main() -> None:
 
     print("已生成 Round 10 Week 2 配置与日志骨架:", base)
     print("请在 Python 中 import configparser 读取 config.ini 做一次打印验证。")
+
+    mark("r10-w2-ex2")
+    input("请手动完成第2周自测后按回车继续...")
+    mark("r10-w2-self")
 
 
 if __name__ == "__main__":

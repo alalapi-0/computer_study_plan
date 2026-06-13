@@ -2,7 +2,15 @@
 """Round 11 · Week 2 exercises: parameterized insert and query."""
 
 import sqlite3
+import subprocess
 from pathlib import Path
+
+def _repo_root() -> "Path":
+    return Path(__file__).resolve().parents[3]
+
+
+def mark(task_id: str) -> None:
+    subprocess.run(["bash", str(_repo_root() / "mark_done.sh"), task_id], check=False)
 
 
 def insert_run(
@@ -42,6 +50,10 @@ def main() -> None:
     print(f"当前 runs 记录数: {len(rows)}")
     for row in rows[-3:]:
         print(row)
+
+    mark("r11-w2-ex2")
+    input("请手动完成第2周自测后按回车继续...")
+    mark("r11-w2-self")
 
 
 if __name__ == "__main__":

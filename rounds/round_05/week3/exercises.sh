@@ -3,6 +3,12 @@
 
 set -e
 
+REPO_ROOT="$(cd "$(dirname "$0")/../../.." && pwd)"
+
+mark() {
+  bash "$REPO_ROOT/mark_done.sh" "$1"
+}
+
 mkdir -p ~/cli-lab/round5/week3
 cd ~/cli-lab/round5/week3
 
@@ -24,3 +30,9 @@ python3 dp_stairs_demo.py
 echo "请补充一个贪心反例（证明并非总是最优）后按回车继续..."
 read
 echo "Week 3 完成。"
+
+mark r05-w3-ex3
+
+echo "请手动完成第3周自测后按回车继续..."
+read
+mark r05-w3-self

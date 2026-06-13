@@ -3,7 +3,15 @@
 
 import argparse
 import logging
+import subprocess
 from pathlib import Path
+
+def _repo_root() -> "Path":
+    return Path(__file__).resolve().parents[3]
+
+
+def mark(task_id: str) -> None:
+    subprocess.run(["bash", str(_repo_root() / "mark_done.sh"), task_id], check=False)
 
 
 def parse_args() -> argparse.Namespace:
@@ -60,6 +68,12 @@ def main() -> None:
     print("- original:", len(lines))
     print("- processed:", len(processed))
     print("- output:", dst)
+
+    mark("r07-fin-comp")
+    input("请检查 rounds/round_07/final/ai_prep_tool_cheatsheet.md 后按回车...")
+    mark("r07-fin-sheet")
+    input("请确认你能解释 Round 07 核心概念后按回车...")
+    mark("r07-fin-acc1")
 
 
 if __name__ == "__main__":
