@@ -1,7 +1,15 @@
 #!/usr/bin/env python3
 """Round 09 · Week 2 exercises: git workflow rehearsal."""
 
+import subprocess
 from pathlib import Path
+
+def _repo_root() -> "Path":
+    return Path(__file__).resolve().parents[3]
+
+
+def mark(task_id: str) -> None:
+    subprocess.run(["bash", str(_repo_root() / "mark_done.sh"), task_id], check=False)
 
 
 def main() -> None:
@@ -21,6 +29,10 @@ def main() -> None:
     print("参考命令：")
     for command in commands:
         print("-", command)
+
+    mark("r09-w2-ex2")
+    input("请手动完成第2周自测后按回车继续...")
+    mark("r09-w2-self")
 
 
 if __name__ == "__main__":

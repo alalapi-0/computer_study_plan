@@ -3,6 +3,12 @@
 
 set -e
 
+REPO_ROOT="$(cd "$(dirname "$0")/../../.." && pwd)"
+
+mark() {
+  bash "$REPO_ROOT/mark_done.sh" "$1"
+}
+
 mkdir -p ~/cli-lab/round6/week2
 cd ~/cli-lab/round6/week2
 
@@ -22,3 +28,9 @@ ps aux | grep -E "sleep|bash" | grep -v grep || true
 echo "请手动尝试一次 nohup 或 tmux 后按回车继续..."
 read
 echo "Week 2 完成。"
+
+mark r06-w2-ex2
+
+echo "请手动完成第2周自测后按回车继续..."
+read
+mark r06-w2-self

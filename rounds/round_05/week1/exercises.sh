@@ -3,6 +3,12 @@
 
 set -e
 
+REPO_ROOT="$(cd "$(dirname "$0")/../../.." && pwd)"
+
+mark() {
+  bash "$REPO_ROOT/mark_done.sh" "$1"
+}
+
 mkdir -p ~/cli-lab/round5/week1
 cd ~/cli-lab/round5/week1
 
@@ -29,3 +35,9 @@ python3 binary_search_demo.py
 echo "请补充一个双指针或滑动窗口练习后按回车继续..."
 read
 echo "Week 1 完成。"
+
+mark r05-w1-ex1
+
+echo "请手动完成第1周自测后按回车继续..."
+read
+mark r05-w1-self

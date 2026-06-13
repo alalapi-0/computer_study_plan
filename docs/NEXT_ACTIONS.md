@@ -347,6 +347,24 @@
 
 ---
 
+## TASK-RR-27：Stage 1 工程线 · Round 05–21 进度系统接入
+
+- 状态：**done**（2026-06-13）
+- 背景：Round 05–21 最小骨架已展开，但 `progress.json` / `progress.html` 仅覆盖 Round 00–04，工程线进度跟踪存在断层。
+- 目标：为 Round 05–21 注册 `r05-*` … `r21-*` 任务；在 `progress.html` 的 `ROUNDS` 数组追加元数据；练习脚本接入 `mark_done.sh` 自动打卡。
+- 要修改：`progress.json`、`progress_data.js`、`progress.html`、`mark_done.sh`（round_id 解析）、Round 05–21 练习脚本；新增 `scripts/integrate_round_progress.py`。
+- 不要修改：不触碰 `rounds/round_00/`；不改 `records/` 真实学习记录；不引入新依赖。
+- 验收标准：`progress.json` 含 Round 05–21 任务；`bash mark_done.sh` 可识别；`progress.html` ROUNDS 共 22 项；练习脚本语法校验通过。
+- 风险：一次性改动文件过多导致遗漏；通过集成脚本 + 校验脚本降低风险。
+- 是否需要用户介入：否。
+- 实际产物：
+  - `scripts/integrate_round_progress.py`
+  - `progress.json` 新增 204 个 engineering 任务（总计 280）
+  - `progress.html` / `progress_data.js` 同步
+  - Round 05–06 `exercises.sh` / `final/*.sh` 与 Round 07–21 `exercises.py` / `final/*.py` 接入 `mark_done.sh`
+
+---
+
 # VPS 实操支线任务（编号 TASK-VPS-XX）
 
 > 主线 TASK-RR-XX 与 VPS 支线 TASK-VPS-XX **可并行推进**，编号空间互不冲突。
@@ -427,7 +445,7 @@ TASK-011 实际产物：
 ## 推荐下一步（按优先级）
 
 1. 运行 `python3 scripts/agent_gate.py --json` 查看下一项可自动推进任务（已跳过 RR-05/06/07/08）。
-2. （自动）Stage 1 Round 00–21 最小骨架已全部展开；下一候选见 `agent_gate --json`（可能为 VPS/历史 TASK 或无可自动项）。
+2. （自动）工程线 Round 00–21 进度已全部接入；下一候选：软考 `network.md` + `composition.md` 骨架，或 `plans/linux/` 软考 OS 对照笔记。
 3. （可选）用户自行恢复 RR-05 官网核验或 RR-08 作品集决策时，在队列中改回 `pending` 并移出 `SKIP_TASK_IDS`。
 
 > 主线推进、VPS 支线推进、考试日期录入**互不阻塞**；用户可根据当下心情与可用时间选择。

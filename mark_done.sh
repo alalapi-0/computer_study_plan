@@ -169,8 +169,10 @@ with open(js_path, "w", encoding="utf-8") as f:
 
 # 追加动作事件日志（Phase 2 原型，JSONL）
 def resolve_round_id(tid: str) -> str:
-    if tid.startswith("r02-"):
-        return "round_02"
+    import re
+    m = re.match(r"^r(\d{2})-", tid)
+    if m:
+        return f"round_{m.group(1)}"
     if tid.startswith(("w1-", "w2-", "w3-", "fin-")):
         return "round_00"
     return "unknown"

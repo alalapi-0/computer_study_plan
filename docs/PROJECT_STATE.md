@@ -916,3 +916,30 @@
 
 - `python3 scripts/agent_gate.py --verify`：通过。
 - Round 13–21 Python 练习脚本 `py_compile`：通过。
+
+## 38. 2026-06-13 TASK-RR-27 Round 05–21 进度系统接入
+
+### 38.1 本轮新增
+
+- 新增 `scripts/integrate_round_progress.py`（Round 05–21 进度集成自动化脚本）。
+
+### 38.2 本轮修改
+
+- `progress.json`：新增 Round 05–21 的 `r05-*` … `r21-*` 任务（+204，engineering lane，总计 280 任务）。
+- `progress_data.js`：与 `progress.json` 同步。
+- `progress.html`：`ROUNDS` 数组扩展至 Round 21（共 22 个 Round 面板）；卡片说明更新。
+- `mark_done.sh`：`resolve_round_id` 泛化为匹配所有 `rNN-*` 任务 ID。
+- Round 05–06 的 `exercises.sh` / `final/comprehensive_exercise.sh` 与 Round 07–21 的 `exercises.py` / `final/comprehensive_exercise.py`：接入 `mark_done.sh` 自动打卡。
+
+### 38.3 验证
+
+- `python3 scripts/integrate_round_progress.py`：已执行（幂等可重跑）。
+- `python3 scripts/agent_gate.py --verify`：通过。
+- `python3 scripts/generate_task_feedback.py`：通过（反馈覆盖 280 任务）。
+- `progress.html` ROUNDS 数组：22 项（Node 解析校验）。
+- Round 05/06 shell 与 Round 07/15/21 Python 脚本语法校验：通过。
+
+### 38.4 风险边界核对
+
+- 未改动 `rounds/round_00/`。
+- 未改动 `records/` 下真实学习记录（`task_feedback.json` 为原型输出，已同步扩展）。

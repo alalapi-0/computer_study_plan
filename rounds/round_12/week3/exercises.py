@@ -1,7 +1,15 @@
 #!/usr/bin/env python3
 """Round 12 · Week 3 exercises: logging rotation and cron entry stub."""
 
+import subprocess
 from pathlib import Path
+
+def _repo_root() -> "Path":
+    return Path(__file__).resolve().parents[3]
+
+
+def mark(task_id: str) -> None:
+    subprocess.run(["bash", str(_repo_root() / "mark_done.sh"), task_id], check=False)
 
 
 LOG_UTILS = '''"""Logging helpers for ai_prep_tool sandbox (Round 12)."""
@@ -47,6 +55,10 @@ def main() -> None:
 
     print("已生成:", base / "log_utils.py")
     print("已生成:", run_sh)
+
+    mark("r12-w3-ex3")
+    input("请手动完成第3周自测后按回车继续...")
+    mark("r12-w3-self")
 
 
 if __name__ == "__main__":

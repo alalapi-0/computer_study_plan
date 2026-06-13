@@ -2,7 +2,15 @@
 """Round 11 · Week 1 exercises: create SQLite schema."""
 
 import sqlite3
+import subprocess
 from pathlib import Path
+
+def _repo_root() -> "Path":
+    return Path(__file__).resolve().parents[3]
+
+
+def mark(task_id: str) -> None:
+    subprocess.run(["bash", str(_repo_root() / "mark_done.sh"), task_id], check=False)
 
 
 SCHEMA = """
@@ -28,6 +36,10 @@ def main() -> None:
 
     print("已初始化 SQLite:", db_path)
     print("runs 表已创建（若不存在）。")
+
+    mark("r11-w1-ex1")
+    input("请手动完成第1周自测后按回车继续...")
+    mark("r11-w1-self")
 
 
 if __name__ == "__main__":

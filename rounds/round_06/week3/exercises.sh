@@ -3,6 +3,12 @@
 
 set -e
 
+REPO_ROOT="$(cd "$(dirname "$0")/../../.." && pwd)"
+
+mark() {
+  bash "$REPO_ROOT/mark_done.sh" "$1"
+}
+
 mkdir -p ~/cli-lab/round6/week3
 cd ~/cli-lab/round6/week3
 
@@ -19,3 +25,9 @@ echo "  crontab -e"
 echo "请手动写出一条测试 cron 表达式后按回车继续..."
 read
 echo "Week 3 完成。"
+
+mark r06-w3-ex3
+
+echo "请手动完成第3周自测后按回车继续..."
+read
+mark r06-w3-self

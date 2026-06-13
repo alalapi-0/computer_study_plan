@@ -3,7 +3,15 @@
 
 import sqlite3
 from datetime import datetime
+import subprocess
 from pathlib import Path
+
+def _repo_root() -> "Path":
+    return Path(__file__).resolve().parents[3]
+
+
+def mark(task_id: str) -> None:
+    subprocess.run(["bash", str(_repo_root() / "mark_done.sh"), task_id], check=False)
 
 
 DB_PATH = Path.home() / "cli-lab" / "round8" / "week2" / "runs.db"
@@ -43,6 +51,10 @@ def main() -> None:
 
     print("数据库位置:", DB_PATH)
     print("当前 runs 记录数:", count)
+
+    mark("r08-w2-ex2")
+    input("请手动完成第2周自测后按回车继续...")
+    mark("r08-w2-self")
 
 
 if __name__ == "__main__":
