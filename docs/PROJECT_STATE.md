@@ -916,3 +916,19 @@
 
 - `python3 scripts/agent_gate.py --verify`：通过。
 - Round 13–21 Python 练习脚本 `py_compile`：通过。
+
+## 38. 2026-06-15 TASK-RR-26 Round 05 接入进度系统
+
+### 38.1 本轮修改
+
+- `progress.json`：新增 Round 05 的 `r05-*` 任务 ID（12 项，lane=`engineering`）。
+- `progress.html`：新增 Round 05 面板与任务元数据。
+- `rounds/round_05/*/exercises.sh` 与 `final/comprehensive_exercise.sh`：接入 `mark_done.sh` 自动打卡。
+- `README.md`：区分「实操目录已展开」与「进度看板已接入」范围。
+
+### 38.2 验证
+
+- `bash -n rounds/round_05/**/exercises.sh` 与 `final/comprehensive_exercise.sh`：通过。
+- `python3 scripts/check_protocol_sync.py`：通过。
+- `python3 scripts/validate_learning_data.py`：通过。
+- `bash mark_done.sh`：可识别 `r05-*` 任务。

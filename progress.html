@@ -541,8 +541,37 @@ const ROUNDS = [
         { id:"r04-fin-acc1",  type:"test",     title:"验收：解释 dict/set/deque 场景",   cmd:"自动", file:"round_04.md" },
       ]}
     ]
+  },
+  {
+    id: "round_05",
+    title: "Round 05 · 高频算法模式",
+    lane: "engineering",
+    difficulty: "⭐⭐⭐☆☆",
+    duration: "3 周",
+    weeks: [
+      { id: "round05-week1", title: "第 1 周：双指针 / 滑动窗口 / 二分", tasks: [
+        { id:"r05-w1-read", type:"reading",  title:"阅读 week1/notes.md",                cmd:"bash mark_done.sh r05-w1-read", file:"rounds/round_05/week1/notes.md" },
+        { id:"r05-w1-ex1",  type:"exercise", title:"练习1：二分查找 demo",                 cmd:"自动", file:"rounds/round_05/week1/exercises.sh" },
+        { id:"r05-w1-self", type:"test",     title:"第1周自测",                          cmd:"自动", file:"rounds/round_05/week1/exercises.sh" },
+      ]},
+      { id: "round05-week2", title: "第 2 周：分治 / DFS / BFS / 回溯", tasks: [
+        { id:"r05-w2-read", type:"reading",  title:"阅读 week2/notes.md",                cmd:"bash mark_done.sh r05-w2-read", file:"rounds/round_05/week2/notes.md" },
+        { id:"r05-w2-ex2",  type:"exercise", title:"练习2：DFS 遍历 demo",                 cmd:"自动", file:"rounds/round_05/week2/exercises.sh" },
+        { id:"r05-w2-self", type:"test",     title:"第2周自测",                          cmd:"自动", file:"rounds/round_05/week2/exercises.sh" },
+      ]},
+      { id: "round05-week3", title: "第 3 周：贪心 / DP 入门", tasks: [
+        { id:"r05-w3-read", type:"reading",  title:"阅读 week3/notes.md",                cmd:"bash mark_done.sh r05-w3-read", file:"rounds/round_05/week3/notes.md" },
+        { id:"r05-w3-ex3",  type:"exercise", title:"练习3：爬楼梯 DP demo",                cmd:"自动", file:"rounds/round_05/week3/exercises.sh" },
+        { id:"r05-w3-self", type:"test",     title:"第3周自测",                          cmd:"自动", file:"rounds/round_05/week3/exercises.sh" },
+      ]},
+      { id: "round05-final", title: "最终验收", tasks: [
+        { id:"r05-fin-comp",  type:"exercise", title:"综合练习：算法模式选择器",           cmd:"自动", file:"rounds/round_05/final/comprehensive_exercise.sh" },
+        { id:"r05-fin-sheet", type:"output",   title:"完成 Round 05 算法模式小抄",       cmd:"自动", file:"rounds/round_05/final/algorithm_patterns_cheatsheet.md" },
+        { id:"r05-fin-acc1",  type:"test",     title:"验收：解释 6 类算法模式判断习惯",   cmd:"自动", file:"round_05.md" },
+      ]}
+    ]
   }
-  // 后续 Round 在落地为实操目录时按本结构追加；当前已展开 Round 00、Round 01、Round 02、Round 03、Round 04。
+  // 后续 Round 在落地为实操目录时按本结构追加；进度已接入 Round 00–05。
 ];
 
 // ============================================================

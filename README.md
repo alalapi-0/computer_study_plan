@@ -264,7 +264,7 @@ cd ~/PycharmProjects/computer_study_plan
 - 考试倒计时（localStorage）
 - 阶段进度（Stage 0–7）
 - 当前薄弱项（自动识别完成率 < 30% 且任务数 ≥ 5 的 lane）
-- 按 lane / Round 浏览（当前已展开 Round 00–Round 21）
+- 按 lane / Round 浏览（实操目录已展开 Round 00–21；进度看板已接入 Round 00–05）
 
 ### 6.4 进度系统 CLI
 

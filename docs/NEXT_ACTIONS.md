@@ -424,10 +424,36 @@ TASK-011 实际产物：
 
 ---
 
+## TASK-RR-27：Stage 1 增强 · Round 06 接入进度系统
+
+- 状态：**pending**
+- 背景：Round 06 最小骨架已存在，进度系统尚未注册 `r06-*` 任务。
+- 目标：将 Round 06 纳入进度闭环（任务注册 + 看板展示 + 练习自动打卡）。
+- 要修改：`progress.json`、`progress.html`、`rounds/round_06/` 练习脚本、`README.md`。
+- 不要修改：不触碰 `rounds/round_00/`；不改 `records/` 真实学习记录。
+- 验收标准：`mark_done.sh` 可识别 `r06-*`；协议与学习数据校验通过。
+- 是否需要用户介入：否。
+
+---
+
+## TASK-RR-26：Stage 1 增强 · Round 05 接入进度系统
+
+- 状态：**done**（2026-06-15）
+- 背景：Round 05 最小骨架已存在，但 `progress.json` / `progress.html` 未注册 `r05-*` 任务，练习脚本未接入 `mark_done.sh`。
+- 目标：将 Round 05 纳入进度闭环（任务注册 + 看板展示 + 练习自动打卡）。
+- 是否需要用户介入：否。
+- 实际产物：
+  - `progress.json` 追加 12 个 `r05-*` 任务（lane=`engineering`）
+  - `progress.html` 新增 Round 05 面板
+  - `rounds/round_05/*/exercises.sh` 与 `final/comprehensive_exercise.sh` 接入 `mark_done.sh`
+  - `rounds/round_05/README.md` 更新使用说明
+
+---
+
 ## 推荐下一步（按优先级）
 
-1. 运行 `python3 scripts/agent_gate.py --json` 查看下一项可自动推进任务（已跳过 RR-05/06/07/08）。
-2. （自动）Stage 1 Round 00–21 最小骨架已全部展开；下一候选见 `agent_gate --json`（可能为 VPS/历史 TASK 或无可自动项）。
+1. **TASK-RR-27**（候选）：Round 06 接入进度系统（模式同 RR-26）。
+2. 运行 `python3 scripts/agent_gate.py --json --no-require-clean` 查看下一项可自动推进任务。
 3. （可选）用户自行恢复 RR-05 官网核验或 RR-08 作品集决策时，在队列中改回 `pending` 并移出 `SKIP_TASK_IDS`。
 
 > 主线推进、VPS 支线推进、考试日期录入**互不阻塞**；用户可根据当下心情与可用时间选择。

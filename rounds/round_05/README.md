@@ -29,4 +29,4 @@ round_05/
 
 1. 每周先阅读 `weekN/notes.md`，再执行 `weekN/exercises.sh`。
 2. 全部练习在 `~/cli-lab/round5` 沙盒执行，不污染仓库目录。
-3. 本轮先落最小骨架，后续按需要接入 `r05-*` 进度任务。
+3. 阅读笔记后执行 `bash mark_done.sh r05-wX-read`；练习脚本会自动打卡 `r05-*` 任务。

@@ -3,6 +3,12 @@
 
 set -e
 
+REPO_ROOT="$(cd "$(dirname "$0")/../../.." && pwd)"
+
+mark() {
+  bash "$REPO_ROOT/mark_done.sh" "$1"
+}
+
 mkdir -p ~/cli-lab/round5/final
 cd ~/cli-lab/round5/final
 
@@ -34,6 +40,11 @@ EOF
 
 python3 pattern_selector_demo.py
 
+mark r05-fin-comp
+
 echo "请完成一题算法模式归类并记录结论后按回车..."
 read
+mark r05-fin-sheet
+mark r05-fin-acc1
+
 echo "Final 完成。"
