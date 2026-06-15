@@ -42,14 +42,14 @@
 
 ## MCP Tools
 
-当前项目要求启用以下 Workspace MCP Servers：
+当前项目运行时需要以下 MCP Servers（通用 5 项由 Cursor Home `~/.cursor/mcp.json` 提供，本项目仅配置 `filesystem`）：
 
-- chrome-devtools
-- context7
-- filesystem
-- github
-- playwright
-- stitch
+- chrome-devtools（全局）
+- context7（全局）
+- filesystem（项目级）
+- github（全局）
+- playwright（全局）
+- stitch（全局）
 
 用途：
 
@@ -66,7 +66,7 @@
 
 涉及页面、审核台、生成结果、预览、发布流程的任务，必须使用 chrome-devtools 或 playwright 进行真实浏览器检查。
 
-配置位于 `.cursor/mcp.json`；可运行 `npm run check:mcp` 或 `node scripts/check_mcp_config.js` 验证；CLI 层状态另见 `npm run check:cursor-mcp`。修改后可能需要重启 Cursor 或重新加载窗口。
+项目级配置位于 `.cursor/mcp.json`（仅 `filesystem`）；通用 server 见 Cursor Home。可运行 `npm run check:mcp` 或 `node scripts/check_mcp_config.js` 验证；CLI 层状态另见 `npm run check:cursor-mcp`。修改后可能需要重启 Cursor 或重新加载窗口。
 
 ## Cursor Browser UI Workflow
 
@@ -103,3 +103,11 @@ Cursor 执行 UI 优化（如 `progress.html`）时必须遵守：
 - 需要修改 GitHub remote 或认证。
 - 需要把任何院校 / 考试 / 考纲信息写入仓库但无法访问最新官方源。
 - push 失败、merge conflict、验证连续失败，或任务边界不清。
+
+## Workspace Tooling Standard
+
+本项目的通用 MCP 工具（chrome-devtools / playwright / context7 / github / stitch）与跨项目分工规则
+遵循工作区级标准，详见：
+`/Users/alalapi/PycharmProjects/.agent_workspace/docs/AGENT_TOOLING_STANDARD.md`
+
+本项目专属、不可全局化的工具（如有）：见本文件 MCP 配置章节。

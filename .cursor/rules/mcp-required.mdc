@@ -6,18 +6,18 @@ alwaysApply: true
 
 # MCP Required
 
-当前仓库默认需要以下 6 个 Workspace MCP Servers：
+当前仓库运行时需要以下 6 个 MCP Servers：
 
-- chrome-devtools
-- context7
-- filesystem
-- github
-- playwright
-- stitch
+- chrome-devtools（Cursor Home 全局）
+- context7（Cursor Home 全局）
+- filesystem（本项目 `.cursor/mcp.json`）
+- github（Cursor Home 全局）
+- playwright（Cursor Home 全局）
+- stitch（Cursor Home 全局）
 
 ## 启动前检查
 
-Agent 开始自动推进前，必须确认 `.cursor/mcp.json` 存在且包含上述 server，并运行 `node scripts/check_mcp_config.js`（或 `npm run check:mcp`）验证配置。
+Agent 开始自动推进前，必须确认 Cursor Home（`~/.cursor/mcp.json`）已配置 5 个通用 server，本项目 `.cursor/mcp.json` 仅保留 `filesystem`，并运行 `node scripts/check_mcp_config.js`（或 `npm run check:mcp`）验证配置。
 
 若某个 MCP 不可用，记录原因，不要无意义反复安装；使用可用替代方案继续推进。
 
