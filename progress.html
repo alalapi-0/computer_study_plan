@@ -360,7 +360,7 @@
 <!-- ── Block 6: 按 lane / Round 浏览 ── -->
 <div class="card">
   <h2>📦 按主线查看 Round</h2>
-  <div class="card-sub">按 lane 切换，查看每条主线下的 Round 任务清单。当前已展开 Round 00、Round 01、Round 02、Round 03、Round 04。</div>
+  <div class="card-sub" id="roundBrowseSub">按 lane 切换查看 Round。轮次状态由 <code style="background:rgba(255,255,255,0.08);padding:0.05em 0.35em;border-radius:4px;font-family:monospace">progress_rounds.json</code> 提供（运行 <code style="background:rgba(255,255,255,0.08);padding:0.05em 0.35em;border-radius:4px;font-family:monospace">python3 scripts/generate_progress_rounds.py</code> 同步）。</div>
   <div class="lane-tabs" id="laneTabs"></div>
   <div class="round-tabs" id="roundTabs"></div>
   <div id="panels"></div>
@@ -374,176 +374,43 @@
 
 </div> <!-- /container -->
 
+<script src="progress_rounds.js"></script>
 <script src="progress_data.js"></script>
 <script>
 // ============================================================
-// 静态元数据：Round 列表（每个 Round 必须有 lane 字段）
-// 这是 progress.html 的本地"知识源"，与 progress.json 中的任务 ID 通过 task_id 对齐。
+// Round 元数据：从 progress_rounds.json / progress_rounds.js 加载（勿在此硬编码轮次列表）
+// 生成：python3 scripts/generate_progress_rounds.py
 // ============================================================
-const ROUNDS = [
-  {
-    id: "round_00",
-    title: "Round 00 · Terminal 初见",
-    lane: "engineering",
-    difficulty: "⭐☆☆☆☆",
-    duration: "3 周",
-    weeks: [
-      { id: "week1", title: "第 1 周：建立感觉（pwd / ls / cd）", tasks: [
-        { id:"w1-read",  type:"reading",  title:"阅读 week1/notes.md",                   cmd:"bash mark_done.sh w1-read",  file:"rounds/round_00/week1/notes.md" },
-        { id:"w1-ex1",   type:"exercise", title:"练习1：认识当前位置",                    cmd:"自动",  file:"rounds/round_00/week1/exercises.sh" },
-        { id:"w1-ex2",   type:"exercise", title:"练习2：创建子目录并切换",                cmd:"自动",  file:"rounds/round_00/week1/exercises.sh" },
-        { id:"w1-ex3",   type:"exercise", title:"练习3：绝对路径 vs 相对路径",             cmd:"自动",  file:"rounds/round_00/week1/exercises.sh" },
-        { id:"w1-self",  type:"test",     title:"第1周自测",                              cmd:"自动",  file:"rounds/round_00/week1/exercises.sh" },
-      ]},
-      { id: "week2", title: "第 2 周：创建东西（mkdir / touch / cat）", tasks: [
-        { id:"w2-read",  type:"reading",  title:"阅读 week2/notes.md",             cmd:"bash mark_done.sh w2-read",  file:"rounds/round_00/week2/notes.md" },
-        { id:"w2-ex4",   type:"exercise", title:"练习4：创建更多子目录",              cmd:"自动",  file:"rounds/round_00/week2/exercises.sh" },
-        { id:"w2-ex5",   type:"exercise", title:"练习5：创建空文件",                 cmd:"自动",  file:"rounds/round_00/week2/exercises.sh" },
-        { id:"w2-ex6",   type:"exercise", title:"练习6：用 cat 查看空文件",          cmd:"自动",  file:"rounds/round_00/week2/exercises.sh" },
-        { id:"w2-ex7",   type:"exercise", title:"练习7：echo + cat",                cmd:"自动",  file:"rounds/round_00/week2/exercises.sh" },
-        { id:"w2-self",  type:"test",     title:"第2周自测",                        cmd:"自动",  file:"rounds/round_00/week2/exercises.sh" },
-      ]},
-      { id: "week3", title: "第 3 周：学会自查（man）", tasks: [
-        { id:"w3-read",  type:"reading",  title:"阅读 week3/notes.md",             cmd:"bash mark_done.sh w3-read",  file:"rounds/round_00/week3/notes.md" },
-        { id:"w3-ex8",   type:"exercise", title:"练习8：man ls", cmd:"自动", file:"rounds/round_00/week3/exercises.sh" },
-        { id:"w3-ex9",   type:"exercise", title:"练习9：man pwd/mkdir/touch/cat", cmd:"自动", file:"rounds/round_00/week3/exercises.sh" },
-        { id:"w3-ex10",  type:"exercise", title:"练习10：man man",               cmd:"自动", file:"rounds/round_00/week3/exercises.sh" },
-        { id:"w3-self",  type:"test",     title:"第3周自测",                     cmd:"自动", file:"rounds/round_00/week3/exercises.sh" },
-      ]},
-      { id: "final", title: "最终验收", tasks: [
-        { id:"fin-comp",   type:"exercise", title:"综合练习",                            cmd:"自动", file:"rounds/round_00/final/comprehensive_exercise.sh" },
-        { id:"fin-sheet",  type:"output",   title:"完成命令小抄",                         cmd:"自动", file:"rounds/round_00/final/command_cheatsheet.md" },
-        { id:"fin-acc1",   type:"test",     title:"验收：Terminal 与 Shell 的区别",       cmd:"自动", file:"round_00.md" },
-        { id:"fin-acc2",   type:"test",     title:"验收：能用 7 个命令",                 cmd:"自动", file:"round_00.md" },
-        { id:"fin-acc3",   type:"output",   title:"验收：cli-lab 目录与小抄存在",          cmd:"自动", file:"round_00.md" },
-      ]}
-    ]
-  },
-  {
-    id: "round_01",
-    title: "Round 01 · 文件系统与基础命令",
-    lane: "engineering",
-    difficulty: "⭐☆☆☆☆",
-    duration: "3 周",
-    weeks: [
-      { id: "round01-week1", title: "第 1 周：路径感", tasks: [
-        { id:"r01-w1-read", type:"reading",  title:"阅读 week1/notes.md",      cmd:"bash mark_done.sh r01-w1-read", file:"rounds/round_01/week1/notes.md" },
-        { id:"r01-w1-ex1",  type:"exercise", title:"练习1：路径与目录切换",      cmd:"自动", file:"rounds/round_01/week1/exercises.sh" },
-        { id:"r01-w1-self", type:"test",     title:"第1周自测",                cmd:"自动", file:"rounds/round_01/week1/exercises.sh" },
-      ]},
-      { id: "round01-week2", title: "第 2 周：文件操作", tasks: [
-        { id:"r01-w2-read", type:"reading",  title:"阅读 week2/notes.md",      cmd:"bash mark_done.sh r01-w2-read", file:"rounds/round_01/week2/notes.md" },
-        { id:"r01-w2-ex2",  type:"exercise", title:"练习2：创建与整理文件",      cmd:"自动", file:"rounds/round_01/week2/exercises.sh" },
-        { id:"r01-w2-self", type:"test",     title:"第2周自测",                cmd:"自动", file:"rounds/round_01/week2/exercises.sh" },
-      ]},
-      { id: "round01-week3", title: "第 3 周：查看文本与帮助", tasks: [
-        { id:"r01-w3-read", type:"reading",  title:"阅读 week3/notes.md",      cmd:"bash mark_done.sh r01-w3-read", file:"rounds/round_01/week3/notes.md" },
-        { id:"r01-w3-ex3",  type:"exercise", title:"练习3：文本查看与 man",      cmd:"自动", file:"rounds/round_01/week3/exercises.sh" },
-        { id:"r01-w3-self", type:"test",     title:"第3周自测",                cmd:"自动", file:"rounds/round_01/week3/exercises.sh" },
-      ]},
-      { id: "round01-final", title: "最终验收", tasks: [
-        { id:"r01-fin-comp",  type:"exercise", title:"综合练习：文件实验室",       cmd:"自动", file:"rounds/round_01/final/comprehensive_exercise.sh" },
-        { id:"r01-fin-sheet", type:"output",   title:"完成 Round 01 命令小抄",    cmd:"自动", file:"rounds/round_01/final/command_cheatsheet.md" },
-        { id:"r01-fin-acc1",  type:"test",     title:"验收：解释基础命令与路径概念", cmd:"自动", file:"round_01.md" },
-      ]}
-    ]
-  },
-  {
-    id: "round_02",
-    title: "Round 02 · Shell、管道、Git 最小工作流",
-    lane: "engineering",
-    difficulty: "⭐⭐☆☆☆",
-    duration: "3 周",
-    weeks: [
-      { id: "round02-week1", title: "第 1 周：重定向与管道", tasks: [
-        { id:"r02-w1-read",  type:"reading",  title:"阅读 week1/notes.md",               cmd:"bash mark_done.sh r02-w1-read", file:"rounds/round_02/week1/notes.md" },
-        { id:"r02-w1-ex1",   type:"exercise", title:"练习1：覆盖与追加",                  cmd:"自动", file:"rounds/round_02/week1/exercises.sh" },
-        { id:"r02-w1-ex2",   type:"exercise", title:"练习2：去重统计",                    cmd:"自动", file:"rounds/round_02/week1/exercises.sh" },
-        { id:"r02-w1-ex3",   type:"exercise", title:"练习3：日志过滤",                    cmd:"自动", file:"rounds/round_02/week1/exercises.sh" },
-        { id:"r02-w1-self",  type:"test",     title:"第1周自测",                          cmd:"自动", file:"rounds/round_02/week1/exercises.sh" },
-      ]},
-      { id: "round02-week2", title: "第 2 周：最小 shell 脚本", tasks: [
-        { id:"r02-w2-read",  type:"reading",  title:"阅读 week2/notes.md",               cmd:"bash mark_done.sh r02-w2-read", file:"rounds/round_02/week2/notes.md" },
-        { id:"r02-w2-ex4",   type:"exercise", title:"练习4：count_errors.sh",             cmd:"自动", file:"rounds/round_02/week2/exercises.sh" },
-        { id:"r02-w2-ex5",   type:"exercise", title:"练习5：count_labels.sh",             cmd:"自动", file:"rounds/round_02/week2/exercises.sh" },
-        { id:"r02-w2-ex6",   type:"exercise", title:"练习6：show_args.sh",                cmd:"自动", file:"rounds/round_02/week2/exercises.sh" },
-        { id:"r02-w2-self",  type:"test",     title:"第2周自测",                          cmd:"自动", file:"rounds/round_02/week2/exercises.sh" },
-      ]},
-      { id: "round02-week3", title: "第 3 周：Git 最小工作流", tasks: [
-        { id:"r02-w3-read",  type:"reading",  title:"阅读 week3/notes.md",               cmd:"bash mark_done.sh r02-w3-read", file:"rounds/round_02/week3/notes.md" },
-        { id:"r02-w3-ex7",   type:"exercise", title:"练习7：初始化与首次提交",             cmd:"自动", file:"rounds/round_02/week3/exercises.sh" },
-        { id:"r02-w3-ex8",   type:"exercise", title:"练习8：第二次提交",                  cmd:"自动", file:"rounds/round_02/week3/exercises.sh" },
-        { id:"r02-w3-ex9",   type:"exercise", title:"练习9：新增文件提交",                 cmd:"自动", file:"rounds/round_02/week3/exercises.sh" },
-        { id:"r02-w3-self",  type:"test",     title:"第3周自测",                          cmd:"自动", file:"rounds/round_02/week3/exercises.sh" },
-      ]},
-      { id: "round02-final", title: "最终验收", tasks: [
-        { id:"r02-fin-comp",  type:"exercise", title:"综合练习：日志过滤 + 迷你 Git 仓库", cmd:"自动", file:"rounds/round_02/final/comprehensive_exercise.sh" },
-        { id:"r02-fin-sheet", type:"output",   title:"完成 Round 02 命令小抄",            cmd:"自动", file:"rounds/round_02/final/command_cheatsheet.md" },
-        { id:"r02-fin-acc1",  type:"test",     title:"验收：解释 >、>>、| 区别",          cmd:"自动", file:"round_02.md" },
-        { id:"r02-fin-acc2",  type:"output",   title:"验收：完成 3 次 Git 提交并解释",    cmd:"自动", file:"round_02.md" },
-      ]}
-    ]
-  },
-  {
-    id: "round_03",
-    title: "Round 03 · Python 基础与复杂度入门",
-    lane: "engineering",
-    difficulty: "⭐⭐☆☆☆",
-    duration: "3 周",
-    weeks: [
-      { id: "round03-week1", title: "第 1 周：Python 基础语法", tasks: [
-        { id:"r03-w1-read", type:"reading",  title:"阅读 week1/notes.md",                cmd:"bash mark_done.sh r03-w1-read", file:"rounds/round_03/week1/notes.md" },
-        { id:"r03-w1-ex1",  type:"exercise", title:"练习1：变量、循环与函数",              cmd:"自动", file:"rounds/round_03/week1/exercises.sh" },
-        { id:"r03-w1-self", type:"test",     title:"第1周自测",                          cmd:"自动", file:"rounds/round_03/week1/exercises.sh" },
-      ]},
-      { id: "round03-week2", title: "第 2 周：list/dict 与函数拆分", tasks: [
-        { id:"r03-w2-read", type:"reading",  title:"阅读 week2/notes.md",                cmd:"bash mark_done.sh r03-w2-read", file:"rounds/round_03/week2/notes.md" },
-        { id:"r03-w2-ex2",  type:"exercise", title:"练习2：标签统计函数",                  cmd:"自动", file:"rounds/round_03/week2/exercises.sh" },
-        { id:"r03-w2-self", type:"test",     title:"第2周自测",                          cmd:"自动", file:"rounds/round_03/week2/exercises.sh" },
-      ]},
-      { id: "round03-week3", title: "第 3 周：复杂度观察", tasks: [
-        { id:"r03-w3-read", type:"reading",  title:"阅读 week3/notes.md",                cmd:"bash mark_done.sh r03-w3-read", file:"rounds/round_03/week3/notes.md" },
-        { id:"r03-w3-ex3",  type:"exercise", title:"练习3：线性与平方级对比",              cmd:"自动", file:"rounds/round_03/week3/exercises.sh" },
-        { id:"r03-w3-self", type:"test",     title:"第3周自测",                          cmd:"自动", file:"rounds/round_03/week3/exercises.sh" },
-      ]},
-      { id: "round03-final", title: "最终验收", tasks: [
-        { id:"r03-fin-comp",  type:"exercise", title:"综合练习：mini analyzer",          cmd:"自动", file:"rounds/round_03/final/comprehensive_exercise.sh" },
-        { id:"r03-fin-sheet", type:"output",   title:"完成 Round 03 复杂度小抄",         cmd:"自动", file:"rounds/round_03/final/complexity_cheatsheet.md" },
-        { id:"r03-fin-acc1",  type:"test",     title:"验收：解释 O(n) 与 O(n^2) 差异",   cmd:"自动", file:"round_03.md" },
-      ]}
-    ]
-  },
-  {
-    id: "round_04",
-    title: "Round 04 · 核心数据结构",
-    lane: "engineering",
-    difficulty: "⭐⭐⭐☆☆",
-    duration: "3 周",
-    weeks: [
-      { id: "round04-week1", title: "第 1 周：列表与顺序存储", tasks: [
-        { id:"r04-w1-read", type:"reading",  title:"阅读 week1/notes.md",                cmd:"bash mark_done.sh r04-w1-read", file:"rounds/round_04/week1/notes.md" },
-        { id:"r04-w1-ex1",  type:"exercise", title:"练习1：列表统计与访问",                cmd:"自动", file:"rounds/round_04/week1/exercises.sh" },
-        { id:"r04-w1-self", type:"test",     title:"第1周自测",                          cmd:"自动", file:"rounds/round_04/week1/exercises.sh" },
-      ]},
-      { id: "round04-week2", title: "第 2 周：栈与队列", tasks: [
-        { id:"r04-w2-read", type:"reading",  title:"阅读 week2/notes.md",                cmd:"bash mark_done.sh r04-w2-read", file:"rounds/round_04/week2/notes.md" },
-        { id:"r04-w2-ex2",  type:"exercise", title:"练习2：stack/queue 基础操作",         cmd:"自动", file:"rounds/round_04/week2/exercises.sh" },
-        { id:"r04-w2-self", type:"test",     title:"第2周自测",                          cmd:"自动", file:"rounds/round_04/week2/exercises.sh" },
-      ]},
-      { id: "round04-week3", title: "第 3 周：哈希与去重", tasks: [
-        { id:"r04-w3-read", type:"reading",  title:"阅读 week3/notes.md",                cmd:"bash mark_done.sh r04-w3-read", file:"rounds/round_04/week3/notes.md" },
-        { id:"r04-w3-ex3",  type:"exercise", title:"练习3：dict/set 统计与去重",          cmd:"自动", file:"rounds/round_04/week3/exercises.sh" },
-        { id:"r04-w3-self", type:"test",     title:"第3周自测",                          cmd:"自动", file:"rounds/round_04/week3/exercises.sh" },
-      ]},
-      { id: "round04-final", title: "最终验收", tasks: [
-        { id:"r04-fin-comp",  type:"exercise", title:"综合练习：data toolkit",           cmd:"自动", file:"rounds/round_04/final/comprehensive_exercise.sh" },
-        { id:"r04-fin-sheet", type:"output",   title:"完成 Round 04 数据结构小抄",       cmd:"自动", file:"rounds/round_04/final/complexity_cheatsheet.md" },
-        { id:"r04-fin-acc1",  type:"test",     title:"验收：解释 dict/set/deque 场景",   cmd:"自动", file:"round_04.md" },
-      ]}
-    ]
+let ROUNDS = [];
+
+async function loadRoundsMeta() {
+  if (window.PROGRESS_ROUNDS && Array.isArray(window.PROGRESS_ROUNDS.rounds)) {
+    ROUNDS = window.PROGRESS_ROUNDS.rounds;
+    return;
   }
-  // 后续 Round 在落地为实操目录时按本结构追加；当前已展开 Round 00、Round 01、Round 02、Round 03、Round 04。
-];
+  if (window.location.protocol !== "file:") {
+    try {
+      const res = await fetch("progress_rounds.json?_=" + Date.now());
+      if (res.ok) {
+        const data = await res.json();
+        ROUNDS = data.rounds || [];
+        return;
+      }
+    } catch (e) { /* fall through */ }
+  }
+  ROUNDS = [];
+}
+
+function updateRoundBrowseSub() {
+  const el = document.getElementById("roundBrowseSub");
+  if (!el) return;
+  const linked = ROUNDS.filter(r => r.progress_linked).map(r => r.id.replace("round_", ""));
+  const scaffold = ROUNDS.filter(r => r.scaffold_only).map(r => r.id.replace("round_", ""));
+  const linkedTxt = linked.length ? `进度已接入 Round ${linked.join("、")}` : "尚无进度接入轮次";
+  const scaffoldTxt = scaffold.length ? `仅骨架 Round ${scaffold.join("、")}` : "";
+  el.textContent = `按 lane 切换。${linkedTxt}${scaffoldTxt ? "；" + scaffoldTxt : ""}。状态扫描：python3 scripts/round_status.py`;
+}
+
 
 // ============================================================
 // Stage 与 lane 的映射（基于 docs/STAGE_PLAN.md）
@@ -646,6 +513,7 @@ function laneStats(laneKey) {
 // Render
 // ============================================================
 function render() {
+  updateRoundBrowseSub();
   renderGlobal();
   renderLanes();
   renderStages();
@@ -756,21 +624,23 @@ function renderRoundsForLane(laneKey) {
 
   const laneRounds = ROUNDS.filter(r => r.lane === laneKey);
   if (!laneRounds.length) {
-    panelsEl.innerHTML = `<div class="empty-state">本主线下尚未注册任何 Round。可在 progress.json 注册任务，或在 progress.html 的 ROUNDS 数组追加 Round 元数据。</div>`;
+    panelsEl.innerHTML = `<div class="empty-state">本主线下尚未注册任何 Round。运行 <code>python3 scripts/generate_progress_rounds.py</code> 同步 <code>progress_rounds.json</code>。</div>`;
     return;
   }
 
   const col = getCollapsed();
 
   laneRounds.forEach(round => {
-    const allTasks  = round.weeks.flatMap(w => w.tasks);
+    const weeks = round.weeks || [];
+    const allTasks  = weeks.flatMap(w => w.tasks || []);
     const doneTasks = allTasks.filter(t => isTaskDone(t.id));
     const allDone   = doneTasks.length === allTasks.length && allTasks.length > 0;
     const pct = allTasks.length ? Math.round(doneTasks.length / allTasks.length * 100) : 0;
+    const isScaffold = round.scaffold_only || weeks.length === 0;
 
     const tab = document.createElement("button");
     tab.className = "tab-btn" + (allDone ? " done" : "") + (round.id === activeRound ? " active" : "");
-    tab.textContent = round.title;
+    tab.textContent = isScaffold ? `${round.title}（骨架）` : round.title;
     tab.addEventListener("click", () => { activeRound = round.id; render(); });
     tabsEl.appendChild(tab);
 
@@ -784,16 +654,31 @@ function renderRoundsForLane(laneKey) {
           <span class="badge lane">${round.lane}</span>
           <span class="badge">${round.difficulty}</span>
           <span class="badge blue">${round.duration}</span>
-          <span class="badge green">${doneTasks.length}/${allTasks.length} 完成</span>
+          <span class="badge green">${isScaffold ? "未接入进度" : `${doneTasks.length}/${allTasks.length} 完成`}</span>
         </div>
       </div>
       <div class="round-progress-bar">
         <div class="bar-wrap" style="flex:1"><div class="bar-fill" style="width:${pct}%"></div></div>
-        <span class="rp-text">${pct}%</span>
+        <span class="rp-text">${isScaffold ? "—" : pct + "%"}</span>
       </div>
     `;
 
-    round.weeks.forEach(week => {
+    if (isScaffold) {
+      const readme = round.readme || `rounds/${round.id}/README.md`;
+      const sandbox = `~/cli-lab/round${round.id.replace("round_", "")}`;
+      const note = document.createElement("div");
+      note.className = "empty-state";
+      note.innerHTML = `
+        本轮为<strong>最小实操骨架</strong>，尚未接入 <code>progress.json</code> 任务打卡。<br>
+        阅读 <code>${readme}</code>，在 <code>${sandbox}</code> 沙盒练习。<br>
+        接入进度见 <code>CONVERSION_PROTOCOL.md</code> §8；状态扫描 <code>python3 scripts/round_status.py</code>。
+      `;
+      panel.appendChild(note);
+      panelsEl.appendChild(panel);
+      return;
+    }
+
+    weeks.forEach(week => {
       const weekDone  = week.tasks.filter(t => isTaskDone(t.id)).length;
       const weekTotal = week.tasks.length;
       const weekAllDone  = weekDone === weekTotal && weekTotal > 0;
@@ -914,12 +799,12 @@ function updateCountdowns() {
 // ============================================================
 function expandAll() {
   const c = getCollapsed();
-  ROUNDS.forEach(r => r.weeks.forEach(w => { c[w.id] = false; }));
+  ROUNDS.forEach(r => (r.weeks || []).forEach(w => { c[w.id] = false; }));
   setCollapsed(c); render();
 }
 function collapseAll() {
   const c = getCollapsed();
-  ROUNDS.forEach(r => r.weeks.forEach(w => { c[w.id] = true; }));
+  ROUNDS.forEach(r => (r.weeks || []).forEach(w => { c[w.id] = true; }));
   setCollapsed(c); render();
 }
 
@@ -933,12 +818,13 @@ if (window.location.protocol === "file:") {
   document.addEventListener("DOMContentLoaded", () => {
     const btn = document.getElementById("refreshBtn");
     btn.onclick = () => location.reload();
-    btn.title = "重新加载页面以读取最新 progress_data.js";
+    btn.title = "重新加载页面以读取最新 progress_data.js / progress_rounds.js";
   });
 }
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
   loadPersonal();
-  loadProgress();
+  await loadRoundsMeta();
+  await loadProgress();
 });
 </script>
 </body>

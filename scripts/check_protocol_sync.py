@@ -19,8 +19,13 @@ REQUIRED_PATHS = [
     "docs/PROJECT_STATE.md",
     "docs/NEXT_ACTIONS.md",
     "progress.json",
+    "progress_rounds.json",
+    "progress_rounds.js",
     "progress.html",
     "mark_done.sh",
+    "scripts/round_status.py",
+    "scripts/generate_progress_rounds.py",
+    "scripts/check_user_journey.py",
     "rounds/round_00/final/comprehensive_exercise.sh",
 ]
 

@@ -1,0 +1,988 @@
+{
+  "version": 1,
+  "generated_note": "由 scripts/generate_progress_rounds.py 维护；勿手工编造轮次列表。",
+  "rounds": [
+    {
+      "id": "round_00",
+      "title": "Round 00 · Terminal 初见",
+      "lane": "engineering",
+      "difficulty": "⭐☆☆☆☆",
+      "duration": "3 周",
+      "weeks": [
+        {
+          "id": "week1",
+          "title": "第 1 周：建立感觉（pwd / ls / cd）",
+          "tasks": [
+            {
+              "id": "w1-read",
+              "type": "reading",
+              "title": "阅读 week1/notes.md",
+              "cmd": "bash mark_done.sh w1-read",
+              "file": "rounds/round_00/week1/notes.md"
+            },
+            {
+              "id": "w1-ex1",
+              "type": "exercise",
+              "title": "练习1：认识当前位置",
+              "cmd": "自动",
+              "file": "rounds/round_00/week1/exercises.sh"
+            },
+            {
+              "id": "w1-ex2",
+              "type": "exercise",
+              "title": "练习2：创建子目录并切换",
+              "cmd": "自动",
+              "file": "rounds/round_00/week1/exercises.sh"
+            },
+            {
+              "id": "w1-ex3",
+              "type": "exercise",
+              "title": "练习3：绝对路径 vs 相对路径",
+              "cmd": "自动",
+              "file": "rounds/round_00/week1/exercises.sh"
+            },
+            {
+              "id": "w1-self",
+              "type": "test",
+              "title": "第1周自测",
+              "cmd": "自动",
+              "file": "rounds/round_00/week1/exercises.sh"
+            }
+          ]
+        },
+        {
+          "id": "week2",
+          "title": "第 2 周：创建东西（mkdir / touch / cat）",
+          "tasks": [
+            {
+              "id": "w2-read",
+              "type": "reading",
+              "title": "阅读 week2/notes.md",
+              "cmd": "bash mark_done.sh w2-read",
+              "file": "rounds/round_00/week2/notes.md"
+            },
+            {
+              "id": "w2-ex4",
+              "type": "exercise",
+              "title": "练习4：创建更多子目录",
+              "cmd": "自动",
+              "file": "rounds/round_00/week2/exercises.sh"
+            },
+            {
+              "id": "w2-ex5",
+              "type": "exercise",
+              "title": "练习5：创建空文件",
+              "cmd": "自动",
+              "file": "rounds/round_00/week2/exercises.sh"
+            },
+            {
+              "id": "w2-ex6",
+              "type": "exercise",
+              "title": "练习6：用 cat 查看空文件",
+              "cmd": "自动",
+              "file": "rounds/round_00/week2/exercises.sh"
+            },
+            {
+              "id": "w2-ex7",
+              "type": "exercise",
+              "title": "练习7：echo + cat",
+              "cmd": "自动",
+              "file": "rounds/round_00/week2/exercises.sh"
+            },
+            {
+              "id": "w2-self",
+              "type": "test",
+              "title": "第2周自测",
+              "cmd": "自动",
+              "file": "rounds/round_00/week2/exercises.sh"
+            }
+          ]
+        },
+        {
+          "id": "week3",
+          "title": "第 3 周：学会自查（man）",
+          "tasks": [
+            {
+              "id": "w3-read",
+              "type": "reading",
+              "title": "阅读 week3/notes.md",
+              "cmd": "bash mark_done.sh w3-read",
+              "file": "rounds/round_00/week3/notes.md"
+            },
+            {
+              "id": "w3-ex8",
+              "type": "exercise",
+              "title": "练习8：man ls",
+              "cmd": "自动",
+              "file": "rounds/round_00/week3/exercises.sh"
+            },
+            {
+              "id": "w3-ex9",
+              "type": "exercise",
+              "title": "练习9：man pwd/mkdir/touch/cat",
+              "cmd": "自动",
+              "file": "rounds/round_00/week3/exercises.sh"
+            },
+            {
+              "id": "w3-ex10",
+              "type": "exercise",
+              "title": "练习10：man man",
+              "cmd": "自动",
+              "file": "rounds/round_00/week3/exercises.sh"
+            },
+            {
+              "id": "w3-self",
+              "type": "test",
+              "title": "第3周自测",
+              "cmd": "自动",
+              "file": "rounds/round_00/week3/exercises.sh"
+            }
+          ]
+        },
+        {
+          "id": "final",
+          "title": "最终验收",
+          "tasks": [
+            {
+              "id": "fin-comp",
+              "type": "exercise",
+              "title": "综合练习",
+              "cmd": "自动",
+              "file": "rounds/round_00/final/comprehensive_exercise.sh"
+            },
+            {
+              "id": "fin-sheet",
+              "type": "output",
+              "title": "完成命令小抄",
+              "cmd": "自动",
+              "file": "rounds/round_00/final/command_cheatsheet.md"
+            },
+            {
+              "id": "fin-acc1",
+              "type": "test",
+              "title": "验收：Terminal 与 Shell 的区别",
+              "cmd": "自动",
+              "file": "round_00.md"
+            },
+            {
+              "id": "fin-acc2",
+              "type": "test",
+              "title": "验收：能用 7 个命令",
+              "cmd": "自动",
+              "file": "round_00.md"
+            },
+            {
+              "id": "fin-acc3",
+              "type": "output",
+              "title": "验收：cli-lab 目录与小抄存在",
+              "cmd": "自动",
+              "file": "round_00.md"
+            }
+          ]
+        }
+      ],
+      "tier": "进度闭环",
+      "progress_linked": true,
+      "scaffold_only": false,
+      "lanes": [
+        "engineering"
+      ]
+    },
+    {
+      "id": "round_01",
+      "title": "Round 01 · 文件系统与基础命令",
+      "lane": "engineering",
+      "difficulty": "⭐☆☆☆☆",
+      "duration": "3 周",
+      "weeks": [
+        {
+          "id": "round01-week1",
+          "title": "第 1 周：路径感",
+          "tasks": [
+            {
+              "id": "r01-w1-read",
+              "type": "reading",
+              "title": "阅读 week1/notes.md",
+              "cmd": "bash mark_done.sh r01-w1-read",
+              "file": "rounds/round_01/week1/notes.md"
+            },
+            {
+              "id": "r01-w1-ex1",
+              "type": "exercise",
+              "title": "练习1：路径与目录切换",
+              "cmd": "自动",
+              "file": "rounds/round_01/week1/exercises.sh"
+            },
+            {
+              "id": "r01-w1-self",
+              "type": "test",
+              "title": "第1周自测",
+              "cmd": "自动",
+              "file": "rounds/round_01/week1/exercises.sh"
+            }
+          ]
+        },
+        {
+          "id": "round01-week2",
+          "title": "第 2 周：文件操作",
+          "tasks": [
+            {
+              "id": "r01-w2-read",
+              "type": "reading",
+              "title": "阅读 week2/notes.md",
+              "cmd": "bash mark_done.sh r01-w2-read",
+              "file": "rounds/round_01/week2/notes.md"
+            },
+            {
+              "id": "r01-w2-ex2",
+              "type": "exercise",
+              "title": "练习2：创建与整理文件",
+              "cmd": "自动",
+              "file": "rounds/round_01/week2/exercises.sh"
+            },
+            {
+              "id": "r01-w2-self",
+              "type": "test",
+              "title": "第2周自测",
+              "cmd": "自动",
+              "file": "rounds/round_01/week2/exercises.sh"
+            }
+          ]
+        },
+        {
+          "id": "round01-week3",
+          "title": "第 3 周：查看文本与帮助",
+          "tasks": [
+            {
+              "id": "r01-w3-read",
+              "type": "reading",
+              "title": "阅读 week3/notes.md",
+              "cmd": "bash mark_done.sh r01-w3-read",
+              "file": "rounds/round_01/week3/notes.md"
+            },
+            {
+              "id": "r01-w3-ex3",
+              "type": "exercise",
+              "title": "练习3：文本查看与 man",
+              "cmd": "自动",
+              "file": "rounds/round_01/week3/exercises.sh"
+            },
+            {
+              "id": "r01-w3-self",
+              "type": "test",
+              "title": "第3周自测",
+              "cmd": "自动",
+              "file": "rounds/round_01/week3/exercises.sh"
+            }
+          ]
+        },
+        {
+          "id": "round01-final",
+          "title": "最终验收",
+          "tasks": [
+            {
+              "id": "r01-fin-comp",
+              "type": "exercise",
+              "title": "综合练习：文件实验室",
+              "cmd": "自动",
+              "file": "rounds/round_01/final/comprehensive_exercise.sh"
+            },
+            {
+              "id": "r01-fin-sheet",
+              "type": "output",
+              "title": "完成 Round 01 命令小抄",
+              "cmd": "自动",
+              "file": "rounds/round_01/final/command_cheatsheet.md"
+            },
+            {
+              "id": "r01-fin-acc1",
+              "type": "test",
+              "title": "验收：解释基础命令与路径概念",
+              "cmd": "自动",
+              "file": "round_01.md"
+            }
+          ]
+        }
+      ],
+      "tier": "进度闭环",
+      "progress_linked": true,
+      "scaffold_only": false,
+      "lanes": [
+        "engineering"
+      ]
+    },
+    {
+      "id": "round_02",
+      "title": "Round 02 · Shell、管道、Git 最小工作流",
+      "lane": "engineering",
+      "difficulty": "⭐⭐☆☆☆",
+      "duration": "3 周",
+      "weeks": [
+        {
+          "id": "round02-week1",
+          "title": "第 1 周：重定向与管道",
+          "tasks": [
+            {
+              "id": "r02-w1-read",
+              "type": "reading",
+              "title": "阅读 week1/notes.md",
+              "cmd": "bash mark_done.sh r02-w1-read",
+              "file": "rounds/round_02/week1/notes.md"
+            },
+            {
+              "id": "r02-w1-ex1",
+              "type": "exercise",
+              "title": "练习1：覆盖与追加",
+              "cmd": "自动",
+              "file": "rounds/round_02/week1/exercises.sh"
+            },
+            {
+              "id": "r02-w1-ex2",
+              "type": "exercise",
+              "title": "练习2：去重统计",
+              "cmd": "自动",
+              "file": "rounds/round_02/week1/exercises.sh"
+            },
+            {
+              "id": "r02-w1-ex3",
+              "type": "exercise",
+              "title": "练习3：日志过滤",
+              "cmd": "自动",
+              "file": "rounds/round_02/week1/exercises.sh"
+            },
+            {
+              "id": "r02-w1-self",
+              "type": "test",
+              "title": "第1周自测",
+              "cmd": "自动",
+              "file": "rounds/round_02/week1/exercises.sh"
+            }
+          ]
+        },
+        {
+          "id": "round02-week2",
+          "title": "第 2 周：最小 shell 脚本",
+          "tasks": [
+            {
+              "id": "r02-w2-read",
+              "type": "reading",
+              "title": "阅读 week2/notes.md",
+              "cmd": "bash mark_done.sh r02-w2-read",
+              "file": "rounds/round_02/week2/notes.md"
+            },
+            {
+              "id": "r02-w2-ex4",
+              "type": "exercise",
+              "title": "练习4：count_errors.sh",
+              "cmd": "自动",
+              "file": "rounds/round_02/week2/exercises.sh"
+            },
+            {
+              "id": "r02-w2-ex5",
+              "type": "exercise",
+              "title": "练习5：count_labels.sh",
+              "cmd": "自动",
+              "file": "rounds/round_02/week2/exercises.sh"
+            },
+            {
+              "id": "r02-w2-ex6",
+              "type": "exercise",
+              "title": "练习6：show_args.sh",
+              "cmd": "自动",
+              "file": "rounds/round_02/week2/exercises.sh"
+            },
+            {
+              "id": "r02-w2-self",
+              "type": "test",
+              "title": "第2周自测",
+              "cmd": "自动",
+              "file": "rounds/round_02/week2/exercises.sh"
+            }
+          ]
+        },
+        {
+          "id": "round02-week3",
+          "title": "第 3 周：Git 最小工作流",
+          "tasks": [
+            {
+              "id": "r02-w3-read",
+              "type": "reading",
+              "title": "阅读 week3/notes.md",
+              "cmd": "bash mark_done.sh r02-w3-read",
+              "file": "rounds/round_02/week3/notes.md"
+            },
+            {
+              "id": "r02-w3-ex7",
+              "type": "exercise",
+              "title": "练习7：初始化与首次提交",
+              "cmd": "自动",
+              "file": "rounds/round_02/week3/exercises.sh"
+            },
+            {
+              "id": "r02-w3-ex8",
+              "type": "exercise",
+              "title": "练习8：第二次提交",
+              "cmd": "自动",
+              "file": "rounds/round_02/week3/exercises.sh"
+            },
+            {
+              "id": "r02-w3-ex9",
+              "type": "exercise",
+              "title": "练习9：新增文件提交",
+              "cmd": "自动",
+              "file": "rounds/round_02/week3/exercises.sh"
+            },
+            {
+              "id": "r02-w3-self",
+              "type": "test",
+              "title": "第3周自测",
+              "cmd": "自动",
+              "file": "rounds/round_02/week3/exercises.sh"
+            }
+          ]
+        },
+        {
+          "id": "round02-final",
+          "title": "最终验收",
+          "tasks": [
+            {
+              "id": "r02-fin-comp",
+              "type": "exercise",
+              "title": "综合练习：日志过滤 + 迷你 Git 仓库",
+              "cmd": "自动",
+              "file": "rounds/round_02/final/comprehensive_exercise.sh"
+            },
+            {
+              "id": "r02-fin-sheet",
+              "type": "output",
+              "title": "完成 Round 02 命令小抄",
+              "cmd": "自动",
+              "file": "rounds/round_02/final/command_cheatsheet.md"
+            },
+            {
+              "id": "r02-fin-acc1",
+              "type": "test",
+              "title": "验收：解释 >、>>、| 区别",
+              "cmd": "自动",
+              "file": "round_02.md"
+            },
+            {
+              "id": "r02-fin-acc2",
+              "type": "output",
+              "title": "验收：完成 3 次 Git 提交并解释",
+              "cmd": "自动",
+              "file": "round_02.md"
+            }
+          ]
+        }
+      ],
+      "tier": "进度闭环",
+      "progress_linked": true,
+      "scaffold_only": false,
+      "lanes": [
+        "engineering"
+      ]
+    },
+    {
+      "id": "round_03",
+      "title": "Round 03 · Python 基础与复杂度入门",
+      "lane": "engineering",
+      "difficulty": "⭐⭐☆☆☆",
+      "duration": "3 周",
+      "weeks": [
+        {
+          "id": "round03-week1",
+          "title": "第 1 周：Python 基础语法",
+          "tasks": [
+            {
+              "id": "r03-w1-read",
+              "type": "reading",
+              "title": "阅读 week1/notes.md",
+              "cmd": "bash mark_done.sh r03-w1-read",
+              "file": "rounds/round_03/week1/notes.md"
+            },
+            {
+              "id": "r03-w1-ex1",
+              "type": "exercise",
+              "title": "练习1：变量、循环与函数",
+              "cmd": "自动",
+              "file": "rounds/round_03/week1/exercises.sh"
+            },
+            {
+              "id": "r03-w1-self",
+              "type": "test",
+              "title": "第1周自测",
+              "cmd": "自动",
+              "file": "rounds/round_03/week1/exercises.sh"
+            }
+          ]
+        },
+        {
+          "id": "round03-week2",
+          "title": "第 2 周：list/dict 与函数拆分",
+          "tasks": [
+            {
+              "id": "r03-w2-read",
+              "type": "reading",
+              "title": "阅读 week2/notes.md",
+              "cmd": "bash mark_done.sh r03-w2-read",
+              "file": "rounds/round_03/week2/notes.md"
+            },
+            {
+              "id": "r03-w2-ex2",
+              "type": "exercise",
+              "title": "练习2：标签统计函数",
+              "cmd": "自动",
+              "file": "rounds/round_03/week2/exercises.sh"
+            },
+            {
+              "id": "r03-w2-self",
+              "type": "test",
+              "title": "第2周自测",
+              "cmd": "自动",
+              "file": "rounds/round_03/week2/exercises.sh"
+            }
+          ]
+        },
+        {
+          "id": "round03-week3",
+          "title": "第 3 周：复杂度观察",
+          "tasks": [
+            {
+              "id": "r03-w3-read",
+              "type": "reading",
+              "title": "阅读 week3/notes.md",
+              "cmd": "bash mark_done.sh r03-w3-read",
+              "file": "rounds/round_03/week3/notes.md"
+            },
+            {
+              "id": "r03-w3-ex3",
+              "type": "exercise",
+              "title": "练习3：线性与平方级对比",
+              "cmd": "自动",
+              "file": "rounds/round_03/week3/exercises.sh"
+            },
+            {
+              "id": "r03-w3-self",
+              "type": "test",
+              "title": "第3周自测",
+              "cmd": "自动",
+              "file": "rounds/round_03/week3/exercises.sh"
+            }
+          ]
+        },
+        {
+          "id": "round03-final",
+          "title": "最终验收",
+          "tasks": [
+            {
+              "id": "r03-fin-comp",
+              "type": "exercise",
+              "title": "综合练习：mini analyzer",
+              "cmd": "自动",
+              "file": "rounds/round_03/final/comprehensive_exercise.sh"
+            },
+            {
+              "id": "r03-fin-sheet",
+              "type": "output",
+              "title": "完成 Round 03 复杂度小抄",
+              "cmd": "自动",
+              "file": "rounds/round_03/final/complexity_cheatsheet.md"
+            },
+            {
+              "id": "r03-fin-acc1",
+              "type": "test",
+              "title": "验收：解释 O(n) 与 O(n^2) 差异",
+              "cmd": "自动",
+              "file": "round_03.md"
+            }
+          ]
+        }
+      ],
+      "tier": "进度闭环",
+      "progress_linked": true,
+      "scaffold_only": false,
+      "lanes": [
+        "engineering"
+      ]
+    },
+    {
+      "id": "round_04",
+      "title": "Round 04 · 核心数据结构",
+      "lane": "engineering",
+      "difficulty": "⭐⭐⭐☆☆",
+      "duration": "3 周",
+      "weeks": [
+        {
+          "id": "round04-week1",
+          "title": "第 1 周：列表与顺序存储",
+          "tasks": [
+            {
+              "id": "r04-w1-read",
+              "type": "reading",
+              "title": "阅读 week1/notes.md",
+              "cmd": "bash mark_done.sh r04-w1-read",
+              "file": "rounds/round_04/week1/notes.md"
+            },
+            {
+              "id": "r04-w1-ex1",
+              "type": "exercise",
+              "title": "练习1：列表统计与访问",
+              "cmd": "自动",
+              "file": "rounds/round_04/week1/exercises.sh"
+            },
+            {
+              "id": "r04-w1-self",
+              "type": "test",
+              "title": "第1周自测",
+              "cmd": "自动",
+              "file": "rounds/round_04/week1/exercises.sh"
+            }
+          ]
+        },
+        {
+          "id": "round04-week2",
+          "title": "第 2 周：栈与队列",
+          "tasks": [
+            {
+              "id": "r04-w2-read",
+              "type": "reading",
+              "title": "阅读 week2/notes.md",
+              "cmd": "bash mark_done.sh r04-w2-read",
+              "file": "rounds/round_04/week2/notes.md"
+            },
+            {
+              "id": "r04-w2-ex2",
+              "type": "exercise",
+              "title": "练习2：stack/queue 基础操作",
+              "cmd": "自动",
+              "file": "rounds/round_04/week2/exercises.sh"
+            },
+            {
+              "id": "r04-w2-self",
+              "type": "test",
+              "title": "第2周自测",
+              "cmd": "自动",
+              "file": "rounds/round_04/week2/exercises.sh"
+            }
+          ]
+        },
+        {
+          "id": "round04-week3",
+          "title": "第 3 周：哈希与去重",
+          "tasks": [
+            {
+              "id": "r04-w3-read",
+              "type": "reading",
+              "title": "阅读 week3/notes.md",
+              "cmd": "bash mark_done.sh r04-w3-read",
+              "file": "rounds/round_04/week3/notes.md"
+            },
+            {
+              "id": "r04-w3-ex3",
+              "type": "exercise",
+              "title": "练习3：dict/set 统计与去重",
+              "cmd": "自动",
+              "file": "rounds/round_04/week3/exercises.sh"
+            },
+            {
+              "id": "r04-w3-self",
+              "type": "test",
+              "title": "第3周自测",
+              "cmd": "自动",
+              "file": "rounds/round_04/week3/exercises.sh"
+            }
+          ]
+        },
+        {
+          "id": "round04-final",
+          "title": "最终验收",
+          "tasks": [
+            {
+              "id": "r04-fin-comp",
+              "type": "exercise",
+              "title": "综合练习：data toolkit",
+              "cmd": "自动",
+              "file": "rounds/round_04/final/comprehensive_exercise.sh"
+            },
+            {
+              "id": "r04-fin-sheet",
+              "type": "output",
+              "title": "完成 Round 04 数据结构小抄",
+              "cmd": "自动",
+              "file": "rounds/round_04/final/complexity_cheatsheet.md"
+            },
+            {
+              "id": "r04-fin-acc1",
+              "type": "test",
+              "title": "验收：解释 dict/set/deque 场景",
+              "cmd": "自动",
+              "file": "round_04.md"
+            }
+          ]
+        }
+      ],
+      "tier": "进度闭环",
+      "progress_linked": true,
+      "scaffold_only": false,
+      "lanes": [
+        "engineering"
+      ]
+    },
+    {
+      "id": "round_05",
+      "title": "Round 05 · 高频算法模式",
+      "lane": "engineering",
+      "lanes": [
+        "engineering"
+      ],
+      "difficulty": "⭐⭐⭐☆☆",
+      "duration": "3 周",
+      "tier": "最小骨架",
+      "progress_linked": false,
+      "scaffold_only": true,
+      "readme": "rounds/round_05/README.md",
+      "weeks": []
+    },
+    {
+      "id": "round_06",
+      "title": "Round 06 · Linux 进阶与自动化",
+      "lane": "engineering",
+      "lanes": [
+        "engineering"
+      ],
+      "difficulty": "⭐⭐⭐☆☆",
+      "duration": "3 周",
+      "tier": "最小骨架",
+      "progress_linked": false,
+      "scaffold_only": true,
+      "readme": "rounds/round_06/README.md",
+      "weeks": []
+    },
+    {
+      "id": "round_07",
+      "title": "Round 07 · 面向 AI 项目的综合练习",
+      "lane": "engineering",
+      "lanes": [
+        "engineering"
+      ],
+      "difficulty": "⭐⭐⭐☆☆",
+      "duration": "3 周",
+      "tier": "最小骨架",
+      "progress_linked": false,
+      "scaffold_only": true,
+      "readme": "rounds/round_07/README.md",
+      "weeks": []
+    },
+    {
+      "id": "round_08",
+      "title": "Round 08 · 总复盘与升级路线",
+      "lane": "engineering",
+      "lanes": [
+        "engineering"
+      ],
+      "difficulty": "⭐⭐⭐☆☆",
+      "duration": "3 周",
+      "tier": "最小骨架",
+      "progress_linked": false,
+      "scaffold_only": true,
+      "readme": "rounds/round_08/README.md",
+      "weeks": []
+    },
+    {
+      "id": "round_09",
+      "title": "Round 09 · 仓库规范化与测试入门",
+      "lane": "engineering",
+      "lanes": [
+        "engineering"
+      ],
+      "difficulty": "⭐⭐⭐☆☆",
+      "duration": "3 周",
+      "tier": "最小骨架",
+      "progress_linked": false,
+      "scaffold_only": true,
+      "readme": "rounds/round_09/README.md",
+      "weeks": []
+    },
+    {
+      "id": "round_10",
+      "title": "Round 10 · Python 工程化基础",
+      "lane": "engineering",
+      "lanes": [
+        "engineering"
+      ],
+      "difficulty": "⭐⭐⭐☆☆",
+      "duration": "3 周",
+      "tier": "最小骨架",
+      "progress_linked": false,
+      "scaffold_only": true,
+      "readme": "rounds/round_10/README.md",
+      "weeks": []
+    },
+    {
+      "id": "round_11",
+      "title": "Round 11 · 本地持久化与数据记录",
+      "lane": "engineering",
+      "lanes": [
+        "engineering"
+      ],
+      "difficulty": "⭐⭐⭐☆☆",
+      "duration": "3 周",
+      "tier": "最小骨架",
+      "progress_linked": false,
+      "scaffold_only": true,
+      "readme": "rounds/round_11/README.md",
+      "weeks": []
+    },
+    {
+      "id": "round_12",
+      "title": "Round 12 · 自动化流水线与批处理",
+      "lane": "engineering",
+      "lanes": [
+        "engineering"
+      ],
+      "difficulty": "⭐⭐⭐☆☆",
+      "duration": "3 周",
+      "tier": "最小骨架",
+      "progress_linked": false,
+      "scaffold_only": true,
+      "readme": "rounds/round_12/README.md",
+      "weeks": []
+    },
+    {
+      "id": "round_13",
+      "title": "Round 13 · 环境复现与发布基础",
+      "lane": "engineering",
+      "lanes": [
+        "engineering"
+      ],
+      "difficulty": "⭐⭐⭐☆☆",
+      "duration": "3 周",
+      "tier": "最小骨架",
+      "progress_linked": false,
+      "scaffold_only": true,
+      "readme": "rounds/round_13/README.md",
+      "weeks": []
+    },
+    {
+      "id": "round_14",
+      "title": "Round 14 · HTTP 与 API 设计基础",
+      "lane": "engineering",
+      "lanes": [
+        "engineering"
+      ],
+      "difficulty": "⭐⭐⭐☆☆",
+      "duration": "3 周",
+      "tier": "最小骨架",
+      "progress_linked": false,
+      "scaffold_only": true,
+      "readme": "rounds/round_14/README.md",
+      "weeks": []
+    },
+    {
+      "id": "round_15",
+      "title": "Round 15 · FastAPI 基础",
+      "lane": "engineering",
+      "lanes": [
+        "engineering"
+      ],
+      "difficulty": "⭐⭐⭐☆☆",
+      "duration": "3 周",
+      "tier": "最小骨架",
+      "progress_linked": false,
+      "scaffold_only": true,
+      "readme": "rounds/round_15/README.md",
+      "weeks": []
+    },
+    {
+      "id": "round_16",
+      "title": "Round 16 · API 与数据层结合",
+      "lane": "engineering",
+      "lanes": [
+        "engineering"
+      ],
+      "difficulty": "⭐⭐⭐⭐☆",
+      "duration": "3 周",
+      "tier": "最小骨架",
+      "progress_linked": false,
+      "scaffold_only": true,
+      "readme": "rounds/round_16/README.md",
+      "weeks": []
+    },
+    {
+      "id": "round_17",
+      "title": "Round 17 · 服务化收口",
+      "lane": "engineering",
+      "lanes": [
+        "engineering"
+      ],
+      "difficulty": "⭐⭐⭐⭐☆",
+      "duration": "3 周",
+      "tier": "最小骨架",
+      "progress_linked": false,
+      "scaffold_only": true,
+      "readme": "rounds/round_17/README.md",
+      "weeks": []
+    },
+    {
+      "id": "round_18",
+      "title": "Round 18 · 数值计算与数据分析前置",
+      "lane": "engineering",
+      "lanes": [
+        "engineering"
+      ],
+      "difficulty": "⭐⭐⭐☆☆",
+      "duration": "3 周",
+      "tier": "最小骨架",
+      "progress_linked": false,
+      "scaffold_only": true,
+      "readme": "rounds/round_18/README.md",
+      "weeks": []
+    },
+    {
+      "id": "round_19",
+      "title": "Round 19 · 机器学习最小闭环",
+      "lane": "engineering",
+      "lanes": [
+        "engineering"
+      ],
+      "difficulty": "⭐⭐⭐☆☆",
+      "duration": "3 周",
+      "tier": "最小骨架",
+      "progress_linked": false,
+      "scaffold_only": true,
+      "readme": "rounds/round_19/README.md",
+      "weeks": []
+    },
+    {
+      "id": "round_20",
+      "title": "Round 20 · PyTorch 入门",
+      "lane": "engineering",
+      "lanes": [
+        "engineering"
+      ],
+      "difficulty": "⭐⭐⭐⭐☆",
+      "duration": "3 周",
+      "tier": "最小骨架",
+      "progress_linked": false,
+      "scaffold_only": true,
+      "readme": "rounds/round_20/README.md",
+      "weeks": []
+    },
+    {
+      "id": "round_21",
+      "title": "Round 21 · NLP 前置基础",
+      "lane": "engineering",
+      "lanes": [
+        "engineering"
+      ],
+      "difficulty": "⭐⭐⭐⭐☆",
+      "duration": "3 周",
+      "tier": "最小骨架",
+      "progress_linked": false,
+      "scaffold_only": true,
+      "readme": "rounds/round_21/README.md",
+      "weeks": []
+    }
+  ]
+}

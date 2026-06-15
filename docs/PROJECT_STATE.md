@@ -1,6 +1,30 @@
 # Project State
 
-## 1. 项目概览
+## 0. 当前快照（动态扫描，2026-06-12）
+
+> **勿将下方 §1–§9 早期扫描结论当作现状**；它们记录 2026-04 首次入库时的历史判断。  
+> 轮次与进度以脚本输出为准：
+
+```bash
+python3 scripts/round_status.py --summary
+python3 scripts/check_user_journey.py   # 含 docs/CONSISTENCY_AUDIT_REPORT.md
+```
+
+| 指标 | 当前值（脚本扫描） |
+|------|-------------------|
+| 概览 md `round_00`–`round_21` | 22 份 |
+| 完整实操骨架 `rounds/round_XX/` | 22 个目录 |
+| `progress.json` 已接入 | Round 00–04（76 任务） |
+| 进度闭环（JSON + mark_done + 看板 weeks） | Round 00–04 |
+| 仅骨架未接入进度 | Round 05–21 |
+| 看板元数据 `progress_rounds.json` | 22 轮（5 有任务清单，17 骨架占位） |
+
+---
+
+## 1. 项目概览（历史 · 2026-04-28 首次扫描）
+
+> ⚠️ 下列 §1–§9 保留作审计轨迹；**实现状态已过时**。见 §0。
+
 - **仓库名称**：`computer_study_plan`（基于当前目录名判断）。
 - **唯一本地工作副本**：`~/PycharmProjects/computer_study_plan`（绝对路径 `/Users/alalapi/PycharmProjects/computer_study_plan`）。IDE 工作区、文档中的「仓库根」、Git 操作均指此目录；详见 `docs/WORKSPACE.md`。
 - **练习沙盒（非仓库）**：Round 00 等终端练习使用 `~/cli-lab/round0`，与 Git 根分离。
@@ -916,3 +940,30 @@
 
 - `python3 scripts/agent_gate.py --verify`：通过。
 - Round 13–21 Python 练习脚本 `py_compile`：通过。
+
+## 38. 2026-06-12 描述一致性审计与动态轮次状态
+
+### 38.1 本轮新增
+
+- `scripts/round_status.py`：扫描概览 md / 实操骨架 / 进度接入 / 看板 UI，替代文档硬编码轮次表。
+- `scripts/check_user_journey.py`：16 项用户旅程测试 + 生成 `docs/CONSISTENCY_AUDIT_REPORT.md`。
+- `scripts/generate_progress_rounds.py`：维护 `progress_rounds.json` / `progress_rounds.js`。
+- `progress_rounds.json`、`progress_rounds.js`：看板 Round 元数据单一来源。
+
+### 38.2 本轮修改
+
+- `progress.html`：移除硬编码 ROUNDS 数组，动态加载 `progress_rounds`；骨架轮次显示「未接入进度」说明。
+- `mark_done.sh`：`resolve_round_id` 改为通用 `rNN-` 解析（修复仅识别 round_00/02 的 bug）。
+- `README.md`、`CONVERSION_PROTOCOL.md` §6/§8.3、`docs/governance/file_naming_rules.md`：去除误导性「全部已展开/已完成」表述。
+- `docs/PROJECT_STATE.md` §0 当前快照；`package.json` 新增 `check:journey`、`round:status`、`round:sync-ui`。
+
+### 38.3 验证
+
+- `python3 scripts/check_user_journey.py`：16/16 通过。
+- `npm run check:protocol`：通过。
+
+## 39. 2026-06-12 Progress 网页全学习闭环路线图
+
+- 新增 `docs/PROGRESS_WEB_LEARNING_ROADMAP.md`（PW-0 ~ PW-6）：目标在 `http://localhost:8000/progress.html` 完成读材料、练习、打卡、错题与复盘。
+- 同步：`MASTER_STUDY_ROADMAP.md`、`STAGE_PLAN.md` §13、`CODEX_LONG_TERM_PLAN.md` §0、`NEXT_ACTIONS.md` TASK-WEB-01 ~ 07（queued）、`README.md` §6.3。
+- **计划态**：尚未实现 `learn_server` 与网页内操作；当前仍依赖 `mark_done.sh` 与终端练习。
