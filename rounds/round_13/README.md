@@ -1,22 +1,31 @@
-# Round 13 · 环境复现与发布
+# Round 13 · 环境复现与发布基础
 
-这个目录是 Round 13（环境复现与发布）的最小实操骨架。
+Round 13 的目标是把前面几轮做出的 Python 小工具，整理成“换一台机器也能读懂、重建、交付”的最小发布包。用户应当可以只通过 Web UI 完成阅读、运行练习脚本、浏览器终端自测、手动记录小抄和最终验收。
 
 > **仓库根**：`~/PycharmProjects/computer_study_plan`  
 > **练习沙盒**：`~/cli-lab/round13`  
 > 路径说明见 [`docs/WORKSPACE.md`](../../docs/WORKSPACE.md)。
 
-## 目录结构
+## Web UI 完成路径
 
-```
-round_13/
-├─ README.md
-├─ week1/ … week3/
-└─ final/
-```
+1. 启动本地服务：`python3 scripts/progress_server.py`。
+2. 打开 `progress.html?round=round_13`。
+3. 逐周点击“阅读”打开 notes，点击“运行”生成标准沙盒产物。
+4. 对自测任务点击“终端”，在浏览器终端中手敲最小命令。
+5. 最后运行综合练习，阅读并手动完成 `env_repro_cheatsheet.md` 与验收解释。
 
-## 使用方式
+## 本轮安全边界
 
-1. 每周先阅读 `weekN/notes.md`，再执行 `python3 weekN/exercises.py`。
-2. 全部练习在 `~/cli-lab/round13` 沙盒执行。
-3. 本轮先落最小骨架，后续按需要接入进度任务。
+- 所有自动脚本只写入 `~/cli-lab/round13`，不会改仓库外的系统配置。
+- Week 1 会用标准库生成一个无 pip 的演示虚拟环境，用于理解 venv 结构；不会联网安装依赖。
+- Week 3 与 final 会生成 Dockerfile、`.dockerignore` 和发布检查脚本；不会自动执行 `docker build` 或 `docker run`。
+- 浏览器终端仍会拦截 `pip install`、`docker`、网络下载、远程 Git、SSH 等高风险或非沙盒命令。
+
+## 产物地图
+
+| 阶段 | 自动脚本产物 | 用户自测产物 |
+|---|---|---|
+| Week 1 | `week1_auto/env_report.json`、`requirements.txt`、`.venv_demo/` | 自己创建 `.venv_self` 并解释 `pyvenv.cfg` |
+| Week 2 | `week2_auto/pyproject.toml`、`.env.example`、配置读取脚本 | 自己写 `read_env.py` 或检查 `tomllib` |
+| Week 3 | `week3_auto/Dockerfile`、`.dockerignore`、`release_check.py` | 自己写最小 Dockerfile 并说明暂不 build |
+| Final | `final_auto/ai_prep_tool_release/` 与 zip 交付包 | 完成环境复现小抄和验收解释 |

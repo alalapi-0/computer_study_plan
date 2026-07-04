@@ -1458,3 +1458,37 @@
 - 本轮 API/UI 验证产生的进度、动作、反馈和终端历史均已从测试前快照恢复。
 - 未引入大型新依赖；只使用 Python 标准库。
 - 未写入系统 crontab；未启动 nohup/tmux 后台任务；只生成示例文本和入口脚本。
+
+## 56. 2026-07-04 TASK-RR-44 Round 13 内容填充与环境复现发布练习
+
+### 56.1 本轮修改
+
+- `rounds/round_13/README.md`：从“最小实操骨架”更新为 Web UI 可练习说明，明确阅读、自动运行、终端自测、小抄和验收的页面操作路径。
+- `rounds/round_13/week1|week2|week3/notes.md`：补齐 venv、requirements、pyproject.toml、`.env.example`、Dockerfile、`.dockerignore`、发布前自检的学习步骤、自测命令和完成标准。
+- `rounds/round_13/week1|week2|week3/exercises.py`：改为默认可非交互运行，自动生成演示虚拟环境、依赖清单、项目配置、Dockerfile、发布检查报告和下一步提示，只自动记录对应练习任务。
+- `rounds/round_13/final/comprehensive_exercise.py`：改为 Web UI 默认可运行的环境复现收口检查，生成完整 `ai_prep_tool_release` 沙盒、发布前检查报告、handoff manifest 和 zip 交付包，只自动记录 `r13-fin-comp`。
+- `rounds/round_13/final/env_repro_cheatsheet.md`：补齐 Web UI 完成路径、文件职责表、复现流程、Docker 边界和最终验收自问。
+- `scripts/build_rounds_data.py` / `rounds_data.js`：将 Round 13 UI 任务标题从“练习1 / 练习2 / 练习3”改为用户能理解的动作标题。
+
+### 56.2 用户视角问题修复
+
+- Round 13 原 notes 太短，用户不知道如何只通过 Web UI 完成环境复现与发布排练。
+- Round 13 原脚本只写 marker 文件，没有形成可检查的 venv / requirements / pyproject / Dockerfile / 发布包产物。
+- Round 13 原任务标题过泛，用户无法判断分别要练 venv、项目配置还是 Dockerfile。
+- Week 2 初版检查脚本生成的 `settings.py` 定义了 `main()` 但未作为脚本调用，真实 API 测试会失败；已补上入口并回归通过。
+- Week 3 自测命令避免在浏览器终端输入 `/app` 绝对路径文本，防止安全规则把 Dockerfile 内容误判为仓库外路径。
+
+### 56.3 验证
+
+- API 验证：`r13-w1-ex1`、`r13-w2-ex2`、`r13-w3-ex3`、`r13-fin-comp` 均可通过 `/api/tasks/<id>/run` 运行成功；`r13-w1-self/run` 返回 `task_not_runnable`。
+- 浏览器终端验证：`/api/terminal?cwd=~/round13` 返回 `~/round13`；终端 API 可在任务 `r13-w1-self` 下创建 `python3 -m venv --without-pip .venv_self` 并读取 `pyvenv.cfg`；`docker build -t demo .` 返回 `terminal_command_not_allowed:docker`。
+- 真实浏览器验证：`progress.html?round=round_13` 会直接选中 Round 13；`r13-w1-ex1` 显示“运行”，`r13-w1-self` 不显示“运行”但显示“终端”；点击后终端工作目录为 `~/round13`，UI 输入 `pwd` 输出 `/Users/alalapi/cli-lab/round13`。
+- 文档阅读与外链验证：Week 1 notes 可在阅读器中直接阅读，包含 Web UI 学习路径；阅读弹窗和运行结果弹窗可用 `Escape` 关闭；`round_13.md` 中 Python venv 官方文档链接可被定位，`target="_blank"`，`rel` 包含 `noreferrer noopener`。
+- 移动端验证：390px 宽度无整页横向溢出。
+- 静态与数据验证：`build_rounds_data.py`、Python 语法编译、自动打卡目标检查均通过。
+
+### 56.4 风险边界核对
+
+- 本轮 API/UI 验证产生的进度、动作、反馈和终端历史均已从测试前快照恢复。
+- 未引入大型新依赖；未安装第三方包；未执行 Docker build/run。
+- 自动脚本只写入 `~/cli-lab/round13` 沙盒；发布包中的 Dockerfile 只生成和检查，不启动容器。

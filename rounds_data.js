@@ -1470,72 +1470,72 @@ window.ROUNDS_DATA = [
     "weeks": [
       {
         "id": "round13-week1",
-        "title": "第 1 周：基础练习",
+        "title": "第 1 周：venv 与 requirements",
         "tasks": [
           {
             "id": "r13-w1-read",
             "type": "reading",
-            "title": "阅读 week1/notes.md",
+            "title": "阅读：venv 结构与依赖清单",
             "file": "rounds/round_13/week1/notes.md"
           },
           {
             "id": "r13-w1-ex1",
             "type": "exercise",
-            "title": "练习1",
+            "title": "练习：生成 venv 结构与 requirements",
             "file": "rounds/round_13/week1/exercises.py"
           },
           {
             "id": "r13-w1-self",
             "type": "test",
-            "title": "第1周自测",
+            "title": "自测：自己创建 .venv_self",
             "file": "rounds/round_13/week1/exercises.py"
           }
         ]
       },
       {
         "id": "round13-week2",
-        "title": "第 2 周：进阶练习",
+        "title": "第 2 周：pyproject 与配置样例",
         "tasks": [
           {
             "id": "r13-w2-read",
             "type": "reading",
-            "title": "阅读 week2/notes.md",
+            "title": "阅读：pyproject.toml、.env.example 与配置职责",
             "file": "rounds/round_13/week2/notes.md"
           },
           {
             "id": "r13-w2-ex2",
             "type": "exercise",
-            "title": "练习2",
+            "title": "练习：生成 pyproject 与配置样例",
             "file": "rounds/round_13/week2/exercises.py"
           },
           {
             "id": "r13-w2-self",
             "type": "test",
-            "title": "第2周自测",
+            "title": "自测：自己检查 TOML 与 env 示例",
             "file": "rounds/round_13/week2/exercises.py"
           }
         ]
       },
       {
         "id": "round13-week3",
-        "title": "第 3 周：综合练习",
+        "title": "第 3 周：Dockerfile 与发布前自检",
         "tasks": [
           {
             "id": "r13-w3-read",
             "type": "reading",
-            "title": "阅读 week3/notes.md",
+            "title": "阅读：Dockerfile、.dockerignore 与发布边界",
             "file": "rounds/round_13/week3/notes.md"
           },
           {
             "id": "r13-w3-ex3",
             "type": "exercise",
-            "title": "练习3",
+            "title": "练习：生成 Dockerfile 与发布检查",
             "file": "rounds/round_13/week3/exercises.py"
           },
           {
             "id": "r13-w3-self",
             "type": "test",
-            "title": "第3周自测",
+            "title": "自测：自己写最小 Dockerfile",
             "file": "rounds/round_13/week3/exercises.py"
           }
         ]
@@ -1547,19 +1547,19 @@ window.ROUNDS_DATA = [
           {
             "id": "r13-fin-comp",
             "type": "exercise",
-            "title": "综合练习",
+            "title": "综合练习：生成可交付发布包",
             "file": "rounds/round_13/final/comprehensive_exercise.py"
           },
           {
             "id": "r13-fin-sheet",
             "type": "output",
-            "title": "完成本 Round 小抄",
+            "title": "产出：完成 Round 13 环境复现小抄",
             "file": "rounds/round_13/final/env_repro_cheatsheet.md"
           },
           {
             "id": "r13-fin-acc1",
             "type": "test",
-            "title": "验收：Round 13 核心目标",
+            "title": "验收：解释 venv、requirements、pyproject 与 Dockerfile",
             "file": "round_13.md"
           }
         ]

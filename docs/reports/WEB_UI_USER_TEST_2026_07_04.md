@@ -278,6 +278,23 @@
 - 移动端验证：390px 宽度无整页横向溢出。
 - 清理：本轮 API/UI 测试产生的进度、动作、反馈和终端历史已从测试前快照恢复。
 
+## Round 13 内容填充与环境复现发布补测
+
+- before 问题：Round 13 仍是最小骨架，notes 只列目标和自查，缺少 Web UI 学习路径和浏览器终端自测命令。
+- before 问题：Round 13 脚本只写 marker 文件，没有形成 venv、requirements、pyproject、Dockerfile、发布检查报告或交付包等可检查产物。
+- before 问题：Round 13 任务标题仍是“练习1 / 练习2 / 练习3”，用户无法判断要练 venv、项目配置还是 Dockerfile。
+- 修复：Round 13 README、Week 1–3 notes、final 小抄已补齐 venv、requirements、pyproject.toml、`.env.example`、Dockerfile、`.dockerignore`、发布前自检、Web UI 完成路径和验收自问。
+- 修复：Round 13 Python 脚本改为非交互运行，自动生成演示虚拟环境、依赖清单、项目配置、Dockerfile、发布检查报告、handoff manifest 和 zip 交付包，只自动记录脚本实际完成的练习任务；自测、小抄和验收仍由用户手动完成并记录。
+- 修复：Round 13 UI 任务标题改为“生成 venv 结构与 requirements”“生成 pyproject 与配置样例”“生成 Dockerfile 与发布检查”等动作标题。
+- 边界：本轮不联网安装依赖，不执行 `docker build` / `docker run`；Dockerfile 只生成和检查。
+- API 验证：`r13-w1-ex1`、`r13-w2-ex2`、`r13-w3-ex3`、`r13-fin-comp` 均可运行成功；`r13-w1-self/run` 返回 `task_not_runnable`。
+- 浏览器终端验证：`~/round13` 可作为映射目录；终端 API 能在任务 `r13-w1-self` 下创建无 pip 的 `.venv_self` 并读取 `pyvenv.cfg`；`docker build -t demo .` 返回 `terminal_command_not_allowed:docker`。
+- UI 验证：真实 Chrome 打开 `progress.html?round=round_13` 后直接选中 Round 13；`r13-w1-ex1` 显示“运行”，`r13-w1-self` 不显示“运行”但显示“终端”；点击后工作目录为 `~/round13`，输入 `pwd` 输出 `/Users/alalapi/cli-lab/round13`。
+- 文档阅读验证：Week 1 notes 可在阅读器中直接阅读，包含 Web UI 学习路径；阅读弹窗和运行结果弹窗均可用 `Escape` 关闭；`round_13.md` 中 Python venv 官方链接可被定位，`target="_blank"`，`rel` 包含 `noreferrer noopener`。
+- 移动端验证：390px 宽度无整页横向溢出。
+- 清理：本轮 API/UI 测试产生的进度、动作、反馈和终端历史已从测试前快照恢复。
+- 工具备注：应用内浏览器插件本轮打开本地页时控制超时；已使用本机 Google Chrome + Playwright 打开同一 Web UI 完成真实渲染、点击、终端和截图验证。
+
 ## 验证命令
 
 ```bash
@@ -293,6 +310,7 @@ node --check progress_ui.js
 python3 -m py_compile scripts/progress_lib.py scripts/progress_server.py scripts/generate_task_feedback.py scripts/mark_done_cli.py scripts/sync_progress_data.py scripts/build_rounds_data.py scripts/check_protocol_sync.py scripts/validate_learning_data.py
 python3 -m py_compile rounds/round_11/week1/exercises.py rounds/round_11/week2/exercises.py rounds/round_11/week3/exercises.py rounds/round_11/final/comprehensive_exercise.py
 python3 -m py_compile rounds/round_12/week1/exercises.py rounds/round_12/week2/exercises.py rounds/round_12/week3/exercises.py rounds/round_12/final/comprehensive_exercise.py
+python3 -m py_compile rounds/round_13/week1/exercises.py rounds/round_13/week2/exercises.py rounds/round_13/week3/exercises.py rounds/round_13/final/comprehensive_exercise.py
 python3 scripts/agent_gate.py --verify
 git diff --check
 ```

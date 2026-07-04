@@ -24,6 +24,7 @@ DIFFICULTY_BY_ROUND = {
     10: "⭐⭐⭐☆☆",
     11: "⭐⭐⭐☆☆",
     12: "⭐⭐⭐☆☆",
+    13: "⭐⭐⭐☆☆",
 }
 
 
@@ -616,6 +617,87 @@ def build_standard_round(root: Path, num: int) -> dict | None:
                     ],
                 },
                 {"id": "round06-final", "title": "最终验收", "tasks": final_tasks},
+            ],
+        }
+
+    if num == 13:
+        final_tasks = []
+        if comp:
+            final_tasks.append(
+                {
+                    "id": "r13-fin-comp",
+                    "type": "exercise",
+                    "title": "综合练习：生成可交付发布包",
+                    "file": comp,
+                }
+            )
+        if sheet:
+            final_tasks.append(
+                {
+                    "id": "r13-fin-sheet",
+                    "type": "output",
+                    "title": "产出：完成 Round 13 环境复现小抄",
+                    "file": sheet,
+                }
+            )
+        final_tasks.append(
+            {
+                "id": "r13-fin-acc1",
+                "type": "test",
+                "title": "验收：解释 venv、requirements、pyproject 与 Dockerfile",
+                "file": "round_13.md",
+            }
+        )
+        return {
+            "id": "round_13",
+            "title": round_title(root, num),
+            "lane": "engineering",
+            "difficulty": DIFFICULTY_BY_ROUND.get(num, "⭐⭐⭐☆☆"),
+            "duration": "3 周",
+            "weeks": [
+                {
+                    "id": "round13-week1",
+                    "title": "第 1 周：venv 与 requirements",
+                    "tasks": [
+                        {
+                            "id": "r13-w1-read",
+                            "type": "reading",
+                            "title": "阅读：venv 结构与依赖清单",
+                            "file": "rounds/round_13/week1/notes.md",
+                        },
+                        {"id": "r13-w1-ex1", "type": "exercise", "title": "练习：生成 venv 结构与 requirements", "file": ex1},
+                        {"id": "r13-w1-self", "type": "test", "title": "自测：自己创建 .venv_self", "file": ex1},
+                    ],
+                },
+                {
+                    "id": "round13-week2",
+                    "title": "第 2 周：pyproject 与配置样例",
+                    "tasks": [
+                        {
+                            "id": "r13-w2-read",
+                            "type": "reading",
+                            "title": "阅读：pyproject.toml、.env.example 与配置职责",
+                            "file": "rounds/round_13/week2/notes.md",
+                        },
+                        {"id": "r13-w2-ex2", "type": "exercise", "title": "练习：生成 pyproject 与配置样例", "file": ex2},
+                        {"id": "r13-w2-self", "type": "test", "title": "自测：自己检查 TOML 与 env 示例", "file": ex2},
+                    ],
+                },
+                {
+                    "id": "round13-week3",
+                    "title": "第 3 周：Dockerfile 与发布前自检",
+                    "tasks": [
+                        {
+                            "id": "r13-w3-read",
+                            "type": "reading",
+                            "title": "阅读：Dockerfile、.dockerignore 与发布边界",
+                            "file": "rounds/round_13/week3/notes.md",
+                        },
+                        {"id": "r13-w3-ex3", "type": "exercise", "title": "练习：生成 Dockerfile 与发布检查", "file": ex3},
+                        {"id": "r13-w3-self", "type": "test", "title": "自测：自己写最小 Dockerfile", "file": ex3},
+                    ],
+                },
+                {"id": "round13-final", "title": "最终验收", "tasks": final_tasks},
             ],
         }
 
