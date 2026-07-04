@@ -1357,3 +1357,36 @@
 - 本轮 API/UI 验证产生的进度、动作、反馈和终端历史均已从测试前快照恢复。
 - 未引入大型新依赖；未安装 pytest；未执行 GitHub 远程 Git 操作。
 - 未放宽浏览器终端高风险命令边界；`git push` 仍被拦截。
+
+## 53. 2026-07-04 TASK-RR-41 Round 10 内容填充与 Python 工程化练习
+
+### 53.1 本轮修改
+
+- `rounds/round_10/README.md`：从“最小实操骨架”更新为 Web UI 可练习说明，明确阅读、自动运行、终端自测、小抄和验收的页面操作路径。
+- `rounds/round_10/week1|week2|week3/notes.md`：补齐 CLI / core / IO 拆分、config.ini / logging、可控错误与入口规范的学习步骤、自测命令和完成标准。
+- `rounds/round_10/week1|week2|week3/exercises.py`：改为默认可非交互运行，自动生成工程化沙盒项目、配置、日志、错误路径报告和下一步提示，只自动记录对应练习任务。
+- `rounds/round_10/final/comprehensive_exercise.py`：改为 Web UI 默认可运行的 Round 10 收口检查，生成完整 `ai_prep_tool` 小项目并验证成功路径、缺失输入错误路径、日志和 summary，只自动记录 `r10-fin-comp`。
+- `rounds/round_10/final/python_engineering_cheatsheet.md`：补齐 Web UI 完成路径、文件职责表、配置日志口诀、错误处理口诀和最终验收自问。
+- `scripts/build_rounds_data.py` / `rounds_data.js`：将 Round 10 UI 任务标题从“练习1 / 练习2 / 练习3”改为用户能理解的动作标题。
+
+### 53.2 用户视角问题修复
+
+- Round 10 原 notes 太短，用户不知道如何只通过 Web UI 完成模块拆分、配置日志和错误处理练习。
+- Round 10 原脚本只是生成骨架或跑内存自检，没有形成 Web UI 一键运行后的可检查产物与自动记录。
+- Round 10 原任务标题过泛，用户无法从 UI 判断分别要练 CLI 拆分、配置日志还是入口错误处理。
+- 本轮明确不安装第三方依赖、不切换到 `src/` layout、不做打包发布；先把 Python 工程化的最小职责边界跑通。
+
+### 53.3 验证
+
+- API 验证：`r10-w1-ex1`、`r10-w2-ex2`、`r10-w3-ex3`、`r10-fin-comp` 均可通过 `/api/tasks/<id>/run` 运行成功；`r10-w1-self/run` 返回 `task_not_runnable`。
+- 浏览器终端验证：`/api/terminal?cwd=~/round10` 返回 `~/round10`；终端 API 可在任务 `r10-w3-self` 下写入入口脚本并看到返回码 2；`python3 -c` 返回 `terminal_command_blocked`。
+- 真实浏览器验证：`progress.html?round=round_10` 会直接选中 Round 10；`r10-w1-ex1` 显示“运行”，`r10-w1-self` 不显示“运行”但显示“终端”；点击后终端工作目录为 `~/round10`，UI 输入 `pwd` 输出 `/Users/alalapi/cli-lab/round10`。
+- 文档阅读与外链验证：Week 1 notes 可在阅读器中直接阅读；`round_10.md` 中 Python argparse 官方文档链接可被定位，`target="_blank"`，`rel` 包含 `noreferrer noopener`。
+- 移动端验证：390px 宽度无整页横向溢出。
+- 静态与数据验证：`build_rounds_data.py`、Python 语法编译、自动打卡目标检查均通过。
+
+### 53.4 风险边界核对
+
+- 本轮 API/UI 验证产生的进度、动作、反馈和终端历史均已从测试前快照恢复。
+- 未引入大型新依赖；未安装第三方包；未做打包发布或 layout 迁移。
+- 未放宽浏览器终端高风险命令边界；`python3 -c` 仍被拦截。

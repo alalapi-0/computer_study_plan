@@ -1155,72 +1155,72 @@ window.ROUNDS_DATA = [
     "weeks": [
       {
         "id": "round10-week1",
-        "title": "第 1 周：基础练习",
+        "title": "第 1 周：CLI、核心逻辑与 IO 拆分",
         "tasks": [
           {
             "id": "r10-w1-read",
             "type": "reading",
-            "title": "阅读 week1/notes.md",
+            "title": "阅读：入口、核心逻辑和文件读写边界",
             "file": "rounds/round_10/week1/notes.md"
           },
           {
             "id": "r10-w1-ex1",
             "type": "exercise",
-            "title": "练习1",
+            "title": "练习：拆出 cli.py / core.py / io_utils.py",
             "file": "rounds/round_10/week1/exercises.py"
           },
           {
             "id": "r10-w1-self",
             "type": "test",
-            "title": "第1周自测",
+            "title": "自测：自己写一个薄 CLI",
             "file": "rounds/round_10/week1/exercises.py"
           }
         ]
       },
       {
         "id": "round10-week2",
-        "title": "第 2 周：进阶练习",
+        "title": "第 2 周：配置文件与日志",
         "tasks": [
           {
             "id": "r10-w2-read",
             "type": "reading",
-            "title": "阅读 week2/notes.md",
+            "title": "阅读：config.ini、fallback 与 logging",
             "file": "rounds/round_10/week2/notes.md"
           },
           {
             "id": "r10-w2-ex2",
             "type": "exercise",
-            "title": "练习2",
+            "title": "练习：读取配置并写入日志",
             "file": "rounds/round_10/week2/exercises.py"
           },
           {
             "id": "r10-w2-self",
             "type": "test",
-            "title": "第2周自测",
+            "title": "自测：自己读 config.ini",
             "file": "rounds/round_10/week2/exercises.py"
           }
         ]
       },
       {
         "id": "round10-week3",
-        "title": "第 3 周：综合练习",
+        "title": "第 3 周：错误处理与入口规范",
         "tasks": [
           {
             "id": "r10-w3-read",
             "type": "reading",
-            "title": "阅读 week3/notes.md",
+            "title": "阅读：可控错误、返回码与 __main__",
             "file": "rounds/round_10/week3/notes.md"
           },
           {
             "id": "r10-w3-ex3",
             "type": "exercise",
-            "title": "练习3",
+            "title": "练习：处理缺失输入并规范入口",
             "file": "rounds/round_10/week3/exercises.py"
           },
           {
             "id": "r10-w3-self",
             "type": "test",
-            "title": "第3周自测",
+            "title": "自测：自己写可控错误入口",
             "file": "rounds/round_10/week3/exercises.py"
           }
         ]
@@ -1232,19 +1232,19 @@ window.ROUNDS_DATA = [
           {
             "id": "r10-fin-comp",
             "type": "exercise",
-            "title": "综合练习",
+            "title": "综合练习：工程化项目收口检查",
             "file": "rounds/round_10/final/comprehensive_exercise.py"
           },
           {
             "id": "r10-fin-sheet",
             "type": "output",
-            "title": "完成本 Round 小抄",
+            "title": "产出：完成 Round 10 Python 工程化小抄",
             "file": "rounds/round_10/final/python_engineering_cheatsheet.md"
           },
           {
             "id": "r10-fin-acc1",
             "type": "test",
-            "title": "验收：Round 10 核心目标",
+            "title": "验收：解释模块拆分、配置、日志和错误处理",
             "file": "round_10.md"
           }
         ]
