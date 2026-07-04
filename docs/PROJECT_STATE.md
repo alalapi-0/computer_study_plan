@@ -1735,3 +1735,38 @@
 - 本轮 API/UI 验证产生的进度、动作、反馈和终端历史均已从测试前快照恢复。
 - 未引入大型新依赖；未安装 PyTorch / torchvision；未创建后端服务。
 - 自动脚本只写入 `~/cli-lab/round20` 沙盒；生成的样例 CSV、PyTorch 风格代码、checkpoint smoke 文件和静态检查结果不进入仓库。
+
+## 64. 2026-07-04 TASK-RR-52 Round 21 内容填充与 NLP 前置基础练习
+
+### 64.1 本轮修改
+
+- `rounds/round_21/README.md`：从“最小实操骨架”更新为 Web UI 可练习说明，明确页面路径、沙盒产物、依赖边界和外链策略。
+- `rounds/round_21/week1|week2|week3/notes.md`：补齐 tokenization、词表编号、embedding、padding、均值池化、Bag-of-words、TF-IDF、BPE 与 WordPiece 的学习步骤、自测短命令和官方外链。
+- `rounds/round_21/week1|week2|week3/exercises.py`：改为默认可非交互运行，自动生成 NLP 代码形状、样例数据、标准库 smoke check、静态检查报告和下一步提示，只自动记录对应练习任务。
+- `rounds/round_21/final/comprehensive_exercise.py`：改为 Web UI 默认可运行的 NLP 前置基础项目包练习，生成 `tokenizer.py`、`dataset.py`、`embedding_model.py`、`traditional_baseline.py`、样例 CSV、流程合同、标准库预检和最终静态验收报告，只自动记录 `r21-fin-comp`。
+- `rounds/round_21/final/nlp_prereq_cheatsheet.md` 与 `round_21.md`：补齐 Web UI 完成路径、tokenization / vocab / embedding / TF-IDF 小抄和最终验收自问。
+- `scripts/build_rounds_data.py` / `rounds_data.js`：将 Round 21 UI 任务标题从“基础练习 / 进阶练习 / 综合练习”改为用户能理解的动作标题，并同步四星难度。
+
+### 64.2 用户视角问题修复
+
+- Round 21 原 notes 太短，用户不知道如何只通过 Web UI 完成 NLP 前置练习。
+- Round 21 原脚本只写 marker 文件，没有形成 tokenizer、词表、embedding、文本分类、传统文本特征或最终项目包等可检查产物。
+- Round 21 原任务标题过泛，用户无法判断分别要练 tokenization、embedding 还是文本特征。
+- 原总览引导用户直接安装 `torch transformers scikit-learn`，在 Web UI 终端中会被安全规则拦截，也容易让用户误以为本轮必须下载模型；已改为生成真实代码形状，并用 Python 标准库做可运行验证。
+- 初版终端自测仍可能走多行脚本路径；已统一为先点“运行”生成 smoke 脚本，再执行短命令 `cd` / `python3` / `cat`。
+
+### 64.3 验证
+
+- 直接脚本验证：`r21-w1-ex1`、`r21-w2-ex2`、`r21-w3-ex3`、`r21-fin-comp` 四个脚本均可直接运行成功，并生成对应 `static_check_report.json` / `final_static_check_report.json`。
+- API 验证：四个练习脚本均可通过 `/api/tasks/<id>/run` 运行成功；`r21-w1-self/run` 返回 `task_not_runnable`。
+- 浏览器终端验证：终端 API 与 UI 均可进入 `~/round21`；终端 UI 可绑定 `r21-w2-self`，执行 `pwd`、`cd ~/round21/week2_auto/embedding_classifier`、`python3 stdlib_embedding_smoke.py`，输出包含 `embedding_dim` 与 `prediction`；`pip install torch transformers scikit-learn` 返回 `terminal_command_not_allowed:pip`。
+- UI 验证：Codex 应用内浏览器打开 `progress.html?round=round_21` 后直接选中 Round 21；12 个任务、4 个运行按钮、9 个终端按钮均可见；Week 1 notes 可在阅读器中直接阅读；点击“运行”有确认框，确认后运行结果弹窗显示“运行成功”和 `static_check_report.json`；恢复记录后页面显示 0/12 完成。
+- 文档阅读验证：Week 1 notes 包含 Web UI 学习路径和浏览器终端自测；Hugging Face Tokenizers 外链渲染为 `_blank` 新标签，`rel` 包含 `noreferrer noopener`。
+- 移动端验证：390px 宽度无整页横向溢出；任务按钮换行后不重叠。
+- 截图：`/tmp/round21_web_ui_panel.png`（恢复真实记录后的 Round 21 面板）；阅读弹窗 `/tmp/round21_reading_modal.png`；运行结果 `/tmp/round21_run_result.png`；终端 `/tmp/round21_terminal_ui.png`；移动端 `/tmp/round21_mobile_ui.png`。
+
+### 64.4 风险边界核对
+
+- 本轮 API/UI 验证产生的进度、动作、反馈和终端历史均已从测试前快照恢复。
+- 未引入大型新依赖；未安装 torch / transformers / scikit-learn；未下载预训练模型；未创建后端服务。
+- 自动脚本只写入 `~/cli-lab/round21` 沙盒；生成的 NLP 示例代码、样例数据和静态检查结果不进入仓库。

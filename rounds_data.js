@@ -2305,77 +2305,77 @@ window.ROUNDS_DATA = [
     "id": "round_21",
     "title": "Round 21 · NLP 前置基础",
     "lane": "engineering",
-    "difficulty": "⭐⭐⭐☆☆",
+    "difficulty": "⭐⭐⭐⭐☆",
     "duration": "3 周",
     "weeks": [
       {
         "id": "round21-week1",
-        "title": "第 1 周：基础练习",
+        "title": "第 1 周：Tokenization、词表与编号",
         "tasks": [
           {
             "id": "r21-w1-read",
             "type": "reading",
-            "title": "阅读 week1/notes.md",
+            "title": "阅读：文本预处理、tokenization 与词表编号",
             "file": "rounds/round_21/week1/notes.md"
           },
           {
             "id": "r21-w1-ex1",
             "type": "exercise",
-            "title": "练习1",
+            "title": "练习：生成手写 tokenizer 与词表编号示例",
             "file": "rounds/round_21/week1/exercises.py"
           },
           {
             "id": "r21-w1-self",
             "type": "test",
-            "title": "第1周自测",
+            "title": "自测：终端运行 tokenizer smoke check",
             "file": "rounds/round_21/week1/exercises.py"
           }
         ]
       },
       {
         "id": "round21-week2",
-        "title": "第 2 周：进阶练习",
+        "title": "第 2 周：Embedding 与最小文本分类",
         "tasks": [
           {
             "id": "r21-w2-read",
             "type": "reading",
-            "title": "阅读 week2/notes.md",
+            "title": "阅读：nn.Embedding、padding 与均值池化",
             "file": "rounds/round_21/week2/notes.md"
           },
           {
             "id": "r21-w2-ex2",
             "type": "exercise",
-            "title": "练习2",
+            "title": "练习：生成 embedding 与文本分类示例",
             "file": "rounds/round_21/week2/exercises.py"
           },
           {
             "id": "r21-w2-self",
             "type": "test",
-            "title": "第2周自测",
+            "title": "自测：终端运行 embedding smoke check",
             "file": "rounds/round_21/week2/exercises.py"
           }
         ]
       },
       {
         "id": "round21-week3",
-        "title": "第 3 周：综合练习",
+        "title": "第 3 周：传统文本特征与子词策略",
         "tasks": [
           {
             "id": "r21-w3-read",
             "type": "reading",
-            "title": "阅读 week3/notes.md",
+            "title": "阅读：Bag-of-words、TF-IDF、BPE 与 WordPiece",
             "file": "rounds/round_21/week3/notes.md"
           },
           {
             "id": "r21-w3-ex3",
             "type": "exercise",
-            "title": "练习3",
+            "title": "练习：生成传统文本特征与子词对照示例",
             "file": "rounds/round_21/week3/exercises.py"
           },
           {
             "id": "r21-w3-self",
             "type": "test",
-            "title": "第3周自测",
+            "title": "自测：终端运行 text feature smoke check",
             "file": "rounds/round_21/week3/exercises.py"
           }
         ]
@@ -2387,19 +2387,19 @@ window.ROUNDS_DATA = [
           {
             "id": "r21-fin-comp",
             "type": "exercise",
-            "title": "综合练习",
+            "title": "综合练习：完整 NLP 前置基础项目包",
             "file": "rounds/round_21/final/comprehensive_exercise.py"
           },
           {
             "id": "r21-fin-sheet",
             "type": "output",
-            "title": "完成本 Round 小抄",
+            "title": "产出：完成 Round 21 NLP 前置基础小抄",
             "file": "rounds/round_21/final/nlp_prereq_cheatsheet.md"
           },
           {
             "id": "r21-fin-acc1",
             "type": "test",
-            "title": "验收：Round 21 核心目标",
+            "title": "验收：解释 tokenization、词表、embedding 与文本分类路径",
             "file": "round_21.md"
           }
         ]

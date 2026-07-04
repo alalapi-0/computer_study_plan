@@ -837,6 +837,23 @@ TASK-011 实际产物：
 
 ---
 
+## TASK-RR-52：Stage 1 填充 · Round 21 Web UI 可完成练习
+
+- 状态：**done**（2026-07-04）
+- 背景：Round 21 已有最小骨架，但 notes 只列目标和自查，脚本只写 marker；总览还引导用户直接 `pip install torch transformers scikit-learn`，不符合“只通过 Web UI 稳定推进”的优先级。
+- 目标：让 Round 21 用户只通过 Web UI 就能阅读 NLP 前置基础资料，运行自动练习，在浏览器映射终端中完成 tokenizer / embedding / text feature smoke check，并手动记录最终小抄与验收。
+- 实际产物：
+  - `rounds/round_21/README.md` 更新为 Web UI 可练习说明，明确自动产物只写入 `~/cli-lab/round21`，不在 Web UI 中安装 `torch`、`transformers`、`scikit-learn` 或下载模型。
+  - `rounds/round_21/week1|week2|week3/notes.md` 补齐 tokenization、词表编号、embedding、padding、均值池化、传统文本特征、BPE / WordPiece 的学习步骤、自测短命令和官方外链。
+  - `rounds/round_21/week1|week2|week3/exercises.py` 改为默认可非交互运行，自动生成 NLP 代码形状、标准库 smoke check、静态检查报告和下一步提示，只自动记录对应练习任务。
+  - `rounds/round_21/final/comprehensive_exercise.py` 改为 Web UI 默认可运行的 NLP 前置基础项目包练习，生成 `tokenizer.py`、`dataset.py`、`embedding_model.py`、`traditional_baseline.py`、样例 CSV、流程合同、标准库预检和最终静态验收报告，只自动记录 `r21-fin-comp`。
+  - `rounds/round_21/final/nlp_prereq_cheatsheet.md` 与 `round_21.md` 补齐 Web UI 完成路径、tokenization / vocab / embedding / TF-IDF 小抄和最终验收自问。
+  - `scripts/build_rounds_data.py` / `rounds_data.js` 为 Round 21 输出清晰任务标题，并同步四星难度。
+- 验收：API 可运行 Round 21 四个练习脚本；自测任务拒绝误运行；浏览器终端可绑定 `r21-w2-self` 到 `~/round21` 并执行 `pwd` / `cd` / `python3 stdlib_embedding_smoke.py`；`pip install torch transformers scikit-learn` 被拦截；Week 1 notes 可在阅读器中直接阅读；Hugging Face 官方外链可新标签页打开；运行结果弹窗可见；桌面端和 390px 移动端无横向溢出；测试记录已恢复。
+- 是否需要用户介入：否。
+
+---
+
 ## TASK-RR-26：Stage 1 增强 · Round 05 接入进度系统
 
 - 状态：**done**（2026-06-15）

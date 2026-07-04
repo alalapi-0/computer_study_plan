@@ -455,3 +455,23 @@ git diff --check
 - 移动端验证：390px 宽度无整页横向溢出；任务按钮换行后不重叠。
 - 截图：`/tmp/round20_web_ui_panel.png`（恢复真实记录后的 Round 20 页面，显示 0/12 完成）；阅读弹窗 `/tmp/round20_reading_modal.png`；运行结果 `/tmp/round20_run_result.png`；终端 `/tmp/round20_terminal_ui.png`；移动端 `/tmp/round20_mobile_ui.png`。
 - 清理：本轮 API/UI 测试产生的进度、动作、反馈和终端历史已从测试前快照恢复。
+
+## Round 21 内容填充与 NLP 前置基础补测
+
+- before 问题：Round 21 仍是最小骨架，notes 只列目标和自查，缺少 Web UI 学习路径、可直接阅读的知识解释、官方外链和浏览器终端自测命令。
+- before 问题：Round 21 脚本只写 marker 文件，没有形成 tokenizer、词表编号、embedding、文本分类、传统文本特征、子词对照或最终项目包等可检查产物。
+- before 问题：Round 21 任务标题仍是“基础练习 / 进阶练习 / 综合练习”，用户无法判断要练 tokenization、embedding 还是文本特征。
+- before 问题：总览引导用户 `pip install torch transformers scikit-learn`，但浏览器终端会拦截 `pip`，且下载模型不适合作为 Web UI 默认路径。
+- 修复：Round 21 README、Week 1-3 notes、final 小抄已补齐 tokenization、vocab、encode/decode、embedding、padding、mean pooling、TF-IDF、BPE / WordPiece、Web UI 完成路径和验收自问。
+- 修复：Round 21 Python 脚本改为非交互运行，自动生成 NLP 代码形状、样例数据、标准库 smoke check、静态检查报告和最终 NLP 前置基础项目包，只自动记录脚本实际完成的练习任务。
+- 修复：Round 21 UI 任务标题改为“生成手写 tokenizer 与词表编号示例”“生成 embedding 与文本分类示例”“生成传统文本特征与子词对照示例”等动作标题，并同步四星难度。
+- 修复：浏览器终端自测统一为先点“运行”生成 smoke 脚本，再执行短命令 `cd` / `python3` / `cat`；避免多行脚本、网络下载和大依赖安装。
+- 边界：本轮不在 Web UI 中执行 `pip install torch transformers scikit-learn`，不下载 Hugging Face 模型；自动练习生成真实代码形状，但用 Python 标准库和静态检查做可运行验证。
+- 直接脚本验证：`python3 -m py_compile scripts/build_rounds_data.py rounds/round_21/week1/exercises.py rounds/round_21/week2/exercises.py rounds/round_21/week3/exercises.py rounds/round_21/final/comprehensive_exercise.py` 通过；四个 Round 21 脚本直接运行成功。
+- API 验证：`r21-w1-ex1`、`r21-w2-ex2`、`r21-w3-ex3`、`r21-fin-comp` 均可通过 `/api/tasks/<id>/run` 运行成功；`r21-w1-self/run` 返回 `task_not_runnable`。
+- 浏览器终端验证：`~/round21` 可进入 Round 21 沙盒；终端 API 可运行 Week 1 / Week 2 / Week 3 的 smoke check 短命令；终端 UI 可绑定 `r21-w2-self`，执行 `pwd`、`cd ~/round21/week2_auto/embedding_classifier`、`python3 stdlib_embedding_smoke.py`，输出包含 `embedding_dim` 与 `prediction`；`pip install torch transformers scikit-learn` 返回 `terminal_command_not_allowed:pip`。
+- UI 验证：Codex 应用内浏览器打开 `progress.html?round=round_21` 后直接选中 Round 21；12 个任务、4 个运行按钮、9 个终端按钮均可见；Week 1 notes 可在阅读器中直接阅读；点击“运行”有确认框，确认后运行结果弹窗显示“运行成功”和 `static_check_report.json`；恢复记录后页面显示 0/12 完成。
+- 文档阅读验证：Week 1 notes 包含 Web UI 学习路径和浏览器终端自测；Hugging Face Tokenizers 与 Tokenizers Quicktour 外链渲染为 `_blank` 新标签，`rel` 包含 `noreferrer noopener`。
+- 移动端验证：390px 宽度无整页横向溢出；任务按钮换行后不重叠。
+- 截图：`/tmp/round21_web_ui_panel.png`（恢复真实记录后的 Round 21 面板）；阅读弹窗 `/tmp/round21_reading_modal.png`；运行结果 `/tmp/round21_run_result.png`；终端 `/tmp/round21_terminal_ui.png`；移动端 `/tmp/round21_mobile_ui.png`。
+- 清理：本轮 API/UI 测试产生的进度、动作、反馈和终端历史已从测试前快照恢复。
