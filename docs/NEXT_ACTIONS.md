@@ -820,6 +820,23 @@ TASK-011 实际产物：
 
 ---
 
+## TASK-RR-51：Stage 1 填充 · Round 20 Web UI 可完成练习
+
+- 状态：**done**（2026-07-04）
+- 背景：Round 20 已有最小骨架，但 notes 只列目标和自查，脚本只写 marker；任务标题仍是“练习1 / 练习2 / 练习3”，用户无法判断要练 Tensor、DataLoader、训练循环还是 checkpoint。
+- 目标：让 Round 20 用户只通过 Web UI 就能阅读 PyTorch 入门资料，运行自动练习，在浏览器映射终端中完成 batch / loss 下降 / checkpoint smoke check，并手动记录最终小抄与验收。
+- 实际产物：
+  - `rounds/round_20/README.md` 更新为 Web UI 可练习说明，明确自动产物只写入 `~/cli-lab/round20`，不在 Web UI 中执行 `pip install torch torchvision`。
+  - `rounds/round_20/week1|week2|week3/notes.md` 补齐 Tensor、Dataset/DataLoader、nn.Module、训练循环、eval/no_grad、state_dict 与 checkpoint 的学习步骤、自测短命令和官方外链。
+  - `rounds/round_20/week1|week2|week3/exercises.py` 改为默认可非交互运行，自动生成 PyTorch 风格示例代码、标准库 smoke check、静态检查报告和下一步提示，只自动记录对应练习任务。
+  - `rounds/round_20/final/comprehensive_exercise.py` 改为 Web UI 默认可运行的 PyTorch 入门项目包练习，生成 `dataset.py`、`model.py`、`train.py`、`checkpoint.py`、样例 CSV、工作流合同、标准库预检和最终静态验收报告，只自动记录 `r20-fin-comp`。
+  - `rounds/round_20/final/pytorch_intro_cheatsheet.md` 与 `round_20.md` 补齐 Web UI 完成路径、训练循环、评估、保存加载小抄和最终验收自问。
+  - `scripts/build_rounds_data.py` / `rounds_data.js` 为 Round 20 输出清晰任务标题，并同步四星难度。
+- 验收：API 可运行 Round 20 四个练习脚本；自测任务拒绝误运行；浏览器终端可绑定 `r20-w2-self` 到 `~/round20` 并执行 `pwd` / loss 下降 smoke check；`pip install torch torchvision` 被拦截；Week 1 notes 可在阅读器中直接阅读；PyTorch 官方外链可新标签页打开；运行结果弹窗可见；桌面端和 390px 移动端无横向溢出；测试记录已恢复。
+- 是否需要用户介入：否。
+
+---
+
 ## TASK-RR-26：Stage 1 增强 · Round 05 接入进度系统
 
 - 状态：**done**（2026-06-15）

@@ -2200,77 +2200,77 @@ window.ROUNDS_DATA = [
     "id": "round_20",
     "title": "Round 20 · PyTorch 入门",
     "lane": "engineering",
-    "difficulty": "⭐⭐⭐☆☆",
+    "difficulty": "⭐⭐⭐⭐☆",
     "duration": "3 周",
     "weeks": [
       {
         "id": "round20-week1",
-        "title": "第 1 周：基础练习",
+        "title": "第 1 周：Tensor、Dataset 与 DataLoader",
         "tasks": [
           {
             "id": "r20-w1-read",
             "type": "reading",
-            "title": "阅读 week1/notes.md",
+            "title": "阅读：Tensor 形状、Dataset 与 batch",
             "file": "rounds/round_20/week1/notes.md"
           },
           {
             "id": "r20-w1-ex1",
             "type": "exercise",
-            "title": "练习1",
+            "title": "练习：生成 tensor、Dataset 与 batch 示例",
             "file": "rounds/round_20/week1/exercises.py"
           },
           {
             "id": "r20-w1-self",
             "type": "test",
-            "title": "第1周自测",
+            "title": "自测：终端运行 batch smoke check",
             "file": "rounds/round_20/week1/exercises.py"
           }
         ]
       },
       {
         "id": "round20-week2",
-        "title": "第 2 周：进阶练习",
+        "title": "第 2 周：nn.Module 与训练循环",
         "tasks": [
           {
             "id": "r20-w2-read",
             "type": "reading",
-            "title": "阅读 week2/notes.md",
+            "title": "阅读：nn.Module、loss、backward 与 optimizer",
             "file": "rounds/round_20/week2/notes.md"
           },
           {
             "id": "r20-w2-ex2",
             "type": "exercise",
-            "title": "练习2",
+            "title": "练习：生成 nn.Module 与训练循环示例",
             "file": "rounds/round_20/week2/exercises.py"
           },
           {
             "id": "r20-w2-self",
             "type": "test",
-            "title": "第2周自测",
+            "title": "自测：终端运行 loss 下降 smoke check",
             "file": "rounds/round_20/week2/exercises.py"
           }
         ]
       },
       {
         "id": "round20-week3",
-        "title": "第 3 周：综合练习",
+        "title": "第 3 周：eval、no_grad 与 checkpoint",
         "tasks": [
           {
             "id": "r20-w3-read",
             "type": "reading",
-            "title": "阅读 week3/notes.md",
+            "title": "阅读：eval/no_grad、state_dict 与保存加载",
             "file": "rounds/round_20/week3/notes.md"
           },
           {
             "id": "r20-w3-ex3",
             "type": "exercise",
-            "title": "练习3",
+            "title": "练习：生成 eval/no_grad 与 checkpoint 示例",
             "file": "rounds/round_20/week3/exercises.py"
           },
           {
             "id": "r20-w3-self",
             "type": "test",
-            "title": "第3周自测",
+            "title": "自测：终端运行 checkpoint smoke check",
             "file": "rounds/round_20/week3/exercises.py"
           }
         ]
@@ -2282,19 +2282,19 @@ window.ROUNDS_DATA = [
           {
             "id": "r20-fin-comp",
             "type": "exercise",
-            "title": "综合练习",
+            "title": "综合练习：完整 PyTorch 入门项目包",
             "file": "rounds/round_20/final/comprehensive_exercise.py"
           },
           {
             "id": "r20-fin-sheet",
             "type": "output",
-            "title": "完成本 Round 小抄",
+            "title": "产出：完成 Round 20 PyTorch 入门小抄",
             "file": "rounds/round_20/final/pytorch_intro_cheatsheet.md"
           },
           {
             "id": "r20-fin-acc1",
             "type": "test",
-            "title": "验收：Round 20 核心目标",
+            "title": "验收：解释 Tensor、DataLoader、训练循环、eval 与 checkpoint",
             "file": "round_20.md"
           }
         ]

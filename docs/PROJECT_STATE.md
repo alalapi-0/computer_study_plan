@@ -1701,3 +1701,37 @@
 - 未引入大型新依赖；未安装 scikit-learn / NumPy / pandas；未创建后端服务。
 - 自动脚本只写入 `~/cli-lab/round19` 沙盒；生成的样例 CSV、训练脚本、指标报告和静态检查结果不进入仓库。
 - `npm run check:mcp` 配置层通过；`npm run check:cursor-mcp` 退出 0，但提示当前线程 filesystem 仍需 approval。本轮真实浏览器检查使用 Codex 应用内浏览器完成，并在 DOM 选择器不匹配时改用实际页面结构重新定位。
+
+## 63. 2026-07-04 TASK-RR-51 Round 20 内容填充与 PyTorch 入门练习
+
+### 63.1 本轮修改
+
+- `rounds/round_20/README.md`：从“最小实操骨架”更新为 Web UI 可练习说明，明确页面路径、沙盒产物、依赖边界和最终验收标准。
+- `rounds/round_20/week1|week2|week3/notes.md`：补齐 Tensor、Dataset/DataLoader、nn.Module、训练循环、eval/no_grad、state_dict 与 checkpoint 的学习步骤、自测短命令和 PyTorch 官方外链。
+- `rounds/round_20/week1|week2|week3/exercises.py`：改为默认可非交互运行，自动生成 PyTorch 风格示例代码、标准库 smoke check、样例数据、静态检查报告和下一步提示，只自动记录对应练习任务。
+- `rounds/round_20/final/comprehensive_exercise.py`：改为 Web UI 默认可运行的 PyTorch 入门项目包练习，生成 `dataset.py`、`model.py`、`train.py`、`checkpoint.py`、样例 CSV、工作流合同、标准库预检和最终静态验收报告，只自动记录 `r20-fin-comp`。
+- `rounds/round_20/final/pytorch_intro_cheatsheet.md` 与 `round_20.md`：补齐 Web UI 完成路径、Tensor / DataLoader / 训练循环 / 评估 / 保存加载小抄和最终验收自问。
+- `scripts/build_rounds_data.py` / `rounds_data.js`：将 Round 20 UI 任务标题从“练习1 / 练习2 / 练习3”改为用户能理解的动作标题，并同步四星难度。
+
+### 63.2 用户视角问题修复
+
+- Round 20 原 notes 太短，用户不知道如何只通过 Web UI 完成 PyTorch 入门练习。
+- Round 20 原脚本只写 marker 文件，没有形成可检查的 tensor、Dataset、DataLoader、nn.Module、训练循环、评估或 checkpoint 产物。
+- Round 20 原任务标题过泛，用户无法判断分别要练数据层、训练循环还是保存加载。
+- 初版自测命令试图在浏览器终端粘贴多行脚本，会被终端安全规则拦截；已改为“先运行自动练习生成 smoke 脚本，再用短命令 `cd` / `python3` / `cat` 验证”的稳定路径。
+- 本轮明确不在 Web UI 中执行 `pip install torch torchvision`；自动练习生成真实 PyTorch 代码形状，并用 Python 标准库做 smoke/static check。
+
+### 63.3 验证
+
+- API 验证：`r20-w1-ex1`、`r20-w2-ex2`、`r20-w3-ex3`、`r20-fin-comp` 均可通过 `/api/tasks/<id>/run` 运行成功；`r20-w1-self/run` 返回 `task_not_runnable`。
+- 浏览器终端验证：`/api/terminal?cwd=~/round20` 与 `/api/terminal?cwd=~/cli-lab/round20` 均可进入 Round 20 沙盒；终端 UI 可绑定 `r20-w2-self`，执行 `pwd`、`cd ~/round20/week2_auto/training_loop` 与 `python3 stdlib_gradient_demo.py`，输出包含 `loss_decreased` 和 `final_loss`；`pip install torch torchvision` 返回 `terminal_command_not_allowed:pip`。
+- 真实浏览器验证：`progress.html?round=round_20` 可选中 Round 20；12 个任务、4 个运行按钮、9 个终端按钮均可见；Week 1 notes 可在阅读器中直接阅读；点击“运行”有确认框，结果弹窗显示“运行成功”和 `static_check_report.json`；恢复记录后页面显示 0/12 完成。
+- 文档阅读与外链验证：Week 1 notes 包含 Web UI 学习路径和浏览器终端自测；PyTorch Learn the Basics / Tensors / Datasets & DataLoaders 外链渲染为 `_blank` 新标签，`rel` 包含 `noreferrer noopener`。
+- 移动端验证：390px 宽度无整页横向溢出；任务按钮换行后不重叠。
+- 静态与数据验证：`build_rounds_data.py`、Python 语法编译、脚本直接运行、API 运行、终端短命令、真实浏览器截图均通过。
+
+### 63.4 风险边界核对
+
+- 本轮 API/UI 验证产生的进度、动作、反馈和终端历史均已从测试前快照恢复。
+- 未引入大型新依赖；未安装 PyTorch / torchvision；未创建后端服务。
+- 自动脚本只写入 `~/cli-lab/round20` 沙盒；生成的样例 CSV、PyTorch 风格代码、checkpoint smoke 文件和静态检查结果不进入仓库。

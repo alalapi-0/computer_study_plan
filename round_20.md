@@ -27,6 +27,17 @@
 - [ ] 知道 `model.eval()` 和 `torch.no_grad()` 的作用
 - [ ] 能保存和加载模型权重
 
+## Web UI 完成方式
+
+本轮可以只通过 `progress.html` 完成：
+
+1. 打开 Round 20 面板，按顺序点击每周“阅读”任务，在弹窗里读完 notes。
+2. 点击“运行”任务，让系统在 `~/cli-lab/round20` 下生成 PyTorch 风格示例、标准库 smoke check 和静态检查报告。
+3. 点击“终端”任务，在浏览器内终端手写最小自测脚本，确认 tensor 形状、训练循环四步和 checkpoint 语义。
+4. 最后手动完成小抄与验收任务，把“Tensor -> Dataset/DataLoader -> nn.Module -> train/eval -> save/load”讲清楚。
+
+自动练习不会在 Web UI 中安装 `torch` / `torchvision`。脚本会生成真实 PyTorch 代码形状，并用 Python 标准库做静态与烟测验证；如果你在本机另行安装了 PyTorch，可以进入沙盒手动运行生成的 PyTorch 示例。
+
 ---
 
 ## 本轮不学什么
@@ -112,10 +123,11 @@ class MyModel(nn.Module):
 ### 准备工作
 
 ```bash
-pip install torch torchvision
 mkdir -p ~/cli-lab/round20
 cd ~/cli-lab/round20
 ```
+
+可选：如果要在 Web UI 之外真实运行 PyTorch 示例，再自行准备虚拟环境并安装 `torch` / `torchvision`。
 
 ---
 
