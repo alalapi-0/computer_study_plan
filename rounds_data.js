@@ -840,72 +840,72 @@ window.ROUNDS_DATA = [
     "weeks": [
       {
         "id": "round07-week1",
-        "title": "第 1 周：基础练习",
+        "title": "第 1 周：pathlib 与多格式读写",
         "tasks": [
           {
             "id": "r07-w1-read",
             "type": "reading",
-            "title": "阅读 week1/notes.md",
+            "title": "阅读：pathlib 与 txt/csv/json/jsonl 读写",
             "file": "rounds/round_07/week1/notes.md"
           },
           {
             "id": "r07-w1-ex1",
             "type": "exercise",
-            "title": "练习1",
+            "title": "练习：读取四种小数据格式",
             "file": "rounds/round_07/week1/exercises.py"
           },
           {
             "id": "r07-w1-self",
             "type": "test",
-            "title": "第1周自测",
+            "title": "自测：自己写 read_formats.py",
             "file": "rounds/round_07/week1/exercises.py"
           }
         ]
       },
       {
         "id": "round07-week2",
-        "title": "第 2 周：进阶练习",
+        "title": "第 2 周：argparse 与 logging",
         "tasks": [
           {
             "id": "r07-w2-read",
             "type": "reading",
-            "title": "阅读 week2/notes.md",
+            "title": "阅读：argparse 参数与 logging 日志",
             "file": "rounds/round_07/week2/notes.md"
           },
           {
             "id": "r07-w2-ex2",
             "type": "exercise",
-            "title": "练习2",
+            "title": "练习：命令行参数与日志输出",
             "file": "rounds/round_07/week2/exercises.py"
           },
           {
             "id": "r07-w2-self",
             "type": "test",
-            "title": "第2周自测",
+            "title": "自测：自己写 cli_logger.py",
             "file": "rounds/round_07/week2/exercises.py"
           }
         ]
       },
       {
         "id": "round07-week3",
-        "title": "第 3 周：综合练习",
+        "title": "第 3 周：整合 ai_prep_tool",
         "tasks": [
           {
             "id": "r07-w3-read",
             "type": "reading",
-            "title": "阅读 week3/notes.md",
+            "title": "阅读：数据去重、统计与工具整合",
             "file": "rounds/round_07/week3/notes.md"
           },
           {
             "id": "r07-w3-ex3",
             "type": "exercise",
-            "title": "练习3",
+            "title": "练习：整合 mini ai_prep_tool",
             "file": "rounds/round_07/week3/exercises.py"
           },
           {
             "id": "r07-w3-self",
             "type": "test",
-            "title": "第3周自测",
+            "title": "自测：自己写 mini_prep_tool.py",
             "file": "rounds/round_07/week3/exercises.py"
           }
         ]
@@ -917,19 +917,19 @@ window.ROUNDS_DATA = [
           {
             "id": "r07-fin-comp",
             "type": "exercise",
-            "title": "综合练习",
+            "title": "综合练习：AI 数据预处理工具",
             "file": "rounds/round_07/final/comprehensive_exercise.py"
           },
           {
             "id": "r07-fin-sheet",
             "type": "output",
-            "title": "完成本 Round 小抄",
+            "title": "产出：完成 Round 07 ai_prep_tool 小抄",
             "file": "rounds/round_07/final/ai_prep_tool_cheatsheet.md"
           },
           {
             "id": "r07-fin-acc1",
             "type": "test",
-            "title": "验收：Round 07 核心目标",
+            "title": "验收：解释读取、参数、日志和去重流程",
             "file": "round_07.md"
           }
         ]

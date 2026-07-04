@@ -180,6 +180,22 @@
 - 移动端验证：390px 宽度无整页横向溢出。
 - 清理：本轮 API/UI 测试产生的进度、动作、反馈和终端历史已从测试前快照恢复。
 
+## Round 07 内容填充与 AI 数据预处理补测
+
+- before 问题：Round 07 仍是最小骨架，notes 只列目标和自查，缺少 Web UI 学习路径和浏览器终端自测命令。
+- before 问题：Week 2 与 Final 脚本默认要求 `--input`，在 Web UI 一键运行时会直接失败。
+- before 问题：Round 07 任务标题仍是“练习1 / 练习2 / 练习3”，用户无法判断要练多格式读取、参数日志还是整合工具。
+- 修复：Round 07 README、Week 1–3 notes、final 小抄已补齐 pathlib、多格式读写、argparse、logging、去重统计、函数拆分、Web UI 完成路径和验收自问。
+- 修复：Round 07 Python 脚本改为非交互运行，自动生成演示输入、输出结果、日志和下一步提示，只自动记录脚本实际完成的练习任务；自测、小抄和验收仍由用户手动完成并记录。
+- 修复：Round 07 UI 任务标题改为“读取四种小数据格式”“命令行参数与日志输出”“整合 mini ai_prep_tool”等动作标题。
+- API 验证：`r07-w1-ex1`、`r07-w2-ex2`、`r07-w3-ex3`、`r07-fin-comp` 均可运行成功；`r07-w1-self/run` 返回 `task_not_runnable`。
+- 浏览器终端验证：`~/round7` 可作为映射目录；终端能在任务 `r07-w1-self` 下写入并运行 `read_formats.py`；`python3 -c` 返回 `terminal_command_blocked`。
+- UI 验证：真实 Chrome 打开 `progress.html?round=round_07` 后直接选中 Round 07；`r07-w1-ex1` 显示“运行”，`r07-w1-self` 不显示“运行”但显示“终端”；点击后当前任务为“自测：自己写 read_formats.py”，工作目录为 `~/round7`。
+- 外链验证：在阅读器中打开 `round_07.md`，Python argparse 官方链接可被定位，`target="_blank"`，`rel` 包含 `noreferrer noopener`。
+- 移动端验证：390px 宽度无整页横向溢出。
+- 清理：本轮 API/UI 测试产生的进度、动作、反馈和终端历史已从测试前快照恢复。
+- 工具备注：应用内浏览器插件本轮打开本地页时控制超时；已使用本机 Google Chrome + Playwright 打开同一 Web UI 完成真实渲染、点击、终端和截图验证。
+
 ## 验证命令
 
 ```bash

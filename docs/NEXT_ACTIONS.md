@@ -602,6 +602,22 @@ TASK-011 实际产物：
 
 ---
 
+## TASK-RR-38：Stage 1 填充 · Round 07 Web UI 可完成练习
+
+- 状态：**done**（2026-07-04）
+- 背景：Round 07 已接入进度系统，但仍是最小骨架；notes 缺少 Web UI 学习路径，Week 2 / Final 脚本默认要求 `--input`，会在网页“一键运行”中失败，任务标题也不利于用户判断该练多格式读取、参数日志还是整合工具。
+- 目标：让 Round 07 用户只通过 Web UI 就能阅读 pathlib、多格式读写、argparse、logging、去重统计资料，运行自动练习，在浏览器映射终端中完成 Python 文件自测，并手动记录最终小抄与验收。
+- 实际产物：
+  - `rounds/round_07/README.md` 更新为 Web UI 使用说明，明确阅读、运行、自测、最终验收边界。
+  - `rounds/round_07/week1|week2|week3/notes.md` 补齐页面学习路径、浏览器终端自测命令、格式/参数/日志/函数拆分要点。
+  - `rounds/round_07/week1|week2|week3/exercises.py` 与 `final/comprehensive_exercise.py` 改为默认可从 Web UI 非交互运行，自动生成演示输入、输出结果、日志和下一步提示；只自动记录对应练习任务。
+  - `rounds/round_07/final/ai_prep_tool_cheatsheet.md` 补齐 Web UI 完成路径、参数、格式读取和最终验收自问。
+  - `scripts/build_rounds_data.py` / `rounds_data.js` 为 Round 07 输出清晰任务标题。
+- 验收：API 可运行 Round 07 四个练习脚本；自测任务拒绝误运行；浏览器终端可绑定 `r07-w1-self` 到 `~/round7` 并运行手写 `read_formats.py`；`python3 -c` 仍被拦截；`round_07.md` 外部资料链接可在阅读器新标签页打开；桌面端和 390px 移动端无横向溢出；测试记录已恢复。
+- 是否需要用户介入：否。
+
+---
+
 ## TASK-RR-26：Stage 1 增强 · Round 05 接入进度系统
 
 - 状态：**done**（2026-06-15）

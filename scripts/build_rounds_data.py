@@ -18,6 +18,7 @@ DIFFICULTY_BY_ROUND = {
     4: "⭐⭐⭐☆☆",
     5: "⭐⭐⭐☆☆",
     6: "⭐⭐⭐☆☆",
+    7: "⭐⭐⭐☆☆",
 }
 
 
@@ -610,6 +611,87 @@ def build_standard_round(root: Path, num: int) -> dict | None:
                     ],
                 },
                 {"id": "round06-final", "title": "最终验收", "tasks": final_tasks},
+            ],
+        }
+
+    if num == 7:
+        final_tasks = []
+        if comp:
+            final_tasks.append(
+                {
+                    "id": "r07-fin-comp",
+                    "type": "exercise",
+                    "title": "综合练习：AI 数据预处理工具",
+                    "file": comp,
+                }
+            )
+        if sheet:
+            final_tasks.append(
+                {
+                    "id": "r07-fin-sheet",
+                    "type": "output",
+                    "title": "产出：完成 Round 07 ai_prep_tool 小抄",
+                    "file": sheet,
+                }
+            )
+        final_tasks.append(
+            {
+                "id": "r07-fin-acc1",
+                "type": "test",
+                "title": "验收：解释读取、参数、日志和去重流程",
+                "file": "round_07.md",
+            }
+        )
+        return {
+            "id": "round_07",
+            "title": round_title(root, num),
+            "lane": "engineering",
+            "difficulty": DIFFICULTY_BY_ROUND.get(num, "⭐⭐⭐☆☆"),
+            "duration": "3 周",
+            "weeks": [
+                {
+                    "id": "round07-week1",
+                    "title": "第 1 周：pathlib 与多格式读写",
+                    "tasks": [
+                        {
+                            "id": "r07-w1-read",
+                            "type": "reading",
+                            "title": "阅读：pathlib 与 txt/csv/json/jsonl 读写",
+                            "file": "rounds/round_07/week1/notes.md",
+                        },
+                        {"id": "r07-w1-ex1", "type": "exercise", "title": "练习：读取四种小数据格式", "file": ex1},
+                        {"id": "r07-w1-self", "type": "test", "title": "自测：自己写 read_formats.py", "file": ex1},
+                    ],
+                },
+                {
+                    "id": "round07-week2",
+                    "title": "第 2 周：argparse 与 logging",
+                    "tasks": [
+                        {
+                            "id": "r07-w2-read",
+                            "type": "reading",
+                            "title": "阅读：argparse 参数与 logging 日志",
+                            "file": "rounds/round_07/week2/notes.md",
+                        },
+                        {"id": "r07-w2-ex2", "type": "exercise", "title": "练习：命令行参数与日志输出", "file": ex2},
+                        {"id": "r07-w2-self", "type": "test", "title": "自测：自己写 cli_logger.py", "file": ex2},
+                    ],
+                },
+                {
+                    "id": "round07-week3",
+                    "title": "第 3 周：整合 ai_prep_tool",
+                    "tasks": [
+                        {
+                            "id": "r07-w3-read",
+                            "type": "reading",
+                            "title": "阅读：数据去重、统计与工具整合",
+                            "file": "rounds/round_07/week3/notes.md",
+                        },
+                        {"id": "r07-w3-ex3", "type": "exercise", "title": "练习：整合 mini ai_prep_tool", "file": ex3},
+                        {"id": "r07-w3-self", "type": "test", "title": "自测：自己写 mini_prep_tool.py", "file": ex3},
+                    ],
+                },
+                {"id": "round07-final", "title": "最终验收", "tasks": final_tasks},
             ],
         }
 
