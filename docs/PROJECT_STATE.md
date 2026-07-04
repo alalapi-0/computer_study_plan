@@ -1390,3 +1390,36 @@
 - 本轮 API/UI 验证产生的进度、动作、反馈和终端历史均已从测试前快照恢复。
 - 未引入大型新依赖；未安装第三方包；未做打包发布或 layout 迁移。
 - 未放宽浏览器终端高风险命令边界；`python3 -c` 仍被拦截。
+
+## 54. 2026-07-04 TASK-RR-42 Round 11 内容填充与 SQLite 持久化练习
+
+### 54.1 本轮修改
+
+- `rounds/round_11/README.md`：从“最小实操骨架”更新为 Web UI 可练习说明，明确阅读、自动运行、终端自测、小抄和验收的页面操作路径。
+- `rounds/round_11/week1|week2|week3/notes.md`：补齐 SQLite 建表、参数化插入、`db.py` 查询封装、主工具写入运行历史的学习步骤、自测命令和完成标准。
+- `rounds/round_11/week1|week2|week3/exercises.py`：改为默认可非交互运行，自动生成 `runs.db`、查询报告、持久化报告和下一步提示，只自动记录对应练习任务。
+- `rounds/round_11/final/comprehensive_exercise.py`：改为 Web UI 默认可运行的 SQLite 运行历史收口检查，生成完整 `ai_prep_tool` 沙盒并验证 2 次运行历史、格式查询、处理总数和 `.gitignore` 边界，只自动记录 `r11-fin-comp`。
+- `rounds/round_11/final/sqlite_persistence_cheatsheet.md`：补齐 Web UI 完成路径、表结构、参数化 SQL、`db.py` 职责和最终验收自问。
+- `scripts/build_rounds_data.py` / `rounds_data.js`：将 Round 11 UI 任务标题从“练习1 / 练习2 / 练习3”改为用户能理解的动作标题。
+
+### 54.2 用户视角问题修复
+
+- Round 11 原 notes 太短，用户不知道如何只通过 Web UI 完成 SQLite 持久化练习。
+- Round 11 原脚本只是生成少量文件或依赖前一周产物，没有形成 Web UI 一键运行后的稳定可检查产物与自动记录。
+- Round 11 原任务标题过泛，用户无法从 UI 判断分别要练 `runs` 表、`db.py` 查询封装还是主工具运行历史。
+- 本轮明确 `.db` 文件只写入 `~/cli-lab/round11` 沙盒，不把练习数据库提交进仓库；自动脚本只标记练习任务，自测、小抄和验收仍由用户自己阅读、手写、解释并手动记录。
+
+### 54.3 验证
+
+- API 验证：`r11-w1-ex1`、`r11-w2-ex2`、`r11-w3-ex3`、`r11-fin-comp` 均可通过 `/api/tasks/<id>/run` 运行成功；`r11-w1-self/run` 返回 `task_not_runnable`。
+- 浏览器终端验证：`/api/terminal?cwd=~/round11` 返回 `~/round11`；终端 API 可在任务 `r11-w1-self` 下写入并运行 SQLite 脚本；`python3 -c` 返回 `terminal_command_blocked`。
+- 真实浏览器验证：`progress.html?round=round_11` 会直接选中 Round 11；`r11-w1-ex1` 显示“运行”，`r11-w1-self` 不显示“运行”但显示“终端”；点击后终端工作目录为 `~/round11`，UI 输入 `pwd` 输出 `/Users/alalapi/cli-lab/round11`。
+- 文档阅读与外链验证：Week 1 notes 可在阅读器中直接阅读，包含 Web UI 学习路径；`round_11.md` 中 Python sqlite3 官方文档链接可被定位，`target="_blank"`，`rel` 包含 `noreferrer noopener`。
+- 移动端验证：390px 宽度无整页横向溢出。
+- 静态与数据验证：`build_rounds_data.py`、Python 语法编译、自动打卡目标检查均通过。
+
+### 54.4 风险边界核对
+
+- 本轮 API/UI 验证产生的进度、动作、反馈和终端历史均已从测试前快照恢复。
+- 未引入大型新依赖；只使用 Python 标准库 `sqlite3`。
+- 未把练习 `.db` 文件写入仓库；练习产物位于 `~/cli-lab/round11` 沙盒。

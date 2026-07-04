@@ -22,6 +22,7 @@ DIFFICULTY_BY_ROUND = {
     8: "⭐⭐⭐☆☆",
     9: "⭐⭐⭐☆☆",
     10: "⭐⭐⭐☆☆",
+    11: "⭐⭐⭐☆☆",
 }
 
 
@@ -938,6 +939,87 @@ def build_standard_round(root: Path, num: int) -> dict | None:
                     ],
                 },
                 {"id": "round10-final", "title": "最终验收", "tasks": final_tasks},
+            ],
+        }
+
+    if num == 11:
+        final_tasks = []
+        if comp:
+            final_tasks.append(
+                {
+                    "id": "r11-fin-comp",
+                    "type": "exercise",
+                    "title": "综合练习：SQLite 运行历史收口检查",
+                    "file": comp,
+                }
+            )
+        if sheet:
+            final_tasks.append(
+                {
+                    "id": "r11-fin-sheet",
+                    "type": "output",
+                    "title": "产出：完成 Round 11 SQLite 持久化小抄",
+                    "file": sheet,
+                }
+            )
+        final_tasks.append(
+            {
+                "id": "r11-fin-acc1",
+                "type": "test",
+                "title": "验收：解释 runs 表、参数化 SQL 和运行历史",
+                "file": "round_11.md",
+            }
+        )
+        return {
+            "id": "round_11",
+            "title": round_title(root, num),
+            "lane": "engineering",
+            "difficulty": DIFFICULTY_BY_ROUND.get(num, "⭐⭐⭐☆☆"),
+            "duration": "3 周",
+            "weeks": [
+                {
+                    "id": "round11-week1",
+                    "title": "第 1 周：SQLite 建表与参数化插入",
+                    "tasks": [
+                        {
+                            "id": "r11-w1-read",
+                            "type": "reading",
+                            "title": "阅读：runs 表、sqlite3 与参数化 SQL",
+                            "file": "rounds/round_11/week1/notes.md",
+                        },
+                        {"id": "r11-w1-ex1", "type": "exercise", "title": "练习：创建 runs.db 与 runs 表", "file": ex1},
+                        {"id": "r11-w1-self", "type": "test", "title": "自测：自己写建表和插入脚本", "file": ex1},
+                    ],
+                },
+                {
+                    "id": "round11-week2",
+                    "title": "第 2 周：插入、查询与 db.py 封装",
+                    "tasks": [
+                        {
+                            "id": "r11-w2-read",
+                            "type": "reading",
+                            "title": "阅读：insert_run、get_all_runs 与条件查询",
+                            "file": "rounds/round_11/week2/notes.md",
+                        },
+                        {"id": "r11-w2-ex2", "type": "exercise", "title": "练习：封装 db.py 并查询历史", "file": ex2},
+                        {"id": "r11-w2-self", "type": "test", "title": "自测：自己封装 insert_run", "file": ex2},
+                    ],
+                },
+                {
+                    "id": "round11-week3",
+                    "title": "第 3 周：接入主工具并记录历史",
+                    "tasks": [
+                        {
+                            "id": "r11-w3-read",
+                            "type": "reading",
+                            "title": "阅读：每次运行写入 runs.db",
+                            "file": "rounds/round_11/week3/notes.md",
+                        },
+                        {"id": "r11-w3-ex3", "type": "exercise", "title": "练习：ai_prep_tool 自动写运行历史", "file": ex3},
+                        {"id": "r11-w3-self", "type": "test", "title": "自测：自己接入 insert_run", "file": ex3},
+                    ],
+                },
+                {"id": "round11-final", "title": "最终验收", "tasks": final_tasks},
             ],
         }
 

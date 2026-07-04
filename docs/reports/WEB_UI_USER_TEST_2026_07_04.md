@@ -243,6 +243,22 @@
 - 移动端验证：390px 宽度无整页横向溢出。
 - 清理：本轮 API/UI 测试产生的进度、动作、反馈和终端历史已从测试前快照恢复。
 
+## Round 11 内容填充与 SQLite 持久化补测
+
+- before 问题：Round 11 仍是最小骨架，notes 只列目标和自查，缺少 Web UI 学习路径和浏览器终端自测命令。
+- before 问题：Round 11 脚本只生成局部文件或依赖前一周产物，没有形成 Web UI 一键运行后的稳定可检查产物与自动记录。
+- before 问题：Round 11 任务标题仍是“练习1 / 练习2 / 练习3”，用户无法判断要练 `runs` 表、`db.py` 查询封装还是主工具运行历史。
+- 修复：Round 11 README、Week 1–3 notes、final 小抄已补齐 SQLite 建表、参数化插入、查询封装、主工具持久化、Web UI 完成路径和验收自问。
+- 修复：Round 11 Python 脚本改为非交互运行，自动生成 `runs.db`、`db.py`、`ai_prep_tool.py`、查询报告和收口摘要，只自动记录脚本实际完成的练习任务；自测、小抄和验收仍由用户手动完成并记录。
+- 修复：Round 11 UI 任务标题改为“创建 runs.db 与 runs 表”“封装 db.py 并查询历史”“ai_prep_tool 自动写运行历史”等动作标题。
+- 边界：本轮只使用 Python 标准库 `sqlite3`，练习数据库只写入 `~/cli-lab/round11` 沙盒，不提交 `.db` 文件。
+- API 验证：`r11-w1-ex1`、`r11-w2-ex2`、`r11-w3-ex3`、`r11-fin-comp` 均可运行成功；`r11-w1-self/run` 返回 `task_not_runnable`。
+- 浏览器终端验证：`~/round11` 可作为映射目录；终端 API 能在任务 `r11-w1-self` 下写入并运行 SQLite 脚本；`python3 -c` 返回 `terminal_command_blocked`。
+- UI 验证：真实 Chrome 打开 `progress.html?round=round_11` 后直接选中 Round 11；`r11-w1-ex1` 显示“运行”，`r11-w1-self` 不显示“运行”但显示“终端”；点击后工作目录为 `~/round11`，输入 `pwd` 输出 `/Users/alalapi/cli-lab/round11`。
+- 文档阅读验证：Week 1 notes 可在阅读器中直接阅读，包含 Web UI 学习路径；`round_11.md` 中 Python sqlite3 官方链接可被定位，`target="_blank"`，`rel` 包含 `noreferrer noopener`。
+- 移动端验证：390px 宽度无整页横向溢出。
+- 清理：本轮 API/UI 测试产生的进度、动作、反馈和终端历史已从测试前快照恢复。
+
 ## 验证命令
 
 ```bash
@@ -256,6 +272,9 @@ python3 -m json.tool progress.json
 python3 -m json.tool records/feedback/task_feedback.json
 node --check progress_ui.js
 python3 -m py_compile scripts/progress_lib.py scripts/progress_server.py scripts/generate_task_feedback.py scripts/mark_done_cli.py scripts/sync_progress_data.py scripts/build_rounds_data.py scripts/check_protocol_sync.py scripts/validate_learning_data.py
+python3 -m py_compile rounds/round_11/week1/exercises.py rounds/round_11/week2/exercises.py rounds/round_11/week3/exercises.py rounds/round_11/final/comprehensive_exercise.py
+python3 scripts/agent_gate.py --verify
+git diff --check
 ```
 
 ## 当前结论

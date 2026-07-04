@@ -1260,72 +1260,72 @@ window.ROUNDS_DATA = [
     "weeks": [
       {
         "id": "round11-week1",
-        "title": "第 1 周：基础练习",
+        "title": "第 1 周：SQLite 建表与参数化插入",
         "tasks": [
           {
             "id": "r11-w1-read",
             "type": "reading",
-            "title": "阅读 week1/notes.md",
+            "title": "阅读：runs 表、sqlite3 与参数化 SQL",
             "file": "rounds/round_11/week1/notes.md"
           },
           {
             "id": "r11-w1-ex1",
             "type": "exercise",
-            "title": "练习1",
+            "title": "练习：创建 runs.db 与 runs 表",
             "file": "rounds/round_11/week1/exercises.py"
           },
           {
             "id": "r11-w1-self",
             "type": "test",
-            "title": "第1周自测",
+            "title": "自测：自己写建表和插入脚本",
             "file": "rounds/round_11/week1/exercises.py"
           }
         ]
       },
       {
         "id": "round11-week2",
-        "title": "第 2 周：进阶练习",
+        "title": "第 2 周：插入、查询与 db.py 封装",
         "tasks": [
           {
             "id": "r11-w2-read",
             "type": "reading",
-            "title": "阅读 week2/notes.md",
+            "title": "阅读：insert_run、get_all_runs 与条件查询",
             "file": "rounds/round_11/week2/notes.md"
           },
           {
             "id": "r11-w2-ex2",
             "type": "exercise",
-            "title": "练习2",
+            "title": "练习：封装 db.py 并查询历史",
             "file": "rounds/round_11/week2/exercises.py"
           },
           {
             "id": "r11-w2-self",
             "type": "test",
-            "title": "第2周自测",
+            "title": "自测：自己封装 insert_run",
             "file": "rounds/round_11/week2/exercises.py"
           }
         ]
       },
       {
         "id": "round11-week3",
-        "title": "第 3 周：综合练习",
+        "title": "第 3 周：接入主工具并记录历史",
         "tasks": [
           {
             "id": "r11-w3-read",
             "type": "reading",
-            "title": "阅读 week3/notes.md",
+            "title": "阅读：每次运行写入 runs.db",
             "file": "rounds/round_11/week3/notes.md"
           },
           {
             "id": "r11-w3-ex3",
             "type": "exercise",
-            "title": "练习3",
+            "title": "练习：ai_prep_tool 自动写运行历史",
             "file": "rounds/round_11/week3/exercises.py"
           },
           {
             "id": "r11-w3-self",
             "type": "test",
-            "title": "第3周自测",
+            "title": "自测：自己接入 insert_run",
             "file": "rounds/round_11/week3/exercises.py"
           }
         ]
@@ -1337,19 +1337,19 @@ window.ROUNDS_DATA = [
           {
             "id": "r11-fin-comp",
             "type": "exercise",
-            "title": "综合练习",
+            "title": "综合练习：SQLite 运行历史收口检查",
             "file": "rounds/round_11/final/comprehensive_exercise.py"
           },
           {
             "id": "r11-fin-sheet",
             "type": "output",
-            "title": "完成本 Round 小抄",
+            "title": "产出：完成 Round 11 SQLite 持久化小抄",
             "file": "rounds/round_11/final/sqlite_persistence_cheatsheet.md"
           },
           {
             "id": "r11-fin-acc1",
             "type": "test",
-            "title": "验收：Round 11 核心目标",
+            "title": "验收：解释 runs 表、参数化 SQL 和运行历史",
             "file": "round_11.md"
           }
         ]
