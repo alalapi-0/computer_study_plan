@@ -9,12 +9,16 @@ mark() {
   bash "$REPO_ROOT/mark_done.sh" "$1"
 }
 
-mkdir -p ~/cli-lab/round1/final_lab/{input,output,backup,notes}
-cd ~/cli-lab/round1/final_lab
+mkdir -p ~/cli-lab/round1/study_files_lab/{input,output,backup,notes}
+cd ~/cli-lab/round1/study_files_lab
 
-touch input/raw1.txt input/raw2.txt
+echo "Round 01 Final：迷你文件整理实验室"
+echo
+
+touch input/raw1.txt input/raw2.txt input/raw3.txt
 cp input/raw1.txt backup/
-mv input/raw2.txt output/final_raw2.txt
+mv input/raw2.txt output/
+mv input/raw3.txt input/final_raw3.txt
 
 cat > notes/round1_notes.txt <<'EOF'
 pwd: 查看当前路径
@@ -30,13 +34,8 @@ EOF
 
 mark r01-fin-comp
 
-echo "请检查 rounds/round_01/final/command_cheatsheet.md 后按回车..."
-read
-mark r01-fin-sheet
-
-echo "请确认你可以解释本轮核心命令后按回车..."
-read
-mark r01-fin-acc1
-
 echo "综合练习完成，结果如下："
-ls -R
+find . -maxdepth 3 -type f | sort
+echo
+echo "脚本已完成综合练习任务 r01-fin-comp。"
+echo "下一步：在 Web UI 中检查 command_cheatsheet.md，确认小抄和验收后手动标记 r01-fin-sheet 与 r01-fin-acc1。"

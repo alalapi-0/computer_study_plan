@@ -173,19 +173,19 @@ window.ROUNDS_DATA = [
           {
             "id": "r01-w1-read",
             "type": "reading",
-            "title": "阅读 week1/notes.md",
+            "title": "阅读：路径、绝对路径、相对路径",
             "file": "rounds/round_01/week1/notes.md"
           },
           {
             "id": "r01-w1-ex1",
             "type": "exercise",
-            "title": "练习1",
+            "title": "练习：路径切换实验",
             "file": "rounds/round_01/week1/exercises.sh"
           },
           {
             "id": "r01-w1-self",
             "type": "test",
-            "title": "第1周自测",
+            "title": "自测：不用提示切换目录",
             "file": "rounds/round_01/week1/exercises.sh"
           }
         ]
@@ -197,19 +197,19 @@ window.ROUNDS_DATA = [
           {
             "id": "r01-w2-read",
             "type": "reading",
-            "title": "阅读 week2/notes.md",
+            "title": "阅读：创建、复制、移动、删除",
             "file": "rounds/round_01/week2/notes.md"
           },
           {
             "id": "r01-w2-ex2",
             "type": "exercise",
-            "title": "练习2",
+            "title": "练习：创建 / 复制 / 改名 / 删除",
             "file": "rounds/round_01/week2/exercises.sh"
           },
           {
             "id": "r01-w2-self",
             "type": "test",
-            "title": "第2周自测",
+            "title": "自测：独立整理 week2_test",
             "file": "rounds/round_01/week2/exercises.sh"
           }
         ]
@@ -221,19 +221,19 @@ window.ROUNDS_DATA = [
           {
             "id": "r01-w3-read",
             "type": "reading",
-            "title": "阅读 week3/notes.md",
+            "title": "阅读：cat / less / head / tail / man",
             "file": "rounds/round_01/week3/notes.md"
           },
           {
             "id": "r01-w3-ex3",
             "type": "exercise",
-            "title": "练习3",
+            "title": "练习：查看文本与查帮助",
             "file": "rounds/round_01/week3/exercises.sh"
           },
           {
             "id": "r01-w3-self",
             "type": "test",
-            "title": "第3周自测",
+            "title": "自测：head / tail / man",
             "file": "rounds/round_01/week3/exercises.sh"
           }
         ]
@@ -245,19 +245,19 @@ window.ROUNDS_DATA = [
           {
             "id": "r01-fin-comp",
             "type": "exercise",
-            "title": "综合练习",
+            "title": "综合练习：迷你文件整理实验室",
             "file": "rounds/round_01/final/comprehensive_exercise.sh"
           },
           {
             "id": "r01-fin-sheet",
             "type": "output",
-            "title": "完成本 Round 小抄",
+            "title": "产出：完成 Round 01 命令小抄",
             "file": "rounds/round_01/final/command_cheatsheet.md"
           },
           {
             "id": "r01-fin-acc1",
             "type": "test",
-            "title": "验收：Round 01 核心目标",
+            "title": "验收：解释路径与 13 个基础命令",
             "file": "round_01.md"
           }
         ]

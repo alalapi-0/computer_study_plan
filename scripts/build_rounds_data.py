@@ -168,6 +168,72 @@ def build_standard_round(root: Path, num: int) -> dict | None:
             }
         )
 
+    if num == 1:
+        final_tasks = []
+        if comp:
+            final_tasks.append(
+                {
+                    "id": "r01-fin-comp",
+                    "type": "exercise",
+                    "title": "综合练习：迷你文件整理实验室",
+                    "file": comp,
+                }
+            )
+        if sheet:
+            final_tasks.append(
+                {
+                    "id": "r01-fin-sheet",
+                    "type": "output",
+                    "title": "产出：完成 Round 01 命令小抄",
+                    "file": sheet,
+                }
+            )
+        final_tasks.append(
+            {
+                "id": "r01-fin-acc1",
+                "type": "test",
+                "title": "验收：解释路径与 13 个基础命令",
+                "file": "round_01.md",
+            }
+        )
+        return {
+            "id": "round_01",
+            "title": round_title(root, num),
+            "lane": "engineering",
+            "difficulty": DIFFICULTY_BY_ROUND.get(num, "⭐☆☆☆☆"),
+            "duration": "3 周",
+            "weeks": [
+                {
+                    "id": "round01-week1",
+                    "title": "第 1 周：路径感",
+                    "tasks": [
+                        {"id": "r01-w1-read", "type": "reading", "title": "阅读：路径、绝对路径、相对路径", "file": "rounds/round_01/week1/notes.md"},
+                        {"id": "r01-w1-ex1", "type": "exercise", "title": "练习：路径切换实验", "file": ex1},
+                        {"id": "r01-w1-self", "type": "test", "title": "自测：不用提示切换目录", "file": ex1},
+                    ],
+                },
+                {
+                    "id": "round01-week2",
+                    "title": "第 2 周：文件操作",
+                    "tasks": [
+                        {"id": "r01-w2-read", "type": "reading", "title": "阅读：创建、复制、移动、删除", "file": "rounds/round_01/week2/notes.md"},
+                        {"id": "r01-w2-ex2", "type": "exercise", "title": "练习：创建 / 复制 / 改名 / 删除", "file": ex2},
+                        {"id": "r01-w2-self", "type": "test", "title": "自测：独立整理 week2_test", "file": ex2},
+                    ],
+                },
+                {
+                    "id": "round01-week3",
+                    "title": "第 3 周：查看文本与帮助",
+                    "tasks": [
+                        {"id": "r01-w3-read", "type": "reading", "title": "阅读：cat / less / head / tail / man", "file": "rounds/round_01/week3/notes.md"},
+                        {"id": "r01-w3-ex3", "type": "exercise", "title": "练习：查看文本与查帮助", "file": ex3},
+                        {"id": "r01-w3-self", "type": "test", "title": "自测：head / tail / man", "file": ex3},
+                    ],
+                },
+                {"id": "round01-final", "title": "最终验收", "tasks": final_tasks},
+            ],
+        }
+
     if num == 2:
         return {
             "id": "round_02",

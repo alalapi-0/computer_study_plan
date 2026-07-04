@@ -488,6 +488,23 @@ TASK-011 实际产物：
 
 ---
 
+## TASK-RR-31：Stage 1 填充 · Round 01 Web UI 可完成练习
+
+- 状态：**done**（2026-07-04）
+- 背景：核心 Web UI 已支持阅读、记录、运行练习脚本、浏览器终端、存档 / 读档。下一步开始逐轮把已有学习计划从“骨架”补成可直接学习的内容。Round 01 是最早的终端操作轮次，也是浏览器终端能力的第一轮真实验收。
+- 目标：让 Round 01 用户只通过 Web UI 就能阅读、运行、手敲终端练习、完成自测和最终验收记录。
+- 实际产物：
+  - `rounds/round_01/README.md` 更新为 Web UI 使用说明。
+  - `rounds/round_01/week1|week2|week3/notes.md` 补齐学习步骤、自测标准和终端练习说明。
+  - `rounds/round_01/week1|week2|week3/exercises.sh` 与 `final/comprehensive_exercise.sh` 改为非交互运行，只打卡脚本实际完成的练习任务。
+  - `rounds/round_01/final/command_cheatsheet.md` 补齐删除安全、命令说明和验收自问。
+  - `scripts/build_rounds_data.py` / `rounds_data.js` 为 Round 01 输出清晰任务标题。
+  - `scripts/progress_lib.py` 支持沙盒内普通 `rm <file>`、`less`、`man`，继续拦截危险删除和命令串联。
+- 验收：Round 01 可通过 Web UI 阅读资料、运行脚本、使用浏览器终端完成文件删除等终端练习；脚本不再卡在输入等待，也不会替用户完成自测 / 小抄 / 验收。
+- 是否需要用户介入：否。
+
+---
+
 ## TASK-RR-26：Stage 1 增强 · Round 05 接入进度系统
 
 - 状态：**done**（2026-06-15）

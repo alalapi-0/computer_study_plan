@@ -1049,3 +1049,31 @@
 
 - 未引入数据库、前端框架、后端框架或大型新依赖。
 - 未扩大到 VPS / SSH / 远程服务器执行。
+
+## 43. 2026-07-04 TASK-RR-31 Round 01 内容填充与 UI 可完成性
+
+### 43.1 本轮修改
+
+- `rounds/round_01/README.md`：从“最小骨架”更新为 Web UI 可练习说明，明确阅读、运行、自测、最终验收的页面操作路径。
+- `rounds/round_01/week1|week2|week3/notes.md`：补齐路径感、文件操作、文本查看与查帮助的可执行学习步骤、自测标准和终端练习边界。
+- `rounds/round_01/week1|week2|week3/exercises.sh` 与 `final/comprehensive_exercise.sh`：移除 `read` 等待与自测 / 小抄 / 验收连带打卡，只自动记录脚本实际完成的练习任务。
+- `rounds/round_01/final/command_cheatsheet.md`：补齐删除前检查、常用命令解释和最终验收自问。
+- `scripts/build_rounds_data.py` / `rounds_data.js`：将 Round 01 UI 任务标题从“练习1/2/3”改为用户能理解的动作标题。
+- `scripts/progress_lib.py`：浏览器终端允许在 `~/cli-lab` 沙盒内执行普通 `rm <file>`、`less`、`man`；`less/man` 使用捕获输出模式；继续拦截 `rm -r/-f`、通配符、家目录、命令串联符、绝对路径和仓库外路径。
+
+### 43.2 用户视角问题修复
+
+- Round 01 原 UI 任务标题过泛，用户不知道每个练习要做什么。
+- Round 01 脚本原先会等待回车并连带标记自测 / 小抄 / 验收，不适合浏览器一键运行。
+- Round 01 文件删除练习与浏览器终端全量禁用 `rm` 冲突，导致无法只通过 Web UI 完成练习。
+- Round 01 文本查看练习需要 `less` / `man`，但浏览器终端白名单与“按 q 退出”文案不匹配。
+- Round 01 笔记过短，缺少“在 Web UI 中怎么完成”的说明。
+
+### 43.3 验证
+
+- `python3 scripts/build_rounds_data.py`：通过，未新增任务，Round 01 标题已同步到 `rounds_data.js`。
+- `rg` 检查：Round 01 脚本中不存在 `read` 等待和自测 / 小抄 / 验收连带打卡。
+- API / 函数验证：`POST /api/tasks/r01-w2-ex2/run` 返回成功，输出提示用户手动标记自测；浏览器终端允许 `rm round1_api_rm_test/delete_me.txt`、`less`、`man` 捕获输出，拦截 `rm -rf`、`rm *`、`rm ~/x`、`ls; pwd`、`man -P cat ls`、`less +...`、`less -...`、`sh -c` 和 `bash -c`。
+- 真实浏览器验证：Round 01 可展开，专用任务标题可见；Week 1 notes 可在弹窗打开，包含 Web UI 步骤、命令块和自测说明；桌面端无横向溢出。
+- 静态与数据验证：`generate_task_feedback.py`、`check_protocol_sync.py`、`validate_learning_data.py`、`agent_gate.py --verify`、`bash -n`、`node --check progress_ui.js`、Python 编译、JSON 校验均通过。
+- MCP 验证：`npm run check:mcp` 通过；`npm run check:cursor-mcp` 可在 CLI 层列出 chrome-devtools / playwright / context7 / github / stitch 等工具，同时仍提示当前 Cursor 侧 server approval 状态需在 Cursor 设置中处理。
