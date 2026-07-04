@@ -530,19 +530,19 @@ window.ROUNDS_DATA = [
           {
             "id": "r04-w1-read",
             "type": "reading",
-            "title": "阅读 week1/notes.md",
+            "title": "阅读：list 顺序存储与遍历",
             "file": "rounds/round_04/week1/notes.md"
           },
           {
             "id": "r04-w1-ex1",
             "type": "exercise",
-            "title": "练习1",
+            "title": "练习：list 遍历、过滤与统计",
             "file": "rounds/round_04/week1/exercises.sh"
           },
           {
             "id": "r04-w1-self",
             "type": "test",
-            "title": "第1周自测",
+            "title": "自测：自己写 scores.py",
             "file": "rounds/round_04/week1/exercises.sh"
           }
         ]
@@ -554,19 +554,19 @@ window.ROUNDS_DATA = [
           {
             "id": "r04-w2-read",
             "type": "reading",
-            "title": "阅读 week2/notes.md",
+            "title": "阅读：stack 后进先出与 queue 先进先出",
             "file": "rounds/round_04/week2/notes.md"
           },
           {
             "id": "r04-w2-ex2",
             "type": "exercise",
-            "title": "练习2",
+            "title": "练习：stack 与 queue 出入顺序",
             "file": "rounds/round_04/week2/exercises.sh"
           },
           {
             "id": "r04-w2-self",
             "type": "test",
-            "title": "第2周自测",
+            "title": "自测：自己写 browser_history.py",
             "file": "rounds/round_04/week2/exercises.sh"
           }
         ]
@@ -578,19 +578,19 @@ window.ROUNDS_DATA = [
           {
             "id": "r04-w3-read",
             "type": "reading",
-            "title": "阅读 week3/notes.md",
+            "title": "阅读：dict 计数与 set 去重",
             "file": "rounds/round_04/week3/notes.md"
           },
           {
             "id": "r04-w3-ex3",
             "type": "exercise",
-            "title": "练习3",
+            "title": "练习：dict 计数与 set 去重",
             "file": "rounds/round_04/week3/exercises.sh"
           },
           {
             "id": "r04-w3-self",
             "type": "test",
-            "title": "第3周自测",
+            "title": "自测：自己写 tag_report.py",
             "file": "rounds/round_04/week3/exercises.sh"
           }
         ]
@@ -602,19 +602,19 @@ window.ROUNDS_DATA = [
           {
             "id": "r04-fin-comp",
             "type": "exercise",
-            "title": "综合练习",
+            "title": "综合练习：数据结构工具箱",
             "file": "rounds/round_04/final/comprehensive_exercise.sh"
           },
           {
             "id": "r04-fin-sheet",
             "type": "output",
-            "title": "完成本 Round 小抄",
+            "title": "产出：完成 Round 04 数据结构小抄",
             "file": "rounds/round_04/final/complexity_cheatsheet.md"
           },
           {
             "id": "r04-fin-acc1",
             "type": "test",
-            "title": "验收：Round 04 核心目标",
+            "title": "验收：解释 list、dict、set、deque 适用场景",
             "file": "round_04.md"
           }
         ]

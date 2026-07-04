@@ -1,16 +1,18 @@
 #!/bin/bash
-# Round 04 · Final 综合练习
+# Round 04 · Final 综合练习（Web UI 可运行）
 
 set -e
 
 REPO_ROOT="$(cd "$(dirname "$0")/../../.." && pwd)"
+LAB="$HOME/cli-lab/round4/final_auto"
 
 mark() {
   bash "$REPO_ROOT/mark_done.sh" "$1"
 }
 
-mkdir -p ~/cli-lab/round4/final
-cd ~/cli-lab/round4/final
+rm -rf "$LAB"
+mkdir -p "$LAB"
+cd "$LAB"
 
 cat > data_toolkit.py <<'EOF'
 from collections import deque
@@ -29,19 +31,27 @@ def summarize(items):
         batches.append(batch)
     return {"freq": freq, "unique": sorted(set(items)), "batches": batches}
 
-print(summarize(["ok", "ok", "error", "warn", "ok", "error"]))
+def stack_demo(actions):
+    stack = []
+    for action in actions:
+        stack.append(action)
+    return stack.pop(), stack
+
+data = ["ok", "ok", "error", "warn", "ok", "error"]
+print("summary:", summarize(data))
+print("stack:", stack_demo(["open", "edit", "save"]))
 EOF
 
 python3 data_toolkit.py
 
+cat > final_notes.md <<'EOF'
+# Round 04 Final 自动练习产物
+
+- data_toolkit.py：综合使用 dict、set、deque、list 和 stack 思路。
+- 这只是自动综合练习。
+- 小抄 r04-fin-sheet 与验收 r04-fin-acc1 仍需用户自己阅读、解释并在 Web UI 手动记录。
+EOF
+
 mark r04-fin-comp
 
-echo "请检查 rounds/round_04/final/complexity_cheatsheet.md 后按回车..."
-read
-mark r04-fin-sheet
-
-echo "请确认你能解释 dict/set/deque 的适用场景后按回车..."
-read
-mark r04-fin-acc1
-
-echo "Final 完成。"
+echo "Round 04 Final 自动练习完成。请继续手动完成 r04-fin-sheet 与 r04-fin-acc1。"

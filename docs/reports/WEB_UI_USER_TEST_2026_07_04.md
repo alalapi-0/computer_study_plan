@@ -126,6 +126,21 @@
 - 清理：本轮 API/UI 测试产生的进度、动作、反馈和终端历史已从测试前快照恢复。
 - 工具备注：应用内浏览器插件本轮打开本地页时出现控制超时；已使用本机 Playwright 打开同一 Web UI 完成真实渲染与点击验证。
 
+## Round 04 内容填充与核心数据结构补测
+
+- before 问题：Round 04 仍是最小骨架，notes 只列目标和自查，缺少 Web UI 学习路径和自测命令。
+- before 问题：Round 04 任务标题仍是“练习1 / 练习2 / 练习3”，用户无法判断要练 list、stack/queue 还是 dict/set。
+- before 问题：Round 04 脚本会等待回车，并连带标记自测、小抄和验收，不适合浏览器一键运行。
+- 修复：Round 04 README、Week 1–3 notes、final 小抄已补齐 list、stack/queue、dict/set、deque 的场景直觉、自测命令和验收自问。
+- 修复：Round 04 脚本改为非交互运行，只自动记录脚本实际完成的练习任务；自测、小抄和验收仍由用户手动完成并记录。
+- 修复：Round 04 UI 任务标题改为“list 遍历、过滤与统计”“stack 与 queue 出入顺序”“dict 计数与 set 去重”等动作标题。
+- API 验证：`r04-w1-ex1`、`r04-w2-ex2`、`r04-w3-ex3`、`r04-fin-comp` 均可运行成功；`r04-w1-self/run` 返回 `task_not_runnable`。
+- 浏览器终端验证：`~/round4` 可作为映射目录；终端能在任务 `r04-w1-self` 下写入并运行 Python 文件；`python3 -c` 仍被拦截。
+- UI 验证：真实浏览器打开 `progress.html?round=round_04` 后直接选中 Round 04；自测任务不显示“运行”但显示“终端”；点击后当前任务为“自测：自己写 scores.py”，工作目录为 `~/round4`；输入 `pwd` 输出 `/Users/alalapi/cli-lab/round4`。
+- 移动端验证：390px 宽度无整页横向溢出。
+- 清理：本轮 API/UI 测试产生的进度、动作、反馈和终端历史已从测试前快照恢复。
+- 工具备注：应用内浏览器插件本轮打开本地页时出现控制超时；已使用本机 Playwright 打开同一 Web UI 完成真实渲染与点击验证。
+
 ## 验证命令
 
 ```bash

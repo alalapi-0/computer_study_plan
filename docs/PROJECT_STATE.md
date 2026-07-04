@@ -1142,3 +1142,34 @@
 - 本轮 API/UI 验证产生的进度、动作、反馈和终端历史均已从测试前快照恢复。
 - 未放宽终端沙盒边界；仍限制在 `~/cli-lab` 内并拦截危险命令。
 - 未引入前端框架、数据库、后端框架或大型新依赖。
+
+## 46. 2026-07-04 TASK-RR-34 Round 04 内容填充与核心数据结构练习
+
+### 46.1 本轮修改
+
+- `rounds/round_04/README.md`：从“最小骨架”更新为 Web UI 可练习说明，明确阅读、运行、自测、最终验收的页面操作路径。
+- `rounds/round_04/week1|week2|week3/notes.md`：补齐 list、stack/queue、dict/set 的学习步骤、自测命令、场景直觉和完成标准。
+- `rounds/round_04/week1|week2|week3/exercises.sh` 与 `final/comprehensive_exercise.sh`：改为非交互运行，只自动记录脚本实际完成的练习任务；自测、小抄和验收仍由用户手动记录。
+- `rounds/round_04/final/complexity_cheatsheet.md`：补齐核心数据结构小抄、选择口诀和最终验收自问。
+- `scripts/build_rounds_data.py` / `rounds_data.js`：将 Round 04 UI 任务标题从“练习1/2/3”改为用户能理解的动作标题。
+
+### 46.2 用户视角问题修复
+
+- Round 04 原 notes 太短，用户不知道如何只通过 Web UI 完成数据结构练习。
+- Round 04 原脚本会等待回车并连带标记自测 / 小抄 / 验收，不适合浏览器运行闭环。
+- Round 04 原任务标题过泛，用户无法从 UI 判断 list、stack/queue、dict/set 分别要练什么。
+
+### 46.3 验证
+
+- API 验证：`r04-w1-ex1`、`r04-w2-ex2`、`r04-w3-ex3`、`r04-fin-comp` 均可通过 `/api/tasks/<id>/run` 运行成功；`r04-w1-self/run` 返回 `task_not_runnable`。
+- 浏览器终端验证：`/api/terminal?cwd=~/round4` 返回 `~/round4`；终端可在任务 `r04-w1-self` 下写入并运行 `scores.py`；`python3 -c` 仍被拦截。
+- 真实浏览器验证：`progress.html?round=round_04` 会直接选中 Round 04；自测任务不显示“运行”但显示“终端”；点击“终端”后当前任务绑定为“自测：自己写 scores.py”，工作目录为 `~/round4`；UI 输入 `pwd` 输出 `/Users/alalapi/cli-lab/round4`。
+- 移动端验证：390px 宽度无整页横向溢出。
+- 静态与数据验证：`build_rounds_data.py`、`generate_task_feedback.py`、`check_protocol_sync.py`、`validate_learning_data.py`、`agent_gate.py --verify`、`bash -n`、`node --check progress_ui.js`、Python 编译、JSON 校验、`git diff --check` 均通过。
+- MCP 验证：`npm run check:mcp` 通过；`npm run check:cursor-mcp` 可在 CLI 层列出 chrome-devtools / playwright / context7 / github / stitch 等工具，filesystem 仍显示 Cursor 侧需审批。
+
+### 46.4 风险边界核对
+
+- 本轮 API/UI 验证产生的进度、动作、反馈和终端历史均已从测试前快照恢复。
+- 未放宽终端沙盒边界；仍限制在 `~/cli-lab` 内并拦截危险命令。
+- 未引入前端框架、数据库、后端框架或大型新依赖。

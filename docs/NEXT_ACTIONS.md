@@ -541,6 +541,22 @@ TASK-011 实际产物：
 
 ---
 
+## TASK-RR-34：Stage 1 填充 · Round 04 Web UI 可完成练习
+
+- 状态：**done**（2026-07-04）
+- 背景：Round 04 是核心数据结构入门，原内容仍是最小骨架，任务标题泛化，脚本会等待输入并连带标记自测 / 小抄 / 验收。
+- 目标：让 Round 04 用户只通过 Web UI 就能阅读 list、stack、queue、dict、set、deque 资料，运行自动练习，在浏览器映射终端中手写自测脚本，并手动记录最终验收。
+- 实际产物：
+  - `rounds/round_04/README.md` 更新为 Web UI 使用说明。
+  - `rounds/round_04/week1|week2|week3/notes.md` 补齐 list、stack/queue、dict/set 的页面学习路径、自测命令和完成标准。
+  - `rounds/round_04/week1|week2|week3/exercises.sh` 与 `final/comprehensive_exercise.sh` 改为非交互运行，只打卡脚本实际完成的练习任务。
+  - `rounds/round_04/final/complexity_cheatsheet.md` 补齐数据结构选择口诀和最终验收自问。
+  - `scripts/build_rounds_data.py` / `rounds_data.js` 为 Round 04 输出清晰任务标题。
+- 验收：API 可运行 Round 04 四个练习脚本；自测任务拒绝误运行；浏览器终端可绑定 `r04-w1-self` 到 `~/round4` 并执行 `pwd`；桌面端和 390px 移动端无横向溢出；测试记录已恢复。
+- 是否需要用户介入：否。
+
+---
+
 ## TASK-RR-26：Stage 1 增强 · Round 05 接入进度系统
 
 - 状态：**done**（2026-06-15）
