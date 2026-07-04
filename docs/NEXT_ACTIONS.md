@@ -426,13 +426,30 @@ TASK-011 实际产物：
 
 ## TASK-RR-27：Stage 1 增强 · Round 06 接入进度系统
 
-- 状态：**pending**
+- 状态：**done**（2026-07-04）
 - 背景：Round 06 最小骨架已存在，进度系统尚未注册 `r06-*` 任务。
 - 目标：将 Round 06 纳入进度闭环（任务注册 + 看板展示 + 练习自动打卡）。
 - 要修改：`progress.json`、`progress.html`、`rounds/round_06/` 练习脚本、`README.md`。
 - 不要修改：不触碰 `rounds/round_00/`；不改 `records/` 真实学习记录。
 - 验收标准：`mark_done.sh` 可识别 `r06-*`；协议与学习数据校验通过。
 - 是否需要用户介入：否。
+- 实际产物：
+  - `progress.json` 注册 `r06-*` 任务（lane=`engineering`）
+  - `rounds_data.js` 展示 Round 06 任务
+  - `rounds/round_06/week1|week2|week3/exercises.sh` 与 `final/comprehensive_exercise.sh` 接入 `mark_done.sh`
+  - Web UI 可直接阅读 Round 06 notes / scripts 并完成记录
+
+---
+
+## TASK-RR-28：Web UI 后续增强 · 练习执行安全模型
+
+- 状态：**pending**
+- 背景：2026-07-04 已实现“Web UI 阅读资料 / 查看练习脚本 / 写入记录 / 完成或撤销任务”的核心闭环。若后续要求“完全不切终端，并由浏览器直接执行本地练习脚本”，需要额外的命令执行权限模型。
+- 目标：设计并实现安全的本地练习执行入口（仅允许白名单脚本、固定 `~/cli-lab` 沙盒、执行前提示影响、执行后记录输出摘要）。
+- 要修改：待设计；预计涉及 `scripts/progress_server.py`、Web UI、验证脚本与安全说明。
+- 不要修改：不引入数据库；不执行任意用户输入命令；不扩大到真实远程/VPS操作。
+- 验收标准：浏览器可触发白名单练习脚本；输出可见；失败可记录；安全边界文档明确。
+- 是否需要用户介入：建议先确认安全边界后再做。
 
 ---
 
@@ -452,7 +469,7 @@ TASK-011 实际产物：
 
 ## 推荐下一步（按优先级）
 
-1. **TASK-RR-27**（候选）：Round 06 接入进度系统（模式同 RR-26）。
+1. **TASK-RR-28**（候选）：如果用户要求浏览器直接执行练习脚本，先做安全模型。
 2. 运行 `python3 scripts/agent_gate.py --json --no-require-clean` 查看下一项可自动推进任务。
 3. （可选）用户自行恢复 RR-05 官网核验或 RR-08 作品集决策时，在队列中改回 `pending` 并移出 `SKIP_TASK_IDS`。
 

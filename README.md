@@ -242,19 +242,21 @@ cd ~/PycharmProjects/computer_study_plan
 ### 6.2 日常使用
 
 - 每周选择一种强度（保底 / 标准 / 冲刺），在 `records/weekly_reviews/YYYY-WW.md` 写本周清单。
-- 工作日完成任务后：`bash mark_done.sh <task-id>`。
+- 工作日完成任务后：优先打开 Web UI 点击「完成」或在「记录」里写备注；也可用 `bash mark_done.sh <task-id>`。
 - 错题录入 `records/error_notes/<lane>/<module>/...`。
 - 周末写复盘。
 
 ### 6.3 看进度
 
-- **方式一（推荐）**：双击 `progress.html`，浏览器打开。完成练习后按 `⌘R` 刷新。
-- **方式二（自动刷新）**：
+- **方式一（推荐 · 网页打卡）**：
   ```bash
   cd ~/PycharmProjects/computer_study_plan
-  python3 -m http.server 8000
-  open http://localhost:8000/progress.html
+  python3 scripts/progress_server.py
+  # 或：npm run serve
+  open http://127.0.0.1:8777/progress.html
   ```
+  看板内可直接「完成 / 撤销」任务、打开「记录」写备注和证据路径、页内阅读 notes 与练习脚本。
+- **方式二（只读）**：双击 `progress.html` 或通过 `python3 -m http.server` 打开（无写 API）。
 
 看板包含：
 
@@ -264,7 +266,7 @@ cd ~/PycharmProjects/computer_study_plan
 - 考试倒计时（localStorage）
 - 阶段进度（Stage 0–7）
 - 当前薄弱项（自动识别完成率 < 30% 且任务数 ≥ 5 的 lane）
-- 按 lane / Round 浏览（实操目录已展开 Round 00–21；进度看板已接入 Round 00–05）
+- 按 lane / Round 浏览（实操目录已展开 Round 00–21；进度看板任务集合已与 `progress.json` 对齐）
 
 ### 6.4 进度系统 CLI
 

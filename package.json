@@ -4,6 +4,9 @@
   "description": "Learning roadmap and progress control repository",
   "scripts": {
     "check:mcp": "node scripts/check_mcp_config.js",
-    "check:cursor-mcp": "bash scripts/check_cursor_mcp_status.sh"
+    "check:cursor-mcp": "bash scripts/check_cursor_mcp_status.sh",
+    "serve": "python3 scripts/progress_server.py",
+    "sync:progress": "python3 scripts/sync_progress_data.py",
+    "build:rounds": "python3 scripts/build_rounds_data.py"
   }
 }

@@ -932,3 +932,42 @@
 - `python3 scripts/check_protocol_sync.py`：通过。
 - `python3 scripts/validate_learning_data.py`：通过。
 - `bash mark_done.sh`：可识别 `r05-*` 任务。
+
+## 39. 2026-07-04 Web UI 用户闭环测试与修复
+
+### 39.1 本轮新增
+
+- 新增 `docs/reports/WEB_UI_USER_TEST_2026_07_04.md`，记录用户视角 before / after 测试、问题清单、修复项与验证命令。
+- 新增 Web UI 事件历史接口：`GET /api/events`。
+- 新增 Web UI “继续学习”入口与每任务“记录”入口。
+
+### 39.2 本轮修改
+
+- `progress.html`：从“统计优先”调整为“继续学习优先”；移动端任务行改为可换行网格；浅色工作台视觉替代旧暗色重卡片；关键脚本加版本查询串避免缓存旧逻辑。
+- `progress_ui.js`：重写轻量阅读器，支持 Markdown 标题、引用、列表、表格、代码块、链接；支持 `.sh` / `.py` 脚本在页内以代码块阅读；完成 / 撤销按钮只绑定 `data-action`；记录弹窗支持备注与证据路径。
+- `scripts/progress_lib.py`：`mark_task()` 写入动作后自动重建 task feedback；新增事件读取、事件分组、反馈生成公共函数。
+- `scripts/progress_server.py`：新增事件 API；完成 / 撤销接口支持 JSON body 中的 `note` 与 `evidence_path`。
+- `scripts/generate_task_feedback.py`：复用 `progress_lib.py` 的反馈生成逻辑。
+- `scripts/build_rounds_data.py`：补齐 Round 02 的真实任务结构，避免 `progress.json` 中存在 UI 不可见任务。
+- `progress.json`：删除两个无脚本、无事件、由旧通用生成器留下的冗余 Round 02 任务（`r02-w2-ex2`、`r02-w3-ex3`）。
+- `rounds/round_06/*/exercises.sh` 与 `final/comprehensive_exercise.sh`：接入 `mark_done.sh` 自动打卡，完成 TASK-RR-27 的实际落地。
+
+### 39.3 验证
+
+- `npm run check:mcp`：通过。
+- `npm run check:cursor-mcp`：CLI 层可列出 chrome-devtools / playwright 等工具；filesystem 在 Cursor 侧仍显示需审批，但当前 Codex 线程使用本地文件与 Playwright/浏览器能力完成验证。
+- `python3 scripts/build_rounds_data.py`：通过，`rounds_data.js` 与 `progress.json` 任务集合对齐。
+- `python3 scripts/generate_task_feedback.py`：通过。
+- `python3 scripts/validate_learning_data.py`：通过。
+- `python3 scripts/check_protocol_sync.py`：通过。
+- `python3 -m json.tool progress.json`：通过。
+- `python3 -m json.tool records/feedback/task_feedback.json`：通过。
+- `node --check progress_ui.js`：通过。
+- `python3 -m py_compile scripts/progress_lib.py scripts/progress_server.py scripts/generate_task_feedback.py scripts/mark_done_cli.py scripts/sync_progress_data.py scripts/build_rounds_data.py`：通过。
+- 真实浏览器测试：桌面端可打开学习资料、练习脚本、记录弹窗；完成 / 撤销链路可写入并恢复；390px 移动端无横向溢出。
+
+### 39.4 风险边界核对
+
+- 本轮 UI 回归测试产生的临时事件已从 `records/action_logs/events.jsonl` 清理。
+- 未删除已有 2026-06-15 事件日志。
+- 未引入数据库、后端框架或大型新依赖；仍保持本地 JSON + 轻量 Python server。

@@ -6,29 +6,41 @@
   <title>学习进度看板 · 四主线</title>
   <style>
     :root {
-      --bg: #0f1117;
-      --card: #1a1d27;
-      --card-hover: #21253a;
-      --border: #2e3348;
-      --accent: #6c63ff;
-      --accent2: #38bdf8;
-      --green: #22c55e;
-      --yellow: #f59e0b;
-      --red: #ef4444;
-      --pink: #ec4899;
-      --text: #e2e8f0;
-      --text-muted: #94a3b8;
-      --radius: 12px;
+      --bg: #f5f7fb;
+      --card: #ffffff;
+      --card-hover: #f8fafc;
+      --border: #d7dce6;
+      --accent: #2563eb;
+      --accent2: #0f766e;
+      --green: #16a34a;
+      --yellow: #b45309;
+      --red: #dc2626;
+      --pink: #be123c;
+      --text: #111827;
+      --text-muted: #5f6b7a;
+      --radius: 8px;
+      --shadow: 0 8px 24px rgba(15,23,42,0.08);
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+      font-family: "SF Pro Text", -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
       background: var(--bg);
       color: var(--text);
       min-height: 100vh;
-      padding: 2rem 1.5rem 4rem;
+      padding: 1.5rem 1.25rem 5rem;
+      line-height: 1.55;
     }
-    .container { max-width: 980px; margin: 0 auto; }
+    .container { max-width: 1040px; margin: 0 auto; }
+    .top-bar {
+      position: sticky; top: 0; z-index: 40;
+      backdrop-filter: blur(12px);
+      background: rgba(255,255,255,0.92);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1rem 1.25rem;
+      margin-bottom: 1.25rem;
+      box-shadow: var(--shadow);
+    }
 
     /* ── Header ── */
     header h1 { font-size: 1.75rem; font-weight: 700; letter-spacing: -0.02em; }
@@ -62,7 +74,9 @@
       margin-bottom: 1rem;
       display: none;
     }
-    .banner.error { display: block; background: rgba(239,68,68,0.12); border: 1px solid var(--red); color: #fca5a5; }
+    .banner.error { display: block; background: rgba(220,38,38,0.08); border: 1px solid var(--red); color: #991b1b; }
+    .banner.ok   { display: block; background: rgba(22,163,74,0.08); border: 1px solid var(--green); color: #166534; }
+    .banner.warn { display: block; background: rgba(180,83,9,0.08); border: 1px solid var(--yellow); color: #92400e; }
     .banner code {
       background: rgba(255,255,255,0.08); padding: 0.1em 0.4em; border-radius: 4px;
       font-family: "SF Mono","Fira Code",monospace; font-size: 0.85em;
@@ -86,6 +100,28 @@
     .bar-wrap { height: 8px; background: var(--border); border-radius: 99px; overflow: hidden; }
     .bar-fill { height: 100%; border-radius: 99px; transition: width 0.5s ease; background: linear-gradient(90deg, var(--accent), var(--accent2)); }
 
+    /* ── Continue learning ── */
+    .focus-card {
+      border-color: rgba(37,99,235,0.35);
+      background: #ffffff;
+    }
+    .continue-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.2fr) minmax(220px, 0.8fr);
+      gap: 1rem;
+      align-items: start;
+    }
+    @media (max-width: 760px) { .continue-grid { grid-template-columns: 1fr; } }
+    .continue-title { font-size: 1rem; font-weight: 700; margin-bottom: 0.35rem; }
+    .continue-meta { color: var(--text-muted); font-size: 0.8rem; margin-bottom: 0.65rem; }
+    .continue-actions { display: flex; gap: 0.45rem; flex-wrap: wrap; }
+    .continue-note {
+      border-left: 3px solid var(--accent2);
+      padding-left: 0.8rem;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+    }
+
     /* ── Lane grid (四主线进度) ── */
     .lane-grid {
       display: grid;
@@ -93,7 +129,7 @@
       gap: 0.8rem;
     }
     .lane-item {
-      background: rgba(255,255,255,0.02);
+      background: #f8fafc;
       border: 1px solid var(--border);
       border-radius: 8px;
       padding: 0.8rem 1rem;
@@ -118,11 +154,11 @@
     /* ── Personal config (本周任务 + 倒计时) ── */
     .config-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
     @media (max-width: 720px) { .config-grid { grid-template-columns: 1fr; } }
-    .config-card { background: rgba(255,255,255,0.02); border: 1px solid var(--border); border-radius: 8px; padding: 1rem; }
+    .config-card { background: #f8fafc; border: 1px solid var(--border); border-radius: 8px; padding: 1rem; }
     .config-card h3 { font-size: 0.9rem; margin-bottom: 0.5rem; }
     .config-card textarea, .config-card input[type="date"] {
       width: 100%;
-      background: var(--bg); color: var(--text);
+      background: var(--card); color: var(--text);
       border: 1px solid var(--border); border-radius: 6px;
       padding: 0.5rem 0.7rem; font-size: 0.82rem; font-family: inherit;
     }
@@ -142,7 +178,7 @@
     /* ── Stage panel ── */
     .stage-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 0.6rem; }
     .stage-item {
-      background: rgba(255,255,255,0.02);
+      background: #f8fafc;
       border: 1px solid var(--border);
       border-radius: 8px;
       padding: 0.6rem 0.8rem;
@@ -222,10 +258,35 @@
     .task-list.collapsed { display: none; }
     .task-item {
       display: flex; align-items: flex-start; gap: 0.9rem;
-      padding: 0.65rem 1.5rem; border-radius: 6px; margin: 0 0.5rem;
+      padding: 0.75rem 1.5rem; border-radius: 8px; margin: 0.15rem 0.5rem;
+      transition: background 0.15s;
     }
+    .task-item:hover { background: rgba(255,255,255,0.02); }
+    .task-item.done { background: rgba(52,211,153,0.04); }
+    .task-actions { display: flex; gap: 0.35rem; flex-shrink: 0; margin-top: 2px; flex-wrap: wrap; }
+    .task-btn {
+      padding: 0.28rem 0.65rem; border-radius: 6px; font-size: 0.72rem;
+      border: 1px solid var(--border); background: var(--card); color: var(--text);
+      cursor: pointer; transition: all 0.15s;
+    }
+    .task-btn.done { border-color: var(--green); color: var(--green); }
+    .task-btn.done:hover { background: rgba(52,211,153,0.12); }
+    .task-btn.undo { border-color: var(--yellow); color: var(--yellow); }
+    .task-btn.read { border-color: var(--accent2); color: var(--accent2); }
+    .task-btn.read:hover { background: rgba(78,205,196,0.1); }
+    .task-btn.record { border-color: var(--accent); color: var(--accent); }
+    .task-btn.record:hover { background: rgba(37,99,235,0.08); }
+    .task-feedback {
+      margin-top: 0.35rem; font-size: 0.72rem; color: var(--accent2);
+      padding-left: 0.5rem; border-left: 2px solid rgba(78,205,196,0.35);
+    }
+    .task-file-link {
+      font-size: 0.72rem; color: var(--accent2); cursor: pointer;
+      background: none; border: none; padding: 0; text-align: left;
+    }
+    .task-file-link:hover { text-decoration: underline; }
     .task-status-icon { font-size: 1.1rem; flex-shrink: 0; margin-top: 1px; min-width: 1.2rem; text-align: center; }
-    .task-content { flex: 1; }
+    .task-content { flex: 1; min-width: 0; }
     .task-title { font-size: 0.88rem; font-weight: 500; line-height: 1.4; }
     .task-item.done .task-title { text-decoration: line-through; color: var(--text-muted); }
     .task-meta { display: flex; align-items: center; gap: 0.6rem; margin-top: 3px; }
@@ -266,6 +327,119 @@
     .weak-list .weak-item.alert { border-color: var(--red); color: #fca5a5; }
     .weak-list .weak-item .lane-name { font-weight: 600; color: var(--text); }
     .weak-empty { color: var(--text-muted); font-size: 0.8rem; }
+
+    /* reader modal */
+    .modal-overlay {
+      display: none; position: fixed; inset: 0; z-index: 100;
+      background: rgba(0,0,0,0.65); align-items: center; justify-content: center; padding: 1rem;
+    }
+    .modal-overlay.open { display: flex; }
+    .modal-panel {
+      width: min(720px, 100%); max-height: 85vh; overflow: auto;
+      background: var(--card); border: 1px solid var(--border); border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+    .modal-head {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 1rem 1.25rem; border-bottom: 1px solid var(--border);
+      position: sticky; top: 0; background: var(--card);
+    }
+    .modal-head h3 { font-size: 1rem; }
+    .modal-close {
+      border: 1px solid var(--border); background: transparent; color: var(--text-muted);
+      border-radius: 6px; padding: 0.25rem 0.6rem; cursor: pointer;
+    }
+    #readerBody { padding: 1rem 1.25rem 1.5rem; font-size: 0.9rem; }
+    #readerBody .md-body h1 { font-size: 1.25rem; margin: 1rem 0 0.5rem; }
+    #readerBody .md-body h2 { font-size: 1.05rem; margin: 0.9rem 0 0.4rem; color: var(--accent2); }
+    #readerBody .md-body h3 { font-size: 0.95rem; margin: 0.7rem 0 0.3rem; }
+    #readerBody .md-body p { margin: 0.45rem 0; }
+    #readerBody .md-body ul, #readerBody .md-body ol { margin: 0.5rem 0 0.7rem 1.2rem; }
+    #readerBody .md-body li { margin: 0.25rem 0; }
+    #readerBody .md-body a { color: var(--accent); }
+    #readerBody .md-body blockquote {
+      border-left: 3px solid var(--accent2);
+      padding: 0.45rem 0.7rem;
+      margin: 0.6rem 0;
+      background: #f8fafc;
+      color: var(--text-muted);
+    }
+    #readerBody .md-body pre {
+      overflow: auto;
+      background: #111827;
+      color: #e5e7eb;
+      padding: 0.85rem;
+      border-radius: 8px;
+      margin: 0.7rem 0;
+      line-height: 1.5;
+    }
+    #readerBody .md-body pre code { background: transparent; padding: 0; color: inherit; }
+    #readerBody .md-body code {
+      background: #eef2ff; padding: 0.1em 0.35em; border-radius: 4px;
+      font-family: "SF Mono","Fira Code",monospace; font-size: 0.85em;
+    }
+    #readerBody .table-scroll { overflow-x: auto; margin: 0.65rem 0; }
+    #readerBody table { border-collapse: collapse; width: 100%; min-width: 480px; }
+    #readerBody th, #readerBody td { border: 1px solid var(--border); padding: 0.45rem 0.55rem; text-align: left; vertical-align: top; }
+    #readerBody th { background: #f8fafc; }
+    .reader-loading, .reader-error { color: var(--text-muted); }
+
+    .record-panel { display: flex; flex-direction: column; gap: 0.65rem; }
+    .record-status {
+      display: inline-flex; width: fit-content; padding: 0.25rem 0.6rem; border-radius: 999px;
+      font-size: 0.78rem; border: 1px solid var(--border);
+    }
+    .record-status.done { color: var(--green); border-color: var(--green); background: rgba(22,163,74,0.08); }
+    .record-status.open { color: var(--yellow); border-color: var(--yellow); background: rgba(180,83,9,0.08); }
+    .record-suggestion { color: var(--accent2); }
+    .record-label { font-size: 0.78rem; color: var(--text-muted); }
+    .record-input {
+      width: 100%; border: 1px solid var(--border); border-radius: 8px;
+      background: #fff; color: var(--text); padding: 0.55rem 0.65rem; font: inherit;
+    }
+    textarea.record-input { min-height: 5rem; resize: vertical; }
+    .record-actions { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+    .record-list { list-style: none; display: flex; flex-direction: column; gap: 0.45rem; margin: 0; padding: 0; }
+    .record-list li { border: 1px solid var(--border); border-radius: 8px; padding: 0.55rem 0.65rem; background: #f8fafc; }
+    .record-list li span { color: var(--text-muted); font-size: 0.75rem; margin-left: 0.4rem; }
+    .record-list li p { margin: 0.35rem 0 0; color: var(--text-muted); }
+    .record-empty { color: var(--text-muted); }
+    .code-doc-note { color: var(--text-muted); }
+
+    @media (max-width: 640px) {
+      body { padding: 1rem 0.9rem 4rem; }
+      header h1 { font-size: 1.45rem; }
+      .card, .top-bar { padding: 1rem; }
+      .config-grid, .config-card, .round-panel, .week-section, .task-list { min-width: 0; }
+      .config-card { width: 100%; }
+      .countdown-row { flex-wrap: wrap; align-items: flex-start; }
+      .config-card .countdown-row label { min-width: 3.5rem; }
+      .config-card .countdown-row .days { width: 100%; margin-left: 0; text-align: left; }
+      .round-header { align-items: flex-start; flex-direction: column; padding: 1rem; }
+      .round-progress-bar { padding: 0.6rem 1rem; }
+      .week-title { padding: 0.75rem 1rem; }
+      .task-item {
+        display: grid;
+        grid-template-columns: 1.3rem minmax(0, 1fr);
+        align-items: start;
+        gap: 0.55rem 0.7rem;
+        padding: 0.75rem 1rem;
+      }
+      .task-status-icon { grid-row: 1 / span 3; }
+      .task-actions { grid-column: 2; margin-top: 0; }
+      .task-type { grid-column: 2; width: fit-content; margin-top: 0; }
+      .task-meta { flex-wrap: wrap; }
+    }
+
+    .toast {
+      position: fixed; bottom: 1.5rem; right: 1.5rem; z-index: 120;
+      padding: 0.65rem 1rem; border-radius: 8px; font-size: 0.85rem;
+      background: var(--card); border: 1px solid var(--border); box-shadow: var(--shadow);
+      opacity: 0; transition: opacity 0.2s;
+    }
+    .toast.ok { border-color: var(--green); color: var(--green); }
+    .toast.warn { border-color: var(--yellow); color: var(--yellow); }
+    .toast.error { border-color: var(--red); color: var(--red); }
   </style>
 </head>
 
@@ -273,22 +447,30 @@
 
 <div class="container">
 
+<div class="top-bar">
 <header>
-  <h1>📚 学习进度看板 · <span>四主线</span></h1>
-  <p>状态从 <code style="background:rgba(255,255,255,0.1);padding:0.1em 0.4em;border-radius:4px;font-family:monospace">progress.json</code> / <code style="background:rgba(255,255,255,0.1);padding:0.1em 0.4em;border-radius:4px;font-family:monospace">progress_data.js</code> 读取。完成练习后运行 <code style="background:rgba(255,255,255,0.1);padding:0.1em 0.4em;border-radius:4px;font-family:monospace">bash mark_done.sh &lt;id&gt;</code> 再刷新。</p>
+  <h1>学习工作台 · <span>四主线</span></h1>
+  <p>从这里阅读资料、查看练习、写入记录并完成打卡。启动 <code style="background:#eef2ff;padding:0.1em 0.4em;border-radius:4px;font-family:monospace">python3 scripts/progress_server.py</code> 后可网页写入。</p>
 </header>
-
-<!-- Banner -->
-<div class="banner error" id="errorBanner"></div>
-
-<div class="last-updated">
+<div class="last-updated" style="margin-top:0.75rem;margin-bottom:0">
   <span id="lastUpdated">正在加载…</span>
   <button class="refresh-btn" onclick="loadProgress()" id="refreshBtn">↻ 刷新</button>
+</div>
+</div>
+
+<!-- Banner -->
+<div class="banner" id="apiBanner" style="display:none"></div>
+<div class="banner error" id="errorBanner"></div>
+
+<!-- ── Block 0: 继续学习 ── -->
+<div class="card focus-card" id="continueCard">
+  <h2>继续学习</h2>
+  <div class="empty-state">正在寻找下一条任务…</div>
 </div>
 
 <!-- ── Block 1: 总进度 ── -->
 <div class="card">
-  <h2>🎯 总进度</h2>
+  <h2>总进度</h2>
   <div class="global-progress">
     <span class="label">全部任务</span>
     <div class="bar-wrap"><div class="bar-fill" id="globalBar" style="width:0%"></div></div>
@@ -298,14 +480,14 @@
 
 <!-- ── Block 2: 四主线进度 ── -->
 <div class="card">
-  <h2>🛤️ 四主线进度</h2>
-  <div class="card-sub">每条主线（lane）的任务完成率。完成率 &lt; 30% 且任务数 ≥ 5 时会标红为薄弱项。</div>
+  <h2>四主线进度</h2>
+  <div class="card-sub">每条主线（lane）的任务完成率。已开始学习且完成率 &lt; 30%（任务数 ≥ 5）时会标为薄弱项。</div>
   <div class="lane-grid" id="laneGrid"></div>
 </div>
 
 <!-- ── Block 3: 个人配置（本周任务 + 倒计时） ── -->
 <div class="card">
-  <h2>🗓️ 本周与倒计时（本地保存）</h2>
+  <h2>本周与倒计时（本地保存）</h2>
   <div class="card-sub">本周任务与考试日期保存在浏览器 localStorage，不写入 progress.json。</div>
   <div class="config-grid">
     <div class="config-card">
@@ -345,22 +527,22 @@
 
 <!-- ── Block 4: 阶段进度（Stage 0–7） ── -->
 <div class="card">
-  <h2>📐 阶段进度（Stage 0–7）</h2>
+  <h2>阶段进度（Stage 0–7）</h2>
   <div class="card-sub">详见 <code style="background:rgba(255,255,255,0.08);padding:0.05em 0.35em;border-radius:4px;font-family:monospace">docs/STAGE_PLAN.md</code>。Stage 进度按"该 Stage 关联 lane 的完成率"近似计算。</div>
   <div class="stage-list" id="stageList"></div>
 </div>
 
 <!-- ── Block 5: 当前薄弱项 ── -->
 <div class="card">
-  <h2>⚠️ 当前薄弱项</h2>
-  <div class="card-sub">按 lane 完成率自动识别（&lt; 30% 且 ≥ 5 任务）。详细错题回流见 <code style="background:rgba(255,255,255,0.08);padding:0.05em 0.35em;border-radius:4px;font-family:monospace">docs/ERROR_REVIEW_SYSTEM.md</code>。</div>
+  <h2>当前薄弱项</h2>
+  <div class="card-sub">按 lane 完成率自动识别（已开始学习且 &lt; 30%，任务数 ≥ 5）。</div>
   <div class="weak-list" id="weakList"></div>
 </div>
 
 <!-- ── Block 6: 按 lane / Round 浏览 ── -->
 <div class="card">
-  <h2>📦 按主线查看 Round</h2>
-  <div class="card-sub">按 lane 切换，查看每条主线下的 Round 任务清单。当前已展开 Round 00、Round 01、Round 02、Round 03、Round 04。</div>
+  <h2>按主线查看 Round</h2>
+  <div class="card-sub">按 lane 切换，查看 Round 00–21 任务清单。点击「阅读」可在页内打开 notes / 计划文档。</div>
   <div class="lane-tabs" id="laneTabs"></div>
   <div class="round-tabs" id="roundTabs"></div>
   <div id="panels"></div>
@@ -374,205 +556,22 @@
 
 </div> <!-- /container -->
 
-<script src="progress_data.js"></script>
+<div class="modal-overlay" id="readerModal" aria-hidden="true">
+  <div class="modal-panel" role="dialog" aria-labelledby="readerTitle">
+    <div class="modal-head">
+      <h3 id="readerTitle">阅读</h3>
+      <button type="button" class="modal-close" id="readerClose">关闭</button>
+    </div>
+    <div id="readerBody"></div>
+  </div>
+</div>
+
+<script src="progress_data.js?v=20260704c"></script>
+<script src="rounds_data.js?v=20260704c"></script>
+<script src="progress_ui.js?v=20260704c"></script>
 <script>
-// ============================================================
-// 静态元数据：Round 列表（每个 Round 必须有 lane 字段）
-// 这是 progress.html 的本地"知识源"，与 progress.json 中的任务 ID 通过 task_id 对齐。
-// ============================================================
-const ROUNDS = [
-  {
-    id: "round_00",
-    title: "Round 00 · Terminal 初见",
-    lane: "engineering",
-    difficulty: "⭐☆☆☆☆",
-    duration: "3 周",
-    weeks: [
-      { id: "week1", title: "第 1 周：建立感觉（pwd / ls / cd）", tasks: [
-        { id:"w1-read",  type:"reading",  title:"阅读 week1/notes.md",                   cmd:"bash mark_done.sh w1-read",  file:"rounds/round_00/week1/notes.md" },
-        { id:"w1-ex1",   type:"exercise", title:"练习1：认识当前位置",                    cmd:"自动",  file:"rounds/round_00/week1/exercises.sh" },
-        { id:"w1-ex2",   type:"exercise", title:"练习2：创建子目录并切换",                cmd:"自动",  file:"rounds/round_00/week1/exercises.sh" },
-        { id:"w1-ex3",   type:"exercise", title:"练习3：绝对路径 vs 相对路径",             cmd:"自动",  file:"rounds/round_00/week1/exercises.sh" },
-        { id:"w1-self",  type:"test",     title:"第1周自测",                              cmd:"自动",  file:"rounds/round_00/week1/exercises.sh" },
-      ]},
-      { id: "week2", title: "第 2 周：创建东西（mkdir / touch / cat）", tasks: [
-        { id:"w2-read",  type:"reading",  title:"阅读 week2/notes.md",             cmd:"bash mark_done.sh w2-read",  file:"rounds/round_00/week2/notes.md" },
-        { id:"w2-ex4",   type:"exercise", title:"练习4：创建更多子目录",              cmd:"自动",  file:"rounds/round_00/week2/exercises.sh" },
-        { id:"w2-ex5",   type:"exercise", title:"练习5：创建空文件",                 cmd:"自动",  file:"rounds/round_00/week2/exercises.sh" },
-        { id:"w2-ex6",   type:"exercise", title:"练习6：用 cat 查看空文件",          cmd:"自动",  file:"rounds/round_00/week2/exercises.sh" },
-        { id:"w2-ex7",   type:"exercise", title:"练习7：echo + cat",                cmd:"自动",  file:"rounds/round_00/week2/exercises.sh" },
-        { id:"w2-self",  type:"test",     title:"第2周自测",                        cmd:"自动",  file:"rounds/round_00/week2/exercises.sh" },
-      ]},
-      { id: "week3", title: "第 3 周：学会自查（man）", tasks: [
-        { id:"w3-read",  type:"reading",  title:"阅读 week3/notes.md",             cmd:"bash mark_done.sh w3-read",  file:"rounds/round_00/week3/notes.md" },
-        { id:"w3-ex8",   type:"exercise", title:"练习8：man ls", cmd:"自动", file:"rounds/round_00/week3/exercises.sh" },
-        { id:"w3-ex9",   type:"exercise", title:"练习9：man pwd/mkdir/touch/cat", cmd:"自动", file:"rounds/round_00/week3/exercises.sh" },
-        { id:"w3-ex10",  type:"exercise", title:"练习10：man man",               cmd:"自动", file:"rounds/round_00/week3/exercises.sh" },
-        { id:"w3-self",  type:"test",     title:"第3周自测",                     cmd:"自动", file:"rounds/round_00/week3/exercises.sh" },
-      ]},
-      { id: "final", title: "最终验收", tasks: [
-        { id:"fin-comp",   type:"exercise", title:"综合练习",                            cmd:"自动", file:"rounds/round_00/final/comprehensive_exercise.sh" },
-        { id:"fin-sheet",  type:"output",   title:"完成命令小抄",                         cmd:"自动", file:"rounds/round_00/final/command_cheatsheet.md" },
-        { id:"fin-acc1",   type:"test",     title:"验收：Terminal 与 Shell 的区别",       cmd:"自动", file:"round_00.md" },
-        { id:"fin-acc2",   type:"test",     title:"验收：能用 7 个命令",                 cmd:"自动", file:"round_00.md" },
-        { id:"fin-acc3",   type:"output",   title:"验收：cli-lab 目录与小抄存在",          cmd:"自动", file:"round_00.md" },
-      ]}
-    ]
-  },
-  {
-    id: "round_01",
-    title: "Round 01 · 文件系统与基础命令",
-    lane: "engineering",
-    difficulty: "⭐☆☆☆☆",
-    duration: "3 周",
-    weeks: [
-      { id: "round01-week1", title: "第 1 周：路径感", tasks: [
-        { id:"r01-w1-read", type:"reading",  title:"阅读 week1/notes.md",      cmd:"bash mark_done.sh r01-w1-read", file:"rounds/round_01/week1/notes.md" },
-        { id:"r01-w1-ex1",  type:"exercise", title:"练习1：路径与目录切换",      cmd:"自动", file:"rounds/round_01/week1/exercises.sh" },
-        { id:"r01-w1-self", type:"test",     title:"第1周自测",                cmd:"自动", file:"rounds/round_01/week1/exercises.sh" },
-      ]},
-      { id: "round01-week2", title: "第 2 周：文件操作", tasks: [
-        { id:"r01-w2-read", type:"reading",  title:"阅读 week2/notes.md",      cmd:"bash mark_done.sh r01-w2-read", file:"rounds/round_01/week2/notes.md" },
-        { id:"r01-w2-ex2",  type:"exercise", title:"练习2：创建与整理文件",      cmd:"自动", file:"rounds/round_01/week2/exercises.sh" },
-        { id:"r01-w2-self", type:"test",     title:"第2周自测",                cmd:"自动", file:"rounds/round_01/week2/exercises.sh" },
-      ]},
-      { id: "round01-week3", title: "第 3 周：查看文本与帮助", tasks: [
-        { id:"r01-w3-read", type:"reading",  title:"阅读 week3/notes.md",      cmd:"bash mark_done.sh r01-w3-read", file:"rounds/round_01/week3/notes.md" },
-        { id:"r01-w3-ex3",  type:"exercise", title:"练习3：文本查看与 man",      cmd:"自动", file:"rounds/round_01/week3/exercises.sh" },
-        { id:"r01-w3-self", type:"test",     title:"第3周自测",                cmd:"自动", file:"rounds/round_01/week3/exercises.sh" },
-      ]},
-      { id: "round01-final", title: "最终验收", tasks: [
-        { id:"r01-fin-comp",  type:"exercise", title:"综合练习：文件实验室",       cmd:"自动", file:"rounds/round_01/final/comprehensive_exercise.sh" },
-        { id:"r01-fin-sheet", type:"output",   title:"完成 Round 01 命令小抄",    cmd:"自动", file:"rounds/round_01/final/command_cheatsheet.md" },
-        { id:"r01-fin-acc1",  type:"test",     title:"验收：解释基础命令与路径概念", cmd:"自动", file:"round_01.md" },
-      ]}
-    ]
-  },
-  {
-    id: "round_02",
-    title: "Round 02 · Shell、管道、Git 最小工作流",
-    lane: "engineering",
-    difficulty: "⭐⭐☆☆☆",
-    duration: "3 周",
-    weeks: [
-      { id: "round02-week1", title: "第 1 周：重定向与管道", tasks: [
-        { id:"r02-w1-read",  type:"reading",  title:"阅读 week1/notes.md",               cmd:"bash mark_done.sh r02-w1-read", file:"rounds/round_02/week1/notes.md" },
-        { id:"r02-w1-ex1",   type:"exercise", title:"练习1：覆盖与追加",                  cmd:"自动", file:"rounds/round_02/week1/exercises.sh" },
-        { id:"r02-w1-ex2",   type:"exercise", title:"练习2：去重统计",                    cmd:"自动", file:"rounds/round_02/week1/exercises.sh" },
-        { id:"r02-w1-ex3",   type:"exercise", title:"练习3：日志过滤",                    cmd:"自动", file:"rounds/round_02/week1/exercises.sh" },
-        { id:"r02-w1-self",  type:"test",     title:"第1周自测",                          cmd:"自动", file:"rounds/round_02/week1/exercises.sh" },
-      ]},
-      { id: "round02-week2", title: "第 2 周：最小 shell 脚本", tasks: [
-        { id:"r02-w2-read",  type:"reading",  title:"阅读 week2/notes.md",               cmd:"bash mark_done.sh r02-w2-read", file:"rounds/round_02/week2/notes.md" },
-        { id:"r02-w2-ex4",   type:"exercise", title:"练习4：count_errors.sh",             cmd:"自动", file:"rounds/round_02/week2/exercises.sh" },
-        { id:"r02-w2-ex5",   type:"exercise", title:"练习5：count_labels.sh",             cmd:"自动", file:"rounds/round_02/week2/exercises.sh" },
-        { id:"r02-w2-ex6",   type:"exercise", title:"练习6：show_args.sh",                cmd:"自动", file:"rounds/round_02/week2/exercises.sh" },
-        { id:"r02-w2-self",  type:"test",     title:"第2周自测",                          cmd:"自动", file:"rounds/round_02/week2/exercises.sh" },
-      ]},
-      { id: "round02-week3", title: "第 3 周：Git 最小工作流", tasks: [
-        { id:"r02-w3-read",  type:"reading",  title:"阅读 week3/notes.md",               cmd:"bash mark_done.sh r02-w3-read", file:"rounds/round_02/week3/notes.md" },
-        { id:"r02-w3-ex7",   type:"exercise", title:"练习7：初始化与首次提交",             cmd:"自动", file:"rounds/round_02/week3/exercises.sh" },
-        { id:"r02-w3-ex8",   type:"exercise", title:"练习8：第二次提交",                  cmd:"自动", file:"rounds/round_02/week3/exercises.sh" },
-        { id:"r02-w3-ex9",   type:"exercise", title:"练习9：新增文件提交",                 cmd:"自动", file:"rounds/round_02/week3/exercises.sh" },
-        { id:"r02-w3-self",  type:"test",     title:"第3周自测",                          cmd:"自动", file:"rounds/round_02/week3/exercises.sh" },
-      ]},
-      { id: "round02-final", title: "最终验收", tasks: [
-        { id:"r02-fin-comp",  type:"exercise", title:"综合练习：日志过滤 + 迷你 Git 仓库", cmd:"自动", file:"rounds/round_02/final/comprehensive_exercise.sh" },
-        { id:"r02-fin-sheet", type:"output",   title:"完成 Round 02 命令小抄",            cmd:"自动", file:"rounds/round_02/final/command_cheatsheet.md" },
-        { id:"r02-fin-acc1",  type:"test",     title:"验收：解释 >、>>、| 区别",          cmd:"自动", file:"round_02.md" },
-        { id:"r02-fin-acc2",  type:"output",   title:"验收：完成 3 次 Git 提交并解释",    cmd:"自动", file:"round_02.md" },
-      ]}
-    ]
-  },
-  {
-    id: "round_03",
-    title: "Round 03 · Python 基础与复杂度入门",
-    lane: "engineering",
-    difficulty: "⭐⭐☆☆☆",
-    duration: "3 周",
-    weeks: [
-      { id: "round03-week1", title: "第 1 周：Python 基础语法", tasks: [
-        { id:"r03-w1-read", type:"reading",  title:"阅读 week1/notes.md",                cmd:"bash mark_done.sh r03-w1-read", file:"rounds/round_03/week1/notes.md" },
-        { id:"r03-w1-ex1",  type:"exercise", title:"练习1：变量、循环与函数",              cmd:"自动", file:"rounds/round_03/week1/exercises.sh" },
-        { id:"r03-w1-self", type:"test",     title:"第1周自测",                          cmd:"自动", file:"rounds/round_03/week1/exercises.sh" },
-      ]},
-      { id: "round03-week2", title: "第 2 周：list/dict 与函数拆分", tasks: [
-        { id:"r03-w2-read", type:"reading",  title:"阅读 week2/notes.md",                cmd:"bash mark_done.sh r03-w2-read", file:"rounds/round_03/week2/notes.md" },
-        { id:"r03-w2-ex2",  type:"exercise", title:"练习2：标签统计函数",                  cmd:"自动", file:"rounds/round_03/week2/exercises.sh" },
-        { id:"r03-w2-self", type:"test",     title:"第2周自测",                          cmd:"自动", file:"rounds/round_03/week2/exercises.sh" },
-      ]},
-      { id: "round03-week3", title: "第 3 周：复杂度观察", tasks: [
-        { id:"r03-w3-read", type:"reading",  title:"阅读 week3/notes.md",                cmd:"bash mark_done.sh r03-w3-read", file:"rounds/round_03/week3/notes.md" },
-        { id:"r03-w3-ex3",  type:"exercise", title:"练习3：线性与平方级对比",              cmd:"自动", file:"rounds/round_03/week3/exercises.sh" },
-        { id:"r03-w3-self", type:"test",     title:"第3周自测",                          cmd:"自动", file:"rounds/round_03/week3/exercises.sh" },
-      ]},
-      { id: "round03-final", title: "最终验收", tasks: [
-        { id:"r03-fin-comp",  type:"exercise", title:"综合练习：mini analyzer",          cmd:"自动", file:"rounds/round_03/final/comprehensive_exercise.sh" },
-        { id:"r03-fin-sheet", type:"output",   title:"完成 Round 03 复杂度小抄",         cmd:"自动", file:"rounds/round_03/final/complexity_cheatsheet.md" },
-        { id:"r03-fin-acc1",  type:"test",     title:"验收：解释 O(n) 与 O(n^2) 差异",   cmd:"自动", file:"round_03.md" },
-      ]}
-    ]
-  },
-  {
-    id: "round_04",
-    title: "Round 04 · 核心数据结构",
-    lane: "engineering",
-    difficulty: "⭐⭐⭐☆☆",
-    duration: "3 周",
-    weeks: [
-      { id: "round04-week1", title: "第 1 周：列表与顺序存储", tasks: [
-        { id:"r04-w1-read", type:"reading",  title:"阅读 week1/notes.md",                cmd:"bash mark_done.sh r04-w1-read", file:"rounds/round_04/week1/notes.md" },
-        { id:"r04-w1-ex1",  type:"exercise", title:"练习1：列表统计与访问",                cmd:"自动", file:"rounds/round_04/week1/exercises.sh" },
-        { id:"r04-w1-self", type:"test",     title:"第1周自测",                          cmd:"自动", file:"rounds/round_04/week1/exercises.sh" },
-      ]},
-      { id: "round04-week2", title: "第 2 周：栈与队列", tasks: [
-        { id:"r04-w2-read", type:"reading",  title:"阅读 week2/notes.md",                cmd:"bash mark_done.sh r04-w2-read", file:"rounds/round_04/week2/notes.md" },
-        { id:"r04-w2-ex2",  type:"exercise", title:"练习2：stack/queue 基础操作",         cmd:"自动", file:"rounds/round_04/week2/exercises.sh" },
-        { id:"r04-w2-self", type:"test",     title:"第2周自测",                          cmd:"自动", file:"rounds/round_04/week2/exercises.sh" },
-      ]},
-      { id: "round04-week3", title: "第 3 周：哈希与去重", tasks: [
-        { id:"r04-w3-read", type:"reading",  title:"阅读 week3/notes.md",                cmd:"bash mark_done.sh r04-w3-read", file:"rounds/round_04/week3/notes.md" },
-        { id:"r04-w3-ex3",  type:"exercise", title:"练习3：dict/set 统计与去重",          cmd:"自动", file:"rounds/round_04/week3/exercises.sh" },
-        { id:"r04-w3-self", type:"test",     title:"第3周自测",                          cmd:"自动", file:"rounds/round_04/week3/exercises.sh" },
-      ]},
-      { id: "round04-final", title: "最终验收", tasks: [
-        { id:"r04-fin-comp",  type:"exercise", title:"综合练习：data toolkit",           cmd:"自动", file:"rounds/round_04/final/comprehensive_exercise.sh" },
-        { id:"r04-fin-sheet", type:"output",   title:"完成 Round 04 数据结构小抄",       cmd:"自动", file:"rounds/round_04/final/complexity_cheatsheet.md" },
-        { id:"r04-fin-acc1",  type:"test",     title:"验收：解释 dict/set/deque 场景",   cmd:"自动", file:"round_04.md" },
-      ]}
-    ]
-  },
-  {
-    id: "round_05",
-    title: "Round 05 · 高频算法模式",
-    lane: "engineering",
-    difficulty: "⭐⭐⭐☆☆",
-    duration: "3 周",
-    weeks: [
-      { id: "round05-week1", title: "第 1 周：双指针 / 滑动窗口 / 二分", tasks: [
-        { id:"r05-w1-read", type:"reading",  title:"阅读 week1/notes.md",                cmd:"bash mark_done.sh r05-w1-read", file:"rounds/round_05/week1/notes.md" },
-        { id:"r05-w1-ex1",  type:"exercise", title:"练习1：二分查找 demo",                 cmd:"自动", file:"rounds/round_05/week1/exercises.sh" },
-        { id:"r05-w1-self", type:"test",     title:"第1周自测",                          cmd:"自动", file:"rounds/round_05/week1/exercises.sh" },
-      ]},
-      { id: "round05-week2", title: "第 2 周：分治 / DFS / BFS / 回溯", tasks: [
-        { id:"r05-w2-read", type:"reading",  title:"阅读 week2/notes.md",                cmd:"bash mark_done.sh r05-w2-read", file:"rounds/round_05/week2/notes.md" },
-        { id:"r05-w2-ex2",  type:"exercise", title:"练习2：DFS 遍历 demo",                 cmd:"自动", file:"rounds/round_05/week2/exercises.sh" },
-        { id:"r05-w2-self", type:"test",     title:"第2周自测",                          cmd:"自动", file:"rounds/round_05/week2/exercises.sh" },
-      ]},
-      { id: "round05-week3", title: "第 3 周：贪心 / DP 入门", tasks: [
-        { id:"r05-w3-read", type:"reading",  title:"阅读 week3/notes.md",                cmd:"bash mark_done.sh r05-w3-read", file:"rounds/round_05/week3/notes.md" },
-        { id:"r05-w3-ex3",  type:"exercise", title:"练习3：爬楼梯 DP demo",                cmd:"自动", file:"rounds/round_05/week3/exercises.sh" },
-        { id:"r05-w3-self", type:"test",     title:"第3周自测",                          cmd:"自动", file:"rounds/round_05/week3/exercises.sh" },
-      ]},
-      { id: "round05-final", title: "最终验收", tasks: [
-        { id:"r05-fin-comp",  type:"exercise", title:"综合练习：算法模式选择器",           cmd:"自动", file:"rounds/round_05/final/comprehensive_exercise.sh" },
-        { id:"r05-fin-sheet", type:"output",   title:"完成 Round 05 算法模式小抄",       cmd:"自动", file:"rounds/round_05/final/algorithm_patterns_cheatsheet.md" },
-        { id:"r05-fin-acc1",  type:"test",     title:"验收：解释 6 类算法模式判断习惯",   cmd:"自动", file:"round_05.md" },
-      ]}
-    ]
-  }
-  // 后续 Round 在落地为实操目录时按本结构追加；进度已接入 Round 00–05。
-];
+const ROUNDS = window.ROUNDS_DATA || [];
+
 
 // ============================================================
 // Stage 与 lane 的映射（基于 docs/STAGE_PLAN.md）
@@ -604,6 +603,8 @@ let activeLane  = "engineering";
 let activeRound = "round_00";
 let progressData = {};
 let lanesData    = {};
+const LANE_PRIORITY = ["soft_exam", "math2", "cs408", "engineering"];
+const READABLE_FILE_RE = /\.(md|txt|sh|py)$/i;
 
 // ============================================================
 // Load progress
@@ -675,12 +676,75 @@ function laneStats(laneKey) {
 // Render
 // ============================================================
 function render() {
+  renderContinue();
   renderGlobal();
   renderLanes();
   renderStages();
   renderWeak();
   renderLaneTabs();
   renderRoundsForLane(activeLane);
+}
+
+function canOpenFile(file) {
+  return !!(file && READABLE_FILE_RE.test(file));
+}
+
+function fileLabel(file, type) {
+  if (!file) return "";
+  const name = file.split("/").pop();
+  if (type === "reading") return `学习资料：${name}`;
+  if (/\.(sh|py)$/i.test(file)) return `练习脚本：${name}`;
+  return `查看文件：${name}`;
+}
+
+function findNextTask() {
+  const orderedRounds = [...ROUNDS].sort((a, b) => {
+    const ai = LANE_PRIORITY.indexOf(a.lane);
+    const bi = LANE_PRIORITY.indexOf(b.lane);
+    return (ai === -1 ? 99 : ai) - (bi === -1 ? 99 : bi);
+  });
+  for (const round of orderedRounds) {
+    for (const week of round.weeks || []) {
+      for (const task of week.tasks || []) {
+        if (!isTaskDone(task.id)) return { round, week, task };
+      }
+    }
+  }
+  return null;
+}
+
+function renderContinue() {
+  const card = document.getElementById("continueCard");
+  if (!card) return;
+  const next = findNextTask();
+  if (!next) {
+    card.innerHTML = `
+      <h2>继续学习</h2>
+      <div class="empty-state">所有已注册任务都完成了。可以进入复盘，或运行 <code>python3 scripts/build_rounds_data.py</code> 同步新任务。</div>
+    `;
+    return;
+  }
+  const { round, week, task } = next;
+  const fb = feedbackFor(task.id);
+  const canRead = canOpenFile(task.file);
+  card.innerHTML = `
+    <h2>继续学习</h2>
+    <div class="continue-grid">
+      <div>
+        <div class="continue-title">${task.title}</div>
+        <div class="continue-meta">${round.title} / ${week.title} / ${round.lane}</div>
+        <div class="continue-actions">
+          ${canRead ? `<button type="button" class="task-btn read task-open" data-file="${task.file}" data-title="${task.title}">${fileLabel(task.file, task.type)}</button>` : ""}
+          ${taskRecordButton(task.id)}
+          ${taskActionButtons(task.id, false)}
+        </div>
+      </div>
+      <div class="continue-note">
+        ${escapeHtml(fb?.next_suggestion || "先打开学习资料，完成一个最小动作后再记录。")}
+      </div>
+    </div>
+  `;
+  bindTaskActions(card);
 }
 
 function renderGlobal() {
@@ -696,7 +760,7 @@ function renderLanes() {
   el.innerHTML = "";
   Object.entries(lanesData).forEach(([key, meta]) => {
     const s = laneStats(key);
-    const weak = s.total >= 5 && s.pct < 30;
+    const weak = s.total >= 5 && s.pct < 30 && s.done > 0;
     const item = document.createElement("div");
     item.className = `lane-item ${key}${weak ? " weak" : ""}`;
     item.innerHTML = `
@@ -739,11 +803,11 @@ function renderWeak() {
   const weaks = Object.entries(lanesData).map(([key, meta]) => {
     const s = laneStats(key);
     return { key, meta, s };
-  }).filter(x => x.s.total >= 5 && x.s.pct < 30);
+  }).filter(x => x.s.total >= 5 && x.s.pct < 30 && x.s.done > 0);
   if (!weaks.length) {
     const item = document.createElement("div");
     item.className = "weak-empty";
-    item.textContent = "✅ 当前没有完成率低于 30% 且任务数 ≥ 5 的主线。";
+    item.textContent = "✅ 当前没有「已开始但完成率低于 30%」的主线。";
     el.appendChild(item);
     return;
   }
@@ -785,7 +849,7 @@ function renderRoundsForLane(laneKey) {
 
   const laneRounds = ROUNDS.filter(r => r.lane === laneKey);
   if (!laneRounds.length) {
-    panelsEl.innerHTML = `<div class="empty-state">本主线下尚未注册任何 Round。可在 progress.json 注册任务，或在 progress.html 的 ROUNDS 数组追加 Round 元数据。</div>`;
+    panelsEl.innerHTML = `<div class="empty-state">本主线下尚未注册任务。运行 <code>python3 scripts/build_rounds_data.py</code> 同步 Round 元数据。</div>`;
     return;
   }
 
@@ -852,24 +916,37 @@ function renderRoundsForLane(laneKey) {
       week.tasks.forEach(task => {
         const done   = isTaskDone(task.id);
         const doneAt = taskDoneAt(task.id);
+        const canRead = canOpenFile(task.file);
 
         const item = document.createElement("div");
         item.className = "task-item" + (done ? " done" : "");
+        item.dataset.taskId = task.id;
         const typeLabel = { reading:"阅读", exercise:"练习", test:"自测", output:"产出" }[task.type];
+        const fileHtml = canRead
+          ? `<button type="button" class="task-file-link task-open" data-file="${task.file}" data-title="${task.title}" title="${task.file}">${fileLabel(task.file, task.type)}</button>`
+          : `<span class="task-file">${task.file || ""}</span>`;
 
         item.innerHTML = `
           <span class="task-status-icon">${done ? "✅" : "⬜"}</span>
           <div class="task-content">
             <div class="task-title">${task.title}</div>
             <div class="task-meta">
-              <span class="task-file">${task.file}</span>
-              ${doneAt ? `<span class="task-done-at">✓ ${doneAt}</span>` : `<span class="task-cmd">${task.cmd}</span>`}
+              ${fileHtml}
+              ${doneAt ? `<span class="task-done-at">✓ ${doneAt}</span>` : ""}
             </div>
+            ${renderFeedbackHint(task.id)}
+          </div>
+          <div class="task-actions">
+            ${canRead ? `<button type="button" class="task-btn read task-open" data-file="${task.file}" data-title="${task.title}">打开</button>` : ""}
+            ${taskRecordButton(task.id)}
+            ${taskActionButtons(task.id, done)}
           </div>
           <span class="task-type ${task.type}">${typeLabel}</span>
         `;
         listEl.appendChild(item);
       });
+
+      bindTaskActions(listEl);
 
       weekEl.appendChild(titleEl);
       weekEl.appendChild(listEl);
@@ -965,9 +1042,12 @@ if (window.location.protocol === "file:") {
     btn.title = "重新加载页面以读取最新 progress_data.js";
   });
 }
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
   loadPersonal();
-  loadProgress();
+  await detectApi();
+  await loadFeedbackData();
+  await loadEventData();
+  await loadProgress();
 });
 </script>
 </body>

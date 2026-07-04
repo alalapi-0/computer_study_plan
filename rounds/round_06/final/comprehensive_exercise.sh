@@ -3,6 +3,12 @@
 
 set -e
 
+REPO_ROOT="$(cd "$(dirname "$0")/../../.." && pwd)"
+
+mark() {
+  bash "$REPO_ROOT/mark_done.sh" "$1"
+}
+
 mkdir -p ~/cli-lab/round6/final/input ~/cli-lab/round6/final/output
 cd ~/cli-lab/round6/final
 
@@ -26,6 +32,11 @@ EOF
 chmod +x batch_process.sh
 ./batch_process.sh
 
+mark r06-fin-comp
+
 echo "请确认你能解释该脚本里的 grep/sed/awk 流程后按回车..."
 read
+mark r06-fin-sheet
+mark r06-fin-acc1
+
 echo "Final 完成。"
