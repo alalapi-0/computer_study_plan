@@ -386,6 +386,7 @@ TERMINAL_ALLOWED_COMMANDS = {
     "man",
     "mkdir",
     "mv",
+    "ps",
     "printf",
     "pwd",
     "python3",

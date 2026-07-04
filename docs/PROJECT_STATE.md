@@ -1226,3 +1226,35 @@
 
 - 本轮只修改前端阅读器链接渲染逻辑，未写入任何学习记录。
 - 未引入前端框架、数据库、后端框架或大型新依赖。
+
+## 49. 2026-07-04 TASK-RR-37 Round 06 内容填充与 Linux 自动化练习
+
+### 49.1 本轮修改
+
+- `rounds/round_06/README.md`：从“最小实操骨架”更新为 Web UI 可练习说明，明确阅读、运行、自测、最终验收的页面操作路径。
+- `rounds/round_06/week1|week2|week3/notes.md`：补齐 find/xargs/sed/awk、进程查看、长任务保活、SSH/rsync/crontab 命令排练的学习步骤、自测命令、场景直觉和完成标准。
+- `rounds/round_06/week1|week2|week3/exercises.sh` 与 `final/comprehensive_exercise.sh`：改为非交互运行，只自动记录脚本实际完成的练习任务；自测、小抄和验收仍由用户手动记录。
+- `rounds/round_06/final/linux_automation_cheatsheet.md`：补齐 Linux 自动化命令小抄、Web UI 安全边界和最终验收自问。
+- `scripts/build_rounds_data.py` / `rounds_data.js`：将 Round 06 UI 任务标题从“练习1 / 练习2 / 练习3”改为用户能理解的动作标题。
+- `scripts/progress_lib.py` / `records/terminal/README.md`：浏览器终端允许只读 `ps` 进程查看，继续拦截真实远程和网络命令。
+
+### 49.2 用户视角问题修复
+
+- Round 06 原 notes 太短，用户不知道如何只通过 Web UI 完成 Linux 自动化练习。
+- Round 06 原脚本会等待回车并连带标记自测 / 小抄 / 验收，不适合浏览器一键运行。
+- Round 06 原任务标题过泛，用户无法从 UI 判断 find/xargs、进程查看、远程排练分别要练什么。
+- Round 06 涉及 `ssh`、`rsync`、`crontab` 等高风险命令，已改为 Web UI 内命令排练和计划文件，不执行真实远程操作。
+
+### 49.3 验证
+
+- API 验证：`r06-w1-ex1`、`r06-w2-ex2`、`r06-w3-ex3`、`r06-fin-comp` 均可通过 `/api/tasks/<id>/run` 运行成功；`r06-w2-self/run` 返回 `task_not_runnable`。
+- 浏览器终端验证：`/api/terminal?cwd=~/round6` 返回 `~/round6`；终端允许在任务 `r06-w2-self` 下执行 `ps aux | grep python | head -1`；`ssh user@host` 返回 `terminal_command_blocked`。
+- 真实浏览器验证：`progress.html?round=round_06` 会直接选中 Round 06；自测任务不显示“运行”但显示“终端”；点击后当前任务为“自测：自己写 worker_monitor.sh”，工作目录为 `~/round6`；`round_06.md` 中 MIT Missing Semester 外链可在阅读器中点击并新标签页打开。
+- 移动端验证：390px 宽度无整页横向溢出。
+- 静态与数据验证：`build_rounds_data.py`、`bash -n`、`rg` 残留误打卡检查均通过。
+
+### 49.4 风险边界核对
+
+- 本轮 API/UI 验证产生的进度、动作、反馈和终端历史均已从测试前快照恢复。
+- 未放宽真实远程操作边界；`ssh` / `scp` / `rsync` / 网络命令仍被浏览器终端拦截。
+- 未引入前端框架、数据库、后端框架或大型新依赖。

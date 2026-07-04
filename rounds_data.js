@@ -730,77 +730,77 @@ window.ROUNDS_DATA = [
     "id": "round_06",
     "title": "Round 06 · Linux 进阶与自动化",
     "lane": "engineering",
-    "difficulty": "⭐⭐☆☆☆",
+    "difficulty": "⭐⭐⭐☆☆",
     "duration": "3 周",
     "weeks": [
       {
         "id": "round06-week1",
-        "title": "第 1 周：基础练习",
+        "title": "第 1 周：find / xargs / sed / awk",
         "tasks": [
           {
             "id": "r06-w1-read",
             "type": "reading",
-            "title": "阅读 week1/notes.md",
+            "title": "阅读：find、xargs、sed、awk 批处理",
             "file": "rounds/round_06/week1/notes.md"
           },
           {
             "id": "r06-w1-ex1",
             "type": "exercise",
-            "title": "练习1",
+            "title": "练习：find/xargs/sed/awk 日志清洗",
             "file": "rounds/round_06/week1/exercises.sh"
           },
           {
             "id": "r06-w1-self",
             "type": "test",
-            "title": "第1周自测",
+            "title": "自测：自己写 find_text_report.sh",
             "file": "rounds/round_06/week1/exercises.sh"
           }
         ]
       },
       {
         "id": "round06-week2",
-        "title": "第 2 周：进阶练习",
+        "title": "第 2 周：进程查看与长任务",
         "tasks": [
           {
             "id": "r06-w2-read",
             "type": "reading",
-            "title": "阅读 week2/notes.md",
+            "title": "阅读：ps、后台任务、nohup、tmux",
             "file": "rounds/round_06/week2/notes.md"
           },
           {
             "id": "r06-w2-ex2",
             "type": "exercise",
-            "title": "练习2",
+            "title": "练习：进程查看与长任务日志",
             "file": "rounds/round_06/week2/exercises.sh"
           },
           {
             "id": "r06-w2-self",
             "type": "test",
-            "title": "第2周自测",
+            "title": "自测：自己写 worker_monitor.sh",
             "file": "rounds/round_06/week2/exercises.sh"
           }
         ]
       },
       {
         "id": "round06-week3",
-        "title": "第 3 周：综合练习",
+        "title": "第 3 周：SSH / rsync / crontab 排练",
         "tasks": [
           {
             "id": "r06-w3-read",
             "type": "reading",
-            "title": "阅读 week3/notes.md",
+            "title": "阅读：SSH、rsync、crontab 安全边界",
             "file": "rounds/round_06/week3/notes.md"
           },
           {
             "id": "r06-w3-ex3",
             "type": "exercise",
-            "title": "练习3",
+            "title": "练习：远程同步与 cron 命令排练",
             "file": "rounds/round_06/week3/exercises.sh"
           },
           {
             "id": "r06-w3-self",
             "type": "test",
-            "title": "第3周自测",
+            "title": "自测：自己写 remote_ops_plan.md",
             "file": "rounds/round_06/week3/exercises.sh"
           }
         ]
@@ -812,19 +812,19 @@ window.ROUNDS_DATA = [
           {
             "id": "r06-fin-comp",
             "type": "exercise",
-            "title": "综合练习",
+            "title": "综合练习：批量日志处理流水线",
             "file": "rounds/round_06/final/comprehensive_exercise.sh"
           },
           {
             "id": "r06-fin-sheet",
             "type": "output",
-            "title": "完成本 Round 小抄",
+            "title": "产出：完成 Round 06 Linux 自动化小抄",
             "file": "rounds/round_06/final/linux_automation_cheatsheet.md"
           },
           {
             "id": "r06-fin-acc1",
             "type": "test",
-            "title": "验收：Round 06 核心目标",
+            "title": "验收：解释批处理、进程查看和远程排练边界",
             "file": "round_06.md"
           }
         ]

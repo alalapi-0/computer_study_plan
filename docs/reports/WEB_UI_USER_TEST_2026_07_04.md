@@ -163,6 +163,23 @@
 - UI 验证：真实浏览器打开 `progress.html?round=round_05`，在阅读器中打开 `round_05.md`；`Hello Algo` 链接可被定位，文本正确，`target="_blank"`，`rel` 包含 `noreferrer noopener`；页面中共识别到 5 个 `https://` 外部链接。
 - 清理：本轮只读取页面和检查链接属性，未写入学习记录。
 
+## Round 06 内容填充与 Linux 自动化补测
+
+- before 问题：Round 06 仍是最小骨架，notes 只列目标和自查，缺少 Web UI 学习路径和安全边界。
+- before 问题：Round 06 任务标题仍是“练习1 / 练习2 / 练习3”，用户无法判断要练 find/xargs、进程查看还是远程排练。
+- before 问题：Round 06 脚本会等待回车，并连带标记自测、小抄和验收，不适合浏览器一键运行。
+- before 问题：本轮涉及 `ssh`、`scp`、`rsync`、`crontab` 等真实远程或系统级命令，若不说明边界，用户容易误以为 Web UI 终端应该直接执行。
+- 修复：Round 06 README、Week 1–3 notes、final 小抄已补齐 find/xargs/sed/awk、进程查看、长任务保活、远程命令排练、cron 表达式和验收自问。
+- 修复：Round 06 脚本改为非交互运行，只自动记录脚本实际完成的练习任务；自测、小抄和验收仍由用户手动完成并记录。
+- 修复：Round 06 UI 任务标题改为“find/xargs/sed/awk 日志清洗”“进程查看与长任务日志”“远程同步与 cron 命令排练”等动作标题。
+- 修复：浏览器终端允许只读 `ps` 进程查看，继续拦截真实 `ssh`、`scp`、`rsync`、网络命令和高风险操作。
+- API 验证：`r06-w1-ex1`、`r06-w2-ex2`、`r06-w3-ex3`、`r06-fin-comp` 均可运行成功；`r06-w2-self/run` 返回 `task_not_runnable`。
+- 浏览器终端验证：`~/round6` 可作为映射目录；终端能在任务 `r06-w2-self` 下执行 `ps aux | grep python | head -1`；`ssh user@host` 返回 `terminal_command_blocked`。
+- UI 验证：真实浏览器打开 `progress.html?round=round_06` 后直接选中 Round 06；自测任务不显示“运行”但显示“终端”；点击后当前任务为“自测：自己写 worker_monitor.sh”，工作目录为 `~/round6`。
+- 外链验证：在阅读器中打开 `round_06.md`，MIT Missing Semester 外链可被定位，`target="_blank"`，`rel` 包含 `noreferrer noopener`。
+- 移动端验证：390px 宽度无整页横向溢出。
+- 清理：本轮 API/UI 测试产生的进度、动作、反馈和终端历史已从测试前快照恢复。
+
 ## 验证命令
 
 ```bash

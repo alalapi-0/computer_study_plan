@@ -17,6 +17,7 @@ DIFFICULTY_BY_ROUND = {
     3: "⭐⭐☆☆☆",
     4: "⭐⭐⭐☆☆",
     5: "⭐⭐⭐☆☆",
+    6: "⭐⭐⭐☆☆",
 }
 
 
@@ -528,6 +529,87 @@ def build_standard_round(root: Path, num: int) -> dict | None:
                     ],
                 },
                 {"id": "round05-final", "title": "最终验收", "tasks": final_tasks},
+            ],
+        }
+
+    if num == 6:
+        final_tasks = []
+        if comp:
+            final_tasks.append(
+                {
+                    "id": "r06-fin-comp",
+                    "type": "exercise",
+                    "title": "综合练习：批量日志处理流水线",
+                    "file": comp,
+                }
+            )
+        if sheet:
+            final_tasks.append(
+                {
+                    "id": "r06-fin-sheet",
+                    "type": "output",
+                    "title": "产出：完成 Round 06 Linux 自动化小抄",
+                    "file": sheet,
+                }
+            )
+        final_tasks.append(
+            {
+                "id": "r06-fin-acc1",
+                "type": "test",
+                "title": "验收：解释批处理、进程查看和远程排练边界",
+                "file": "round_06.md",
+            }
+        )
+        return {
+            "id": "round_06",
+            "title": round_title(root, num),
+            "lane": "engineering",
+            "difficulty": DIFFICULTY_BY_ROUND.get(num, "⭐⭐⭐☆☆"),
+            "duration": "3 周",
+            "weeks": [
+                {
+                    "id": "round06-week1",
+                    "title": "第 1 周：find / xargs / sed / awk",
+                    "tasks": [
+                        {
+                            "id": "r06-w1-read",
+                            "type": "reading",
+                            "title": "阅读：find、xargs、sed、awk 批处理",
+                            "file": "rounds/round_06/week1/notes.md",
+                        },
+                        {"id": "r06-w1-ex1", "type": "exercise", "title": "练习：find/xargs/sed/awk 日志清洗", "file": ex1},
+                        {"id": "r06-w1-self", "type": "test", "title": "自测：自己写 find_text_report.sh", "file": ex1},
+                    ],
+                },
+                {
+                    "id": "round06-week2",
+                    "title": "第 2 周：进程查看与长任务",
+                    "tasks": [
+                        {
+                            "id": "r06-w2-read",
+                            "type": "reading",
+                            "title": "阅读：ps、后台任务、nohup、tmux",
+                            "file": "rounds/round_06/week2/notes.md",
+                        },
+                        {"id": "r06-w2-ex2", "type": "exercise", "title": "练习：进程查看与长任务日志", "file": ex2},
+                        {"id": "r06-w2-self", "type": "test", "title": "自测：自己写 worker_monitor.sh", "file": ex2},
+                    ],
+                },
+                {
+                    "id": "round06-week3",
+                    "title": "第 3 周：SSH / rsync / crontab 排练",
+                    "tasks": [
+                        {
+                            "id": "r06-w3-read",
+                            "type": "reading",
+                            "title": "阅读：SSH、rsync、crontab 安全边界",
+                            "file": "rounds/round_06/week3/notes.md",
+                        },
+                        {"id": "r06-w3-ex3", "type": "exercise", "title": "练习：远程同步与 cron 命令排练", "file": ex3},
+                        {"id": "r06-w3-self", "type": "test", "title": "自测：自己写 remote_ops_plan.md", "file": ex3},
+                    ],
+                },
+                {"id": "round06-final", "title": "最终验收", "tasks": final_tasks},
             ],
         }
 

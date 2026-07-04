@@ -585,6 +585,23 @@ TASK-011 实际产物：
 
 ---
 
+## TASK-RR-37：Stage 1 填充 · Round 06 Web UI 可完成练习
+
+- 状态：**done**（2026-07-04）
+- 背景：Round 06 已接入进度系统，但仍是最小骨架；notes 缺少 Web UI 学习路径，脚本会等待输入并连带标记自测 / 小抄 / 验收，任务标题过泛；同时本轮涉及 `ssh`、`rsync`、`crontab` 等高风险命令，需要在 Web UI 里明确安全边界。
+- 目标：让 Round 06 用户只通过 Web UI 就能阅读 find/xargs/sed/awk、进程查看、长任务保活、远程同步与 cron 排练资料，运行自动练习，在浏览器映射终端中完成安全自测，并手动记录最终验收。
+- 实际产物：
+  - `rounds/round_06/README.md` 更新为 Web UI 使用说明，明确浏览器终端与远程命令边界。
+  - `rounds/round_06/week1|week2|week3/notes.md` 补齐批处理、进程查看、远程排练的页面学习路径、自测命令和完成标准。
+  - `rounds/round_06/week1|week2|week3/exercises.sh` 与 `final/comprehensive_exercise.sh` 改为非交互运行，只自动记录脚本实际完成的练习任务；自测、小抄和验收仍由用户手动记录。
+  - `rounds/round_06/final/linux_automation_cheatsheet.md` 补齐 Linux 自动化小抄、Web UI 安全边界和最终验收自问。
+  - `scripts/build_rounds_data.py` / `rounds_data.js` 为 Round 06 输出清晰任务标题。
+  - `scripts/progress_lib.py` / `records/terminal/README.md`：浏览器终端允许只读 `ps` 进程查看，继续拦截 `ssh` / `scp` / `rsync` / 真实网络命令。
+- 验收：API 可运行 Round 06 四个练习脚本；自测任务拒绝误运行；浏览器终端可绑定 `r06-w2-self` 到 `~/round6` 并执行 `ps`；`ssh user@host` 被拦截；`round_06.md` 外部资料链接可在阅读器新标签页打开；桌面端和 390px 移动端无横向溢出；测试记录已恢复。
+- 是否需要用户介入：否。
+
+---
+
 ## TASK-RR-26：Stage 1 增强 · Round 05 接入进度系统
 
 - 状态：**done**（2026-06-15）
