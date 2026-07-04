@@ -1204,3 +1204,25 @@
 - 本轮 API/UI 验证产生的进度、动作、反馈和终端历史均已从测试前快照恢复。
 - 未放宽终端沙盒边界；仍限制在 `~/cli-lab` 内并拦截危险命令。
 - 未引入前端框架、数据库、后端框架或大型新依赖。
+
+## 48. 2026-07-04 TASK-RR-36 Web UI 文档外链跳转
+
+### 48.1 本轮修改
+
+- `progress_ui.js`：Markdown 阅读器的 `inlineMarkdown()` 新增 `[标题](https://...)` 外链渲染支持。
+- 外链渲染为新标签页打开，并带 `rel="noreferrer noopener"`。
+
+### 48.2 用户视角问题修复
+
+- 用户在 Web UI 中阅读 `round_05.md` 等总计划文档时，外部学习资源原先只是 Markdown 文本，不便直接跳转。
+- 修复后，`Hello Algo`、`VisuAlgo`、Khan Academy 等外部资源可以在阅读弹窗中直接点击打开。
+
+### 48.3 验证
+
+- `node --check progress_ui.js`：通过。
+- 真实浏览器验证：打开 `progress.html?round=round_05`，在阅读器中打开 `round_05.md`，确认 `Hello Algo` 链接存在、显示文本正确、`target="_blank"` 且包含 `noreferrer noopener`；页面中共识别到 5 个 `https://` 外部链接。
+
+### 48.4 风险边界核对
+
+- 本轮只修改前端阅读器链接渲染逻辑，未写入任何学习记录。
+- 未引入前端框架、数据库、后端框架或大型新依赖。

@@ -573,6 +573,18 @@ TASK-011 实际产物：
 
 ---
 
+## TASK-RR-36：Web UI 文档阅读器外部链接跳转
+
+- 状态：**done**（2026-07-04）
+- 背景：用户明确要求文档学习可以直接在 Web UI 中读，外部链接可以直接跳转。阅读器已支持代码块、表格和尖括号 URL，但主流 Markdown 链接 `[标题](https://...)` 未被渲染为可点击链接。
+- 目标：让学习资料中的外部资源链接在阅读弹窗内可点击，并通过新标签页打开。
+- 实际产物：
+  - `progress_ui.js`：`inlineMarkdown()` 支持 `[标题](https://...)` 外链，渲染为 `target="_blank"` 并带 `rel="noreferrer noopener"`。
+- 验收：真实浏览器打开 `progress.html?round=round_05`，在阅读器中打开 `round_05.md` 后，`Hello Algo` 等 5 个外部资料链接均渲染为可点击外链。
+- 是否需要用户介入：否。
+
+---
+
 ## TASK-RR-26：Stage 1 增强 · Round 05 接入进度系统
 
 - 状态：**done**（2026-06-15）

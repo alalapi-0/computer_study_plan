@@ -156,6 +156,13 @@
 - 清理：本轮 API/UI 测试产生的进度、动作、反馈和终端历史已从测试前快照恢复。
 - 工具备注：应用内浏览器插件本轮打开本地页时出现控制超时；已使用本机 Playwright 打开同一 Web UI 完成真实渲染与点击验证。
 
+## 文档阅读器外部链接补测
+
+- before 问题：阅读器支持裸 URL / 尖括号 URL，但 `[标题](https://...)` 这种 Markdown 主流外链仍显示为普通文本，用户无法从 Web UI 直接跳转外部资料。
+- 修复：`progress_ui.js` 的 `inlineMarkdown()` 支持 `[标题](https://...)`，渲染为新标签页外链，并带 `noreferrer noopener`。
+- UI 验证：真实浏览器打开 `progress.html?round=round_05`，在阅读器中打开 `round_05.md`；`Hello Algo` 链接可被定位，文本正确，`target="_blank"`，`rel` 包含 `noreferrer noopener`；页面中共识别到 5 个 `https://` 外部链接。
+- 清理：本轮只读取页面和检查链接属性，未写入学习记录。
+
 ## 验证命令
 
 ```bash
