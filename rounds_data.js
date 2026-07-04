@@ -1575,72 +1575,72 @@ window.ROUNDS_DATA = [
     "weeks": [
       {
         "id": "round14-week1",
-        "title": "第 1 周：基础练习",
+        "title": "第 1 周：HTTP 方法与状态码",
         "tasks": [
           {
             "id": "r14-w1-read",
             "type": "reading",
-            "title": "阅读 week1/notes.md",
+            "title": "阅读：HTTP 方法、状态码与请求响应直觉",
             "file": "rounds/round_14/week1/notes.md"
           },
           {
             "id": "r14-w1-ex1",
             "type": "exercise",
-            "title": "练习1",
+            "title": "练习：生成 HTTP 方法与状态码矩阵",
             "file": "rounds/round_14/week1/exercises.py"
           },
           {
             "id": "r14-w1-self",
             "type": "test",
-            "title": "第1周自测",
+            "title": "自测：自己写 method_quiz.txt",
             "file": "rounds/round_14/week1/exercises.py"
           }
         ]
       },
       {
         "id": "round14-week2",
-        "title": "第 2 周：进阶练习",
+        "title": "第 2 周：JSON 请求/响应合同",
         "tasks": [
           {
             "id": "r14-w2-read",
             "type": "reading",
-            "title": "阅读 week2/notes.md",
+            "title": "阅读：请求体、响应体与错误 JSON",
             "file": "rounds/round_14/week2/notes.md"
           },
           {
             "id": "r14-w2-ex2",
             "type": "exercise",
-            "title": "练习2",
+            "title": "练习：生成 JSON API 合同",
             "file": "rounds/round_14/week2/exercises.py"
           },
           {
             "id": "r14-w2-self",
             "type": "test",
-            "title": "第2周自测",
+            "title": "自测：自己写 request.json 并校验",
             "file": "rounds/round_14/week2/exercises.py"
           }
         ]
       },
       {
         "id": "round14-week3",
-        "title": "第 3 周：综合练习",
+        "title": "第 3 周：REST 路由草图",
         "tasks": [
           {
             "id": "r14-w3-read",
             "type": "reading",
-            "title": "阅读 week3/notes.md",
+            "title": "阅读：方法 + 路径 + JSON 的路由设计",
             "file": "rounds/round_14/week3/notes.md"
           },
           {
             "id": "r14-w3-ex3",
             "type": "exercise",
-            "title": "练习3",
+            "title": "练习：生成 REST 路由草图与 mock API",
             "file": "rounds/round_14/week3/exercises.py"
           },
           {
             "id": "r14-w3-self",
             "type": "test",
-            "title": "第3周自测",
+            "title": "自测：自己写 mini_router.py",
             "file": "rounds/round_14/week3/exercises.py"
           }
         ]
@@ -1652,19 +1652,19 @@ window.ROUNDS_DATA = [
           {
             "id": "r14-fin-comp",
             "type": "exercise",
-            "title": "综合练习",
+            "title": "综合练习：生成 HTTP API 设计包",
             "file": "rounds/round_14/final/comprehensive_exercise.py"
           },
           {
             "id": "r14-fin-sheet",
             "type": "output",
-            "title": "完成本 Round 小抄",
+            "title": "产出：完成 Round 14 HTTP/API 小抄",
             "file": "rounds/round_14/final/http_api_cheatsheet.md"
           },
           {
             "id": "r14-fin-acc1",
             "type": "test",
-            "title": "验收：Round 14 核心目标",
+            "title": "验收：解释 HTTP 方法、状态码、JSON 合同和 REST 路由",
             "file": "round_14.md"
           }
         ]

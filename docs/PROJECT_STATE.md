@@ -1492,3 +1492,36 @@
 - 本轮 API/UI 验证产生的进度、动作、反馈和终端历史均已从测试前快照恢复。
 - 未引入大型新依赖；未安装第三方包；未执行 Docker build/run。
 - 自动脚本只写入 `~/cli-lab/round13` 沙盒；发布包中的 Dockerfile 只生成和检查，不启动容器。
+
+## 57. 2026-07-04 TASK-RR-45 Round 14 内容填充与 HTTP API 设计练习
+
+### 57.1 本轮修改
+
+- `rounds/round_14/README.md`：从“最小实操骨架”更新为 Web UI 可练习说明，明确阅读、自动运行、终端自测、小抄和验收的页面操作路径。
+- `rounds/round_14/week1|week2|week3/notes.md`：补齐 HTTP 方法与状态码、JSON 请求/响应合同、REST 路由草图的学习步骤、自测命令和完成标准。
+- `rounds/round_14/week1|week2|week3/exercises.py`：改为默认可非交互运行，自动生成方法矩阵、状态码矩阵、API 合同、mock API、路由测试报告和下一步提示，只自动记录对应练习任务。
+- `rounds/round_14/final/comprehensive_exercise.py`：改为 Web UI 默认可运行的 HTTP API 设计包练习，生成 `api_contract.json`、`mock_api.py`、`client_demo.py`、`preflight_check.py`、`openapi_preview.json` 和收口摘要，只自动记录 `r14-fin-comp`。
+- `rounds/round_14/final/http_api_cheatsheet.md`：补齐 Web UI 完成路径、方法/状态码/JSON 合同/REST 路由小抄和最终验收自问。
+- `scripts/build_rounds_data.py` / `rounds_data.js`：将 Round 14 UI 任务标题从“练习1 / 练习2 / 练习3”改为用户能理解的动作标题。
+
+### 57.2 用户视角问题修复
+
+- Round 14 原 notes 太短，用户不知道如何只通过 Web UI 完成 HTTP/API 设计练习。
+- Round 14 原脚本只写 marker 文件，没有形成方法矩阵、状态码矩阵、API 合同、mock API 或客户端演示等可检查产物。
+- Round 14 原任务标题过泛，用户无法判断分别要练 HTTP 基础、JSON 合同还是 REST 路由。
+- 本轮明确不使用 `curl` 访问真实网络，不安装 FastAPI / uvicorn，不启动长期服务；API 设计先用 Python 标准库 mock 完成合同排练。
+
+### 57.3 验证
+
+- API 验证：`r14-w1-ex1`、`r14-w2-ex2`、`r14-w3-ex3`、`r14-fin-comp` 均可通过 `/api/tasks/<id>/run` 运行成功；`r14-w1-self/run` 返回 `task_not_runnable`。
+- 浏览器终端验证：`/api/terminal?cwd=~/round14` 返回 `~/round14`；终端 API 可在任务 `r14-w2-self` 下写入并校验 `request.json`；`curl https://example.com` 返回 `terminal_command_blocked`。
+- 真实浏览器验证：`progress.html?round=round_14` 会直接选中 Round 14；`r14-w2-ex2` 显示“运行”，`r14-w2-self` 不显示“运行”但显示“终端”；点击后工作目录为 `~/round14`，输入 `pwd` 输出 `/Users/alalapi/cli-lab/round14`。
+- 文档阅读与外链验证：Week 1 notes 可在阅读器中直接阅读，包含 Web UI 学习路径；阅读弹窗可用 `Escape` 关闭；运行结果弹窗可展示 `endpoint_count:` / `sample_count:`；`round_14.md` 中 MDN HTTP overview 外链可被定位，`target="_blank"`，`rel` 包含 `noreferrer noopener`。
+- 移动端验证：390px 宽度无整页横向溢出。
+- 静态与数据验证：`build_rounds_data.py`、Python 语法编译、自动打卡目标检查均通过。
+
+### 57.4 风险边界核对
+
+- 本轮 API/UI 验证产生的进度、动作、反馈和终端历史均已从测试前快照恢复。
+- 未引入大型新依赖；只使用 Python 标准库。
+- 未创建真实后端服务；Round 14 只生成 mock API、合同文件和预检脚本，为 Round 15 的 FastAPI 学习做准备。

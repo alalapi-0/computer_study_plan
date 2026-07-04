@@ -25,6 +25,7 @@ DIFFICULTY_BY_ROUND = {
     11: "⭐⭐⭐☆☆",
     12: "⭐⭐⭐☆☆",
     13: "⭐⭐⭐☆☆",
+    14: "⭐⭐⭐☆☆",
 }
 
 
@@ -698,6 +699,87 @@ def build_standard_round(root: Path, num: int) -> dict | None:
                     ],
                 },
                 {"id": "round13-final", "title": "最终验收", "tasks": final_tasks},
+            ],
+        }
+
+    if num == 14:
+        final_tasks = []
+        if comp:
+            final_tasks.append(
+                {
+                    "id": "r14-fin-comp",
+                    "type": "exercise",
+                    "title": "综合练习：生成 HTTP API 设计包",
+                    "file": comp,
+                }
+            )
+        if sheet:
+            final_tasks.append(
+                {
+                    "id": "r14-fin-sheet",
+                    "type": "output",
+                    "title": "产出：完成 Round 14 HTTP/API 小抄",
+                    "file": sheet,
+                }
+            )
+        final_tasks.append(
+            {
+                "id": "r14-fin-acc1",
+                "type": "test",
+                "title": "验收：解释 HTTP 方法、状态码、JSON 合同和 REST 路由",
+                "file": "round_14.md",
+            }
+        )
+        return {
+            "id": "round_14",
+            "title": round_title(root, num),
+            "lane": "engineering",
+            "difficulty": DIFFICULTY_BY_ROUND.get(num, "⭐⭐⭐☆☆"),
+            "duration": "3 周",
+            "weeks": [
+                {
+                    "id": "round14-week1",
+                    "title": "第 1 周：HTTP 方法与状态码",
+                    "tasks": [
+                        {
+                            "id": "r14-w1-read",
+                            "type": "reading",
+                            "title": "阅读：HTTP 方法、状态码与请求响应直觉",
+                            "file": "rounds/round_14/week1/notes.md",
+                        },
+                        {"id": "r14-w1-ex1", "type": "exercise", "title": "练习：生成 HTTP 方法与状态码矩阵", "file": ex1},
+                        {"id": "r14-w1-self", "type": "test", "title": "自测：自己写 method_quiz.txt", "file": ex1},
+                    ],
+                },
+                {
+                    "id": "round14-week2",
+                    "title": "第 2 周：JSON 请求/响应合同",
+                    "tasks": [
+                        {
+                            "id": "r14-w2-read",
+                            "type": "reading",
+                            "title": "阅读：请求体、响应体与错误 JSON",
+                            "file": "rounds/round_14/week2/notes.md",
+                        },
+                        {"id": "r14-w2-ex2", "type": "exercise", "title": "练习：生成 JSON API 合同", "file": ex2},
+                        {"id": "r14-w2-self", "type": "test", "title": "自测：自己写 request.json 并校验", "file": ex2},
+                    ],
+                },
+                {
+                    "id": "round14-week3",
+                    "title": "第 3 周：REST 路由草图",
+                    "tasks": [
+                        {
+                            "id": "r14-w3-read",
+                            "type": "reading",
+                            "title": "阅读：方法 + 路径 + JSON 的路由设计",
+                            "file": "rounds/round_14/week3/notes.md",
+                        },
+                        {"id": "r14-w3-ex3", "type": "exercise", "title": "练习：生成 REST 路由草图与 mock API", "file": ex3},
+                        {"id": "r14-w3-self", "type": "test", "title": "自测：自己写 mini_router.py", "file": ex3},
+                    ],
+                },
+                {"id": "round14-final", "title": "最终验收", "tasks": final_tasks},
             ],
         }
 
