@@ -634,6 +634,22 @@ TASK-011 实际产物：
 
 ---
 
+## TASK-RR-40：Stage 1 填充 · Round 09 Web UI 可完成练习
+
+- 状态：**done**（2026-07-04）
+- 背景：Round 09 已有最小骨架，但 notes 只列目标和自查，脚本未形成完整 Web UI 闭环，任务标题仍偏泛化，用户无法判断 README/.gitignore、本地 Git 分支、纯函数测试分别要完成什么。
+- 目标：让 Round 09 用户只通过 Web UI 就能阅读仓库规范化、本地 Git 分支工作流、纯函数与测试资料，运行自动练习，在浏览器映射终端中完成本地 Git / Python 自测，并手动记录最终小抄与验收。
+- 实际产物：
+  - `rounds/round_09/README.md` 更新为 Web UI 使用说明，明确不安装 pytest、不做 GitHub 远程操作。
+  - `rounds/round_09/week1|week2|week3/notes.md` 补齐页面学习路径、浏览器终端自测命令、README/.gitignore / 本地 Git / pytest 风格测试要点。
+  - `rounds/round_09/week1|week2|week3/exercises.py` 与 `final/comprehensive_exercise.py` 改为默认可从 Web UI 非交互运行，自动生成规范化项目、本地 Git 沙盒、测试样例和收口摘要；只自动记录对应练习任务。
+  - `rounds/round_09/final/repo_testing_cheatsheet.md` 补齐 Web UI 完成路径、命令小抄和最终验收自问。
+  - `scripts/build_rounds_data.py` / `rounds_data.js` 为 Round 09 输出清晰任务标题。
+- 验收：API 可运行 Round 09 四个练习脚本；自测任务拒绝误运行；浏览器终端可绑定 `r09-w1-self` 到 `~/round9` 并执行 `pwd`；终端 API 可在 `r09-w2-self` 下完成本地 Git init / commit / log，`git push origin main` 被拦截；`round_09.md` 外部资料链接可在阅读器新标签页打开；桌面端和 390px 移动端无横向溢出；测试记录已恢复。
+- 是否需要用户介入：否。
+
+---
+
 ## TASK-RR-26：Stage 1 增强 · Round 05 接入进度系统
 
 - 状态：**done**（2026-06-15）

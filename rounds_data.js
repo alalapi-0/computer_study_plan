@@ -1050,72 +1050,72 @@ window.ROUNDS_DATA = [
     "weeks": [
       {
         "id": "round09-week1",
-        "title": "第 1 周：基础练习",
+        "title": "第 1 周：仓库结构与 README/.gitignore",
         "tasks": [
           {
             "id": "r09-w1-read",
             "type": "reading",
-            "title": "阅读 week1/notes.md",
+            "title": "阅读：README、.gitignore 与项目结构",
             "file": "rounds/round_09/week1/notes.md"
           },
           {
             "id": "r09-w1-ex1",
             "type": "exercise",
-            "title": "练习1",
+            "title": "练习：整理项目结构与基础文档",
             "file": "rounds/round_09/week1/exercises.py"
           },
           {
             "id": "r09-w1-self",
             "type": "test",
-            "title": "第1周自测",
+            "title": "自测：自己写 README 和 .gitignore",
             "file": "rounds/round_09/week1/exercises.py"
           }
         ]
       },
       {
         "id": "round09-week2",
-        "title": "第 2 周：进阶练习",
+        "title": "第 2 周：本地 Git 分支工作流",
         "tasks": [
           {
             "id": "r09-w2-read",
             "type": "reading",
-            "title": "阅读 week2/notes.md",
+            "title": "阅读：feature/hotfix 分支与合并",
             "file": "rounds/round_09/week2/notes.md"
           },
           {
             "id": "r09-w2-ex2",
             "type": "exercise",
-            "title": "练习2",
+            "title": "练习：本地 Git 分支提交与合并",
             "file": "rounds/round_09/week2/exercises.py"
           },
           {
             "id": "r09-w2-self",
             "type": "test",
-            "title": "第2周自测",
+            "title": "自测：自己走一遍 feature 分支",
             "file": "rounds/round_09/week2/exercises.py"
           }
         ]
       },
       {
         "id": "round09-week3",
-        "title": "第 3 周：综合练习",
+        "title": "第 3 周：纯函数与 pytest 风格测试",
         "tasks": [
           {
             "id": "r09-w3-read",
             "type": "reading",
-            "title": "阅读 week3/notes.md",
+            "title": "阅读：纯函数、断言与测试样例",
             "file": "rounds/round_09/week3/notes.md"
           },
           {
             "id": "r09-w3-ex3",
             "type": "exercise",
-            "title": "练习3",
+            "title": "练习：拆出纯函数并运行测试",
             "file": "rounds/round_09/week3/exercises.py"
           },
           {
             "id": "r09-w3-self",
             "type": "test",
-            "title": "第3周自测",
+            "title": "自测：自己写 test_dedup.py",
             "file": "rounds/round_09/week3/exercises.py"
           }
         ]
@@ -1127,19 +1127,19 @@ window.ROUNDS_DATA = [
           {
             "id": "r09-fin-comp",
             "type": "exercise",
-            "title": "综合练习",
+            "title": "综合练习：仓库规范化与测试收口",
             "file": "rounds/round_09/final/comprehensive_exercise.py"
           },
           {
             "id": "r09-fin-sheet",
             "type": "output",
-            "title": "完成本 Round 小抄",
+            "title": "产出：完成 Round 09 仓库与测试小抄",
             "file": "rounds/round_09/final/repo_testing_cheatsheet.md"
           },
           {
             "id": "r09-fin-acc1",
             "type": "test",
-            "title": "验收：Round 09 核心目标",
+            "title": "验收：解释 README、分支、纯函数和测试",
             "file": "round_09.md"
           }
         ]

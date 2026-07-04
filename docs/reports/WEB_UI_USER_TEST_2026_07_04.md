@@ -211,6 +211,22 @@
 - 移动端验证：390px 宽度无整页横向溢出。
 - 清理：本轮 API/UI 测试产生的进度、动作、反馈和终端历史已从测试前快照恢复。
 
+## Round 09 内容填充与仓库测试补测
+
+- before 问题：Round 09 仍是最小骨架，notes 只列目标和自查，缺少 Web UI 学习路径和浏览器终端自测命令。
+- before 问题：Round 09 脚本只是生成少量文件或打印建议命令，没有形成 Web UI 一键运行后的可检查产物与自动记录。
+- before 问题：Round 09 任务标题仍偏泛化，用户无法判断要练 README/.gitignore、本地 Git 分支还是纯函数测试。
+- 修复：Round 09 README、Week 1–3 notes、final 小抄已补齐仓库结构、README/.gitignore、本地 Git 分支、纯函数测试、Web UI 完成路径和验收自问。
+- 修复：Round 09 Python 脚本改为非交互运行，自动生成规范化项目、本地 Git 工作流沙盒、测试样例和收口摘要，只自动记录脚本实际完成的练习任务；自测、小抄和验收仍由用户手动完成并记录。
+- 修复：Round 09 UI 任务标题改为“整理项目结构与基础文档”“本地 Git 分支提交与合并”“拆出纯函数并运行测试”等动作标题。
+- 边界：本轮不安装 pytest，不执行 GitHub remote 操作；本地 Git 练习只在 `~/cli-lab/round9` 沙盒完成。
+- API 验证：`r09-w1-ex1`、`r09-w2-ex2`、`r09-w3-ex3`、`r09-fin-comp` 均可运行成功；`r09-w1-self/run` 返回 `task_not_runnable`。
+- 浏览器终端验证：`~/round9` 可作为映射目录；终端 API 能在任务 `r09-w2-self` 下完成本地 `git init`、`git commit`、`git log`；`git push origin main` 返回 `terminal_command_blocked`。
+- UI 验证：真实 Chrome 打开 `progress.html?round=round_09` 后直接选中 Round 09；`r09-w1-ex1` 显示“运行”，`r09-w1-self` 不显示“运行”但显示“终端”；点击后工作目录为 `~/round9`，输入 `pwd` 输出 `/Users/alalapi/cli-lab/round9`。
+- 文档阅读验证：Week 1 notes 可在阅读器中直接阅读，包含 Web UI 学习路径；`round_09.md` 中 pytest 官方链接可被定位，`target="_blank"`，`rel` 包含 `noreferrer noopener`。
+- 移动端验证：390px 宽度无整页横向溢出。
+- 清理：本轮 API/UI 测试产生的进度、动作、反馈和终端历史已从测试前快照恢复。
+
 ## 验证命令
 
 ```bash

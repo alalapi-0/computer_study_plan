@@ -20,6 +20,7 @@ DIFFICULTY_BY_ROUND = {
     6: "⭐⭐⭐☆☆",
     7: "⭐⭐⭐☆☆",
     8: "⭐⭐⭐☆☆",
+    9: "⭐⭐⭐☆☆",
 }
 
 
@@ -774,6 +775,87 @@ def build_standard_round(root: Path, num: int) -> dict | None:
                     ],
                 },
                 {"id": "round08-final", "title": "最终验收", "tasks": final_tasks},
+            ],
+        }
+
+    if num == 9:
+        final_tasks = []
+        if comp:
+            final_tasks.append(
+                {
+                    "id": "r09-fin-comp",
+                    "type": "exercise",
+                    "title": "综合练习：仓库规范化与测试收口",
+                    "file": comp,
+                }
+            )
+        if sheet:
+            final_tasks.append(
+                {
+                    "id": "r09-fin-sheet",
+                    "type": "output",
+                    "title": "产出：完成 Round 09 仓库与测试小抄",
+                    "file": sheet,
+                }
+            )
+        final_tasks.append(
+            {
+                "id": "r09-fin-acc1",
+                "type": "test",
+                "title": "验收：解释 README、分支、纯函数和测试",
+                "file": "round_09.md",
+            }
+        )
+        return {
+            "id": "round_09",
+            "title": round_title(root, num),
+            "lane": "engineering",
+            "difficulty": DIFFICULTY_BY_ROUND.get(num, "⭐⭐⭐☆☆"),
+            "duration": "3 周",
+            "weeks": [
+                {
+                    "id": "round09-week1",
+                    "title": "第 1 周：仓库结构与 README/.gitignore",
+                    "tasks": [
+                        {
+                            "id": "r09-w1-read",
+                            "type": "reading",
+                            "title": "阅读：README、.gitignore 与项目结构",
+                            "file": "rounds/round_09/week1/notes.md",
+                        },
+                        {"id": "r09-w1-ex1", "type": "exercise", "title": "练习：整理项目结构与基础文档", "file": ex1},
+                        {"id": "r09-w1-self", "type": "test", "title": "自测：自己写 README 和 .gitignore", "file": ex1},
+                    ],
+                },
+                {
+                    "id": "round09-week2",
+                    "title": "第 2 周：本地 Git 分支工作流",
+                    "tasks": [
+                        {
+                            "id": "r09-w2-read",
+                            "type": "reading",
+                            "title": "阅读：feature/hotfix 分支与合并",
+                            "file": "rounds/round_09/week2/notes.md",
+                        },
+                        {"id": "r09-w2-ex2", "type": "exercise", "title": "练习：本地 Git 分支提交与合并", "file": ex2},
+                        {"id": "r09-w2-self", "type": "test", "title": "自测：自己走一遍 feature 分支", "file": ex2},
+                    ],
+                },
+                {
+                    "id": "round09-week3",
+                    "title": "第 3 周：纯函数与 pytest 风格测试",
+                    "tasks": [
+                        {
+                            "id": "r09-w3-read",
+                            "type": "reading",
+                            "title": "阅读：纯函数、断言与测试样例",
+                            "file": "rounds/round_09/week3/notes.md",
+                        },
+                        {"id": "r09-w3-ex3", "type": "exercise", "title": "练习：拆出纯函数并运行测试", "file": ex3},
+                        {"id": "r09-w3-self", "type": "test", "title": "自测：自己写 test_dedup.py", "file": ex3},
+                    ],
+                },
+                {"id": "round09-final", "title": "最终验收", "tasks": final_tasks},
             ],
         }
 

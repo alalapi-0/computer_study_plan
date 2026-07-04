@@ -1324,3 +1324,36 @@
 - 本轮 API/UI 验证产生的进度、动作、反馈和终端历史均已从测试前快照恢复。
 - 未引入大型新依赖；未创建新的真实后端服务；FastAPI 只作为后续路线说明和接口形状排练。
 - 未放宽浏览器终端高风险命令边界。
+
+## 52. 2026-07-04 TASK-RR-40 Round 09 内容填充与仓库测试练习
+
+### 52.1 本轮修改
+
+- `rounds/round_09/README.md`：从“最小实操骨架”更新为 Web UI 可练习说明，明确阅读、自动运行、终端自测、小抄和验收的页面操作路径。
+- `rounds/round_09/week1|week2|week3/notes.md`：补齐 README/.gitignore、feature/hotfix 本地分支、纯函数与 pytest 风格测试的学习步骤、自测命令和完成标准。
+- `rounds/round_09/week1|week2|week3/exercises.py`：改为默认可非交互运行，自动生成规范化项目、本地 Git 工作流沙盒、测试样例和下一步提示，只自动记录对应练习任务。
+- `rounds/round_09/final/comprehensive_exercise.py`：改为 Web UI 默认可运行的 Round 09 收口检查，汇总项目结构、本地 Git 工作流和测试结果，只自动记录 `r09-fin-comp`。
+- `rounds/round_09/final/repo_testing_cheatsheet.md`：补齐 Web UI 完成路径、仓库规范化与测试小抄、最终验收自问。
+- `scripts/build_rounds_data.py` / `rounds_data.js`：将 Round 09 UI 任务标题从“练习1 / 练习2 / 练习3”改为用户能理解的动作标题。
+
+### 52.2 用户视角问题修复
+
+- Round 09 原 notes 太短，用户不知道如何只通过 Web UI 完成仓库结构、README/.gitignore、本地 Git 分支和测试练习。
+- Round 09 原脚本只是生成少量文件或打印建议命令，没有形成 Web UI 一键运行后的可检查产物与自动记录。
+- Round 09 原任务标题过泛，用户无法从 UI 判断分别要练仓库规范化、本地分支合并还是纯函数测试。
+- 本轮明确不安装 pytest、不执行 GitHub remote 操作；Git 练习只在 `~/cli-lab/round9` 本地沙盒仓库内完成。
+
+### 52.3 验证
+
+- API 验证：`r09-w1-ex1`、`r09-w2-ex2`、`r09-w3-ex3`、`r09-fin-comp` 均可通过 `/api/tasks/<id>/run` 运行成功；`r09-w1-self/run` 返回 `task_not_runnable`。
+- 浏览器终端验证：`/api/terminal?cwd=~/round9` 返回 `~/round9`；终端 API 可在任务 `r09-w2-self` 下完成本地 `git init`、`git commit`、`git log`；`git push origin main` 返回 `terminal_command_blocked`。
+- 真实浏览器验证：`progress.html?round=round_09` 会直接选中 Round 09；`r09-w1-ex1` 显示“运行”，`r09-w1-self` 不显示“运行”但显示“终端”；点击后终端工作目录为 `~/round9`，UI 输入 `pwd` 输出 `/Users/alalapi/cli-lab/round9`。
+- 文档阅读与外链验证：Week 1 notes 可在阅读器中直接阅读；`round_09.md` 中 pytest 官方文档链接可被定位，`target="_blank"`，`rel` 包含 `noreferrer noopener`。
+- 移动端验证：390px 宽度无整页横向溢出。
+- 静态与数据验证：`build_rounds_data.py`、Python 语法编译、自动打卡目标检查均通过。
+
+### 52.4 风险边界核对
+
+- 本轮 API/UI 验证产生的进度、动作、反馈和终端历史均已从测试前快照恢复。
+- 未引入大型新依赖；未安装 pytest；未执行 GitHub 远程 Git 操作。
+- 未放宽浏览器终端高风险命令边界；`git push` 仍被拦截。
