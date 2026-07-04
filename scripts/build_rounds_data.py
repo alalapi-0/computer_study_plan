@@ -19,6 +19,7 @@ DIFFICULTY_BY_ROUND = {
     5: "⭐⭐⭐☆☆",
     6: "⭐⭐⭐☆☆",
     7: "⭐⭐⭐☆☆",
+    8: "⭐⭐⭐☆☆",
 }
 
 
@@ -692,6 +693,87 @@ def build_standard_round(root: Path, num: int) -> dict | None:
                     ],
                 },
                 {"id": "round07-final", "title": "最终验收", "tasks": final_tasks},
+            ],
+        }
+
+    if num == 8:
+        final_tasks = []
+        if comp:
+            final_tasks.append(
+                {
+                    "id": "r08-fin-comp",
+                    "type": "exercise",
+                    "title": "综合练习：Round 00-08 收口检查",
+                    "file": comp,
+                }
+            )
+        if sheet:
+            final_tasks.append(
+                {
+                    "id": "r08-fin-sheet",
+                    "type": "output",
+                    "title": "产出：完成 Round 08 升级路线小抄",
+                    "file": sheet,
+                }
+            )
+        final_tasks.append(
+            {
+                "id": "r08-fin-acc1",
+                "type": "test",
+                "title": "验收：解释测试、持久化和服务化边界",
+                "file": "round_08.md",
+            }
+        )
+        return {
+            "id": "round_08",
+            "title": round_title(root, num),
+            "lane": "engineering",
+            "difficulty": DIFFICULTY_BY_ROUND.get(num, "⭐⭐⭐☆☆"),
+            "duration": "3 周",
+            "weeks": [
+                {
+                    "id": "round08-week1",
+                    "title": "第 1 周：项目收口与最小测试",
+                    "tasks": [
+                        {
+                            "id": "r08-w1-read",
+                            "type": "reading",
+                            "title": "阅读：项目结构、测试与 Git 分支收口",
+                            "file": "rounds/round_08/week1/notes.md",
+                        },
+                        {"id": "r08-w1-ex1", "type": "exercise", "title": "练习：整理 ai_prep_tool 并运行最小测试", "file": ex1},
+                        {"id": "r08-w1-self", "type": "test", "title": "自测：自己写 test_basic.py", "file": ex1},
+                    ],
+                },
+                {
+                    "id": "round08-week2",
+                    "title": "第 2 周：sqlite3 运行历史持久化",
+                    "tasks": [
+                        {
+                            "id": "r08-w2-read",
+                            "type": "reading",
+                            "title": "阅读：sqlite3 runs 表与参数化 SQL",
+                            "file": "rounds/round_08/week2/notes.md",
+                        },
+                        {"id": "r08-w2-ex2", "type": "exercise", "title": "练习：创建 runs 表并写入运行历史", "file": ex2},
+                        {"id": "r08-w2-self", "type": "test", "title": "自测：自己写 runs_db.py", "file": ex2},
+                    ],
+                },
+                {
+                    "id": "round08-week3",
+                    "title": "第 3 周：服务化接口形状排练",
+                    "tasks": [
+                        {
+                            "id": "r08-w3-read",
+                            "type": "reading",
+                            "title": "阅读：health/run/runs 接口形状",
+                            "file": "rounds/round_08/week3/notes.md",
+                        },
+                        {"id": "r08-w3-ex3", "type": "exercise", "title": "练习：设计 health/run/runs 响应", "file": ex3},
+                        {"id": "r08-w3-self", "type": "test", "title": "自测：自己写 api_contract.py", "file": ex3},
+                    ],
+                },
+                {"id": "round08-final", "title": "最终验收", "tasks": final_tasks},
             ],
         }
 

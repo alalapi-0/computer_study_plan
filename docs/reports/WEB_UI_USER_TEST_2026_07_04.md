@@ -196,6 +196,21 @@
 - 清理：本轮 API/UI 测试产生的进度、动作、反馈和终端历史已从测试前快照恢复。
 - 工具备注：应用内浏览器插件本轮打开本地页时控制超时；已使用本机 Google Chrome + Playwright 打开同一 Web UI 完成真实渲染、点击、终端和截图验证。
 
+## Round 08 内容填充与升级路线补测
+
+- before 问题：Round 08 仍是最小骨架，notes 只列目标和自查，缺少 Web UI 学习路径和浏览器终端自测命令。
+- before 问题：Round 08 脚本未接入自动记录，Web UI “运行”后不会推进对应练习状态。
+- before 问题：Round 08 任务标题仍是“练习1 / 练习2 / 练习3”，用户无法判断要练项目收口、sqlite3 还是服务化接口。
+- 修复：Round 08 README、Week 1–3 notes、final 小抄已补齐项目收口、最小测试、sqlite3 运行历史、服务化接口形状、Web UI 完成路径和验收自问。
+- 修复：Round 08 Python 脚本改为非交互运行，自动生成项目骨架、测试报告、SQLite 数据库、API 合同和收口摘要，只自动记录脚本实际完成的练习任务；自测、小抄和验收仍由用户手动完成并记录。
+- 修复：Round 08 UI 任务标题改为“整理 ai_prep_tool 并运行最小测试”“创建 runs 表并写入运行历史”“设计 health/run/runs 响应”等动作标题。
+- API 验证：`r08-w1-ex1`、`r08-w2-ex2`、`r08-w3-ex3`、`r08-fin-comp` 均可运行成功；`r08-w1-self/run` 返回 `task_not_runnable`。
+- 浏览器终端验证：`~/round8` 可作为映射目录；终端能在任务 `r08-w3-self` 下写入并运行 `api_contract.py`；`pip install fastapi` 返回 `terminal_command_not_allowed:pip`。
+- UI 验证：真实 Chrome 打开 `progress.html?round=round_08` 后直接选中 Round 08；`r08-w1-ex1` 显示“运行”，`r08-w1-self` 不显示“运行”但显示“终端”；点击后当前任务为“自测：自己写 test_basic.py”，工作目录为 `~/round8`。
+- 外链验证：在阅读器中打开 `round_08.md`，pytest 官方链接可被定位，`target="_blank"`，`rel` 包含 `noreferrer noopener`。
+- 移动端验证：390px 宽度无整页横向溢出。
+- 清理：本轮 API/UI 测试产生的进度、动作、反馈和终端历史已从测试前快照恢复。
+
 ## 验证命令
 
 ```bash

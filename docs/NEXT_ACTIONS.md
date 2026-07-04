@@ -618,6 +618,22 @@ TASK-011 实际产物：
 
 ---
 
+## TASK-RR-39：Stage 1 填充 · Round 08 Web UI 可完成练习
+
+- 状态：**done**（2026-07-04）
+- 背景：Round 08 已接入进度系统，但仍是最小骨架；notes 缺少 Web UI 学习路径，脚本未接入自动记录，任务标题仍是“练习1 / 练习2 / 练习3”，用户无法判断该做项目收口、sqlite3 还是服务化接口排练。
+- 目标：让 Round 08 用户只通过 Web UI 就能阅读项目收口、最小测试、sqlite3 运行历史、服务化接口形状资料，运行自动练习，在浏览器映射终端中完成自测，并手动记录最终小抄与验收。
+- 实际产物：
+  - `rounds/round_08/README.md` 更新为 Web UI 使用说明，明确不引入新依赖、不启动真实后端服务的边界。
+  - `rounds/round_08/week1|week2|week3/notes.md` 补齐页面学习路径、浏览器终端自测命令、项目收口 / sqlite3 / API 合同要点。
+  - `rounds/round_08/week1|week2|week3/exercises.py` 与 `final/comprehensive_exercise.py` 改为默认可从 Web UI 非交互运行，自动生成项目骨架、测试报告、SQLite 数据库、API 合同和收口摘要；只自动记录对应练习任务。
+  - `rounds/round_08/final/upgrade_route_cheatsheet.md` 补齐 Web UI 完成路径、三条升级路线选择标准和最终验收自问。
+  - `scripts/build_rounds_data.py` / `rounds_data.js` 为 Round 08 输出清晰任务标题。
+- 验收：API 可运行 Round 08 四个练习脚本；自测任务拒绝误运行；浏览器终端可绑定 `r08-w3-self` 到 `~/round8` 并运行手写 `api_contract.py`；`pip install fastapi` 被拦截；`round_08.md` 外部资料链接可在阅读器新标签页打开；桌面端和 390px 移动端无横向溢出；测试记录已恢复。
+- 是否需要用户介入：否。
+
+---
+
 ## TASK-RR-26：Stage 1 增强 · Round 05 接入进度系统
 
 - 状态：**done**（2026-06-15）

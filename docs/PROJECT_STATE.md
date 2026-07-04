@@ -1291,3 +1291,36 @@
 - 本轮 API/UI 验证产生的进度、动作、反馈和终端历史均已从测试前快照恢复。
 - 未放宽浏览器终端高风险命令边界；`python3 -c` 仍被拦截。
 - 未引入前端框架、数据库、后端框架或大型新依赖。
+
+## 51. 2026-07-04 TASK-RR-39 Round 08 内容填充与升级路线收口练习
+
+### 51.1 本轮修改
+
+- `rounds/round_08/README.md`：从“最小实操骨架”更新为 Web UI 可练习说明，明确阅读、自动运行、终端自测、小抄和验收的页面操作路径。
+- `rounds/round_08/week1|week2|week3/notes.md`：补齐项目收口、最小测试、sqlite3 运行历史、服务化接口形状的学习步骤、自测命令和完成标准。
+- `rounds/round_08/week1|week2|week3/exercises.py`：改为默认可非交互运行，自动生成项目骨架、测试报告、SQLite 数据库、API 合同和下一步提示，只自动记录对应练习任务。
+- `rounds/round_08/final/comprehensive_exercise.py`：改为 Web UI 默认可运行的 Round 00-08 收口检查，汇总项目结构、测试、SQLite 和 API 合同结果，只自动记录 `r08-fin-comp`。
+- `rounds/round_08/final/upgrade_route_cheatsheet.md`：补齐 Web UI 完成路径、路线 A/B/C 选择标准和最终验收自问。
+- `scripts/build_rounds_data.py` / `rounds_data.js`：将 Round 08 UI 任务标题从“练习1 / 练习2 / 练习3”改为用户能理解的动作标题。
+
+### 51.2 用户视角问题修复
+
+- Round 08 原 notes 太短，用户不知道如何只通过 Web UI 完成项目收口、测试、SQLite 和接口形状排练。
+- Round 08 原脚本未接入自动记录，Web UI “运行”后不会推进对应练习状态。
+- Round 08 原任务标题过泛，用户无法从 UI 判断分别要练项目收口、sqlite3 还是服务化接口。
+- 本轮明确不在仓库中安装 pytest / FastAPI / uvicorn，也不启动真实后端服务；服务化先做标准库接口合同排练。
+
+### 51.3 验证
+
+- API 验证：`r08-w1-ex1`、`r08-w2-ex2`、`r08-w3-ex3`、`r08-fin-comp` 均可通过 `/api/tasks/<id>/run` 运行成功；`r08-w1-self/run` 返回 `task_not_runnable`。
+- 浏览器终端验证：`/api/terminal?cwd=~/round8` 返回 `~/round8`；终端可在任务 `r08-w3-self` 下写入并运行 `api_contract.py`；`pip install fastapi` 返回 `terminal_command_not_allowed:pip`。
+- 真实浏览器验证：`progress.html?round=round_08` 会直接选中 Round 08；`r08-w1-ex1` 显示“运行”，`r08-w1-self` 不显示“运行”但显示“终端”；点击后当前任务为“自测：自己写 test_basic.py”，工作目录为 `~/round8`。
+- 外链验证：在阅读器中打开 `round_08.md`，pytest 官方文档链接可被定位，`target="_blank"`，`rel` 包含 `noreferrer noopener`。
+- 移动端验证：390px 宽度无整页横向溢出。
+- 静态与数据验证：`build_rounds_data.py`、Python 语法编译、自动打卡目标检查均通过。
+
+### 51.4 风险边界核对
+
+- 本轮 API/UI 验证产生的进度、动作、反馈和终端历史均已从测试前快照恢复。
+- 未引入大型新依赖；未创建新的真实后端服务；FastAPI 只作为后续路线说明和接口形状排练。
+- 未放宽浏览器终端高风险命令边界。
