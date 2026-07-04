@@ -450,6 +450,87 @@ def build_standard_round(root: Path, num: int) -> dict | None:
             ],
         }
 
+    if num == 5:
+        final_tasks = []
+        if comp:
+            final_tasks.append(
+                {
+                    "id": "r05-fin-comp",
+                    "type": "exercise",
+                    "title": "综合练习：算法模式选择器",
+                    "file": comp,
+                }
+            )
+        if sheet:
+            final_tasks.append(
+                {
+                    "id": "r05-fin-sheet",
+                    "type": "output",
+                    "title": "产出：完成 Round 05 算法模式小抄",
+                    "file": sheet,
+                }
+            )
+        final_tasks.append(
+            {
+                "id": "r05-fin-acc1",
+                "type": "test",
+                "title": "验收：解释七类算法模式适用场景",
+                "file": "round_05.md",
+            }
+        )
+        return {
+            "id": "round_05",
+            "title": round_title(root, num),
+            "lane": "engineering",
+            "difficulty": DIFFICULTY_BY_ROUND.get(num, "⭐⭐⭐☆☆"),
+            "duration": "3 周",
+            "weeks": [
+                {
+                    "id": "round05-week1",
+                    "title": "第 1 周：双指针 / 滑动窗口 / 二分",
+                    "tasks": [
+                        {
+                            "id": "r05-w1-read",
+                            "type": "reading",
+                            "title": "阅读：双指针、滑动窗口、二分触发条件",
+                            "file": "rounds/round_05/week1/notes.md",
+                        },
+                        {"id": "r05-w1-ex1", "type": "exercise", "title": "练习：二分查找与滑动窗口", "file": ex1},
+                        {"id": "r05-w1-self", "type": "test", "title": "自测：自己写 two_sum_sorted.py", "file": ex1},
+                    ],
+                },
+                {
+                    "id": "round05-week2",
+                    "title": "第 2 周：分治 / DFS / BFS / 回溯",
+                    "tasks": [
+                        {
+                            "id": "r05-w2-read",
+                            "type": "reading",
+                            "title": "阅读：分治、DFS、BFS、回溯",
+                            "file": "rounds/round_05/week2/notes.md",
+                        },
+                        {"id": "r05-w2-ex2", "type": "exercise", "title": "练习：DFS、BFS 与回溯最小例子", "file": ex2},
+                        {"id": "r05-w2-self", "type": "test", "title": "自测：自己写 bfs_levels.py", "file": ex2},
+                    ],
+                },
+                {
+                    "id": "round05-week3",
+                    "title": "第 3 周：贪心 / DP 入门",
+                    "tasks": [
+                        {
+                            "id": "r05-w3-read",
+                            "type": "reading",
+                            "title": "阅读：贪心选择与 DP 状态转移",
+                            "file": "rounds/round_05/week3/notes.md",
+                        },
+                        {"id": "r05-w3-ex3", "type": "exercise", "title": "练习：贪心选择与 DP 爬楼梯", "file": ex3},
+                        {"id": "r05-w3-self", "type": "test", "title": "自测：自己写 coin_change_dp.py", "file": ex3},
+                    ],
+                },
+                {"id": "round05-final", "title": "最终验收", "tasks": final_tasks},
+            ],
+        }
+
     return {
         "id": f"round_{num:02d}",
         "title": round_title(root, num),

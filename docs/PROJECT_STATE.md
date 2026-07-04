@@ -1173,3 +1173,34 @@
 - 本轮 API/UI 验证产生的进度、动作、反馈和终端历史均已从测试前快照恢复。
 - 未放宽终端沙盒边界；仍限制在 `~/cli-lab` 内并拦截危险命令。
 - 未引入前端框架、数据库、后端框架或大型新依赖。
+
+## 47. 2026-07-04 TASK-RR-35 Round 05 内容填充与算法模式练习
+
+### 47.1 本轮修改
+
+- `rounds/round_05/README.md`：从“最小骨架 / 已接入进度”更新为 Web UI 可练习说明，明确阅读、运行、自测、最终验收的页面操作路径。
+- `rounds/round_05/week1|week2|week3/notes.md`：补齐二分、滑动窗口、双指针、DFS/BFS、回溯、贪心和 DP 的学习步骤、自测命令、场景直觉和完成标准。
+- `rounds/round_05/week1|week2|week3/exercises.sh` 与 `final/comprehensive_exercise.sh`：改为非交互运行，只自动记录脚本实际完成的练习任务；自测、小抄和验收仍由用户手动记录。
+- `rounds/round_05/final/algorithm_patterns_cheatsheet.md`：补齐算法模式选择小抄、触发条件和最终验收自问。
+- `scripts/build_rounds_data.py` / `rounds_data.js`：将 Round 05 UI 任务标题从“练习1 / 练习2 / 练习3”改为用户能理解的动作标题。
+
+### 47.2 用户视角问题修复
+
+- Round 05 原 notes 太短，用户不知道如何只通过 Web UI 完成算法模式练习。
+- Round 05 原脚本会等待回车并连带标记自测 / 小抄 / 验收，不适合浏览器一键运行。
+- Round 05 原任务标题过泛，用户无法从 UI 判断二分、图搜索、贪心和 DP 分别要练什么。
+- 算法自测需要用户自己在终端写 Python 文件，已通过浏览器映射终端绑定到 `~/cli-lab/round5`，命令日志带 `task_id`，但不自动等同于任务完成。
+
+### 47.3 验证
+
+- API 验证：`r05-w1-ex1`、`r05-w2-ex2`、`r05-w3-ex3`、`r05-fin-comp` 均可通过 `/api/tasks/<id>/run` 运行成功；`r05-w1-self/run` 返回 `task_not_runnable`。
+- 浏览器终端验证：`/api/terminal?cwd=~/round5` 返回 `~/round5`；终端可在任务 `r05-w1-self` 下写入并运行 Python 文件；危险的 `python3 -c` 仍被拦截。
+- 真实浏览器验证：`progress.html?round=round_05` 会直接选中 Round 05；自测任务不显示“运行”但显示“终端”；点击后当前任务为“自测：自己写 two_sum_sorted.py”，工作目录为 `~/round5`；UI 输入 `pwd` 输出 `/Users/alalapi/cli-lab/round5`。
+- 移动端验证：390px 宽度无整页横向溢出。
+- 静态与数据验证：`build_rounds_data.py`、`check_protocol_sync.py`、`validate_learning_data.py`、`agent_gate.py --verify`、`bash -n`、`node --check progress_ui.js`、Python 编译、JSON 校验、`git diff --check` 均通过。
+
+### 47.4 风险边界核对
+
+- 本轮 API/UI 验证产生的进度、动作、反馈和终端历史均已从测试前快照恢复。
+- 未放宽终端沙盒边界；仍限制在 `~/cli-lab` 内并拦截危险命令。
+- 未引入前端框架、数据库、后端框架或大型新依赖。

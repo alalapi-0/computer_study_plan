@@ -557,6 +557,22 @@ TASK-011 实际产物：
 
 ---
 
+## TASK-RR-35：Stage 1 填充 · Round 05 Web UI 可完成练习
+
+- 状态：**done**（2026-07-04）
+- 背景：Round 05 是高频算法模式入门，虽然已接入进度系统，但原内容仍偏最小骨架；notes 缺少 Web UI 学习路径，脚本会等待输入并连带标记自测 / 小抄 / 验收，任务标题也不利于用户判断该练什么。
+- 目标：让 Round 05 用户只通过 Web UI 就能阅读二分、滑动窗口、双指针、DFS/BFS、回溯、贪心、DP 资料，运行自动练习，在浏览器映射终端中手写自测脚本，并手动记录最终验收。
+- 实际产物：
+  - `rounds/round_05/README.md` 更新为 Web UI 可练习说明，明确阅读、运行、自测、最终验收的页面操作路径。
+  - `rounds/round_05/week1|week2|week3/notes.md` 补齐算法模式触发条件、页面学习路径、自测命令和完成标准。
+  - `rounds/round_05/week1|week2|week3/exercises.sh` 与 `final/comprehensive_exercise.sh` 改为非交互运行，只自动记录脚本实际完成的练习任务；自测、小抄和验收仍由用户手动记录。
+  - `rounds/round_05/final/algorithm_patterns_cheatsheet.md` 补齐算法模式选择小抄和最终验收自问。
+  - `scripts/build_rounds_data.py` / `rounds_data.js` 为 Round 05 输出清晰任务标题。
+- 验收：API 可运行 Round 05 四个练习脚本；自测任务拒绝误运行；浏览器终端可绑定 `r05-w1-self` 到 `~/round5` 并执行 `pwd` / 手写 Python 文件；桌面端和 390px 移动端无横向溢出；测试记录已恢复。
+- 是否需要用户介入：否。
+
+---
+
 ## TASK-RR-26：Stage 1 增强 · Round 05 接入进度系统
 
 - 状态：**done**（2026-06-15）

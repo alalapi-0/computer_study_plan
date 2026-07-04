@@ -1,18 +1,22 @@
 #!/bin/bash
-# Round 05 · Week 2 练习：分治 / DFS / BFS / 回溯
+# Round 05 · Week 2 练习：DFS、BFS 与回溯最小例子（Web UI 可运行）
 
 set -e
 
 REPO_ROOT="$(cd "$(dirname "$0")/../../.." && pwd)"
+LAB="$HOME/cli-lab/round5/week2_auto"
 
 mark() {
   bash "$REPO_ROOT/mark_done.sh" "$1"
 }
 
-mkdir -p ~/cli-lab/round5/week2
-cd ~/cli-lab/round5/week2
+rm -rf "$LAB"
+mkdir -p "$LAB"
+cd "$LAB"
 
-cat > dfs_demo.py <<'EOF'
+cat > graph_backtracking_demo.py <<'EOF'
+from collections import deque
+
 graph = {
     "A": ["B", "C"],
     "B": ["D"],
@@ -30,14 +34,58 @@ def dfs(node, visited):
         dfs(nxt, visited)
 
 dfs("A", set())
+
+def bfs(start):
+    queue = deque([start])
+    visited = {start}
+    order = []
+    while queue:
+        node = queue.popleft()
+        order.append(node)
+        for nxt in graph[node]:
+            if nxt not in visited:
+                visited.add(nxt)
+                queue.append(nxt)
+    return order
+
+print("bfs:", bfs("A"))
+
+def permutations(items):
+    answer = []
+    used = [False] * len(items)
+    path = []
+
+    def backtrack():
+        if len(path) == len(items):
+            answer.append(path[:])
+            return
+        for i, item in enumerate(items):
+            if used[i]:
+                continue
+            used[i] = True
+            path.append(item)
+            backtrack()
+            path.pop()
+            used[i] = False
+
+    backtrack()
+    return answer
+
+print("perm:", permutations(["x", "y", "z"]))
 EOF
 
-python3 dfs_demo.py
+python3 graph_backtracking_demo.py
+
+cat > next_steps.txt <<'EOF'
+Week 2 自动练习已生成 graph_backtracking_demo.py。
+
+自测请在 Web UI 点 r05-w2-self 的“终端”，进入 ~/cli-lab/round5 后自己完成：
+1. 新建 week2_self 目录。
+2. 写一个 bfs_levels.py，使用 deque 完成 BFS。
+3. 运行 python3 bfs_levels.py。
+4. 能解释 DFS、BFS、回溯差异后，手动点“记录 / 完成”。
+EOF
 
 mark r05-w2-ex2
 
-echo "请补充一个回溯或 BFS 练习后按回车继续..."
-read
-mark r05-w2-self
-
-echo "Week 2 完成。"
+echo "Week 2 自动练习完成。请继续手动完成 r05-w2-self。"

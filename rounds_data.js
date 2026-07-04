@@ -635,19 +635,19 @@ window.ROUNDS_DATA = [
           {
             "id": "r05-w1-read",
             "type": "reading",
-            "title": "阅读 week1/notes.md",
+            "title": "阅读：双指针、滑动窗口、二分触发条件",
             "file": "rounds/round_05/week1/notes.md"
           },
           {
             "id": "r05-w1-ex1",
             "type": "exercise",
-            "title": "练习1",
+            "title": "练习：二分查找与滑动窗口",
             "file": "rounds/round_05/week1/exercises.sh"
           },
           {
             "id": "r05-w1-self",
             "type": "test",
-            "title": "第1周自测",
+            "title": "自测：自己写 two_sum_sorted.py",
             "file": "rounds/round_05/week1/exercises.sh"
           }
         ]
@@ -659,19 +659,19 @@ window.ROUNDS_DATA = [
           {
             "id": "r05-w2-read",
             "type": "reading",
-            "title": "阅读 week2/notes.md",
+            "title": "阅读：分治、DFS、BFS、回溯",
             "file": "rounds/round_05/week2/notes.md"
           },
           {
             "id": "r05-w2-ex2",
             "type": "exercise",
-            "title": "练习2",
+            "title": "练习：DFS、BFS 与回溯最小例子",
             "file": "rounds/round_05/week2/exercises.sh"
           },
           {
             "id": "r05-w2-self",
             "type": "test",
-            "title": "第2周自测",
+            "title": "自测：自己写 bfs_levels.py",
             "file": "rounds/round_05/week2/exercises.sh"
           }
         ]
@@ -683,19 +683,19 @@ window.ROUNDS_DATA = [
           {
             "id": "r05-w3-read",
             "type": "reading",
-            "title": "阅读 week3/notes.md",
+            "title": "阅读：贪心选择与 DP 状态转移",
             "file": "rounds/round_05/week3/notes.md"
           },
           {
             "id": "r05-w3-ex3",
             "type": "exercise",
-            "title": "练习3",
+            "title": "练习：贪心选择与 DP 爬楼梯",
             "file": "rounds/round_05/week3/exercises.sh"
           },
           {
             "id": "r05-w3-self",
             "type": "test",
-            "title": "第3周自测",
+            "title": "自测：自己写 coin_change_dp.py",
             "file": "rounds/round_05/week3/exercises.sh"
           }
         ]
@@ -707,19 +707,19 @@ window.ROUNDS_DATA = [
           {
             "id": "r05-fin-comp",
             "type": "exercise",
-            "title": "综合练习",
+            "title": "综合练习：算法模式选择器",
             "file": "rounds/round_05/final/comprehensive_exercise.sh"
           },
           {
             "id": "r05-fin-sheet",
             "type": "output",
-            "title": "完成本 Round 小抄",
+            "title": "产出：完成 Round 05 算法模式小抄",
             "file": "rounds/round_05/final/algorithm_patterns_cheatsheet.md"
           },
           {
             "id": "r05-fin-acc1",
             "type": "test",
-            "title": "验收：Round 05 核心目标",
+            "title": "验收：解释七类算法模式适用场景",
             "file": "round_05.md"
           }
         ]

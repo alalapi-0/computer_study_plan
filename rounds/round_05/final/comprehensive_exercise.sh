@@ -1,16 +1,18 @@
 #!/bin/bash
-# Round 05 · Final 综合练习
+# Round 05 · Final 综合练习（Web UI 可运行）
 
 set -e
 
 REPO_ROOT="$(cd "$(dirname "$0")/../../.." && pwd)"
+LAB="$HOME/cli-lab/round5/final_auto"
 
 mark() {
   bash "$REPO_ROOT/mark_done.sh" "$1"
 }
 
-mkdir -p ~/cli-lab/round5/final
-cd ~/cli-lab/round5/final
+rm -rf "$LAB"
+mkdir -p "$LAB"
+cd "$LAB"
 
 cat > pattern_selector_demo.py <<'EOF'
 def choose_pattern(problem):
@@ -40,11 +42,14 @@ EOF
 
 python3 pattern_selector_demo.py
 
+cat > final_notes.md <<'EOF'
+# Round 05 Final 自动练习产物
+
+- pattern_selector_demo.py：根据题面关键词给出初步算法模式建议。
+- 这只是自动综合练习。
+- 小抄 r05-fin-sheet 与验收 r05-fin-acc1 仍需用户自己阅读、解释并在 Web UI 手动记录。
+EOF
+
 mark r05-fin-comp
 
-echo "请完成一题算法模式归类并记录结论后按回车..."
-read
-mark r05-fin-sheet
-mark r05-fin-acc1
-
-echo "Final 完成。"
+echo "Round 05 Final 自动练习完成。请继续手动完成 r05-fin-sheet 与 r05-fin-acc1。"
