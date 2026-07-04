@@ -440,21 +440,672 @@
     .toast.ok { border-color: var(--green); color: var(--green); }
     .toast.warn { border-color: var(--yellow); color: var(--yellow); }
     .toast.error { border-color: var(--red); color: var(--red); }
+
+    /* ── Figma redesign 2026-07-04 ── */
+    :root {
+      --bg: #f4f7f6;
+      --card: #ffffff;
+      --card-hover: #f9fbfa;
+      --border: #d8e0de;
+      --border-strong: #bdcbc7;
+      --accent: #2563eb;
+      --accent2: #0f766e;
+      --green: #15803d;
+      --yellow: #b45309;
+      --red: #dc2626;
+      --pink: #be123c;
+      --ink: #12201b;
+      --rail: #10241f;
+      --rail-soft: #1b342e;
+      --text: #12201b;
+      --text-muted: #66746e;
+      --radius: 8px;
+      --shadow: 0 16px 44px rgba(18,32,27,0.08);
+      --shadow-soft: 0 1px 2px rgba(18,32,27,0.06);
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      background:
+        linear-gradient(180deg, rgba(15,118,110,0.05), rgba(244,247,246,0) 260px),
+        var(--bg);
+      padding: 1.25rem;
+      color: var(--ink);
+    }
+    .app-shell {
+      width: min(1440px, 100%);
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 248px minmax(0, 1fr);
+      gap: 1.5rem;
+      align-items: start;
+    }
+    .workspace,
+    .container {
+      width: 100%;
+      max-width: 100%;
+      min-width: 0;
+    }
+    .side-rail {
+      position: sticky;
+      top: 1.25rem;
+      min-height: calc(100vh - 2.5rem);
+      background: var(--rail);
+      color: #e8f3ef;
+      border-radius: var(--radius);
+      padding: 1.4rem;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+    .side-rail::after {
+      content: "";
+      position: absolute;
+      inset: auto -20% -18% 18%;
+      height: 170px;
+      background: radial-gradient(circle, rgba(15,118,110,0.38), rgba(15,118,110,0));
+      pointer-events: none;
+    }
+    .rail-brand {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      margin-bottom: 2rem;
+      position: relative;
+      z-index: 1;
+    }
+    .rail-mark {
+      width: 44px;
+      height: 44px;
+      border-radius: 8px;
+      display: grid;
+      place-items: center;
+      background: #e8f7f3;
+      color: var(--rail);
+      font-weight: 800;
+      letter-spacing: 0;
+    }
+    .rail-title { font-weight: 700; font-size: 0.95rem; }
+    .rail-subtitle { margin-top: 0.12rem; color: #b8cbc5; font-size: 0.74rem; }
+    .side-nav {
+      display: grid;
+      gap: 0.45rem;
+      margin-bottom: 2rem;
+      position: relative;
+      z-index: 1;
+    }
+    .nav-item {
+      color: #c5d8d1;
+      text-decoration: none;
+      border: 1px solid rgba(232,243,239,0.12);
+      border-radius: 8px;
+      padding: 0.65rem 0.8rem;
+      font-size: 0.86rem;
+      font-weight: 650;
+      transition: background 0.2s, color 0.2s, border-color 0.2s;
+    }
+    .nav-item:hover { color: #fff; border-color: rgba(232,243,239,0.28); }
+    .nav-item.active {
+      background: #e8f7f3;
+      color: var(--rail);
+      border-color: #e8f7f3;
+    }
+    .rail-note {
+      position: relative;
+      z-index: 1;
+      border-top: 1px solid rgba(232,243,239,0.12);
+      padding-top: 1rem;
+      color: #c5d8d1;
+    }
+    .rail-note-label {
+      display: block;
+      margin-bottom: 0.45rem;
+      color: #ddf7f0;
+      font-size: 0.72rem;
+      font-weight: 750;
+    }
+    .rail-note p { font-size: 0.8rem; line-height: 1.65; }
+
+    .top-bar {
+      position: sticky;
+      top: 1.25rem;
+      z-index: 35;
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 1rem;
+      background: rgba(255,255,255,0.84);
+      border: 1px solid rgba(216,224,222,0.85);
+      padding: 1.15rem 1.25rem;
+      box-shadow: var(--shadow-soft);
+    }
+    header { margin-bottom: 0; }
+    .eyebrow {
+      margin-bottom: 0.25rem;
+      color: var(--accent2);
+      font-size: 0.72rem;
+      font-weight: 800;
+      letter-spacing: 0;
+    }
+    header h1 {
+      font-size: clamp(1.9rem, 3vw, 2.45rem);
+      line-height: 1.08;
+      letter-spacing: 0;
+      color: var(--ink);
+    }
+    header h1 span { color: inherit; }
+    header p {
+      max-width: 650px;
+      margin-top: 0.55rem;
+      color: var(--text-muted);
+      font-size: 0.92rem;
+    }
+    .last-updated {
+      justify-content: flex-end;
+      flex-wrap: wrap;
+      margin: 0 !important;
+      color: var(--text-muted);
+      white-space: nowrap;
+    }
+    .refresh-btn,
+    .btn,
+    .task-btn,
+    .config-card button.save-btn,
+    .modal-close {
+      border-radius: 8px;
+      font-weight: 700;
+      letter-spacing: 0;
+    }
+    .refresh-btn {
+      background: var(--card);
+      color: var(--ink);
+      border-color: var(--border);
+      padding: 0.38rem 0.75rem;
+    }
+    .refresh-btn:hover { background: var(--ink); border-color: var(--ink); color: #fff; }
+
+    .banner {
+      border-radius: 8px;
+      box-shadow: var(--shadow-soft);
+      font-weight: 600;
+    }
+    .banner.ok { background: #dff3ee; border-color: rgba(15,118,110,0.35); color: #0f5f58; }
+    .banner.warn { background: #fff3da; border-color: rgba(180,83,9,0.35); color: #8a3d07; }
+    .banner.error { background: #fce8ee; border-color: rgba(190,18,60,0.35); color: #9f1239; }
+
+    .card {
+      width: 100%;
+      max-width: 100%;
+      min-width: 0;
+      border-color: var(--border);
+      box-shadow: var(--shadow-soft);
+      padding: 1.35rem;
+      margin-bottom: 1.25rem;
+    }
+    .card h2 {
+      margin-bottom: 0.7rem;
+      font-size: 1.08rem;
+      letter-spacing: 0;
+    }
+    .card-sub {
+      max-width: 760px;
+      color: var(--text-muted);
+      line-height: 1.65;
+    }
+    .focus-card {
+      border-color: rgba(15,118,110,0.36);
+      border-left: 6px solid var(--accent2);
+      background:
+        linear-gradient(135deg, rgba(15,118,110,0.06), rgba(255,255,255,0) 42%),
+        #fff;
+      padding: 1.5rem;
+    }
+    .focus-card h2 {
+      color: var(--accent2);
+      font-size: 0.86rem;
+      text-transform: uppercase;
+      letter-spacing: 0.02em;
+    }
+    .continue-grid {
+      grid-template-columns: minmax(0, 1fr) minmax(220px, 0.38fr);
+      gap: 1.5rem;
+      align-items: stretch;
+    }
+    .continue-title {
+      font-size: clamp(1.25rem, 2vw, 1.65rem);
+      line-height: 1.28;
+      margin-bottom: 0.55rem;
+      color: var(--ink);
+    }
+    .continue-meta {
+      color: var(--text-muted);
+      font-size: 0.86rem;
+      margin-bottom: 1.1rem;
+    }
+    .continue-note {
+      display: flex;
+      align-items: flex-start;
+      min-height: 100%;
+      border-left: 1px solid var(--border);
+      padding: 0.15rem 0 0.15rem 1.25rem;
+      color: var(--ink);
+      font-size: 0.94rem;
+      line-height: 1.6;
+    }
+    .continue-actions { gap: 0.55rem; }
+
+    .global-progress {
+      display: grid;
+      grid-template-columns: max-content minmax(100px, 1fr) max-content;
+      gap: 0.9rem;
+    }
+    .bar-wrap { background: #e4ebe9; }
+    .bar-fill { background: linear-gradient(90deg, var(--accent2), var(--accent)); }
+    .global-progress .percent {
+      color: var(--accent2);
+      font-size: 1.2rem;
+      min-width: 3.5rem;
+    }
+
+    .lane-grid {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 0.85rem;
+    }
+    .lane-item,
+    .stage-item,
+    .config-card,
+    .weak-list .weak-item {
+      background: var(--card-hover);
+      border-color: var(--border);
+      border-radius: 8px;
+      box-shadow: none;
+    }
+    .lane-item {
+      position: relative;
+      overflow: hidden;
+      padding: 1rem;
+    }
+    .lane-item::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: var(--accent2);
+    }
+    .lane-item.engineering::before { background: var(--accent); }
+    .lane-item.soft_exam::before { background: var(--yellow); }
+    .lane-item.math2::before { background: var(--green); }
+    .lane-item.cs408::before { background: var(--pink); }
+    .lane-item .lane-title { font-size: 0.94rem; color: var(--ink); }
+    .lane-item .lane-meta { min-height: 2.1em; color: var(--text-muted); }
+    .lane-item .lane-pct {
+      color: var(--ink);
+      font-weight: 800;
+      min-width: 3.4rem;
+    }
+    .lane-item.weak {
+      border-color: rgba(190,18,60,0.4);
+      background: #fff8fa;
+    }
+
+    .config-grid { gap: 0.85rem; }
+    .config-card { padding: 1rem; }
+    .config-card textarea,
+    .config-card input[type="date"],
+    .record-input {
+      border-color: var(--border);
+      background: #fff;
+      color: var(--ink);
+    }
+    .config-card button.save-btn {
+      color: var(--accent2);
+      border-color: var(--accent2);
+      background: #fff;
+      padding: 0.42rem 0.8rem;
+    }
+    .config-card button.save-btn:hover { background: #dff3ee; }
+
+    .stage-list { grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); }
+    .stage-item { padding: 0.8rem; }
+    .stage-item .stage-name { color: var(--ink); }
+    .weak-list .weak-item.alert {
+      color: var(--ink);
+      border-color: rgba(190,18,60,0.35);
+      background: #fff8fa;
+    }
+    .weak-empty {
+      padding: 0.85rem 1rem;
+      border: 1px dashed var(--border-strong);
+      border-radius: 8px;
+      background: var(--card-hover);
+    }
+
+    .lane-tabs,
+    .round-tabs {
+      max-width: 100%;
+      min-width: 0;
+      gap: 0.45rem;
+      row-gap: 0.55rem;
+      margin-bottom: 0.9rem;
+    }
+    .lane-tab,
+    .tab-btn {
+      border-radius: 999px;
+      background: var(--card-hover);
+      border-color: var(--border);
+      color: var(--text-muted);
+      font-weight: 700;
+    }
+    .lane-tab.active,
+    .tab-btn.active {
+      background: var(--ink);
+      border-color: var(--ink);
+      color: #fff;
+    }
+    .tab-btn.done { border-color: var(--green); color: var(--green); }
+    .tab-btn.done.active { background: var(--green); border-color: var(--green); }
+
+    .round-header {
+      border-radius: 8px 8px 0 0;
+      background: var(--card-hover);
+      padding: 1rem 1.15rem;
+    }
+    .round-meta { align-items: center; }
+    .badge {
+      background: #edf2f1;
+      color: var(--text-muted);
+      font-weight: 700;
+    }
+    .badge.blue { background: #e8f0ff; color: var(--accent); }
+    .badge.green { background: #e7f6ec; color: var(--green); }
+    .badge.lane { background: #dff3ee; color: var(--accent2); }
+    .round-progress-bar {
+      background: #fff;
+      border-color: var(--border);
+      padding: 0.7rem 1.15rem;
+    }
+    .week-section {
+      background: #fff;
+      border-color: var(--border);
+    }
+    .week-title {
+      padding: 0.85rem 1.15rem;
+      background: #fff;
+      color: var(--ink);
+    }
+    .week-title .week-count { font-weight: 800; color: var(--text-muted); }
+    .week-title .week-dot { background: #cbd6d3; }
+    .week-title.completed .week-dot { background: var(--green); }
+    .task-list { padding: 0; }
+    .task-item {
+      display: grid;
+      grid-template-columns: 1.15rem minmax(0, 1fr) max-content max-content;
+      gap: 0.75rem;
+      align-items: start;
+      padding: 0.9rem 1.15rem;
+      margin: 0;
+      border-radius: 0;
+      border-bottom: 1px solid #edf2f1;
+      transition: background 0.15s;
+    }
+    .task-item:last-child { border-bottom: 0; }
+    .task-item:hover { background: var(--card-hover); }
+    .task-item.done { background: #f4fbf7; }
+    .task-status-icon {
+      width: 1rem;
+      height: 1rem;
+      min-width: 1rem;
+      margin-top: 0.18rem;
+      border-radius: 999px;
+      border: 1px solid var(--border-strong);
+      background: #fff;
+      font-size: 0;
+      position: relative;
+    }
+    .task-item.done .task-status-icon {
+      background: var(--green);
+      border-color: var(--green);
+    }
+    .task-item.done .task-status-icon::after {
+      content: "";
+      position: absolute;
+      left: 0.31rem;
+      top: 0.16rem;
+      width: 0.28rem;
+      height: 0.52rem;
+      border: solid #fff;
+      border-width: 0 2px 2px 0;
+      transform: rotate(45deg);
+    }
+    .task-content { min-width: 0; }
+    .task-title {
+      font-size: 0.91rem;
+      color: var(--ink);
+      font-weight: 650;
+    }
+    .task-meta {
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      color: var(--text-muted);
+    }
+    .task-file,
+    .task-file-link,
+    .task-done-at,
+    .task-cmd { font-size: 0.72rem; }
+    .task-file-link {
+      color: var(--accent2);
+      font-weight: 700;
+    }
+    .task-actions {
+      justify-content: flex-end;
+      align-items: center;
+      gap: 0.4rem;
+    }
+    .task-btn {
+      background: #fff;
+      color: var(--ink);
+      border-color: var(--border);
+      min-height: 2rem;
+      padding: 0.34rem 0.66rem;
+      font-size: 0.74rem;
+    }
+    .task-btn:hover { background: var(--card-hover); border-color: var(--border-strong); }
+    .task-btn.read { color: var(--accent2); border-color: rgba(15,118,110,0.45); }
+    .task-btn.record { color: var(--accent); border-color: rgba(37,99,235,0.38); }
+    .task-btn.done { color: var(--green); border-color: rgba(21,128,61,0.45); background: #f4fbf7; }
+    .task-btn.undo { color: var(--yellow); border-color: rgba(180,83,9,0.45); background: #fffaf0; }
+    .task-type {
+      align-self: center;
+      justify-self: end;
+      border-radius: 999px;
+      font-weight: 800;
+      color: var(--text-muted);
+      background: #edf2f1;
+    }
+    .task-type.reading { background: #e8f0ff; color: var(--accent); }
+    .task-type.exercise { background: #fff3da; color: var(--yellow); }
+    .task-type.test { background: #fce8ee; color: var(--pink); }
+    .task-type.output { background: #e7f6ec; color: var(--green); }
+    .task-feedback {
+      color: var(--accent2);
+      border-left-color: rgba(15,118,110,0.35);
+      line-height: 1.55;
+    }
+
+    .actions { margin: -0.2rem 0 1.5rem; }
+    .btn {
+      color: var(--ink);
+      background: #fff;
+      padding: 0.55rem 0.95rem;
+    }
+    .btn:hover { background: var(--ink); color: #fff; border-color: var(--ink); }
+    .empty-state {
+      background: var(--card-hover);
+      border: 1px dashed var(--border-strong);
+      border-radius: 8px;
+      padding: 1rem;
+    }
+
+    .modal-overlay { background: rgba(8,18,15,0.68); }
+    .modal-panel {
+      border-color: var(--border);
+      box-shadow: 0 24px 70px rgba(8,18,15,0.24);
+    }
+    #readerBody .md-body h2 { color: var(--accent2); }
+    #readerBody .md-body code { background: #e8f0ff; }
+
+    @media (min-width: 1180px) {
+      .focus-card {
+        display: block;
+      }
+      #progress,
+      #lanes {
+        display: block;
+      }
+    }
+
+    @media (max-width: 1100px) {
+      .lane-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .task-item { grid-template-columns: 1.15rem minmax(0, 1fr) max-content; }
+      .task-type { grid-column: 2; justify-self: start; }
+    }
+
+    @media (max-width: 960px) {
+      body { padding: 0.9rem; }
+      .app-shell { grid-template-columns: minmax(0, 1fr); gap: 0.9rem; }
+      .side-rail {
+        position: relative;
+        top: auto;
+        min-height: auto;
+        padding: 1rem;
+      }
+      .rail-brand { margin-bottom: 1rem; }
+      .side-nav {
+        display: flex;
+        gap: 0.5rem;
+        max-width: 100%;
+        min-width: 0;
+        overflow-x: auto;
+        margin-bottom: 0;
+        padding-bottom: 0.05rem;
+      }
+      .nav-item { white-space: nowrap; padding: 0.55rem 0.75rem; }
+      .rail-note { display: none; }
+      .top-bar {
+        position: relative;
+        top: auto;
+        align-items: flex-start;
+        flex-direction: column;
+        width: 100%;
+        max-width: 100%;
+        min-width: 0;
+      }
+      .workspace { overflow-x: hidden; }
+      .last-updated { justify-content: flex-start; white-space: normal; }
+    }
+
+    @media (max-width: 760px) {
+      .continue-grid { grid-template-columns: minmax(0, 1fr); gap: 1.1rem; }
+      .continue-note {
+        border-left: 0;
+        border-top: 1px solid var(--border);
+        padding: 0.9rem 0 0;
+      }
+      .config-grid,
+      .lane-grid { grid-template-columns: 1fr; }
+      .lane-tabs,
+      .round-tabs {
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        padding-bottom: 0.35rem;
+      }
+      .lane-tab,
+      .tab-btn { white-space: nowrap; }
+    }
+
+    @media (max-width: 640px) {
+      body { padding: 0.75rem; }
+      .side-rail,
+      .top-bar,
+      .card { padding: 1rem; }
+      header h1 { font-size: 1.9rem; }
+      header p { font-size: 0.9rem; }
+      .focus-card { padding: 1rem; border-left-width: 4px; }
+      .card h2 { font-size: 1rem; }
+      .global-progress {
+        grid-template-columns: max-content minmax(80px, 1fr) max-content;
+      }
+      .round-header {
+        padding: 1rem;
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .round-progress-bar { padding: 0.7rem 1rem; }
+      .week-title { padding: 0.8rem 1rem; }
+      .task-item {
+        grid-template-columns: 1.15rem minmax(0, 1fr);
+        gap: 0.55rem 0.7rem;
+        padding: 0.85rem 1rem;
+      }
+      .task-status-icon { grid-row: 1 / span 4; }
+      .task-actions {
+        grid-column: 2;
+        justify-content: flex-start;
+        margin-top: 0.15rem;
+      }
+      .task-type {
+        grid-column: 2;
+        justify-self: start;
+        width: fit-content;
+      }
+      .actions {
+        justify-content: stretch;
+        flex-direction: column;
+      }
+      .actions .btn { width: 100%; }
+      .toast {
+        left: 0.8rem;
+        right: 0.8rem;
+        bottom: 1rem;
+      }
+    }
   </style>
 </head>
 
 <body>
 
-<div class="container">
+<div class="app-shell">
+<aside class="side-rail" aria-label="学习工作台导航">
+  <div class="rail-brand">
+    <div class="rail-mark">CSP</div>
+    <div>
+      <div class="rail-title">学习进度工作台</div>
+      <div class="rail-subtitle">四主线 · Web UI</div>
+    </div>
+  </div>
+  <nav class="side-nav">
+    <a class="nav-item active" href="#today">今日学习</a>
+    <a class="nav-item" href="#lanes">主线进度</a>
+    <a class="nav-item" href="#config">本周配置</a>
+    <a class="nav-item" href="#rounds">Round 清单</a>
+  </nav>
+  <div class="rail-note">
+    <span class="rail-note-label">使用路径</span>
+    <p>先完成下一条任务，再记录证据；每周复盘主线和 Round。</p>
+  </div>
+</aside>
 
-<div class="top-bar">
+<div class="container workspace">
+
+<div class="top-bar" id="today">
 <header>
-  <h1>学习工作台 · <span>四主线</span></h1>
-  <p>从这里阅读资料、查看练习、写入记录并完成打卡。启动 <code style="background:#eef2ff;padding:0.1em 0.4em;border-radius:4px;font-family:monospace">python3 scripts/progress_server.py</code> 后可网页写入。</p>
+  <div class="eyebrow">四主线学习系统</div>
+  <h1>今日学习</h1>
+  <p>阅读资料、写入记录、完成打卡都在这里闭环。先推进下一条任务，再回看主线进度与 Round 清单。</p>
 </header>
 <div class="last-updated" style="margin-top:0.75rem;margin-bottom:0">
   <span id="lastUpdated">正在加载…</span>
-  <button class="refresh-btn" onclick="loadProgress()" id="refreshBtn">↻ 刷新</button>
+  <button class="refresh-btn" onclick="loadProgress()" id="refreshBtn">刷新</button>
 </div>
 </div>
 
@@ -469,7 +1120,7 @@
 </div>
 
 <!-- ── Block 1: 总进度 ── -->
-<div class="card">
+<div class="card" id="progress">
   <h2>总进度</h2>
   <div class="global-progress">
     <span class="label">全部任务</span>
@@ -479,14 +1130,14 @@
 </div>
 
 <!-- ── Block 2: 四主线进度 ── -->
-<div class="card">
+<div class="card" id="lanes">
   <h2>四主线进度</h2>
   <div class="card-sub">每条主线（lane）的任务完成率。已开始学习且完成率 &lt; 30%（任务数 ≥ 5）时会标为薄弱项。</div>
   <div class="lane-grid" id="laneGrid"></div>
 </div>
 
 <!-- ── Block 3: 个人配置（本周任务 + 倒计时） ── -->
-<div class="card">
+<div class="card" id="config">
   <h2>本周与倒计时（本地保存）</h2>
   <div class="card-sub">本周任务与考试日期保存在浏览器 localStorage，不写入 progress.json。</div>
   <div class="config-grid">
@@ -526,7 +1177,7 @@
 </div>
 
 <!-- ── Block 4: 阶段进度（Stage 0–7） ── -->
-<div class="card">
+<div class="card" id="rounds">
   <h2>阶段进度（Stage 0–7）</h2>
   <div class="card-sub">详见 <code style="background:rgba(255,255,255,0.08);padding:0.05em 0.35em;border-radius:4px;font-family:monospace">docs/STAGE_PLAN.md</code>。Stage 进度按"该 Stage 关联 lane 的完成率"近似计算。</div>
   <div class="stage-list" id="stageList"></div>
@@ -555,6 +1206,7 @@
 </div>
 
 </div> <!-- /container -->
+</div> <!-- /app-shell -->
 
 <div class="modal-overlay" id="readerModal" aria-hidden="true">
   <div class="modal-panel" role="dialog" aria-labelledby="readerTitle">
@@ -632,7 +1284,7 @@ async function loadProgress() {
       lanesData    = window.PROGRESS_DATA.lanes || {};
     } else {
       errEl.innerHTML = `
-        <strong>⚠️ 无法读取进度数据</strong><br>
+        <strong>无法读取进度数据</strong><br>
         请确认 <code>progress_data.js</code> 与 <code>progress.html</code> 在同一目录。<br>
         运行一次 <code>bash mark_done.sh &lt;任意任务&gt;</code> 可重新生成该文件。
       `;
@@ -719,7 +1371,7 @@ function renderContinue() {
   const next = findNextTask();
   if (!next) {
     card.innerHTML = `
-      <h2>继续学习</h2>
+      <h2>下一步任务</h2>
       <div class="empty-state">所有已注册任务都完成了。可以进入复盘，或运行 <code>python3 scripts/build_rounds_data.py</code> 同步新任务。</div>
     `;
     return;
@@ -728,7 +1380,7 @@ function renderContinue() {
   const fb = feedbackFor(task.id);
   const canRead = canOpenFile(task.file);
   card.innerHTML = `
-    <h2>继续学习</h2>
+    <h2>下一步任务</h2>
     <div class="continue-grid">
       <div>
         <div class="continue-title">${task.title}</div>
@@ -740,7 +1392,7 @@ function renderContinue() {
         </div>
       </div>
       <div class="continue-note">
-        ${escapeHtml(fb?.next_suggestion || "先打开学习资料，完成一个最小动作后再记录。")}
+        <span>${escapeHtml(fb?.next_suggestion || "先打开学习资料，完成一个最小动作后再记录。")}</span>
       </div>
     </div>
   `;
@@ -807,7 +1459,7 @@ function renderWeak() {
   if (!weaks.length) {
     const item = document.createElement("div");
     item.className = "weak-empty";
-    item.textContent = "✅ 当前没有「已开始但完成率低于 30%」的主线。";
+    item.textContent = "当前没有「已开始但完成率低于 30%」的主线。";
     el.appendChild(item);
     return;
   }
@@ -927,7 +1579,7 @@ function renderRoundsForLane(laneKey) {
           : `<span class="task-file">${task.file || ""}</span>`;
 
         item.innerHTML = `
-          <span class="task-status-icon">${done ? "✅" : "⬜"}</span>
+          <span class="task-status-icon" aria-hidden="true"></span>
           <div class="task-content">
             <div class="task-title">${task.title}</div>
             <div class="task-meta">

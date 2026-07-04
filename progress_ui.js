@@ -19,7 +19,7 @@ async function detectApi() {
   if (!banner) return;
   if (apiReady) {
     banner.className = "banner ok";
-    banner.innerHTML = "<strong>✓ 网页打卡已启用</strong> — 可直接在任务旁点击完成 / 撤销，无需切换终端。";
+    banner.innerHTML = "<strong>网页打卡已启用</strong> — 可直接在任务旁点击完成 / 撤销，无需切换终端。";
     banner.style.display = "block";
   } else if (window.location.protocol !== "file:") {
     banner.className = "banner warn";
