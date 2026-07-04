@@ -278,31 +278,31 @@ window.ROUNDS_DATA = [
           {
             "id": "r02-w1-read",
             "type": "reading",
-            "title": "阅读 week1/notes.md",
+            "title": "阅读：重定向、追加、管道",
             "file": "rounds/round_02/week1/notes.md"
           },
           {
             "id": "r02-w1-ex1",
             "type": "exercise",
-            "title": "练习1：覆盖与追加",
+            "title": "练习：覆盖与追加",
             "file": "rounds/round_02/week1/exercises.sh"
           },
           {
             "id": "r02-w1-ex2",
             "type": "exercise",
-            "title": "练习2：去重统计",
+            "title": "练习：去重统计",
             "file": "rounds/round_02/week1/exercises.sh"
           },
           {
             "id": "r02-w1-ex3",
             "type": "exercise",
-            "title": "练习3：日志过滤",
+            "title": "练习：日志过滤流水线",
             "file": "rounds/round_02/week1/exercises.sh"
           },
           {
             "id": "r02-w1-self",
             "type": "test",
-            "title": "第1周自测",
+            "title": "自测：独立写日志统计链",
             "file": "rounds/round_02/week1/exercises.sh"
           }
         ]
@@ -314,31 +314,31 @@ window.ROUNDS_DATA = [
           {
             "id": "r02-w2-read",
             "type": "reading",
-            "title": "阅读 week2/notes.md",
+            "title": "阅读：最小 Shell 脚本与参数",
             "file": "rounds/round_02/week2/notes.md"
           },
           {
             "id": "r02-w2-ex4",
             "type": "exercise",
-            "title": "练习4：count_errors.sh",
+            "title": "练习：count_errors.sh",
             "file": "rounds/round_02/week2/exercises.sh"
           },
           {
             "id": "r02-w2-ex5",
             "type": "exercise",
-            "title": "练习5：count_labels.sh",
+            "title": "练习：count_labels.sh",
             "file": "rounds/round_02/week2/exercises.sh"
           },
           {
             "id": "r02-w2-ex6",
             "type": "exercise",
-            "title": "练习6：show_args.sh",
+            "title": "练习：show_args.sh 参数观察",
             "file": "rounds/round_02/week2/exercises.sh"
           },
           {
             "id": "r02-w2-self",
             "type": "test",
-            "title": "第2周自测",
+            "title": "自测：运行并解释参数脚本",
             "file": "rounds/round_02/week2/exercises.sh"
           }
         ]
@@ -350,31 +350,31 @@ window.ROUNDS_DATA = [
           {
             "id": "r02-w3-read",
             "type": "reading",
-            "title": "阅读 week3/notes.md",
+            "title": "阅读：Git 工作区、暂存区、提交历史",
             "file": "rounds/round_02/week3/notes.md"
           },
           {
             "id": "r02-w3-ex7",
             "type": "exercise",
-            "title": "练习7：初始化与首次提交",
+            "title": "练习：初始化与首次提交",
             "file": "rounds/round_02/week3/exercises.sh"
           },
           {
             "id": "r02-w3-ex8",
             "type": "exercise",
-            "title": "练习8：第二次提交",
+            "title": "练习：修改 README 后第二次提交",
             "file": "rounds/round_02/week3/exercises.sh"
           },
           {
             "id": "r02-w3-ex9",
             "type": "exercise",
-            "title": "练习9：新增文件再提交",
+            "title": "练习：新增 notes.txt 再提交",
             "file": "rounds/round_02/week3/exercises.sh"
           },
           {
             "id": "r02-w3-self",
             "type": "test",
-            "title": "第3周自测",
+            "title": "自测：解释 status 与 log",
             "file": "rounds/round_02/week3/exercises.sh"
           }
         ]
@@ -386,25 +386,25 @@ window.ROUNDS_DATA = [
           {
             "id": "r02-fin-comp",
             "type": "exercise",
-            "title": "综合练习",
+            "title": "综合练习：日志统计器 + 本地 Git 仓库",
             "file": "rounds/round_02/final/comprehensive_exercise.sh"
           },
           {
             "id": "r02-fin-sheet",
             "type": "output",
-            "title": "完成本 Round 小抄",
+            "title": "产出：完成 Round 02 命令小抄",
             "file": "rounds/round_02/final/command_cheatsheet.md"
           },
           {
             "id": "r02-fin-acc1",
             "type": "test",
-            "title": "验收：Round 02 核心目标",
+            "title": "验收：解释重定向、管道、脚本参数",
             "file": "round_02.md"
           },
           {
             "id": "r02-fin-acc2",
             "type": "output",
-            "title": "验收：完成 3 次 Git 提交并解释",
+            "title": "验收：解释 3 次本地 Git 提交",
             "file": "round_02.md"
           }
         ]

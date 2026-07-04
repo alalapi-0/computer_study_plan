@@ -505,6 +505,25 @@ TASK-011 实际产物：
 
 ---
 
+## TASK-RR-32：Stage 1 填充 · Round 02 Web UI 可完成练习 + 任务绑定终端
+
+- 状态：**done**（2026-07-04）
+- 背景：Round 02 是 Shell、管道与本地 Git 最小工作流，终端操作比 Round 01 更密集。用户要求“把终端直接做成浏览器映射，集成到 UI 里面”。
+- 目标：让 Round 02 用户只通过 Web UI 就能阅读、运行脚本、使用浏览器映射终端完成手敲练习、自测和最终验收记录；同时修正自测 / 验收任务被误显示“运行”的语义问题。
+- 实际产物：
+  - Figma 设计稿：<https://www.figma.com/design/gmSFWf3hylozNlXIlHIJAR>
+  - `rounds/round_02/README.md` 更新为 Web UI 使用说明。
+  - `rounds/round_02/week1|week2|week3/notes.md` 补齐重定向、管道、Shell 脚本、本地 Git 的 Web UI 练习步骤。
+  - `rounds/round_02/week1|week2|week3/exercises.sh` 与 `final/comprehensive_exercise.sh` 改为非交互运行，只打卡脚本实际完成的练习任务。
+  - `rounds/round_02/final/command_cheatsheet.md` 补齐命令小抄与最终验收自问。
+  - `progress.html` / `progress_ui.js`：练习终端升级为“当前任务 + 工作目录 + 快捷命令 + 控制台”；工程实操练习 / 自测 / 产出任务新增“终端”按钮并自动绑定到 `~/cli-lab/roundN`。
+  - `scripts/progress_lib.py` / `scripts/progress_server.py`：终端命令日志新增 `task_id`；“运行”只允许 `exercise` 类型任务。
+  - `records/terminal/README.md` 同步终端边界与 `task_id` 字段。
+- 验收：真实 Chrome 页面可从 Round 02 任务行点击“终端”绑定到 `~/round2`；UI 输入 `pwd` 输出 `/Users/alalapi/cli-lab/round2`；自测任务不会显示或通过“运行”入口；API、静态语义和数据验证均通过；测试记录已恢复。
+- 是否需要用户介入：否。
+
+---
+
 ## TASK-RR-26：Stage 1 增强 · Round 05 接入进度系统
 
 - 状态：**done**（2026-06-15）

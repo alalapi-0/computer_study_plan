@@ -1027,7 +1027,7 @@
 
 - `scripts/progress_lib.py`：新增白名单练习脚本执行、输出摘要、`run_exercise` 动作事件、浏览器终端沙盒命令执行与命令历史记录。
 - `scripts/progress_server.py`：新增 `POST /api/tasks/<id>/run`、`GET /api/terminal`、`POST /api/terminal/run`。
-- `progress.html`：练习 / 自测任务新增“运行”按钮；新增“练习终端”卡片与导航入口。
+- `progress.html`：练习任务新增“运行”按钮；新增“练习终端”卡片与导航入口。
 - `progress_ui.js`：新增运行确认、运行结果弹窗、终端输入输出渲染、清屏和回到 `~/cli-lab`。
 - `records/terminal/README.md`：说明 Web UI 终端历史记录。
 
@@ -1077,3 +1077,35 @@
 - 真实浏览器验证：Round 01 可展开，专用任务标题可见；Week 1 notes 可在弹窗打开，包含 Web UI 步骤、命令块和自测说明；桌面端无横向溢出。
 - 静态与数据验证：`generate_task_feedback.py`、`check_protocol_sync.py`、`validate_learning_data.py`、`agent_gate.py --verify`、`bash -n`、`node --check progress_ui.js`、Python 编译、JSON 校验均通过。
 - MCP 验证：`npm run check:mcp` 通过；`npm run check:cursor-mcp` 可在 CLI 层列出 chrome-devtools / playwright / context7 / github / stitch 等工具，同时仍提示当前 Cursor 侧 server approval 状态需在 Cursor 设置中处理。
+
+## 44. 2026-07-04 TASK-RR-32 Round 02 内容填充与任务绑定终端
+
+### 44.1 本轮修改
+
+- 新建 Figma 设计稿：<https://www.figma.com/design/gmSFWf3hylozNlXIlHIJAR>，用于“任务区 + 映射终端”工作台布局参考。
+- `rounds/round_02/README.md`、`week1|week2|week3/notes.md`、`final/command_cheatsheet.md`：补齐 Web UI 学习路径、重定向 / 管道 / Shell 脚本 / 本地 Git 最小流程、自测标准和安全边界。
+- `rounds/round_02/week1|week2|week3/exercises.sh` 与 `final/comprehensive_exercise.sh`：改为非交互运行，只自动打卡脚本实际完成的练习；自测、小抄和验收仍由用户手动记录。
+- `scripts/build_rounds_data.py` / `rounds_data.js`：将 Round 02 任务标题改为动作化标题。
+- `progress.html` / `progress_ui.js`：终端卡片升级为“当前任务 + 工作目录 + 快捷命令 + 控制台”的浏览器映射工作区；工程实操练习 / 自测 / 产出任务新增“终端”按钮，可一键绑定到对应 `~/cli-lab/roundN`。
+- `scripts/progress_lib.py` / `scripts/progress_server.py`：终端命令日志新增 `task_id`；任务脚本“运行”按钮仅允许 `exercise` 类型，防止自测 / 验收被误自动运行。
+- `records/terminal/README.md`：同步终端映射边界与 `task_id` 字段说明。
+
+### 44.2 用户视角问题修复
+
+- Round 02 原脚本含 `read` 等待，并会连带标记自测 / 小抄 / 验收，不适合浏览器运行闭环。
+- Round 02 自测任务原先因 `.sh` 文件也显示“运行”，会误导用户以为系统能替自己完成自测。
+- 终端原先只是页面底部工具，不知道当前任务是谁；用户需要自己判断该进入哪个 `~/cli-lab/roundN`。
+- 本地 Git 练习需要在浏览器终端完成，但 UI 没有任务级入口和日志关联。
+
+### 44.3 验证
+
+- Figma：已创建并生成“任务列表 + 映射终端”桌面工作台设计稿。
+- API 验证：`/api/terminal?cwd=~/round2` 返回 `~/round2`；`POST /api/terminal/run` 执行 `pwd` 成功，命令日志写入 `task_id=r02-w1-ex1`；`POST /api/tasks/r02-w1-self/run` 返回 `task_not_runnable`。
+- 真实浏览器验证：Chrome 前台页面可展开 Round 02；练习任务显示“运行 / 终端 / 记录 / 完成”；点击“终端”后页面滚到练习终端，当前任务绑定为“练习：覆盖与追加”，工作目录显示 `~/round2`；在 UI 输入 `pwd` 输出 `/Users/alalapi/cli-lab/round2`。
+- 静态语义验证：101 个脚本型 `exercise` 任务可显示运行入口；66 个脚本型非 `exercise` 任务不显示运行入口。
+- 清理：本轮 API/UI 验证产生的进度、动作、反馈和终端历史均已从测试前快照恢复。
+
+### 44.4 风险边界核对
+
+- 未放宽终端沙盒：仍限制在 `~/cli-lab` 内，远程 Git、网络命令、危险删除、命令串联和仓库外路径继续拦截。
+- 未引入前端框架、数据库、后端框架或大型新依赖。

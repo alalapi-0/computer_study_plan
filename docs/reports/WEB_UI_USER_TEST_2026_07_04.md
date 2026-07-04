@@ -57,7 +57,7 @@
 
 ## 练习脚本运行补测
 
-- 新增能力：Web UI 在练习 / 自测任务旁显示“运行”按钮，可从浏览器触发本地白名单脚本。
+- 新增能力：Web UI 在练习任务旁显示“运行”按钮，可从浏览器触发本地白名单脚本；自测 / 验收任务保留手动终端与记录入口。
 - 安全策略：服务端不接收任意命令，只按 `rounds_data.js` 中的任务 ID 反查脚本；脚本路径必须匹配 `rounds/round_XX/weekN|final/(exercises|comprehensive_exercise).sh|py`；工作目录固定为 `~/cli-lab/roundN`；运行超时为 20 秒。
 - 记录策略：运行成功、失败或超时都会追加 `run_exercise` 动作事件，记录脚本路径、沙盒路径、返回码、耗时与输出摘要。
 - 用户理解：点击运行前有浏览器确认框，说明脚本路径、沙盒目录和可能写入动作记录；运行后弹出输出面板。
@@ -90,6 +90,24 @@
 - API / 函数验证：`POST /api/tasks/r01-w2-ex2/run` 返回成功，输出包含“再手动标记 r01-w2-self”；`rm round1_api_rm_test/delete_me.txt` 成功；`less` / `man` 可返回捕获输出；`rm -rf round1_api_rm_test`、`rm *`、`rm ~/x`、`ls; pwd`、`man -P cat ls`、`less +...`、`less -...`、`sh -c`、`bash -c` 均返回 `terminal_command_blocked`。
 - 清理：本轮 API/UI 测试产生的进度、动作、反馈和终端历史已从测试前快照恢复。
 - 工具备注：应用内浏览器控制在本轮点击运行确认框时再次出现控制会话超时，服务端日志显示该次 UI 点击未完成 POST；因此运行链路使用同一 Web UI 后端 API 补测。
+
+## Round 02 内容填充与任务绑定终端补测
+
+- Figma 文件：<https://www.figma.com/design/gmSFWf3hylozNlXIlHIJAR>
+- 设计调整：将“任务列表”和“浏览器映射终端”设计为同一工作台；终端区包含当前任务、工作目录、允许命令、快捷命令和控制台。
+- before 问题：Round 02 仍偏骨架，notes 缺少 Web UI 操作路径，用户不知道如何只靠页面完成重定向、管道、脚本参数和本地 Git 练习。
+- before 问题：Round 02 脚本包含 `read` 等待，并会连带标记自测、小抄和验收，容易把“用户理解”误写成“系统已完成”。
+- before 问题：`.sh` 自测任务会显示“运行”，用户可能误以为点击脚本即可完成自测。
+- before 问题：浏览器终端在页面底部，但没有绑定具体任务，也不会把命令历史关联到任务。
+- 修复：Round 02 notes 和 final 小抄补齐 Web UI 学习路径、手敲命令、自测标准和本地 Git 边界。
+- 修复：Round 02 脚本改为非交互运行，只自动记录脚本实际完成的练习任务；自测、小抄和验收仍由用户手动完成并记录。
+- 修复：前端“运行”按钮仅对 `exercise` 类型显示；后端 `/api/tasks/<id>/run` 也拒绝非 `exercise`，返回 `task_not_runnable`。
+- 修复：工程实操练习 / 自测 / 产出任务新增“终端”按钮；点击后自动绑定当前任务并切换到对应 `~/cli-lab/roundN`。
+- 修复：终端命令历史新增 `task_id` 字段，用于回看命令属于哪个学习任务，但命令执行本身不等同于任务完成。
+- API 验证：`/api/terminal?cwd=~/round2` 返回 `~/round2`；执行 `pwd` 成功，日志写入 `task_id=r02-w1-ex1`；`POST /api/tasks/r02-w1-self/run` 返回 `task_not_runnable`。
+- UI 验证：真实 Chrome 页面可展开 Round 02；练习任务显示“运行 / 终端 / 记录 / 完成”；点击“终端”后终端当前任务显示“练习：覆盖与追加”，工作目录显示 `~/round2`；UI 输入 `pwd` 输出 `/Users/alalapi/cli-lab/round2`。
+- 静态语义验证：脚本型 `exercise` 任务共 101 个，脚本型非 `exercise` 任务共 66 个；运行按钮谓词为 `task.type === "exercise"`。
+- 清理：本轮 API/UI 测试产生的进度、动作、反馈和终端历史已从测试前快照恢复。
 
 ## 验证命令
 

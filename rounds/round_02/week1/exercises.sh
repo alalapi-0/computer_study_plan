@@ -12,15 +12,18 @@
 #   r02-w1-self  → 第1周自测
 # =============================================================
 
+set -e
+
 REPO_ROOT="$(cd "$(dirname "$0")/../../.." && pwd)"
 
 mark() {
   bash "$REPO_ROOT/mark_done.sh" "$1"
 }
 
-echo ">>> 准备工作：创建 ~/cli-lab/round2/week1"
-mkdir -p ~/cli-lab/round2/week1
-cd ~/cli-lab/round2/week1
+LAB="$HOME/cli-lab/round2/week1/script_lab"
+echo ">>> 准备工作：创建 $LAB"
+mkdir -p "$LAB"
+cd "$LAB"
 
 echo "========================================"
 echo "练习 1：覆盖与追加"
@@ -63,12 +66,13 @@ cat errors_only.txt
 cat info_count.txt
 mark r02-w1-ex3
 
-echo "========================================"
-echo "第 1 周自测"
-echo "========================================"
-echo "请手敲一条命令：grep \"error\" app.log | wc -l"
-echo "完成后按回车继续..."
-read
-mark r02-w1-self
+cat > next_steps.txt <<'EOF'
+Week 1 下一步：
+- 在 Web UI 练习终端中进入 ~/cli-lab/round2/week1/self_check。
+- 自己创建 app.log。
+- 手敲 grep "error" app.log | wc -l。
+- 确认能解释 >、>>、| 后，再手动标记 r02-w1-self。
+EOF
 
-echo "🎉 Round 02 Week 1 完成。阅读任务请手动打卡：bash mark_done.sh r02-w1-read"
+echo "脚本已完成 r02-w1-ex1 / r02-w1-ex2 / r02-w1-ex3。"
+echo "阅读任务与自测任务请在 Web UI 中确认后手动完成。"

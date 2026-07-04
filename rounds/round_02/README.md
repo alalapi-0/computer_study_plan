@@ -1,6 +1,6 @@
 # Round 02 · 学习目录
 
-这个目录是 Round 02（Shell、管道、Git 最小工作流）的展开内容。
+这个目录是 Round 02（Shell、管道、Git 最小工作流）的 Web UI 可练习版本。用户可以在 `progress.html` 中阅读任务、运行受控练习脚本、使用内置练习终端完成管道 / 脚本 / Git 本地练习，并在自测后通过页面按钮记录进度。
 
 > **仓库根**（进度、`mark_done.sh`）：`~/PycharmProjects/computer_study_plan`  
 > **练习沙盒**（手敲命令）：`~/cli-lab/round2`  
@@ -25,16 +25,17 @@ round_02/
    └─ command_cheatsheet.md
 ```
 
-## 使用方式
+## Web UI 使用方式
 
-1. 每周先阅读 `weekN/notes.md`，再执行 `weekN/exercises.sh`。
-2. 脚本会自动调用 `mark_done.sh` 标记自动任务。
-3. 阅读任务请手动打卡，例如：`bash mark_done.sh r02-w1-read`。
+1. 打开本仓库的本地 Web UI，选择 `Round 02 · Shell、管道、Git 最小工作流`。
+2. 先读每周 `notes.md`，确认理解后手动完成阅读任务。
+3. 对练习任务点击页面中的运行按钮，脚本会在 `~/cli-lab/round2` 下的自动练习目录中准备材料并记录对应练习任务。
+4. 对自测任务，使用页面里的“练习终端”手敲命令；确认自己能解释输出后，再手动点击完成。
+5. 最终验收里，综合脚本只记录 `r02-fin-comp`；命令小抄和验收项仍需要用户确认后手动完成。
 
-## 进度追踪
+## 终端练习边界
 
-```bash
-cd ~/PycharmProjects/computer_study_plan
-bash mark_done.sh
-open progress.html
-```
+- 练习终端默认映射到 `~/cli-lab`，Round 02 的主要目录是 `~/cli-lab/round2`。
+- 可以练习 `echo`、`cat`、`grep`、`wc`、`sort`、`uniq`、`bash`、`git init/status/add/commit/log/diff`、重定向和管道。
+- 浏览器终端不允许 `;`、`&&`、`||` 这类命令串联；需要把每一步拆成一条命令。
+- Git 只练本地仓库，不做 `clone`、`pull`、`push`、`remote` 或任何远程操作。

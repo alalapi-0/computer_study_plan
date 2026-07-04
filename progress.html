@@ -210,19 +210,119 @@
       background: #0e1714;
       color: #d9f4e9;
       font-family: "SF Mono","Fira Code",ui-monospace,monospace;
+      min-height: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+    .terminal-workspace {
+      display: grid;
+      grid-template-columns: minmax(240px, 0.42fr) minmax(0, 1fr);
+      gap: 0.9rem;
+      align-items: stretch;
+    }
+    .terminal-side-panel {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: #f8fafc;
+      padding: 0.9rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+      min-width: 0;
+    }
+    .terminal-panel-title {
+      font-size: 0.78rem;
+      font-weight: 800;
+      color: var(--ink, var(--text));
+      text-transform: uppercase;
+      letter-spacing: 0;
+    }
+    .terminal-context {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: #fff;
+      padding: 0.75rem;
+      display: grid;
+      gap: 0.45rem;
+    }
+    .terminal-context-title {
+      color: var(--ink, var(--text));
+      font-size: 0.9rem;
+      font-weight: 800;
+      line-height: 1.35;
+    }
+    .terminal-context-meta,
+    .terminal-context-path {
+      color: var(--text-muted);
+      font-size: 0.74rem;
+      line-height: 1.5;
+      word-break: break-word;
+    }
+    .terminal-context-path {
+      font-family: "SF Mono","Fira Code",ui-monospace,monospace;
+      background: #eef2ff;
+      color: var(--accent);
+      padding: 0.22rem 0.38rem;
+      border-radius: 6px;
+    }
+    .terminal-context-actions {
+      display: flex;
+      gap: 0.4rem;
+      flex-wrap: wrap;
+      margin-top: 0.2rem;
+    }
+    .terminal-state-list {
+      display: grid;
+      gap: 0.55rem;
+    }
+    .terminal-state-item {
+      display: grid;
+      gap: 0.22rem;
+      font-size: 0.74rem;
+      color: var(--text-muted);
+    }
+    .terminal-state-item code {
+      color: var(--ink, var(--text));
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 0.25rem 0.4rem;
+      white-space: normal;
+      word-break: break-word;
+    }
+    .terminal-quick {
+      display: flex;
+      gap: 0.4rem;
+      flex-wrap: wrap;
+    }
+    .terminal-chip {
+      border: 1px solid rgba(15,118,110,0.35);
+      background: #dff3ee;
+      color: #0f5f58;
+      border-radius: 8px;
+      padding: 0.34rem 0.52rem;
+      font-family: "SF Mono","Fira Code",ui-monospace,monospace;
+      font-size: 0.72rem;
+      font-weight: 800;
+      cursor: pointer;
     }
     .terminal-output {
-      min-height: 240px;
-      max-height: 360px;
+      min-height: 300px;
+      max-height: 520px;
       overflow: auto;
       padding: 0.85rem;
       font-size: 0.78rem;
       line-height: 1.55;
       white-space: pre-wrap;
       word-break: break-word;
+      flex: 1;
     }
     .terminal-line.muted { color: #94aca4; }
     .terminal-entry { margin-bottom: 0.75rem; }
+    .terminal-entry.system .terminal-command {
+      color: #fde68a;
+      font-weight: 700;
+    }
     .terminal-command { color: #9be7d2; font-weight: 700; }
     .terminal-output pre {
       margin: 0.25rem 0 0;
@@ -370,6 +470,8 @@
     .task-btn.read:hover { background: rgba(78,205,196,0.1); }
     .task-btn.run { border-color: var(--pink); color: var(--pink); }
     .task-btn.run:hover { background: rgba(190,18,60,0.08); }
+    .task-btn.terminal { border-color: var(--accent); color: var(--accent); background: #f8fbff; }
+    .task-btn.terminal:hover { background: rgba(37,99,235,0.08); }
     .task-btn.record { border-color: var(--accent); color: var(--accent); }
     .task-btn.record:hover { background: rgba(37,99,235,0.08); }
     .task-feedback {
@@ -1040,6 +1142,7 @@
     .task-btn:hover { background: var(--card-hover); border-color: var(--border-strong); }
     .task-btn.read { color: var(--accent2); border-color: rgba(15,118,110,0.45); }
     .task-btn.run { color: var(--pink); border-color: rgba(190,18,60,0.38); background: #fff8fa; }
+    .task-btn.terminal { color: var(--accent); border-color: rgba(37,99,235,0.38); background: #f8fbff; }
     .task-btn.record { color: var(--accent); border-color: rgba(37,99,235,0.38); }
     .task-btn.done { color: var(--green); border-color: rgba(21,128,61,0.45); background: #f4fbf7; }
     .task-btn.undo { color: var(--yellow); border-color: rgba(180,83,9,0.45); background: #fffaf0; }
@@ -1142,6 +1245,7 @@
       }
       .config-grid,
       .lane-grid { grid-template-columns: 1fr; }
+      .terminal-workspace { grid-template-columns: 1fr; }
       .lane-tabs,
       .round-tabs {
         flex-wrap: nowrap;
@@ -1322,19 +1426,46 @@
 <div class="card" id="terminal">
   <h2>练习终端</h2>
   <div class="card-sub">浏览器映射到本机 <code>~/cli-lab</code> 沙盒。适合练习 `pwd`、`ls`、`cd`、`mkdir`、`touch`、`cat`、管道、重定向和 Git 最小流程；危险命令、远程命令和仓库外路径会被拦截。</div>
-  <div class="terminal-box">
-    <div class="terminal-output" id="terminalOutput">
-      <div class="terminal-line muted">正在连接练习终端…</div>
+  <div class="terminal-workspace">
+    <div class="terminal-side-panel">
+      <div>
+        <div class="terminal-panel-title">当前任务</div>
+        <div class="terminal-context" id="terminalContext">
+          <div class="terminal-context-title">未绑定任务</div>
+          <div class="terminal-context-meta">从任务行点击“终端”，这里会切到对应 Round 的沙盒目录。</div>
+        </div>
+      </div>
+      <div class="terminal-state-list">
+        <div class="terminal-state-item">
+          <span>工作目录</span>
+          <code id="terminalCwd">~</code>
+        </div>
+        <div class="terminal-state-item">
+          <span>允许命令</span>
+          <code id="terminalAllowed">等待连接</code>
+        </div>
+      </div>
+      <div>
+        <div class="terminal-panel-title">快捷命令</div>
+        <div class="terminal-quick" id="terminalQuickCommands"></div>
+      </div>
     </div>
-    <div class="terminal-input-row">
-      <span class="terminal-prompt" id="terminalPrompt">~ $</span>
-      <input id="terminalInput" class="terminal-input" spellcheck="false" autocomplete="off" placeholder="输入命令后按 Enter，例如：pwd" />
-      <button class="task-btn run" type="button" id="terminalRun">执行</button>
+    <div>
+      <div class="terminal-box">
+        <div class="terminal-output" id="terminalOutput">
+          <div class="terminal-line muted">正在连接练习终端…</div>
+        </div>
+        <div class="terminal-input-row">
+          <span class="terminal-prompt" id="terminalPrompt">~ $</span>
+          <input id="terminalInput" class="terminal-input" spellcheck="false" autocomplete="off" placeholder="输入命令后按 Enter，例如：pwd" />
+          <button class="task-btn run" type="button" id="terminalRun">执行</button>
+        </div>
+      </div>
+      <div class="terminal-tools">
+        <button class="btn" type="button" id="terminalReset">回到 ~/cli-lab</button>
+        <button class="btn" type="button" id="terminalClear">清屏</button>
+      </div>
     </div>
-  </div>
-  <div class="terminal-tools">
-    <button class="btn" type="button" id="terminalReset">回到 ~/cli-lab</button>
-    <button class="btn" type="button" id="terminalClear">清屏</button>
   </div>
 </div>
 
@@ -1394,9 +1525,9 @@
   </div>
 </div>
 
-<script src="progress_data.js?v=20260704d"></script>
-<script src="rounds_data.js?v=20260704d"></script>
-<script src="progress_ui.js?v=20260704d"></script>
+<script src="progress_data.js?v=20260704e"></script>
+<script src="rounds_data.js?v=20260704e"></script>
+<script src="progress_ui.js?v=20260704e"></script>
 <script>
 const ROUNDS = window.ROUNDS_DATA || [];
 
@@ -1511,6 +1642,7 @@ function render() {
   renderWeak();
   renderLaneTabs();
   renderRoundsForLane(activeLane);
+  renderTerminal();
 }
 
 function canOpenFile(file) {
@@ -1564,6 +1696,7 @@ function renderContinue() {
         <div class="continue-actions">
           ${canRead ? `<button type="button" class="task-btn read task-open" data-file="${task.file}" data-title="${task.title}">${fileLabel(task.file, task.type)}</button>` : ""}
           ${taskRunButton(task)}
+          ${taskTerminalButton(task)}
           ${taskRecordButton(task.id)}
           ${taskActionButtons(task.id, false)}
         </div>
@@ -1768,6 +1901,7 @@ function renderRoundsForLane(laneKey) {
           <div class="task-actions">
             ${canRead ? `<button type="button" class="task-btn read task-open" data-file="${task.file}" data-title="${task.title}">打开</button>` : ""}
             ${taskRunButton(task)}
+            ${taskTerminalButton(task)}
             ${taskRecordButton(task.id)}
             ${taskActionButtons(task.id, done)}
           </div>

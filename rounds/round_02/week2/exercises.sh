@@ -12,14 +12,17 @@
 #   r02-w2-self  → 第2周自测
 # =============================================================
 
+set -e
+
 REPO_ROOT="$(cd "$(dirname "$0")/../../.." && pwd)"
 
 mark() {
   bash "$REPO_ROOT/mark_done.sh" "$1"
 }
 
-mkdir -p ~/cli-lab/round2/week2
-cd ~/cli-lab/round2/week2
+LAB="$HOME/cli-lab/round2/week2/script_lab"
+mkdir -p "$LAB"
+cd "$LAB"
 
 echo "========================================"
 echo "练习 4：count_errors.sh"
@@ -71,12 +74,24 @@ EOF
 bash show_args.sh aaa bbb ccc
 mark r02-w2-ex6
 
-echo "========================================"
-echo "第 2 周自测"
-echo "========================================"
-echo "请独立运行：bash show_args.sh one two"
-echo "完成后按回车继续..."
-read
-mark r02-w2-self
+cat > check_file.sh <<'EOF'
+#!/bin/bash
+if grep "error" app.log > /dev/null 2> /dev/null
+then
+  echo "has error"
+else
+  echo "no error"
+fi
+EOF
+bash check_file.sh
 
-echo "🎉 Round 02 Week 2 完成。阅读任务请手动打卡：bash mark_done.sh r02-w2-read"
+cat > next_steps.txt <<'EOF'
+Week 2 下一步：
+- 在 Web UI 练习终端中进入 ~/cli-lab/round2/week2/self_check。
+- 用 printf 写一个 show_args_self.sh。
+- 运行 bash show_args_self.sh one two。
+- 确认能解释 $1、$@、$# 后，再手动标记 r02-w2-self。
+EOF
+
+echo "脚本已完成 r02-w2-ex4 / r02-w2-ex5 / r02-w2-ex6。"
+echo "阅读任务与自测任务请在 Web UI 中确认后手动完成。"

@@ -12,18 +12,23 @@
 #   r02-w3-self  → 第3周自测
 # =============================================================
 
+set -e
+
 REPO_ROOT="$(cd "$(dirname "$0")/../../.." && pwd)"
 
 mark() {
   bash "$REPO_ROOT/mark_done.sh" "$1"
 }
 
-mkdir -p ~/cli-lab/round2/week3/git_lab
-cd ~/cli-lab/round2/week3/git_lab
+LAB="$HOME/cli-lab/round2/week3/git_lab_auto"
+rm -rf "$LAB"
+mkdir -p "$LAB"
+cd "$LAB"
 
-if [ ! -d .git ]; then
-  git init
-fi
+git init -b main >/dev/null 2>&1 || git init >/dev/null
+git config user.name "Round 02 Bot"
+git config user.email "round02@example.local"
+git config commit.gpgsign false
 
 echo "========================================"
 echo "练习 7：首次提交"
@@ -55,12 +60,12 @@ git commit -m "add notes"
 git log --oneline -n 5
 mark r02-w3-ex9
 
-echo "========================================"
-echo "第 3 周自测"
-echo "========================================"
-echo "请手敲并解释：git status / git log --oneline"
-echo "完成后按回车继续..."
-read
-mark r02-w3-self
+cat > next_steps.txt <<'EOF'
+Week 3 下一步：
+- 在 Web UI 练习终端中进入 ~/cli-lab/round2/week3/git_lab_manual。
+- 自己完成 git init / status / add / commit / log。
+- 确认能解释 status 与 log 后，再手动标记 r02-w3-self。
+EOF
 
-echo "🎉 Round 02 Week 3 完成。阅读任务请手动打卡：bash mark_done.sh r02-w3-read"
+echo "脚本已完成 r02-w3-ex7 / r02-w3-ex8 / r02-w3-ex9。"
+echo "阅读任务与自测任务请在 Web UI 中确认后手动完成。"

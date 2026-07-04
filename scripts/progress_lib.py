@@ -239,6 +239,8 @@ def runnable_task_execution_plan(task_id: str, root: Path | None = None) -> dict
     if not meta:
         raise ValueError("task_metadata_not_found")
     task = meta["task"]
+    if task.get("type") != "exercise":
+        raise ValueError("task_not_runnable")
     file_path = str(task.get("file") or "")
     script, round_num = safe_runnable_script(file_path, root)
     sandbox = Path.home() / "cli-lab" / f"round{round_num}"
@@ -502,6 +504,7 @@ def append_terminal_command_event(
     cwd: Path,
     result: str,
     root: Path | None = None,
+    task_id: str = "",
     returncode: int | None = None,
     stdout: str = "",
     stderr: str = "",
@@ -516,6 +519,7 @@ def append_terminal_command_event(
         "cwd": str(cwd),
         "command": command,
         "result": result,
+        "task_id": task_id,
         "returncode": returncode,
         "duration_ms": duration_ms,
         "stdout_excerpt": output_excerpt(stdout, MAX_TERMINAL_OUTPUT_CHARS),
@@ -561,7 +565,12 @@ def terminal_state(cwd: str | None = None) -> dict[str, Any]:
     }
 
 
-def run_terminal_command(command: str, cwd: str | None = None, root: Path | None = None) -> dict[str, Any]:
+def run_terminal_command(
+    command: str,
+    cwd: str | None = None,
+    root: Path | None = None,
+    task_id: str = "",
+) -> dict[str, Any]:
     root = root or repo_root()
     current = clamp_terminal_cwd(cwd)
     command = command.strip()
@@ -592,6 +601,7 @@ def run_terminal_command(command: str, cwd: str | None = None, root: Path | None
             new_cwd,
             "ok",
             root=root,
+            task_id=task_id,
             returncode=0,
             stdout="",
             stderr="",
@@ -658,6 +668,7 @@ def run_terminal_command(command: str, cwd: str | None = None, root: Path | None
         current,
         result,
         root=root,
+        task_id=task_id,
         returncode=returncode,
         stdout=stdout,
         stderr=stderr,

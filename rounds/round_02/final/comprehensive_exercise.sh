@@ -11,14 +11,20 @@
 #   r02-fin-acc2  → 验收2：完成 3 次提交并查看历史
 # =============================================================
 
+set -e
+
 REPO_ROOT="$(cd "$(dirname "$0")/../../.." && pwd)"
 
 mark() {
   bash "$REPO_ROOT/mark_done.sh" "$1"
 }
 
-mkdir -p ~/cli-lab/round2/final_pipeline_lab
-cd ~/cli-lab/round2/final_pipeline_lab
+PIPELINE_LAB="$HOME/cli-lab/round2/final_pipeline_lab_auto"
+GIT_LAB="$HOME/cli-lab/round2/final_git_lab_auto"
+
+rm -rf "$PIPELINE_LAB" "$GIT_LAB"
+mkdir -p "$PIPELINE_LAB"
+cd "$PIPELINE_LAB"
 
 cat > app.log <<'EOF'
 error: login failed
@@ -37,22 +43,13 @@ cat errors_only.txt
 echo ">>> error_count.txt"
 cat error_count.txt
 
-mark r02-fin-comp
+mkdir -p "$GIT_LAB"
+cd "$GIT_LAB"
+git init -b main >/dev/null 2>&1 || git init >/dev/null
+git config user.name "Round 02 Bot"
+git config user.email "round02@example.local"
+git config commit.gpgsign false
 
-echo "请手动完成并检查 rounds/round_02/final/command_cheatsheet.md 后按回车..."
-read
-mark r02-fin-sheet
-
-echo "请口头回答验收问题后按回车："
-echo "1) >、>>、| 有什么区别？"
-read
-mark r02-fin-acc1
-
-mkdir -p ~/cli-lab/round2/final_git_lab
-cd ~/cli-lab/round2/final_git_lab
-if [ ! -d .git ]; then
-  git init
-fi
 echo "# final git lab" > README.md
 git add README.md
 git commit -m "init"
@@ -64,8 +61,7 @@ git add todo.txt
 git commit -m "add todo"
 git log --oneline -n 5
 
-echo "请确认你能解释这 3 次提交后按回车..."
-read
-mark r02-fin-acc2
+mark r02-fin-comp
 
-echo "🎉 Round 02 Final 完成。"
+echo "脚本已完成综合练习 r02-fin-comp。"
+echo "下一步：在 Web UI 中检查 command_cheatsheet.md，确认能解释重定向/管道和 3 次 Git 提交后，手动标记 r02-fin-sheet / r02-fin-acc1 / r02-fin-acc2。"

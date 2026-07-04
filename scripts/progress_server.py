@@ -139,6 +139,7 @@ class ProgressRequestHandler(SimpleHTTPRequestHandler):
                     command=str(payload.get("command", ""))[:500],
                     cwd=str(payload.get("cwd", ""))[:500],
                     root=self.repo_root,
+                    task_id=str(payload.get("task_id", ""))[:120],
                 )
                 self.end_json(HTTPStatus.OK, {"ok": True, "terminal": result})
             except ValueError as exc:

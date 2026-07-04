@@ -5,6 +5,18 @@ let eventMap = {};
 let apiReady = false;
 let terminalHistory = [];
 let terminalCwd = "";
+let terminalCwdDisplay = "~";
+let terminalStateInfo = null;
+let activeTerminalTaskId = "";
+
+const TERMINAL_QUICK_COMMANDS = [
+  "pwd",
+  "ls",
+  "ls -la",
+  "cat next_steps.txt",
+  "git status",
+  "git log --oneline --max-count=5",
+];
 
 async function detectApi() {
   if (window.location.protocol === "file:") {
@@ -103,16 +115,88 @@ function terminalPrompt(cwdDisplay) {
   return `${cwdDisplay || "~"} $`;
 }
 
+function terminalTaskContext() {
+  if (!activeTerminalTaskId) return null;
+  return taskMeta(activeTerminalTaskId);
+}
+
+function terminalCwdForRound(round) {
+  const match = String(round?.id || "").match(/round_(\d{2})/);
+  if (!match) return "~";
+  return `~/round${Number(match[1])}`;
+}
+
+function terminalTaskTarget(taskId) {
+  const meta = taskMeta(taskId);
+  if (!meta) return "~";
+  return terminalCwdForRound(meta.round);
+}
+
+function taskUsesTerminal(task) {
+  if (!task) return false;
+  const meta = taskMeta(task.id);
+  if (meta?.round?.lane !== "engineering") return false;
+  return ["exercise", "test", "output"].includes(task.type);
+}
+
+function renderTerminalContext() {
+  const contextEl = document.getElementById("terminalContext");
+  const quickEl = document.getElementById("terminalQuickCommands");
+  const cwdEl = document.getElementById("terminalCwd");
+  const allowedEl = document.getElementById("terminalAllowed");
+  if (cwdEl) cwdEl.textContent = terminalCwdDisplay || "~";
+  if (allowedEl) {
+    const allowed = terminalStateInfo?.allowed || [];
+    allowedEl.textContent = allowed.length
+      ? allowed.slice(0, 18).join(" ")
+      : "等待连接";
+  }
+  if (quickEl) {
+    quickEl.innerHTML = TERMINAL_QUICK_COMMANDS.map((cmd) => (
+      `<button type="button" class="terminal-chip" data-command="${escapeHtml(cmd)}">${escapeHtml(cmd)}</button>`
+    )).join("");
+    quickEl.querySelectorAll(".terminal-chip").forEach((btn) => {
+      btn.addEventListener("click", () => runTerminalCommand(btn.getAttribute("data-command") || ""));
+    });
+  }
+  if (!contextEl) return;
+  const meta = terminalTaskContext();
+  if (!meta) {
+    contextEl.innerHTML = `
+      <div class="terminal-context-title">未绑定任务</div>
+      <div class="terminal-context-meta">从任务行点击“终端”，这里会切到对应 Round 的沙盒目录。</div>
+    `;
+    return;
+  }
+  const done = isTaskDone(meta.task.id);
+  const canRead = canOpenFile(meta.task.file);
+  contextEl.innerHTML = `
+    <div class="terminal-context-title">${escapeHtml(meta.task.title)}</div>
+    <div class="terminal-context-meta">${escapeHtml(meta.round.title)} / ${escapeHtml(meta.week.title)}</div>
+    <div class="terminal-context-path">${escapeHtml(meta.task.file || "手动练习")}</div>
+    <div class="terminal-context-actions">
+      ${canRead ? `<button type="button" class="task-btn read task-open" data-file="${escapeHtml(meta.task.file)}" data-title="${escapeHtml(meta.task.title)}">打开资料</button>` : ""}
+      ${taskRecordButton(meta.task.id)}
+      ${taskActionButtons(meta.task.id, done)}
+    </div>
+  `;
+  bindTaskActions(contextEl);
+}
+
 function renderTerminal() {
   const output = document.getElementById("terminalOutput");
   const prompt = document.getElementById("terminalPrompt");
   if (!output || !prompt) return;
-  prompt.textContent = terminalPrompt(terminalHistory.length ? terminalHistory[terminalHistory.length - 1].cwd_display : "~");
+  prompt.textContent = terminalPrompt(terminalCwdDisplay || "~");
+  renderTerminalContext();
   if (!terminalHistory.length) {
-    output.innerHTML = `<div class="terminal-line muted">终端已映射到 <code>~/cli-lab</code> 沙盒。试试 <code>pwd</code>、<code>mkdir round0</code>、<code>ls</code>。</div>`;
+    output.innerHTML = `<div class="terminal-line muted">终端已映射到 <code>~/cli-lab</code> 沙盒。任务行的“终端”会把这里切到对应 Round 目录。</div>`;
     return;
   }
   output.innerHTML = terminalHistory.map((entry) => {
+    if (entry.kind === "system") {
+      return `<div class="terminal-entry system"><div class="terminal-command">${escapeHtml(entry.message)}</div></div>`;
+    }
     if (entry.kind === "error") {
       return `<div class="terminal-entry"><div class="terminal-command">${escapeHtml(entry.prompt)} ${escapeHtml(entry.command)}</div><pre class="terminal-stderr">${escapeHtml(entry.error)}</pre></div>`;
     }
@@ -137,11 +221,52 @@ async function loadTerminalState() {
     const res = await fetch(`/api/terminal?cwd=${encodeURIComponent(terminalCwd || "")}&_=${Date.now()}`);
     const data = await res.json();
     if (!res.ok) throw new Error(data.error || "terminal_state_failed");
+    terminalStateInfo = data.terminal || null;
     terminalCwd = data.terminal.cwd || "";
+    terminalCwdDisplay = data.terminal.cwd_display || "~";
     renderTerminal();
   } catch (err) {
     terminalHistory.push({ kind: "error", prompt: "~ $", command: "", error: err.message, cwd_display: "~" });
     renderTerminal();
+  }
+}
+
+async function setTerminalCwd(cwd) {
+  if (!apiReady) {
+    showToast("请先运行 python3 scripts/progress_server.py 启动服务", "warn");
+    return null;
+  }
+  const res = await fetch(`/api/terminal?cwd=${encodeURIComponent(cwd || "")}&_=${Date.now()}`);
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || "terminal_state_failed");
+  terminalStateInfo = data.terminal || null;
+  terminalCwd = data.terminal.cwd || "";
+  terminalCwdDisplay = data.terminal.cwd_display || "~";
+  renderTerminal();
+  return data.terminal;
+}
+
+async function openTaskTerminal(taskId) {
+  if (!apiReady) {
+    showToast("请先运行 python3 scripts/progress_server.py 启动服务", "warn");
+    return;
+  }
+  const meta = taskMeta(taskId);
+  if (!meta) return;
+  activeTerminalTaskId = taskId;
+  try {
+    const target = terminalTaskTarget(taskId);
+    const state = await setTerminalCwd(target);
+    terminalHistory.push({
+      kind: "system",
+      message: `已绑定任务：${meta.task.title}；工作目录 ${state?.cwd_display || target}`,
+      cwd_display: state?.cwd_display || "~",
+    });
+    renderTerminal();
+    document.getElementById("terminal")?.scrollIntoView({ behavior: "smooth", block: "start" });
+    setTimeout(() => document.getElementById("terminalInput")?.focus(), 220);
+  } catch (err) {
+    showToast(err.message || "终端切换失败", "error");
   }
 }
 
@@ -162,12 +287,13 @@ async function runTerminalCommand(command) {
         "Accept": "application/json",
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ command: value, cwd: terminalCwd }),
+      body: JSON.stringify({ command: value, cwd: terminalCwd, task_id: activeTerminalTaskId }),
     });
     const data = await res.json();
     if (!res.ok) throw new Error(data.error || "terminal_run_failed");
     const term = data.terminal || {};
     terminalCwd = term.cwd || terminalCwd;
+    terminalCwdDisplay = term.cwd_display || terminalCwdDisplay;
     if (term.clear) {
       terminalHistory = [];
     } else {
@@ -188,7 +314,7 @@ async function runTerminalCommand(command) {
       command: value,
       prompt: currentPrompt,
       error: err.message,
-      cwd_display: "~",
+      cwd_display: terminalCwdDisplay || "~",
     });
     renderTerminal();
     showToast("命令被拦截或执行失败", "warn");
@@ -202,6 +328,7 @@ async function runTerminalCommand(command) {
 }
 
 async function resetTerminal() {
+  activeTerminalTaskId = "";
   terminalCwd = "";
   await runTerminalCommand("cd ~");
 }
@@ -246,12 +373,17 @@ function taskRecordButton(taskId) {
 }
 
 function isRunnableTask(task) {
-  return !!(task && /\.(sh|py)$/i.test(task.file || "") && ["exercise", "test"].includes(task.type));
+  return !!(task && /\.(sh|py)$/i.test(task.file || "") && task.type === "exercise");
 }
 
 function taskRunButton(task) {
   if (!apiReady || !isRunnableTask(task)) return "";
   return `<button type="button" class="task-btn run task-run" data-task="${task.id}">运行</button>`;
+}
+
+function taskTerminalButton(task) {
+  if (!apiReady || !taskUsesTerminal(task)) return "";
+  return `<button type="button" class="task-btn terminal task-terminal" data-task="${task.id}">终端</button>`;
 }
 
 async function postTaskRun(taskId) {
@@ -320,6 +452,14 @@ function bindTaskActions(container) {
       const id = btn.getAttribute("data-task");
       btn.disabled = true;
       await postTaskRun(id);
+      btn.disabled = false;
+    });
+  });
+  container.querySelectorAll(".task-terminal").forEach((btn) => {
+    btn.addEventListener("click", async (e) => {
+      e.stopPropagation();
+      btn.disabled = true;
+      await openTaskTerminal(btn.getAttribute("data-task"));
       btn.disabled = false;
     });
   });
