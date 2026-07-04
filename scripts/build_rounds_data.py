@@ -27,6 +27,7 @@ DIFFICULTY_BY_ROUND = {
     13: "⭐⭐⭐☆☆",
     14: "⭐⭐⭐☆☆",
     15: "⭐⭐⭐☆☆",
+    16: "⭐⭐⭐⭐☆",
 }
 
 
@@ -862,6 +863,87 @@ def build_standard_round(root: Path, num: int) -> dict | None:
                     ],
                 },
                 {"id": "round15-final", "title": "最终验收", "tasks": final_tasks},
+            ],
+        }
+
+    if num == 16:
+        final_tasks = []
+        if comp:
+            final_tasks.append(
+                {
+                    "id": "r16-fin-comp",
+                    "type": "exercise",
+                    "title": "综合练习：完整 API/Data Layer 项目骨架",
+                    "file": comp,
+                }
+            )
+        if sheet:
+            final_tasks.append(
+                {
+                    "id": "r16-fin-sheet",
+                    "type": "output",
+                    "title": "产出：完成 Round 16 API 与数据层小抄",
+                    "file": sheet,
+                }
+            )
+        final_tasks.append(
+            {
+                "id": "r16-fin-acc1",
+                "type": "test",
+                "title": "验收：解释 API 层、核心逻辑层、SQLite 数据层和错误合同",
+                "file": "round_16.md",
+            }
+        )
+        return {
+            "id": "round_16",
+            "title": round_title(root, num),
+            "lane": "engineering",
+            "difficulty": DIFFICULTY_BY_ROUND.get(num, "⭐⭐⭐⭐☆"),
+            "duration": "3 周",
+            "weeks": [
+                {
+                    "id": "round16-week1",
+                    "title": "第 1 周：POST /run 接真实逻辑",
+                    "tasks": [
+                        {
+                            "id": "r16-w1-read",
+                            "type": "reading",
+                            "title": "阅读：API 主链与 SQLite 写入",
+                            "file": "rounds/round_16/week1/notes.md",
+                        },
+                        {"id": "r16-w1-ex1", "type": "exercise", "title": "练习：生成 POST /run + SQLite 写入链路", "file": ex1},
+                        {"id": "r16-w1-self", "type": "test", "title": "自测：自己写最小 SQLite 写入脚本", "file": ex1},
+                    ],
+                },
+                {
+                    "id": "round16-week2",
+                    "title": "第 2 周：读接口与上传入口",
+                    "tasks": [
+                        {
+                            "id": "r16-w2-read",
+                            "type": "reading",
+                            "title": "阅读：GET /runs、详情查询与 UploadFile",
+                            "file": "rounds/round_16/week2/notes.md",
+                        },
+                        {"id": "r16-w2-ex2", "type": "exercise", "title": "练习：生成 GET /runs 与上传接口", "file": ex2},
+                        {"id": "r16-w2-self", "type": "test", "title": "自测：自己写列表/详情查询", "file": ex2},
+                    ],
+                },
+                {
+                    "id": "round16-week3",
+                    "title": "第 3 周：错误响应与 API 测试",
+                    "tasks": [
+                        {
+                            "id": "r16-w3-read",
+                            "type": "reading",
+                            "title": "阅读：HTTPException、错误合同与 TestClient",
+                            "file": "rounds/round_16/week3/notes.md",
+                        },
+                        {"id": "r16-w3-ex3", "type": "exercise", "title": "练习：生成错误合同与 TestClient 示例", "file": ex3},
+                        {"id": "r16-w3-self", "type": "test", "title": "自测：自己写错误状态码映射", "file": ex3},
+                    ],
+                },
+                {"id": "round16-final", "title": "最终验收", "tasks": final_tasks},
             ],
         }
 

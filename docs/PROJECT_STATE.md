@@ -1558,3 +1558,38 @@
 - 本轮 API/UI 验证产生的进度、动作、反馈和终端历史均已从测试前快照恢复。
 - 未引入大型新依赖；未安装 FastAPI / uvicorn；未启动长期服务。
 - 自动脚本只写入 `~/cli-lab/round15` 沙盒；生成的 `requirements.txt` 是学习产物，不改变仓库运行依赖。
+
+## 59. 2026-07-04 TASK-RR-47 Round 16 内容填充与 API 数据层结合练习
+
+### 59.1 本轮修改
+
+- `rounds/round_16/README.md`：从“最小实操骨架”更新为 Web UI 可练习说明，明确页面路径、沙盒产物、依赖边界和外链策略。
+- `rounds/round_16/week1|week2|week3/notes.md`：补齐 POST `/run` 接真实逻辑、SQLite 记录、GET 列表/详情、上传入口、错误响应、TestClient 示例的学习步骤、自测命令和完成标准。
+- `rounds/round_16/week1|week2|week3/exercises.py`：改为默认可非交互运行，自动生成 FastAPI 形状代码、SQLite demo、上传 route、错误合同、静态检查报告和下一步提示，只自动记录对应练习任务。
+- `rounds/round_16/final/comprehensive_exercise.py`：改为 Web UI 默认可运行的 API/Data Layer 项目包练习，生成 `app/main.py`、routers、schemas、SQLite 数据层、`api_contract.json`、TestClient 示例和最终静态验收报告，只自动记录 `r16-fin-comp`。
+- `rounds/round_16/final/api_data_layer_cheatsheet.md`：补齐 Web UI 完成路径、请求主链、接口合同、错误约定和最小通过标准。
+- `round_16.md`：补充 Web UI 使用方式，明确自动练习只写入 `~/cli-lab/round16`。
+- `scripts/build_rounds_data.py` / `rounds_data.js`：将 Round 16 UI 任务标题从“练习1 / 练习2 / 练习3”改为用户能理解的动作标题，并同步四星难度。
+
+### 59.2 用户视角问题修复
+
+- Round 16 原 notes 太短，用户不知道如何只通过 Web UI 完成 API 与数据层结合练习。
+- Round 16 原脚本只写 marker 文件，没有形成可检查的路由、SQLite、上传、错误合同或测试产物。
+- Round 16 原任务标题过泛，用户无法判断分别要练 API 主链、读接口/上传还是错误测试。
+- 本轮明确不在 Web UI 里执行 `pip install fastapi uvicorn`，不启动长期运行服务；自动练习生成真实 FastAPI 代码形状，并用 Python 标准库做静态合同验证。
+
+### 59.3 验证
+
+- API 验证：`r16-w1-ex1`、`r16-w2-ex2`、`r16-w3-ex3`、`r16-fin-comp` 均可通过 `/api/tasks/<id>/run` 运行成功；`r16-w1-self/run` 返回 `task_not_runnable`。
+- 浏览器终端验证：`/api/terminal?cwd=~/round16` 返回 `~/round16`；终端 API 可在任务 `r16-w1-self` 下执行 `pwd` 和手写 `smoke.py`；`curl https://example.com` 返回 `terminal_command_blocked`。
+- 真实浏览器验证：`progress.html?round=round_16` 可选中 Round 16；12 个任务、4 个运行按钮、终端按钮均可见；Week 1 notes 可在阅读器中直接阅读；点击“运行”有确认框，结果弹窗显示“运行成功”和 `static_check_report.json`；终端输入 `pwd` 输出 `/Users/alalapi/cli-lab/round16`。
+- 文档阅读与外链验证：Week 1 notes 包含 Web UI 学习路径和浏览器终端自测；FastAPI Request Body 与 Python sqlite3 官方外链可定位并可跳转。
+- 移动端验证：390px 宽度无整页横向溢出。
+- 静态与数据验证：`build_rounds_data.py`、Python 语法编译、`check_protocol_sync.py`、`validate_learning_data.py`、`node --check progress_ui.js`、JSON 校验、`git diff --check`、`agent_gate.py --verify` 均通过。
+
+### 59.4 风险边界核对
+
+- 本轮 API/UI 验证产生的进度、动作、反馈和终端历史均已从测试前快照恢复。
+- 未引入大型新依赖；未安装 FastAPI / uvicorn；未创建后端服务。
+- 自动脚本只写入 `~/cli-lab/round16` 沙盒；生成的 `requirements.txt` 是学习产物，不改变仓库运行依赖。
+- `npm run check:mcp` 配置层通过；`npm run check:cursor-mcp` 显示当前线程部分 MCP 仍需 approval，因此本轮真实浏览器检查使用本机 Google Chrome + Playwright 完成。

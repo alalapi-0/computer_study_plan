@@ -259,6 +259,23 @@
 - 移动端验证：390px 宽度无整页横向溢出。
 - 清理：本轮 API/UI 测试产生的进度、动作、反馈和终端历史已从测试前快照恢复。
 
+## Round 16 内容填充与 API 数据层补测
+
+- before 问题：Round 16 仍是最小骨架，notes 只列目标和自查，用户不知道如何只通过 Web UI 完成 API 接真实逻辑、SQLite 记录、上传、错误处理和 API 测试。
+- before 问题：Round 16 三周脚本只写 marker 文件，点击“运行”不会生成可检查的 API/Data Layer 产物。
+- before 问题：Round 16 UI 任务标题仍是“基础练习 / 练习1 / 练习2 / 练习3”，用户无法判断每个任务实际要做什么。
+- 修复：Round 16 README、Week 1–3 notes、final 小抄已补齐 Web UI 学习路径、自动练习产物路径、浏览器终端自测命令、官方外链和验收标准。
+- 修复：Round 16 Python 脚本改为非交互运行，自动生成 FastAPI 形状代码、SQLite 数据层、上传入口、错误合同、TestClient 示例、静态检查报告和最终项目包；只自动记录脚本实际完成的练习任务。
+- 修复：`scripts/build_rounds_data.py` / `rounds_data.js` 为 Round 16 输出清晰任务标题，并将难度同步为 `⭐⭐⭐⭐☆`。
+- 边界：本轮不在 Web UI 中安装 FastAPI / uvicorn，不启动长期服务；自动练习生成真实代码形状，但用 Python 标准库做静态合同验证。
+- API 验证：`r16-w1-ex1`、`r16-w2-ex2`、`r16-w3-ex3`、`r16-fin-comp` 均可通过 `/api/tasks/<id>/run` 运行成功；`r16-w1-self/run` 返回 `task_not_runnable`。
+- 浏览器终端验证：`/api/terminal?cwd=~/round16` 返回 `~/round16`；终端 API 可绑定 `r16-w1-self` 并执行 `pwd` / 手写 `smoke.py`；`curl https://example.com` 返回 `terminal_command_blocked`。
+- UI 验证：真实 Chrome 打开 `progress.html?round=round_16` 后可选中 Round 16；12 个任务、4 个运行按钮、终端按钮均可见；Week 1 notes 可在阅读器中直接阅读；官方 FastAPI / Python sqlite3 外链可定位并可跳转；点击“运行”有确认框，确认后运行结果弹窗显示“运行成功”和 `static_check_report.json`；终端输入 `pwd` 输出 `/Users/alalapi/cli-lab/round16`。
+- 移动端验证：390px 宽度无整页横向溢出。
+- 截图：`/tmp/round16_web_ui_current.png`（恢复真实记录后的 Round 16 页面，显示 0/12 完成）；移动端截图为 `/tmp/round16_mobile.png`。
+- 清理：本轮 API/UI 测试产生的进度、动作、反馈和终端历史已从测试前快照恢复。
+- 工具备注：应用内浏览器可验证资料弹窗和外链跳转，但运行按钮点击在确认框附近出现控制超时；已使用本机 Google Chrome + Playwright 打开同一 Web UI 完成真实渲染、点击、运行、终端和截图验证。
+
 ## Round 12 内容填充与自动化流水线补测
 
 - before 问题：Round 12 仍是最小骨架，notes 只列目标和自查，缺少 Web UI 学习路径和浏览器终端自测命令。
