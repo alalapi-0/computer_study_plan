@@ -1423,3 +1423,38 @@
 - 本轮 API/UI 验证产生的进度、动作、反馈和终端历史均已从测试前快照恢复。
 - 未引入大型新依赖；只使用 Python 标准库 `sqlite3`。
 - 未把练习 `.db` 文件写入仓库；练习产物位于 `~/cli-lab/round11` 沙盒。
+
+## 55. 2026-07-04 TASK-RR-43 Round 12 内容填充与自动化流水线练习
+
+### 55.1 本轮修改
+
+- `rounds/round_12/README.md`：从“最小实操骨架”更新为 Web UI 可练习说明，明确阅读、自动运行、终端自测、小抄和验收的页面操作路径。
+- `rounds/round_12/week1|week2|week3/notes.md`：补齐批量遍历、输出命名、失败记录、subprocess 返回码、shutil 归档、日志轮转、cron/nohup/tmux 排练的学习步骤、自测命令和完成标准。
+- `rounds/round_12/week1|week2|week3/exercises.py`：改为默认可非交互运行，自动生成批处理沙盒、归档报告、轮转日志、定时入口示例和下一步提示，只自动记录对应练习任务。
+- `rounds/round_12/final/comprehensive_exercise.py`：改为 Web UI 默认可运行的自动化流水线收口检查，生成完整 `ai_prep_tool` 沙盒并验证批处理成功 / 失败记录、zip 归档、日志轮转、`run_batch.sh` 和安全示例文件，只自动记录 `r12-fin-comp`。
+- `rounds/round_12/final/pipeline_automation_cheatsheet.md`：补齐 Web UI 完成路径、流水线顺序、文件职责表、安全边界和最终验收自问。
+- `scripts/build_rounds_data.py` / `rounds_data.js`：将 Round 12 UI 任务标题从“练习1 / 练习2 / 练习3”改为用户能理解的动作标题。
+- `progress_ui.js`：阅读弹窗支持 `Escape` 关闭，修复阅读后切换终端时必须点关闭按钮的操作阻力。
+
+### 55.2 用户视角问题修复
+
+- Round 12 原 notes 太短，用户不知道如何只通过 Web UI 完成批处理、归档、日志轮转和定时入口排练。
+- Round 12 原脚本只是生成少量文件或做缺失检查，没有形成 Web UI 一键运行后的稳定可检查产物与自动记录。
+- Round 12 原任务标题过泛，用户无法从 UI 判断分别要练批量扫描、subprocess 归档还是日志轮转。
+- Week 1 自测命令最初使用 `Path / "child"` 写法，浏览器终端安全规则会拦截复杂斜杠表达式；已改为 `Path.joinpath()` 写法并通过终端 API 验证。
+- 阅读弹窗原先不响应 `Escape`，真实浏览器测试中会遮挡后续“终端”按钮；已支持 Esc 关闭。
+
+### 55.3 验证
+
+- API 验证：`r12-w1-ex1`、`r12-w2-ex2`、`r12-w3-ex3`、`r12-fin-comp` 均可通过 `/api/tasks/<id>/run` 运行成功；`r12-w1-self/run` 返回 `task_not_runnable`。
+- 浏览器终端验证：`/api/terminal?cwd=~/round12` 返回 `~/round12`；终端 API 可在任务 `r12-w1-self` 下逐行写入并运行 `scan_demo.py`；`crontab -l` 返回 `terminal_command_not_allowed:crontab`。
+- 真实浏览器验证：`progress.html?round=round_12` 会直接选中 Round 12；`r12-w1-ex1` 显示“运行”，`r12-w1-self` 不显示“运行”但显示“终端”；点击后终端工作目录为 `~/round12`，UI 输入 `pwd` 输出 `/Users/alalapi/cli-lab/round12`。
+- 文档阅读与外链验证：Week 1 notes 可在阅读器中直接阅读，包含 Web UI 学习路径和 `joinpath` 自测写法；`round_12.md` 中 Python pathlib 官方文档链接可被定位，`target="_blank"`，`rel` 包含 `noreferrer noopener`；阅读弹窗可用 `Escape` 关闭。
+- 移动端验证：390px 宽度无整页横向溢出。
+- 静态与数据验证：`build_rounds_data.py`、Python 语法编译、自动打卡目标检查均通过。
+
+### 55.4 风险边界核对
+
+- 本轮 API/UI 验证产生的进度、动作、反馈和终端历史均已从测试前快照恢复。
+- 未引入大型新依赖；只使用 Python 标准库。
+- 未写入系统 crontab；未启动 nohup/tmux 后台任务；只生成示例文本和入口脚本。

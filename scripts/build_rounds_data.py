@@ -23,6 +23,7 @@ DIFFICULTY_BY_ROUND = {
     9: "⭐⭐⭐☆☆",
     10: "⭐⭐⭐☆☆",
     11: "⭐⭐⭐☆☆",
+    12: "⭐⭐⭐☆☆",
 }
 
 
@@ -1020,6 +1021,87 @@ def build_standard_round(root: Path, num: int) -> dict | None:
                     ],
                 },
                 {"id": "round11-final", "title": "最终验收", "tasks": final_tasks},
+            ],
+        }
+
+    if num == 12:
+        final_tasks = []
+        if comp:
+            final_tasks.append(
+                {
+                    "id": "r12-fin-comp",
+                    "type": "exercise",
+                    "title": "综合练习：自动化流水线收口检查",
+                    "file": comp,
+                }
+            )
+        if sheet:
+            final_tasks.append(
+                {
+                    "id": "r12-fin-sheet",
+                    "type": "output",
+                    "title": "产出：完成 Round 12 自动化流水线小抄",
+                    "file": sheet,
+                }
+            )
+        final_tasks.append(
+            {
+                "id": "r12-fin-acc1",
+                "type": "test",
+                "title": "验收：解释批处理、归档、日志轮转和定时入口",
+                "file": "round_12.md",
+            }
+        )
+        return {
+            "id": "round_12",
+            "title": round_title(root, num),
+            "lane": "engineering",
+            "difficulty": DIFFICULTY_BY_ROUND.get(num, "⭐⭐⭐☆☆"),
+            "duration": "3 周",
+            "weeks": [
+                {
+                    "id": "round12-week1",
+                    "title": "第 1 周：批量遍历、输出命名与失败记录",
+                    "tasks": [
+                        {
+                            "id": "r12-w1-read",
+                            "type": "reading",
+                            "title": "阅读：input/output、失败日志与批处理报告",
+                            "file": "rounds/round_12/week1/notes.md",
+                        },
+                        {"id": "r12-w1-ex1", "type": "exercise", "title": "练习：批量扫描并记录失败项", "file": ex1},
+                        {"id": "r12-w1-self", "type": "test", "title": "自测：自己写 scan_demo.py", "file": ex1},
+                    ],
+                },
+                {
+                    "id": "round12-week2",
+                    "title": "第 2 周：subprocess 包装与 shutil 归档",
+                    "tasks": [
+                        {
+                            "id": "r12-w2-read",
+                            "type": "reading",
+                            "title": "阅读：returncode、stdout/stderr 与 zip 归档",
+                            "file": "rounds/round_12/week2/notes.md",
+                        },
+                        {"id": "r12-w2-ex2", "type": "exercise", "title": "练习：运行 worker 并归档输出", "file": ex2},
+                        {"id": "r12-w2-self", "type": "test", "title": "自测：自己写 subprocess_demo.py", "file": ex2},
+                    ],
+                },
+                {
+                    "id": "round12-week3",
+                    "title": "第 3 周：日志轮转与定时入口排练",
+                    "tasks": [
+                        {
+                            "id": "r12-w3-read",
+                            "type": "reading",
+                            "title": "阅读：RotatingFileHandler、cron、nohup 与 tmux",
+                            "file": "rounds/round_12/week3/notes.md",
+                        },
+                        {"id": "r12-w3-ex3", "type": "exercise", "title": "练习：生成 run_batch.sh 与轮转日志", "file": ex3},
+                        {"id": "r12-w3-self", "type": "test", "title": "自测：自己写 log_demo.py", "file": ex3},
+                    ],
+                },
+                {"id": "round12-final", "title": "最终验收", "tasks": final_tasks},
             ],
         }
 

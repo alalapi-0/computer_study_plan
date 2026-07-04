@@ -765,6 +765,11 @@ document.addEventListener("DOMContentLoaded", () => {
       if (e.target === modal) closeMarkdownViewer();
     });
   }
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && modal && modal.classList.contains("open")) {
+      closeMarkdownViewer();
+    }
+  });
   if (terminalInput) {
     terminalInput.addEventListener("keydown", (e) => {
       if (e.key === "Enter") {

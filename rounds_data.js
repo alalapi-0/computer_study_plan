@@ -1365,72 +1365,72 @@ window.ROUNDS_DATA = [
     "weeks": [
       {
         "id": "round12-week1",
-        "title": "第 1 周：基础练习",
+        "title": "第 1 周：批量遍历、输出命名与失败记录",
         "tasks": [
           {
             "id": "r12-w1-read",
             "type": "reading",
-            "title": "阅读 week1/notes.md",
+            "title": "阅读：input/output、失败日志与批处理报告",
             "file": "rounds/round_12/week1/notes.md"
           },
           {
             "id": "r12-w1-ex1",
             "type": "exercise",
-            "title": "练习1",
+            "title": "练习：批量扫描并记录失败项",
             "file": "rounds/round_12/week1/exercises.py"
           },
           {
             "id": "r12-w1-self",
             "type": "test",
-            "title": "第1周自测",
+            "title": "自测：自己写 scan_demo.py",
             "file": "rounds/round_12/week1/exercises.py"
           }
         ]
       },
       {
         "id": "round12-week2",
-        "title": "第 2 周：进阶练习",
+        "title": "第 2 周：subprocess 包装与 shutil 归档",
         "tasks": [
           {
             "id": "r12-w2-read",
             "type": "reading",
-            "title": "阅读 week2/notes.md",
+            "title": "阅读：returncode、stdout/stderr 与 zip 归档",
             "file": "rounds/round_12/week2/notes.md"
           },
           {
             "id": "r12-w2-ex2",
             "type": "exercise",
-            "title": "练习2",
+            "title": "练习：运行 worker 并归档输出",
             "file": "rounds/round_12/week2/exercises.py"
           },
           {
             "id": "r12-w2-self",
             "type": "test",
-            "title": "第2周自测",
+            "title": "自测：自己写 subprocess_demo.py",
             "file": "rounds/round_12/week2/exercises.py"
           }
         ]
       },
       {
         "id": "round12-week3",
-        "title": "第 3 周：综合练习",
+        "title": "第 3 周：日志轮转与定时入口排练",
         "tasks": [
           {
             "id": "r12-w3-read",
             "type": "reading",
-            "title": "阅读 week3/notes.md",
+            "title": "阅读：RotatingFileHandler、cron、nohup 与 tmux",
             "file": "rounds/round_12/week3/notes.md"
           },
           {
             "id": "r12-w3-ex3",
             "type": "exercise",
-            "title": "练习3",
+            "title": "练习：生成 run_batch.sh 与轮转日志",
             "file": "rounds/round_12/week3/exercises.py"
           },
           {
             "id": "r12-w3-self",
             "type": "test",
-            "title": "第3周自测",
+            "title": "自测：自己写 log_demo.py",
             "file": "rounds/round_12/week3/exercises.py"
           }
         ]
@@ -1442,19 +1442,19 @@ window.ROUNDS_DATA = [
           {
             "id": "r12-fin-comp",
             "type": "exercise",
-            "title": "综合练习",
+            "title": "综合练习：自动化流水线收口检查",
             "file": "rounds/round_12/final/comprehensive_exercise.py"
           },
           {
             "id": "r12-fin-sheet",
             "type": "output",
-            "title": "完成本 Round 小抄",
+            "title": "产出：完成 Round 12 自动化流水线小抄",
             "file": "rounds/round_12/final/pipeline_automation_cheatsheet.md"
           },
           {
             "id": "r12-fin-acc1",
             "type": "test",
-            "title": "验收：Round 12 核心目标",
+            "title": "验收：解释批处理、归档、日志轮转和定时入口",
             "file": "round_12.md"
           }
         ]

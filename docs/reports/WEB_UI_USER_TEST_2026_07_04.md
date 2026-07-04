@@ -259,6 +259,25 @@
 - 移动端验证：390px 宽度无整页横向溢出。
 - 清理：本轮 API/UI 测试产生的进度、动作、反馈和终端历史已从测试前快照恢复。
 
+## Round 12 内容填充与自动化流水线补测
+
+- before 问题：Round 12 仍是最小骨架，notes 只列目标和自查，缺少 Web UI 学习路径和浏览器终端自测命令。
+- before 问题：Round 12 脚本只生成局部文件或做缺失检查，没有形成 Web UI 一键运行后的稳定可检查产物与自动记录。
+- before 问题：Round 12 任务标题仍是“练习1 / 练习2 / 练习3”，用户无法判断要练批量扫描、subprocess 归档还是日志轮转。
+- before 问题：阅读弹窗不响应 `Escape`，真实浏览器测试中遮住后续“终端”按钮，切换任务不够顺手。
+- 修复：Round 12 README、Week 1–3 notes、final 小抄已补齐批处理、失败记录、subprocess、归档、日志轮转、cron/nohup/tmux 排练、Web UI 完成路径和验收自问。
+- 修复：Round 12 Python 脚本改为非交互运行，自动生成批处理沙盒、zip 归档、轮转日志、`run_batch.sh`、cron/nohup/tmux 示例和收口摘要，只自动记录脚本实际完成的练习任务；自测、小抄和验收仍由用户手动完成并记录。
+- 修复：Round 12 UI 任务标题改为“批量扫描并记录失败项”“运行 worker 并归档输出”“生成 run_batch.sh 与轮转日志”等动作标题。
+- 修复：Week 1 自测命令改为 `Path.joinpath()` 写法，避免浏览器终端安全规则拦截复杂斜杠表达式。
+- 修复：`progress_ui.js` 支持 `Escape` 关闭阅读弹窗。
+- 边界：本轮只生成 cron/nohup/tmux 示例文本，不写系统 crontab，不启动真实后台任务。
+- API 验证：`r12-w1-ex1`、`r12-w2-ex2`、`r12-w3-ex3`、`r12-fin-comp` 均可运行成功；`r12-w1-self/run` 返回 `task_not_runnable`。
+- 浏览器终端验证：`~/round12` 可作为映射目录；终端 API 能在任务 `r12-w1-self` 下逐行写入并运行 `scan_demo.py`；`crontab -l` 返回 `terminal_command_not_allowed:crontab`。
+- UI 验证：真实 Chrome 打开 `progress.html?round=round_12` 后直接选中 Round 12；`r12-w1-ex1` 显示“运行”，`r12-w1-self` 不显示“运行”但显示“终端”；点击后工作目录为 `~/round12`，输入 `pwd` 输出 `/Users/alalapi/cli-lab/round12`。
+- 文档阅读验证：Week 1 notes 可在阅读器中直接阅读，包含 Web UI 学习路径和 `joinpath` 自测写法；阅读弹窗可用 `Escape` 关闭；`round_12.md` 中 Python pathlib 官方链接可被定位，`target="_blank"`，`rel` 包含 `noreferrer noopener`。
+- 移动端验证：390px 宽度无整页横向溢出。
+- 清理：本轮 API/UI 测试产生的进度、动作、反馈和终端历史已从测试前快照恢复。
+
 ## 验证命令
 
 ```bash
@@ -273,6 +292,7 @@ python3 -m json.tool records/feedback/task_feedback.json
 node --check progress_ui.js
 python3 -m py_compile scripts/progress_lib.py scripts/progress_server.py scripts/generate_task_feedback.py scripts/mark_done_cli.py scripts/sync_progress_data.py scripts/build_rounds_data.py scripts/check_protocol_sync.py scripts/validate_learning_data.py
 python3 -m py_compile rounds/round_11/week1/exercises.py rounds/round_11/week2/exercises.py rounds/round_11/week3/exercises.py rounds/round_11/final/comprehensive_exercise.py
+python3 -m py_compile rounds/round_12/week1/exercises.py rounds/round_12/week2/exercises.py rounds/round_12/week3/exercises.py rounds/round_12/final/comprehensive_exercise.py
 python3 scripts/agent_gate.py --verify
 git diff --check
 ```
