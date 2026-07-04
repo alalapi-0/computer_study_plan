@@ -34,6 +34,19 @@
 
 ---
 
+## Web UI 完成方式
+
+本轮已经接入 `progress.html?round=round_19`：
+
+- 文档学习：点击每周阅读任务，可直接在 Web UI 阅读 `rounds/round_19/week*/notes.md`。
+- 自动练习：点击每周练习任务的“运行”，会在 `~/cli-lab/round19` 生成 scikit-learn 风格代码、标准库自检脚本和静态报告，并记录对应练习完成。
+- 终端自测：点击自测任务的“终端”，浏览器终端会映射到 `~/cli-lab/round19`，用于手写小脚本。
+- 外部链接：推荐资源中的 scikit-learn 官方文档链接会在新标签页打开。
+
+Web UI 中不执行 `pip install scikit-learn numpy pandas`；自动练习通过标准库和 AST 检查完成页面闭环。若你在本机另有 Python 环境，可以离开 Web UI 后再自行安装依赖运行生成的示例代码。
+
+---
+
 ## 推荐资源
 
 | 类型 | 资源 | 说明 |
@@ -104,10 +117,11 @@
 ### 准备工作
 
 ```bash
-pip install scikit-learn numpy pandas
 mkdir -p ~/cli-lab/round19
 cd ~/cli-lab/round19
 ```
+
+> Web UI 自动练习不需要安装第三方依赖；`pip install scikit-learn numpy pandas` 是离开 Web UI 后的可选本机扩展，不是本轮页面闭环的前置。
 
 ---
 

@@ -365,6 +365,7 @@ python3 -m py_compile rounds/round_14/week1/exercises.py rounds/round_14/week2/e
 python3 -m py_compile rounds/round_15/week1/exercises.py rounds/round_15/week2/exercises.py rounds/round_15/week3/exercises.py rounds/round_15/final/comprehensive_exercise.py
 python3 -m py_compile rounds/round_17/week1/exercises.py rounds/round_17/week2/exercises.py rounds/round_17/week3/exercises.py rounds/round_17/final/comprehensive_exercise.py
 python3 -m py_compile rounds/round_18/week1/exercises.py rounds/round_18/week2/exercises.py rounds/round_18/week3/exercises.py rounds/round_18/final/comprehensive_exercise.py
+python3 -m py_compile rounds/round_19/week1/exercises.py rounds/round_19/week2/exercises.py rounds/round_19/week3/exercises.py rounds/round_19/final/comprehensive_exercise.py
 python3 scripts/agent_gate.py --verify
 git diff --check
 ```
@@ -414,3 +415,24 @@ git diff --check
 - 截图：`/tmp/round18_web_ui_current.png`（恢复真实记录后的 Round 18 页面，显示 0/12 完成）；阅读弹窗 `/tmp/round18_reading_modal.png`；运行结果 `/tmp/round18_run_result.png`；终端 `/tmp/round18_terminal_ui.png`；移动端 `/tmp/round18_mobile_ui.png`。
 - 清理：本轮 API/UI 测试产生的进度、动作、反馈和终端历史已从测试前快照恢复。
 - 工具备注：应用内浏览器的 DOM snapshot 接口在本页报运行时兼容错误；本轮改用同一应用内浏览器的只读 DOM evaluate、稳定 CSS selector 点击、确认框处理和截图完成真实页面验证。
+
+## Round 19 内容填充与机器学习最小闭环补测
+
+- before 问题：Round 19 仍是最小骨架，notes 只列目标和自查，缺少 Web UI 学习路径、可直接阅读的知识解释和浏览器终端自测命令。
+- before 问题：Round 19 脚本只写 marker 文件，没有形成 X/y、train/test split、指标、过拟合、预处理、Pipeline 或最终项目包等可检查产物。
+- before 问题：Round 19 任务标题仍是“练习1 / 练习2 / 练习3”，用户无法判断要练切分、指标还是 Pipeline 防泄漏。
+- 修复：Round 19 README、Week 1-3 notes、final 小抄已补齐 X/y、fit/predict/score、accuracy/precision/recall/F1、过拟合、预处理、Pipeline、防泄漏、Web UI 完成路径和验收自问。
+- 修复：Round 19 Python 脚本改为非交互运行，自动生成 scikit-learn 风格代码、标准库可运行 smoke check、静态检查报告和最终机器学习最小闭环项目包，只自动记录脚本实际完成的练习任务。
+- 修复：Round 19 UI 任务标题改为“生成 X/y 切分与最小分类闭环”“生成分类指标与过拟合观察示例”“生成预处理、Pipeline 与泄漏检查示例”等动作标题，并同步三星难度。
+- 修复：Week 2 / Week 3 自测命令原先用 `/` 做除法，会被浏览器终端安全规则拦截；已改为 `** -1` 乘法倒数写法并通过终端 API 验证。
+- 修复：阅读弹窗原先可能命中浏览器缓存，修改 notes 后仍显示旧内容；`progress_ui.js` 已对 markdown fetch 使用 `cache: "no-store"` 和时间戳 cache-bust，`progress.html` 同步版本号。
+- 边界：本轮不在 Web UI 中执行 `pip install scikit-learn numpy pandas`；自动练习生成真实代码形状，但用 Python 标准库和静态检查做可运行验证。
+- API 验证：`r19-w1-ex1`、`r19-w2-ex2`、`r19-w3-ex3`、`r19-fin-comp` 均可通过 `/api/tasks/<id>/run` 运行成功；`r19-w1-self/run` 返回 `task_not_runnable`。
+- 浏览器终端验证：`~/round19` 与 `~/cli-lab/round19` 均映射到 `~/round19`；终端 API 能分别运行 Week 1 train/test split、Week 2 分类指标、Week 3 scaler 防泄漏三段手写自测；`pip install scikit-learn numpy pandas` 返回 `terminal_command_not_allowed:pip`。
+- UI 验证：Codex 应用内浏览器打开 `progress.html?round=round_19` 后直接选中 Round 19；12 个任务、4 个运行按钮、9 个终端按钮均可见；Week 1 notes 可在阅读器中直接阅读；点击“运行”有确认框，确认后运行结果弹窗显示“运行成功”和 `static_check_report.json`；终端输入 `pwd` 输出 `/Users/alalapi/cli-lab/round19`。
+- 文档阅读验证：Week 1 notes 包含 Web UI 学习路径和浏览器终端自测；scikit-learn Getting Started 与 train_test_split 官方链接渲染为 `_blank` 新标签，`rel` 包含 `noreferrer noopener`。
+- 移动端验证：390px 宽度无整页横向溢出；任务按钮换行后不重叠。
+- 截图：`/tmp/round19_web_ui_panel.png`（恢复真实记录后的 Round 19 页面，显示 0/12 完成）；阅读弹窗 `/tmp/round19_reading_modal.png`；运行结果 `/tmp/round19_run_result.png`；终端 `/tmp/round19_terminal_ui.png`；移动端 `/tmp/round19_mobile_ui.png`。
+- 清理：本轮 API/UI 测试产生的进度、动作、反馈和终端历史已从测试前快照恢复。
+- 工具备注：应用内浏览器的 DOM snapshot 接口在本页报运行时兼容错误；本轮改用同一应用内浏览器的只读 DOM evaluate、稳定 CSS selector 点击、确认框处理和截图完成真实页面验证。
+- MCP 备注：`npm run check:mcp` 通过；`npm run check:cursor-mcp` 退出成功，但 CLI 层仍报告 chrome-devtools / playwright / context7 / github / stitch / figma / filesystem 为 `needs approval`，其中 filesystem 工具列表失败。本轮未假定这些 Cursor MCP 已暴露给当前线程，而是使用当前可用的 Codex 应用内浏览器和本地命令完成验证。

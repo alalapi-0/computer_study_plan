@@ -2100,72 +2100,72 @@ window.ROUNDS_DATA = [
     "weeks": [
       {
         "id": "round19-week1",
-        "title": "第 1 周：基础练习",
+        "title": "第 1 周：X/y 与 train/test split",
         "tasks": [
           {
             "id": "r19-w1-read",
             "type": "reading",
-            "title": "阅读 week1/notes.md",
+            "title": "阅读：X/y、训练集、测试集与 fit/predict",
             "file": "rounds/round_19/week1/notes.md"
           },
           {
             "id": "r19-w1-ex1",
             "type": "exercise",
-            "title": "练习1",
+            "title": "练习：生成 X/y 切分与最小分类闭环",
             "file": "rounds/round_19/week1/exercises.py"
           },
           {
             "id": "r19-w1-self",
             "type": "test",
-            "title": "第1周自测",
+            "title": "自测：自己写 train_test_split_demo.py",
             "file": "rounds/round_19/week1/exercises.py"
           }
         ]
       },
       {
         "id": "round19-week2",
-        "title": "第 2 周：进阶练习",
+        "title": "第 2 周：分类指标与过拟合",
         "tasks": [
           {
             "id": "r19-w2-read",
             "type": "reading",
-            "title": "阅读 week2/notes.md",
+            "title": "阅读：accuracy、precision、recall、F1 与过拟合",
             "file": "rounds/round_19/week2/notes.md"
           },
           {
             "id": "r19-w2-ex2",
             "type": "exercise",
-            "title": "练习2",
+            "title": "练习：生成分类指标与过拟合观察示例",
             "file": "rounds/round_19/week2/exercises.py"
           },
           {
             "id": "r19-w2-self",
             "type": "test",
-            "title": "第2周自测",
+            "title": "自测：自己写 metrics_from_counts.py",
             "file": "rounds/round_19/week2/exercises.py"
           }
         ]
       },
       {
         "id": "round19-week3",
-        "title": "第 3 周：综合练习",
+        "title": "第 3 周：预处理、Pipeline 与泄漏",
         "tasks": [
           {
             "id": "r19-w3-read",
             "type": "reading",
-            "title": "阅读 week3/notes.md",
+            "title": "阅读：fit/transform、Pipeline 与数据泄漏",
             "file": "rounds/round_19/week3/notes.md"
           },
           {
             "id": "r19-w3-ex3",
             "type": "exercise",
-            "title": "练习3",
+            "title": "练习：生成预处理、Pipeline 与泄漏检查示例",
             "file": "rounds/round_19/week3/exercises.py"
           },
           {
             "id": "r19-w3-self",
             "type": "test",
-            "title": "第3周自测",
+            "title": "自测：自己写 scaler_rule_demo.py",
             "file": "rounds/round_19/week3/exercises.py"
           }
         ]
@@ -2177,19 +2177,19 @@ window.ROUNDS_DATA = [
           {
             "id": "r19-fin-comp",
             "type": "exercise",
-            "title": "综合练习",
+            "title": "综合练习：完整机器学习最小闭环项目包",
             "file": "rounds/round_19/final/comprehensive_exercise.py"
           },
           {
             "id": "r19-fin-sheet",
             "type": "output",
-            "title": "完成本 Round 小抄",
+            "title": "产出：完成 Round 19 机器学习最小闭环小抄",
             "file": "rounds/round_19/final/ml_minimal_loop_cheatsheet.md"
           },
           {
             "id": "r19-fin-acc1",
             "type": "test",
-            "title": "验收：Round 19 核心目标",
+            "title": "验收：解释 X/y、切分、指标、过拟合与 Pipeline 防泄漏",
             "file": "round_19.md"
           }
         ]

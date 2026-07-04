@@ -1665,3 +1665,39 @@
 - 未引入大型新依赖；未安装 NumPy / pandas；未创建后端服务。
 - 自动脚本只写入 `~/cli-lab/round18` 沙盒；生成的样例 CSV、分析报告和静态检查结果不进入仓库。
 - `npm run check:mcp` 配置层通过；`npm run check:cursor-mcp` 退出 0，但提示当前线程 filesystem 仍需 approval。本轮真实浏览器检查使用 Codex 应用内浏览器完成，DOM 快照能力在该运行时不可用时改用只读 DOM 检查、稳定 CSS selector 点击、确认框处理和截图。
+
+## 62. 2026-07-04 TASK-RR-50 Round 19 内容填充与机器学习最小闭环练习
+
+### 62.1 本轮修改
+
+- `rounds/round_19/README.md`：从“最小实操骨架”更新为 Web UI 可练习说明，明确页面路径、沙盒产物、依赖边界和外链策略。
+- `rounds/round_19/week1|week2|week3/notes.md`：补齐 X/y、train/test split、fit/predict/score、accuracy/precision/recall/F1、过拟合、预处理、Pipeline 与数据泄漏的学习步骤、自测命令和官方外链。
+- `rounds/round_19/week1|week2|week3/exercises.py`：改为默认可非交互运行，自动生成 scikit-learn 风格示例代码、标准库 smoke check、样例数据、静态检查报告和下一步提示，只自动记录对应练习任务。
+- `rounds/round_19/final/comprehensive_exercise.py`：改为 Web UI 默认可运行的机器学习最小闭环项目包练习，生成 `training.py`、`metrics.py`、`preprocess.py`、样例 CSV、实验合同、标准库预检和最终静态验收报告，只自动记录 `r19-fin-comp`。
+- `rounds/round_19/final/ml_minimal_loop_cheatsheet.md` 与 `round_19.md`：补齐 Web UI 完成路径、指标/过拟合/防泄漏小抄和最终验收自问。
+- `scripts/build_rounds_data.py` / `rounds_data.js`：将 Round 19 UI 任务标题从“练习1 / 练习2 / 练习3”改为用户能理解的动作标题，并同步三星难度。
+- `progress_ui.js` / `progress.html`：阅读器 markdown 请求增加 `no-store` 和 cache-bust，资源版本号同步更新，避免开发或部署后用户继续读到旧版 notes。
+
+### 62.2 用户视角问题修复
+
+- Round 19 原 notes 太短，用户不知道如何只通过 Web UI 完成机器学习最小闭环练习。
+- Round 19 原脚本只写 marker 文件，没有形成可检查的切分、训练、预测、指标、过拟合、预处理或项目包产物。
+- Round 19 原任务标题过泛，用户无法判断分别要练 X/y 切分、分类指标还是 Pipeline 防泄漏。
+- Week 2 / Week 3 自测命令最初使用 Python 除号 `/`，浏览器终端安全规则会误判为路径风险；已改为等价的乘幂倒数写法并通过终端 API 验证。
+- 阅读器原始 markdown fetch 不带 cache-bust，真实浏览器测试中更新 notes 后仍显示旧内容；已补 `cache: "no-store"` 与时间戳查询参数。
+
+### 62.3 验证
+
+- API 验证：`r19-w1-ex1`、`r19-w2-ex2`、`r19-w3-ex3`、`r19-fin-comp` 均可通过 `/api/tasks/<id>/run` 运行成功；`r19-w1-self/run` 返回 `task_not_runnable`。
+- 浏览器终端验证：`/api/terminal?cwd=~/round19` 与 `/api/terminal?cwd=~/cli-lab/round19` 均映射为 `~/round19`；终端 API 可执行 Week 1 切分、Week 2 指标、Week 3 预处理规则三段自测；`pip install scikit-learn numpy pandas` 返回 `terminal_command_not_allowed:pip`。
+- 真实浏览器验证：`progress.html?round=round_19` 可选中 Round 19；12 个任务、4 个运行按钮、9 个终端按钮均可见；Week 1 notes 可在阅读器中直接阅读；点击“运行”有确认框，结果弹窗显示“运行成功”和 `static_check_report.json`；终端输入 `pwd` 输出 `/Users/alalapi/cli-lab/round19`。
+- 文档阅读与外链验证：Week 1 notes 包含 Web UI 学习路径和浏览器终端自测；scikit-learn Getting Started 与 train_test_split 官方外链渲染为 `_blank` 新标签，`rel` 包含 `noreferrer noopener`。
+- 移动端验证：390px 宽度无整页横向溢出；任务按钮换行后不重叠。
+- 静态与数据验证：`build_rounds_data.py`、Python 语法编译、`check_protocol_sync.py`、`validate_learning_data.py`、`node --check progress_ui.js`、`git diff --check`、`agent_gate.py --verify` 均通过。
+
+### 62.4 风险边界核对
+
+- 本轮 API/UI 验证产生的进度、动作、反馈和终端历史均已从测试前快照恢复。
+- 未引入大型新依赖；未安装 scikit-learn / NumPy / pandas；未创建后端服务。
+- 自动脚本只写入 `~/cli-lab/round19` 沙盒；生成的样例 CSV、训练脚本、指标报告和静态检查结果不进入仓库。
+- `npm run check:mcp` 配置层通过；`npm run check:cursor-mcp` 退出 0，但提示当前线程 filesystem 仍需 approval。本轮真实浏览器检查使用 Codex 应用内浏览器完成，并在 DOM 选择器不匹配时改用实际页面结构重新定位。

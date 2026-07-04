@@ -802,6 +802,24 @@ TASK-011 实际产物：
 
 ---
 
+## TASK-RR-50：Stage 1 填充 · Round 19 Web UI 可完成练习
+
+- 状态：**done**（2026-07-04）
+- 背景：Round 19 已有最小骨架，但 notes 只列目标和自查，脚本只写 marker；任务标题仍是“练习1 / 练习2 / 练习3”，用户无法判断要练 X/y 切分、分类指标还是 Pipeline 防泄漏。
+- 目标：让 Round 19 用户只通过 Web UI 就能阅读机器学习最小闭环资料，运行自动练习，在浏览器映射终端中完成指标 / 切分 / 预处理自测，并手动记录最终小抄与验收。
+- 实际产物：
+  - `rounds/round_19/README.md` 更新为 Web UI 可练习说明，明确自动产物只写入 `~/cli-lab/round19`，不在 Web UI 中执行 `pip install scikit-learn numpy pandas`。
+  - `rounds/round_19/week1|week2|week3/notes.md` 补齐 X/y、train/test split、fit/predict/score、accuracy/precision/recall/F1、过拟合、预处理、Pipeline 与数据泄漏的学习步骤、自测命令和官方外链。
+  - `rounds/round_19/week1|week2|week3/exercises.py` 改为默认可非交互运行，自动生成 scikit-learn 风格示例代码、标准库 smoke check、静态检查报告和下一步提示，只自动记录对应练习任务。
+  - `rounds/round_19/final/comprehensive_exercise.py` 改为 Web UI 默认可运行的机器学习最小闭环项目包练习，生成 `training.py`、`metrics.py`、`preprocess.py`、样例 CSV、实验合同、标准库预检和最终静态验收报告，只自动记录 `r19-fin-comp`。
+  - `rounds/round_19/final/ml_minimal_loop_cheatsheet.md` 与 `round_19.md` 补齐 Web UI 完成路径、指标/过拟合/防泄漏小抄和最终验收自问。
+  - `scripts/build_rounds_data.py` / `rounds_data.js` 为 Round 19 输出清晰任务标题，并同步三星难度。
+  - `progress_ui.js` / `progress.html`：阅读器 markdown 请求增加 `no-store` 和 cache-bust，资源版本号同步更新，避免用户看到旧版 notes。
+- 验收：API 可运行 Round 19 四个练习脚本；自测任务拒绝误运行；浏览器终端可绑定 `r19-w2-self` 到 `~/round19` 并执行 `pwd` / 手写指标脚本；`pip install scikit-learn numpy pandas` 被拦截；Week 1 notes 可在阅读器中直接阅读；scikit-learn 官方外链可新标签页打开；运行结果弹窗可见；桌面端和 390px 移动端无横向溢出；测试记录已恢复。
+- 是否需要用户介入：否。
+
+---
+
 ## TASK-RR-26：Stage 1 增强 · Round 05 接入进度系统
 
 - 状态：**done**（2026-06-15）

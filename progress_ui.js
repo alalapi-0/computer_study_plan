@@ -482,7 +482,9 @@ async function openMarkdownViewer(filePath, title) {
   modal.classList.add("open");
   modal.setAttribute("aria-hidden", "false");
   try {
-    const res = await fetch("/" + filePath.replace(/^\//, ""));
+    const resourcePath = "/" + filePath.replace(/^\//, "");
+    const separator = resourcePath.includes("?") ? "&" : "?";
+    const res = await fetch(`${resourcePath}${separator}_=${Date.now()}`, { cache: "no-store" });
     if (!res.ok) throw new Error("HTTP " + res.status);
     const text = await res.text();
     if (/\.(sh|py|js|json)$/i.test(filePath)) {
