@@ -29,6 +29,7 @@ DIFFICULTY_BY_ROUND = {
     15: "⭐⭐⭐☆☆",
     16: "⭐⭐⭐⭐☆",
     17: "⭐⭐⭐⭐☆",
+    18: "⭐⭐⭐☆☆",
 }
 
 
@@ -1026,6 +1027,87 @@ def build_standard_round(root: Path, num: int) -> dict | None:
                     ],
                 },
                 {"id": "round17-final", "title": "最终验收", "tasks": final_tasks},
+            ],
+        }
+
+    if num == 18:
+        final_tasks = []
+        if comp:
+            final_tasks.append(
+                {
+                    "id": "r18-fin-comp",
+                    "type": "exercise",
+                    "title": "综合练习：完整数值数据分析项目包",
+                    "file": comp,
+                }
+            )
+        if sheet:
+            final_tasks.append(
+                {
+                    "id": "r18-fin-sheet",
+                    "type": "output",
+                    "title": "产出：完成 Round 18 数值计算与数据分析小抄",
+                    "file": sheet,
+                }
+            )
+        final_tasks.append(
+            {
+                "id": "r18-fin-acc1",
+                "type": "test",
+                "title": "验收：解释数组、DataFrame、清洗、groupby 与分析报告链路",
+                "file": "round_18.md",
+            }
+        )
+        return {
+            "id": "round_18",
+            "title": round_title(root, num),
+            "lane": "engineering",
+            "difficulty": DIFFICULTY_BY_ROUND.get(num, "⭐⭐⭐☆☆"),
+            "duration": "3 周",
+            "weeks": [
+                {
+                    "id": "round18-week1",
+                    "title": "第 1 周：NumPy 数组与 axis",
+                    "tasks": [
+                        {
+                            "id": "r18-w1-read",
+                            "type": "reading",
+                            "title": "阅读：NumPy 数组、shape、axis 与广播",
+                            "file": "rounds/round_18/week1/notes.md",
+                        },
+                        {"id": "r18-w1-ex1", "type": "exercise", "title": "练习：生成 NumPy 数组、axis 与广播示例", "file": ex1},
+                        {"id": "r18-w1-self", "type": "test", "title": "自测：自己写 axis_demo.py", "file": ex1},
+                    ],
+                },
+                {
+                    "id": "round18-week2",
+                    "title": "第 2 周：pandas CSV 与筛选统计",
+                    "tasks": [
+                        {
+                            "id": "r18-w2-read",
+                            "type": "reading",
+                            "title": "阅读：CSV、DataFrame、选列筛行与 groupby",
+                            "file": "rounds/round_18/week2/notes.md",
+                        },
+                        {"id": "r18-w2-ex2", "type": "exercise", "title": "练习：生成 CSV 读取、筛选与 groupby 示例", "file": ex2},
+                        {"id": "r18-w2-self", "type": "test", "title": "自测：自己写 count_labels.py", "file": ex2},
+                    ],
+                },
+                {
+                    "id": "round18-week3",
+                    "title": "第 3 周：数据清洗与分析报告",
+                    "tasks": [
+                        {
+                            "id": "r18-w3-read",
+                            "type": "reading",
+                            "title": "阅读：load、explore、clean、analyze、export",
+                            "file": "rounds/round_18/week3/notes.md",
+                        },
+                        {"id": "r18-w3-ex3", "type": "exercise", "title": "练习：生成读、清洗、统计、导出分析流程", "file": ex3},
+                        {"id": "r18-w3-self", "type": "test", "title": "自测：自己写 clean_demo.py", "file": ex3},
+                    ],
+                },
+                {"id": "round18-final", "title": "最终验收", "tasks": final_tasks},
             ],
         }
 

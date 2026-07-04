@@ -785,6 +785,23 @@ TASK-011 实际产物：
 
 ---
 
+## TASK-RR-49：Stage 1 填充 · Round 18 Web UI 可完成练习
+
+- 状态：**done**（2026-07-04）
+- 背景：Round 18 已有最小骨架，但 notes 只列目标和自查，脚本只写 marker；任务标题仍是“练习1 / 练习2 / 练习3”，用户无法判断要练 NumPy 数组、pandas CSV 还是完整数据分析流水线。
+- 目标：让 Round 18 用户只通过 Web UI 就能阅读数值计算与数据分析资料，运行自动练习，在浏览器映射终端中完成数组 / CSV / 清洗自测，并手动记录最终小抄与验收。
+- 实际产物：
+  - `rounds/round_18/README.md` 更新为 Web UI 可练习说明，明确自动产物只写入 `~/cli-lab/round18`，不在 Web UI 中执行 `pip install numpy pandas`。
+  - `rounds/round_18/week1|week2|week3/notes.md` 补齐 NumPy 数组、shape/dtype/axis、pandas CSV、DataFrame 筛选统计、数据清洗与分析报告的学习步骤、自测命令和完成标准。
+  - `rounds/round_18/week1|week2|week3/exercises.py` 改为默认可非交互运行，自动生成 NumPy / pandas / 分析流水线示例代码、样例数据、静态检查报告和下一步提示，只自动记录对应练习任务。
+  - `rounds/round_18/final/comprehensive_exercise.py` 改为 Web UI 默认可运行的数值数据分析项目包练习，生成 `analysis.py`、样例 CSV、分析合同、标准库预检和最终静态验收报告，只自动记录 `r18-fin-comp`。
+  - `rounds/round_18/final/numerics_analytics_cheatsheet.md` 与 `round_18.md` 补齐 Web UI 完成路径、NumPy / pandas / 清洗统计小抄和最终验收自问。
+  - `scripts/build_rounds_data.py` / `rounds_data.js` 为 Round 18 输出清晰任务标题，并同步三星难度。
+- 验收：API 可运行 Round 18 四个练习脚本；自测任务拒绝误运行；浏览器终端可绑定 `r18-w1-self` 到 `~/round18` 并执行 `pwd` / 手写脚本；`pip install numpy pandas` 被拦截；Week 1 notes 可在阅读器中直接阅读；NumPy 官方外链可新标签页打开；运行结果弹窗可见；桌面端和 390px 移动端无横向溢出；测试记录已恢复。
+- 是否需要用户介入：否。
+
+---
+
 ## TASK-RR-26：Stage 1 增强 · Round 05 接入进度系统
 
 - 状态：**done**（2026-06-15）

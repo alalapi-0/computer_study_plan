@@ -1995,72 +1995,72 @@ window.ROUNDS_DATA = [
     "weeks": [
       {
         "id": "round18-week1",
-        "title": "第 1 周：基础练习",
+        "title": "第 1 周：NumPy 数组与 axis",
         "tasks": [
           {
             "id": "r18-w1-read",
             "type": "reading",
-            "title": "阅读 week1/notes.md",
+            "title": "阅读：NumPy 数组、shape、axis 与广播",
             "file": "rounds/round_18/week1/notes.md"
           },
           {
             "id": "r18-w1-ex1",
             "type": "exercise",
-            "title": "练习1",
+            "title": "练习：生成 NumPy 数组、axis 与广播示例",
             "file": "rounds/round_18/week1/exercises.py"
           },
           {
             "id": "r18-w1-self",
             "type": "test",
-            "title": "第1周自测",
+            "title": "自测：自己写 axis_demo.py",
             "file": "rounds/round_18/week1/exercises.py"
           }
         ]
       },
       {
         "id": "round18-week2",
-        "title": "第 2 周：进阶练习",
+        "title": "第 2 周：pandas CSV 与筛选统计",
         "tasks": [
           {
             "id": "r18-w2-read",
             "type": "reading",
-            "title": "阅读 week2/notes.md",
+            "title": "阅读：CSV、DataFrame、选列筛行与 groupby",
             "file": "rounds/round_18/week2/notes.md"
           },
           {
             "id": "r18-w2-ex2",
             "type": "exercise",
-            "title": "练习2",
+            "title": "练习：生成 CSV 读取、筛选与 groupby 示例",
             "file": "rounds/round_18/week2/exercises.py"
           },
           {
             "id": "r18-w2-self",
             "type": "test",
-            "title": "第2周自测",
+            "title": "自测：自己写 count_labels.py",
             "file": "rounds/round_18/week2/exercises.py"
           }
         ]
       },
       {
         "id": "round18-week3",
-        "title": "第 3 周：综合练习",
+        "title": "第 3 周：数据清洗与分析报告",
         "tasks": [
           {
             "id": "r18-w3-read",
             "type": "reading",
-            "title": "阅读 week3/notes.md",
+            "title": "阅读：load、explore、clean、analyze、export",
             "file": "rounds/round_18/week3/notes.md"
           },
           {
             "id": "r18-w3-ex3",
             "type": "exercise",
-            "title": "练习3",
+            "title": "练习：生成读、清洗、统计、导出分析流程",
             "file": "rounds/round_18/week3/exercises.py"
           },
           {
             "id": "r18-w3-self",
             "type": "test",
-            "title": "第3周自测",
+            "title": "自测：自己写 clean_demo.py",
             "file": "rounds/round_18/week3/exercises.py"
           }
         ]
@@ -2072,19 +2072,19 @@ window.ROUNDS_DATA = [
           {
             "id": "r18-fin-comp",
             "type": "exercise",
-            "title": "综合练习",
+            "title": "综合练习：完整数值数据分析项目包",
             "file": "rounds/round_18/final/comprehensive_exercise.py"
           },
           {
             "id": "r18-fin-sheet",
             "type": "output",
-            "title": "完成本 Round 小抄",
+            "title": "产出：完成 Round 18 数值计算与数据分析小抄",
             "file": "rounds/round_18/final/numerics_analytics_cheatsheet.md"
           },
           {
             "id": "r18-fin-acc1",
             "type": "test",
-            "title": "验收：Round 18 核心目标",
+            "title": "验收：解释数组、DataFrame、清洗、groupby 与分析报告链路",
             "file": "round_18.md"
           }
         ]

@@ -364,6 +364,7 @@ python3 -m py_compile rounds/round_13/week1/exercises.py rounds/round_13/week2/e
 python3 -m py_compile rounds/round_14/week1/exercises.py rounds/round_14/week2/exercises.py rounds/round_14/week3/exercises.py rounds/round_14/final/comprehensive_exercise.py
 python3 -m py_compile rounds/round_15/week1/exercises.py rounds/round_15/week2/exercises.py rounds/round_15/week3/exercises.py rounds/round_15/final/comprehensive_exercise.py
 python3 -m py_compile rounds/round_17/week1/exercises.py rounds/round_17/week2/exercises.py rounds/round_17/week3/exercises.py rounds/round_17/final/comprehensive_exercise.py
+python3 -m py_compile rounds/round_18/week1/exercises.py rounds/round_18/week2/exercises.py rounds/round_18/week3/exercises.py rounds/round_18/final/comprehensive_exercise.py
 python3 scripts/agent_gate.py --verify
 git diff --check
 ```
@@ -392,5 +393,24 @@ git diff --check
 - 文档阅读验证：Week 1 notes 包含 Web UI 学习路径和浏览器终端自测；FastAPI Bigger Applications 与 Metadata 外链渲染为 `_blank` 新标签，`rel` 包含 `noreferrer noopener`。
 - 移动端验证：390px 宽度无整页横向溢出；任务按钮换行后不重叠。
 - 截图：`/tmp/round17_web_ui_current.png`（恢复真实记录后的 Round 17 页面，显示 0/12 完成）；阅读弹窗 `/tmp/round17_reading_modal.png`；运行结果 `/tmp/round17_run_result.png`；终端 `/tmp/round17_terminal_ui.png`；移动端 `/tmp/round17_mobile_ui.png`。
+- 清理：本轮 API/UI 测试产生的进度、动作、反馈和终端历史已从测试前快照恢复。
+- 工具备注：应用内浏览器的 DOM snapshot 接口在本页报运行时兼容错误；本轮改用同一应用内浏览器的只读 DOM evaluate、稳定 CSS selector 点击、确认框处理和截图完成真实页面验证。
+
+## Round 18 内容填充与数值数据分析补测
+
+- before 问题：Round 18 仍是最小骨架，notes 只列目标和自查，缺少 Web UI 学习路径和浏览器终端自测命令。
+- before 问题：Round 18 脚本只写 marker 文件，没有形成 NumPy 数组、pandas CSV、数据清洗、统计导出或最终项目包等可检查产物。
+- before 问题：Round 18 任务标题仍是“练习1 / 练习2 / 练习3”，用户无法判断要练数组、CSV 还是完整分析流水线。
+- 修复：Round 18 README、Week 1–3 notes、final 小抄已补齐 NumPy、pandas、CSV、DataFrame、清洗、groupby、导出报告、Web UI 完成路径和验收自问。
+- 修复：Round 18 Python 脚本改为非交互运行，自动生成数组示例、CSV 样例、分析流水线、标准库预检、静态检查报告和最终项目包，只自动记录脚本实际完成的练习任务。
+- 修复：Round 18 UI 任务标题改为“生成 NumPy 数组、axis 与广播示例”“生成 CSV 读取、筛选与 groupby 示例”“生成读、清洗、统计、导出分析流程”等动作标题，并同步三星难度。
+- 修复：Week 3 自测命令避免链式比较里的 `<` 被浏览器终端安全规则误拦截，改为 `score >= 0 and not score > 1` 并通过终端 API 验证。
+- 边界：本轮不在 Web UI 中执行 `pip install numpy pandas`；自动练习生成真实代码形状，但用 Python 标准库和 AST 做静态合同验证。
+- API 验证：`r18-w1-ex1`、`r18-w2-ex2`、`r18-w3-ex3`、`r18-fin-comp` 均可运行成功；`r18-w1-self/run` 返回 `task_not_runnable`。
+- 浏览器终端验证：`~/round18` 与 `~/cli-lab/round18` 均映射到 `~/round18`；终端 API 能分别运行 Week 1 axis、Week 2 CSV 统计、Week 3 清洗过滤三段手写自测；`pip install numpy pandas` 返回 `terminal_command_not_allowed:pip`。
+- UI 验证：Codex 应用内浏览器打开 `progress.html?round=round_18` 后直接选中 Round 18；12 个任务、4 个运行按钮、9 个终端按钮均可见；Week 1 notes 可在阅读器中直接阅读；点击“运行”有确认框，确认后运行结果弹窗显示“运行成功”和 `static_check_report.json`；终端输入 `pwd` 输出 `/Users/alalapi/cli-lab/round18`。
+- 文档阅读验证：Week 1 notes 包含 Web UI 学习路径和浏览器终端自测；NumPy quickstart 与 absolute beginners 外链渲染为 `_blank` 新标签，`rel` 包含 `noreferrer noopener`。
+- 移动端验证：390px 宽度无整页横向溢出；任务按钮换行后不重叠。
+- 截图：`/tmp/round18_web_ui_current.png`（恢复真实记录后的 Round 18 页面，显示 0/12 完成）；阅读弹窗 `/tmp/round18_reading_modal.png`；运行结果 `/tmp/round18_run_result.png`；终端 `/tmp/round18_terminal_ui.png`；移动端 `/tmp/round18_mobile_ui.png`。
 - 清理：本轮 API/UI 测试产生的进度、动作、反馈和终端历史已从测试前快照恢复。
 - 工具备注：应用内浏览器的 DOM snapshot 接口在本页报运行时兼容错误；本轮改用同一应用内浏览器的只读 DOM evaluate、稳定 CSS selector 点击、确认框处理和截图完成真实页面验证。
