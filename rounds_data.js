@@ -1680,72 +1680,72 @@ window.ROUNDS_DATA = [
     "weeks": [
       {
         "id": "round15-week1",
-        "title": "第 1 周：基础练习",
+        "title": "第 1 周：FastAPI 应用入口与读接口",
         "tasks": [
           {
             "id": "r15-w1-read",
             "type": "reading",
-            "title": "阅读 week1/notes.md",
+            "title": "阅读：应用入口、health 与路径/查询参数",
             "file": "rounds/round_15/week1/notes.md"
           },
           {
             "id": "r15-w1-ex1",
             "type": "exercise",
-            "title": "练习1",
+            "title": "练习：生成 FastAPI 读接口骨架",
             "file": "rounds/round_15/week1/exercises.py"
           },
           {
             "id": "r15-w1-self",
             "type": "test",
-            "title": "第1周自测",
+            "title": "自测：自己写 mini_api_routes.py",
             "file": "rounds/round_15/week1/exercises.py"
           }
         ]
       },
       {
         "id": "round15-week2",
-        "title": "第 2 周：进阶练习",
+        "title": "第 2 周：请求体与 Pydantic 模型",
         "tasks": [
           {
             "id": "r15-w2-read",
             "type": "reading",
-            "title": "阅读 week2/notes.md",
+            "title": "阅读：请求体、响应体与 Pydantic 模型",
             "file": "rounds/round_15/week2/notes.md"
           },
           {
             "id": "r15-w2-ex2",
             "type": "exercise",
-            "title": "练习2",
+            "title": "练习：生成请求体和响应模型骨架",
             "file": "rounds/round_15/week2/exercises.py"
           },
           {
             "id": "r15-w2-self",
             "type": "test",
-            "title": "第2周自测",
+            "title": "自测：自己写 request_run.json",
             "file": "rounds/round_15/week2/exercises.py"
           }
         ]
       },
       {
         "id": "round15-week3",
-        "title": "第 3 周：综合练习",
+        "title": "第 3 周：示例数据与 /docs 说明",
         "tasks": [
           {
             "id": "r15-w3-read",
             "type": "reading",
-            "title": "阅读 week3/notes.md",
+            "title": "阅读：示例数据、summary、tags 与 /docs",
             "file": "rounds/round_15/week3/notes.md"
           },
           {
             "id": "r15-w3-ex3",
             "type": "exercise",
-            "title": "练习3",
+            "title": "练习：生成文档示例与 OpenAPI 预览",
             "file": "rounds/round_15/week3/exercises.py"
           },
           {
             "id": "r15-w3-self",
             "type": "test",
-            "title": "第3周自测",
+            "title": "自测：自己写 docs_example.json",
             "file": "rounds/round_15/week3/exercises.py"
           }
         ]
@@ -1757,19 +1757,19 @@ window.ROUNDS_DATA = [
           {
             "id": "r15-fin-comp",
             "type": "exercise",
-            "title": "综合练习",
+            "title": "综合练习：生成 FastAPI 项目骨架",
             "file": "rounds/round_15/final/comprehensive_exercise.py"
           },
           {
             "id": "r15-fin-sheet",
             "type": "output",
-            "title": "完成本 Round 小抄",
+            "title": "产出：完成 Round 15 FastAPI 小抄",
             "file": "rounds/round_15/final/fastapi_basics_cheatsheet.md"
           },
           {
             "id": "r15-fin-acc1",
             "type": "test",
-            "title": "验收：Round 15 核心目标",
+            "title": "验收：解释路径参数、查询参数、请求体和 Pydantic 模型",
             "file": "round_15.md"
           }
         ]

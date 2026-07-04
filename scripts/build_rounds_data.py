@@ -26,6 +26,7 @@ DIFFICULTY_BY_ROUND = {
     12: "⭐⭐⭐☆☆",
     13: "⭐⭐⭐☆☆",
     14: "⭐⭐⭐☆☆",
+    15: "⭐⭐⭐☆☆",
 }
 
 
@@ -780,6 +781,87 @@ def build_standard_round(root: Path, num: int) -> dict | None:
                     ],
                 },
                 {"id": "round14-final", "title": "最终验收", "tasks": final_tasks},
+            ],
+        }
+
+    if num == 15:
+        final_tasks = []
+        if comp:
+            final_tasks.append(
+                {
+                    "id": "r15-fin-comp",
+                    "type": "exercise",
+                    "title": "综合练习：生成 FastAPI 项目骨架",
+                    "file": comp,
+                }
+            )
+        if sheet:
+            final_tasks.append(
+                {
+                    "id": "r15-fin-sheet",
+                    "type": "output",
+                    "title": "产出：完成 Round 15 FastAPI 小抄",
+                    "file": sheet,
+                }
+            )
+        final_tasks.append(
+            {
+                "id": "r15-fin-acc1",
+                "type": "test",
+                "title": "验收：解释路径参数、查询参数、请求体和 Pydantic 模型",
+                "file": "round_15.md",
+            }
+        )
+        return {
+            "id": "round_15",
+            "title": round_title(root, num),
+            "lane": "engineering",
+            "difficulty": DIFFICULTY_BY_ROUND.get(num, "⭐⭐⭐☆☆"),
+            "duration": "3 周",
+            "weeks": [
+                {
+                    "id": "round15-week1",
+                    "title": "第 1 周：FastAPI 应用入口与读接口",
+                    "tasks": [
+                        {
+                            "id": "r15-w1-read",
+                            "type": "reading",
+                            "title": "阅读：应用入口、health 与路径/查询参数",
+                            "file": "rounds/round_15/week1/notes.md",
+                        },
+                        {"id": "r15-w1-ex1", "type": "exercise", "title": "练习：生成 FastAPI 读接口骨架", "file": ex1},
+                        {"id": "r15-w1-self", "type": "test", "title": "自测：自己写 mini_api_routes.py", "file": ex1},
+                    ],
+                },
+                {
+                    "id": "round15-week2",
+                    "title": "第 2 周：请求体与 Pydantic 模型",
+                    "tasks": [
+                        {
+                            "id": "r15-w2-read",
+                            "type": "reading",
+                            "title": "阅读：请求体、响应体与 Pydantic 模型",
+                            "file": "rounds/round_15/week2/notes.md",
+                        },
+                        {"id": "r15-w2-ex2", "type": "exercise", "title": "练习：生成请求体和响应模型骨架", "file": ex2},
+                        {"id": "r15-w2-self", "type": "test", "title": "自测：自己写 request_run.json", "file": ex2},
+                    ],
+                },
+                {
+                    "id": "round15-week3",
+                    "title": "第 3 周：示例数据与 /docs 说明",
+                    "tasks": [
+                        {
+                            "id": "r15-w3-read",
+                            "type": "reading",
+                            "title": "阅读：示例数据、summary、tags 与 /docs",
+                            "file": "rounds/round_15/week3/notes.md",
+                        },
+                        {"id": "r15-w3-ex3", "type": "exercise", "title": "练习：生成文档示例与 OpenAPI 预览", "file": ex3},
+                        {"id": "r15-w3-self", "type": "test", "title": "自测：自己写 docs_example.json", "file": ex3},
+                    ],
+                },
+                {"id": "round15-final", "title": "最终验收", "tasks": final_tasks},
             ],
         }
 

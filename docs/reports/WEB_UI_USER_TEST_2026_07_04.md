@@ -312,6 +312,22 @@
 - 清理：本轮 API/UI 测试产生的进度、动作、反馈和终端历史已从测试前快照恢复。
 - 工具备注：应用内浏览器插件本轮 DOM 快照与点击能力出现兼容/超时问题；已使用本机 Google Chrome + Playwright 打开同一 Web UI 完成真实渲染、点击、终端和截图验证。
 
+## Round 15 内容填充与 FastAPI 基础补测
+
+- before 问题：Round 15 仍是最小骨架，notes 只列目标和自查，缺少 Web UI 学习路径和浏览器终端自测命令。
+- before 问题：Round 15 脚本只写 marker 文件，没有形成 FastAPI 入口、路径/查询参数、Pydantic 模型、请求/响应示例或 `/docs` 文档示例等可检查产物。
+- before 问题：Round 15 任务标题仍是“练习1 / 练习2 / 练习3”，用户无法判断要练应用入口、请求体模型还是文档示例。
+- 修复：Round 15 README、Week 1–3 notes、final 小抄已补齐 FastAPI 应用入口、路径参数、查询参数、请求体、Pydantic 模型、示例数据、Web UI 完成路径和验收自问。
+- 修复：Round 15 Python 脚本改为非交互运行，自动生成 `app/main.py`、`app/routers/*.py`、`app/schemas.py`、`route_table.json`、样例 JSON、OpenAPI 预览和静态检查报告，只自动记录脚本实际完成的练习任务；自测、小抄和验收仍由用户手动完成并记录。
+- 修复：Round 15 UI 任务标题改为“生成 FastAPI 读接口骨架”“生成请求体和响应模型骨架”“生成文档示例与 OpenAPI 预览”等动作标题。
+- 边界：本轮不在 Web UI 中安装 FastAPI / uvicorn，不启动长期服务；生成真实 FastAPI 代码形状，并通过 Python 标准库做静态合同验证。
+- API 验证：`r15-w1-ex1`、`r15-w2-ex2`、`r15-w3-ex3`、`r15-fin-comp` 均可运行成功；`r15-w1-self/run` 返回 `task_not_runnable`。
+- 浏览器终端验证：`~/round15` 可作为映射目录；终端 API 能在任务 `r15-w2-self` 下写入并校验 `request_api.json`；`pip install fastapi` 返回 `terminal_command_not_allowed:pip`；`uvicorn app.main:app` 返回 `terminal_command_not_allowed:uvicorn`。
+- UI 验证：真实 Chrome 打开 `progress.html?round=round_15` 后直接选中 Round 15；`r15-w2-ex2` 显示“运行”，`r15-w2-self` 不显示“运行”但显示“终端”；点击后工作目录为 `~/round15`，输入 `pwd` 输出 `/Users/alalapi/cli-lab/round15`。
+- 文档阅读验证：Week 1 notes 可在阅读器中直接阅读，包含 Web UI 学习路径；阅读弹窗可用 `Escape` 关闭；运行结果弹窗展示 `model_count:` 和 `model_check_report.json`；`round_15.md` 中 FastAPI Path Parameters 链接可被定位，`target="_blank"`，`rel` 包含 `noreferrer noopener`。
+- 移动端验证：390px 宽度无整页横向溢出。
+- 清理：本轮 API/UI 测试产生的进度、动作、反馈和终端历史已从测试前快照恢复。
+
 ## 验证命令
 
 ```bash
@@ -329,6 +345,7 @@ python3 -m py_compile rounds/round_11/week1/exercises.py rounds/round_11/week2/e
 python3 -m py_compile rounds/round_12/week1/exercises.py rounds/round_12/week2/exercises.py rounds/round_12/week3/exercises.py rounds/round_12/final/comprehensive_exercise.py
 python3 -m py_compile rounds/round_13/week1/exercises.py rounds/round_13/week2/exercises.py rounds/round_13/week3/exercises.py rounds/round_13/final/comprehensive_exercise.py
 python3 -m py_compile rounds/round_14/week1/exercises.py rounds/round_14/week2/exercises.py rounds/round_14/week3/exercises.py rounds/round_14/final/comprehensive_exercise.py
+python3 -m py_compile rounds/round_15/week1/exercises.py rounds/round_15/week2/exercises.py rounds/round_15/week3/exercises.py rounds/round_15/final/comprehensive_exercise.py
 python3 scripts/agent_gate.py --verify
 git diff --check
 ```
