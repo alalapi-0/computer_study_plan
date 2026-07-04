@@ -175,6 +175,33 @@
     }
     .config-card button.save-btn:hover { background: rgba(56,189,248,0.1); }
 
+    /* ── Saves ── */
+    .save-toolbar { display: flex; gap: 0.55rem; flex-wrap: wrap; align-items: center; margin-bottom: 0.9rem; }
+    .save-label-input {
+      flex: 1 1 220px;
+      min-width: 0;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 0.52rem 0.7rem;
+      font: inherit;
+      color: var(--text);
+      background: #fff;
+    }
+    .save-list { display: grid; gap: 0.55rem; }
+    .save-item {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) max-content;
+      gap: 0.8rem;
+      align-items: center;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: #f8fafc;
+      padding: 0.75rem 0.9rem;
+    }
+    .save-name { font-weight: 700; font-size: 0.88rem; }
+    .save-meta { color: var(--text-muted); font-size: 0.75rem; margin-top: 0.2rem; }
+    .save-empty { color: var(--text-muted); font-size: 0.82rem; }
+
     /* ── Stage panel ── */
     .stage-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 0.6rem; }
     .stage-item {
@@ -764,6 +791,17 @@
       padding: 0.42rem 0.8rem;
     }
     .config-card button.save-btn:hover { background: #dff3ee; }
+    .save-label-input {
+      border-color: var(--border);
+      background: #fff;
+      color: var(--ink);
+    }
+    .save-item {
+      background: var(--card-hover);
+      border-color: var(--border);
+    }
+    .save-name { color: var(--ink); }
+    .save-meta { color: var(--text-muted); }
 
     .stage-list { grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); }
     .stage-item { padding: 0.8rem; }
@@ -1063,6 +1101,10 @@
         flex-direction: column;
       }
       .actions .btn { width: 100%; }
+      .save-toolbar { align-items: stretch; }
+      .save-toolbar .btn,
+      .save-item .task-btn { width: 100%; }
+      .save-item { grid-template-columns: minmax(0, 1fr); }
       .toast {
         left: 0.8rem;
         right: 0.8rem;
@@ -1087,6 +1129,7 @@
     <a class="nav-item active" href="#today">今日学习</a>
     <a class="nav-item" href="#lanes">主线进度</a>
     <a class="nav-item" href="#config">本周配置</a>
+    <a class="nav-item" href="#saves">存档读档</a>
     <a class="nav-item" href="#rounds">Round 清单</a>
   </nav>
   <div class="rail-note">
@@ -1176,22 +1219,36 @@
   </div>
 </div>
 
-<!-- ── Block 4: 阶段进度（Stage 0–7） ── -->
-<div class="card" id="rounds">
+<!-- ── Block 4: 存档与读档 ── -->
+<div class="card" id="saves">
+  <h2>存档与读档</h2>
+  <div class="card-sub">存档会保存进度、动作记录、任务反馈、本周任务和倒计时。读档前会自动创建恢复点，防止误操作。</div>
+  <div class="save-toolbar">
+    <input class="save-label-input" id="saveLabel" placeholder="存档备注，例如：软考第一轮启动前" />
+    <button class="btn" type="button" onclick="createSave()">创建存档</button>
+    <button class="btn" type="button" onclick="loadSaves()">刷新列表</button>
+  </div>
+  <div class="save-list" id="saveList">
+    <div class="save-empty">正在读取存档列表…</div>
+  </div>
+</div>
+
+<!-- ── Block 5: 阶段进度（Stage 0–7） ── -->
+<div class="card" id="stages">
   <h2>阶段进度（Stage 0–7）</h2>
   <div class="card-sub">详见 <code style="background:rgba(255,255,255,0.08);padding:0.05em 0.35em;border-radius:4px;font-family:monospace">docs/STAGE_PLAN.md</code>。Stage 进度按"该 Stage 关联 lane 的完成率"近似计算。</div>
   <div class="stage-list" id="stageList"></div>
 </div>
 
-<!-- ── Block 5: 当前薄弱项 ── -->
+<!-- ── Block 6: 当前薄弱项 ── -->
 <div class="card">
   <h2>当前薄弱项</h2>
   <div class="card-sub">按 lane 完成率自动识别（已开始学习且 &lt; 30%，任务数 ≥ 5）。</div>
   <div class="weak-list" id="weakList"></div>
 </div>
 
-<!-- ── Block 6: 按 lane / Round 浏览 ── -->
-<div class="card">
+<!-- ── Block 7: 按 lane / Round 浏览 ── -->
+<div class="card" id="rounds">
   <h2>按主线查看 Round</h2>
   <div class="card-sub">按 lane 切换，查看 Round 00–21 任务清单。点击「阅读」可在页内打开 notes / 计划文档。</div>
   <div class="lane-tabs" id="laneTabs"></div>
@@ -1668,6 +1725,154 @@ function updateCountdowns() {
 });
 
 // ============================================================
+// Save / load snapshots
+// ============================================================
+function personalPayload() {
+  return {
+    weekTasks: document.getElementById("weekTasks")?.value || "",
+    examDates: {
+      soft: document.getElementById("softExamDate")?.value || "",
+      math: document.getElementById("math2Date")?.value || "",
+      cs: document.getElementById("cs408Date")?.value || "",
+    },
+  };
+}
+
+function applyPersonalPayload(personal) {
+  if (!personal || typeof personal !== "object") return;
+  if (typeof personal.weekTasks === "string") {
+    document.getElementById("weekTasks").value = personal.weekTasks;
+    localStorage.setItem(LS_WEEK, personal.weekTasks);
+  }
+  const dates = personal.examDates || {};
+  if (typeof dates.soft === "string") document.getElementById("softExamDate").value = dates.soft;
+  if (typeof dates.math === "string") document.getElementById("math2Date").value = dates.math;
+  if (typeof dates.cs === "string") document.getElementById("cs408Date").value = dates.cs;
+  localStorage.setItem(LS_DATES, JSON.stringify({
+    soft: document.getElementById("softExamDate").value || "",
+    math: document.getElementById("math2Date").value || "",
+    cs: document.getElementById("cs408Date").value || "",
+  }));
+  updateCountdowns();
+}
+
+function formatSaveTime(iso) {
+  if (!iso) return "时间未知";
+  const d = new Date(iso);
+  if (Number.isNaN(d.getTime())) return iso;
+  return d.toLocaleString("zh-CN", { hour12: false });
+}
+
+function saveSummaryText(save) {
+  const s = save.summary || {};
+  const done = Number.isFinite(Number(s.done_count)) ? Number(s.done_count) : 0;
+  const total = Number.isFinite(Number(s.total)) ? Number(s.total) : 0;
+  const events = Number.isFinite(Number(s.event_count)) ? Number(s.event_count) : 0;
+  return `${done}/${total} 完成 · ${events} 条记录 · ${formatSaveTime(save.created_at)}`;
+}
+
+function renderSaves(saves) {
+  const el = document.getElementById("saveList");
+  if (!el) return;
+  if (!apiReady) {
+    el.innerHTML = "<div class='save-empty'>只读模式下无法存档。请用 <code>python3 scripts/progress_server.py</code> 启动后访问页面。</div>";
+    return;
+  }
+  if (!saves.length) {
+    el.innerHTML = "<div class='save-empty'>还没有存档。可以先创建一份当前状态快照。</div>";
+    return;
+  }
+  el.innerHTML = saves.map((save) => `
+    <div class="save-item">
+      <div>
+        <div class="save-name">${escapeHtml(save.label || save.save_id)}</div>
+        <div class="save-meta">${escapeHtml(saveSummaryText(save))}</div>
+        <div class="save-meta">${escapeHtml(save.path || "")}${save.reason === "auto-before-load" ? " · 读档前恢复点" : ""}</div>
+      </div>
+      <button class="task-btn record save-load-btn" type="button" data-save-id="${escapeHtml(save.save_id)}" data-save-label="${escapeHtml(save.label || save.save_id)}">读档</button>
+    </div>
+  `).join("");
+  el.querySelectorAll(".save-load-btn").forEach((btn) => {
+    btn.addEventListener("click", () => loadSave(btn.dataset.saveId, btn.dataset.saveLabel));
+  });
+}
+
+async function loadSaves() {
+  const el = document.getElementById("saveList");
+  if (!el) return;
+  if (!apiReady) {
+    renderSaves([]);
+    return;
+  }
+  el.innerHTML = "<div class='save-empty'>正在读取存档列表…</div>";
+  try {
+    const res = await fetch("/api/saves?_=" + Date.now());
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || "读取失败");
+    renderSaves(data.saves || []);
+  } catch (err) {
+    el.innerHTML = `<div class='save-empty'>无法读取存档列表：${escapeHtml(err.message)}</div>`;
+  }
+}
+
+async function createSave() {
+  if (!apiReady) {
+    showToast("请先运行 python3 scripts/progress_server.py 启动服务", "warn");
+    return;
+  }
+  const input = document.getElementById("saveLabel");
+  const label = input?.value.trim() || "";
+  try {
+    const res = await fetch("/api/saves", {
+      method: "POST",
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        label,
+        personal: personalPayload(),
+      }),
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || "存档失败");
+    if (input) input.value = "";
+    renderSaves(data.saves || []);
+    showToast(`已创建存档：${data.save?.label || data.save?.save_id}`, "ok");
+  } catch (err) {
+    showToast(err.message || "存档失败", "error");
+  }
+}
+
+async function loadSave(saveId, label) {
+  if (!apiReady || !saveId) return;
+  const ok = confirm(`读档会恢复「${label || saveId}」中的进度与记录。系统会先自动创建一份读档前恢复点。确定继续吗？`);
+  if (!ok) return;
+  try {
+    const res = await fetch(`/api/saves/${encodeURIComponent(saveId)}/load`, {
+      method: "POST",
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ personal: personalPayload() }),
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || "读档失败");
+    progressData = data.tasks || progressData;
+    lanesData = data.lanes || lanesData;
+    feedbackMap = data.feedback || feedbackMap;
+    applyPersonalPayload(data.loaded?.personal);
+    await loadEventData();
+    render();
+    renderSaves(data.saves || []);
+    showToast(`已读档：${data.loaded?.label || saveId}`, "ok");
+  } catch (err) {
+    showToast(err.message || "读档失败", "error");
+  }
+}
+
+// ============================================================
 // Bulk expand / collapse
 // ============================================================
 function expandAll() {
@@ -1700,6 +1905,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   await loadFeedbackData();
   await loadEventData();
   await loadProgress();
+  await loadSaves();
 });
 </script>
 </body>

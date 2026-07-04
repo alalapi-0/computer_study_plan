@@ -151,7 +151,7 @@ npm run check:mcp
 ├─ docs/WORKSPACE.md               ← ★ 路径与工作区约定（单一事实源）
 ├─ AGENTS.md                       ← Codex / Cursor / 编程 AI 协作硬规则
 ├─ CONVERSION_PROTOCOL.md          ← Round md 与进度系统协议（v2.0）
-├─ progress.html                   ← 进度看板（四主线 + 阶段 + 倒计时）
+├─ progress.html                   ← 学习工作台（四主线 + 阶段 + 倒计时 + 存档/读档）
 ├─ progress.json                   ← 进度状态唯一来源（v2 + lanes）
 ├─ progress_data.js                ← 进度镜像（mark_done.sh 自动生成）
 ├─ mark_done.sh                    ← 进度 CLI（支持按 lane 分组）
@@ -191,6 +191,7 @@ npm run check:mcp
 │  ├─ README.md
 │  ├─ weekly_reviews/              ← 每周复盘（YYYY-WW.md）
 │  ├─ error_notes/                 ← 错题本（按 lane / module 归档）
+│  ├─ saves/                       ← Web UI 学习进度快照
 │  └─ completed_tasks/             ← 完成的练习快照（可选）
 │
 └─ rounds/                         ← Round 实操目录（仅可执行内容进此）
@@ -242,7 +243,7 @@ cd ~/PycharmProjects/computer_study_plan
 ### 6.2 日常使用
 
 - 每周选择一种强度（保底 / 标准 / 冲刺），在 `records/weekly_reviews/YYYY-WW.md` 写本周清单。
-- 工作日完成任务后：优先打开 Web UI 点击「完成」或在「记录」里写备注；也可用 `bash mark_done.sh <task-id>`。
+- 工作日完成任务后：优先打开 Web UI 点击「完成」或在「记录」里写备注；重要节点可在「存档与读档」创建快照；也可用 `bash mark_done.sh <task-id>`。
 - 错题录入 `records/error_notes/<lane>/<module>/...`。
 - 周末写复盘。
 
@@ -255,7 +256,7 @@ cd ~/PycharmProjects/computer_study_plan
   # 或：npm run serve
   open http://127.0.0.1:8777/progress.html
   ```
-  看板内可直接「完成 / 撤销」任务、打开「记录」写备注和证据路径、页内阅读 notes 与练习脚本。
+  看板内可直接「完成 / 撤销」任务、打开「记录」写备注和证据路径、页内阅读 notes 与练习脚本，并通过「存档与读档」保存或恢复学习进度快照。读档前会自动创建恢复点。
 - **方式二（只读）**：双击 `progress.html` 或通过 `python3 -m http.server` 打开（无写 API）。
 
 看板包含：
@@ -264,6 +265,7 @@ cd ~/PycharmProjects/computer_study_plan
 - 四主线进度（engineering / soft_exam / math2 / cs408）
 - 本周任务（localStorage）
 - 考试倒计时（localStorage）
+- 存档与读档（进度、动作记录、反馈、本周任务、倒计时）
 - 阶段进度（Stage 0–7）
 - 当前薄弱项（自动识别完成率 < 30% 且任务数 ≥ 5 的 lane）
 - 按 lane / Round 浏览（实操目录已展开 Round 00–21；进度看板任务集合已与 `progress.json` 对齐）

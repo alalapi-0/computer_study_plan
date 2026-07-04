@@ -468,6 +468,22 @@ TASK-011 实际产物：
 
 ---
 
+## TASK-RR-30：Web UI 存档与读档
+
+- 状态：**done**（2026-07-04）
+- 背景：用户要求只通过 Web UI 推进学习并能“存档 / 读档”。原 Web UI 已能阅读、记录、完成/撤销，但没有快照恢复能力。
+- 目标：实现本地学习进度快照；快照覆盖进度、动作记录、反馈、本周任务和倒计时；读档前自动创建恢复点。
+- 实际产物：
+  - `records/saves/README.md`
+  - `scripts/progress_lib.py` 存档/读档公共函数
+  - `scripts/progress_server.py` 新增 `GET /api/saves`、`POST /api/saves`、`POST /api/saves/<save_id>/load`
+  - `progress.html` 新增“存档与读档”卡片与导航入口
+  - `README.md`、`docs/PROJECT_STATE.md`、`docs/reports/WEB_UI_USER_TEST_2026_07_04.md` 同步说明与测试记录
+- 验收：API 和真实浏览器 UI 均通过；读档确认框正常；读档后自动恢复点出现在列表；桌面端和 390px 移动端无整页横向溢出；测试快照已清理。
+- 是否需要用户介入：否。
+
+---
+
 ## TASK-RR-26：Stage 1 增强 · Round 05 接入进度系统
 
 - 状态：**done**（2026-06-15）

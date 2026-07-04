@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import datetime
 import json
+import re
 import uuid
 from pathlib import Path
 from typing import Any
@@ -49,6 +50,10 @@ def feedback_json_path(root: Path | None = None) -> Path:
     return (root or repo_root()) / "records/feedback/task_feedback.json"
 
 
+def saves_dir_path(root: Path | None = None) -> Path:
+    return (root or repo_root()) / "records/saves"
+
+
 def load_progress(root: Path | None = None) -> dict[str, Any]:
     path = progress_json_path(root)
     with path.open("r", encoding="utf-8") as f:
@@ -72,6 +77,15 @@ def save_progress(data: dict[str, Any], root: Path | None = None) -> None:
     path = progress_json_path(root)
     with path.open("w", encoding="utf-8") as f:
         json.dump(data, f, ensure_ascii=False, indent=2)
+
+
+def read_feedback_payload(root: Path | None = None) -> dict[str, Any]:
+    path = feedback_json_path(root)
+    if not path.exists():
+        progress = load_progress(root)
+        return build_feedback_payload(progress, load_action_events(root))
+    with path.open("r", encoding="utf-8") as f:
+        return json.load(f)
 
 
 def sync_progress_data_js(data: dict[str, Any], root: Path | None = None) -> None:
@@ -213,6 +227,159 @@ def write_feedback_payload(progress: dict[str, Any], root: Path | None = None) -
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     return payload
+
+
+def save_id_from_label(label: str, fallback: str = "save") -> str:
+    slug = re.sub(r"[^A-Za-z0-9._-]+", "-", label.strip()).strip("-._").lower()
+    return (slug or fallback)[:48]
+
+
+def summarize_save_payload(payload: dict[str, Any]) -> dict[str, Any]:
+    progress = payload.get("progress") or {}
+    tasks = progress.get("tasks") or {}
+    events = payload.get("events") or []
+    done_count = sum(1 for item in tasks.values() if isinstance(item, dict) and item.get("done"))
+    return {
+        "total": len(tasks),
+        "done_count": done_count,
+        "event_count": len(events) if isinstance(events, list) else 0,
+    }
+
+
+def create_progress_save(
+    root: Path | None = None,
+    label: str = "",
+    personal: dict[str, Any] | None = None,
+    reason: str = "manual",
+) -> dict[str, Any]:
+    root = root or repo_root()
+    data = load_progress(root)
+    events = load_action_events(root)
+    feedback = read_feedback_payload(root)
+    created_at = datetime.datetime.now().isoformat(timespec="seconds")
+    stamp = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
+    slug = save_id_from_label(label or reason, fallback=reason or "save")
+    save_id = f"{stamp}-{slug}"
+    save_dir = saves_dir_path(root)
+    save_dir.mkdir(parents=True, exist_ok=True)
+    path = save_dir / f"{save_id}.json"
+    if path.exists():
+        save_id = f"{save_id}-{uuid.uuid4().hex[:6]}"
+        path = save_dir / f"{save_id}.json"
+
+    payload = {
+        "version": 1,
+        "save_id": save_id,
+        "label": label.strip() or ("读档前自动恢复点" if reason == "auto-before-load" else "手动存档"),
+        "reason": reason,
+        "created_at": created_at,
+        "summary": {},
+        "progress": data,
+        "events": events,
+        "feedback": feedback,
+        "personal": personal or {},
+    }
+    payload["summary"] = summarize_save_payload(payload)
+    path.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    return {
+        "save_id": save_id,
+        "label": payload["label"],
+        "reason": reason,
+        "created_at": created_at,
+        "path": str(path.relative_to(root)),
+        "summary": payload["summary"],
+    }
+
+
+def list_progress_saves(root: Path | None = None) -> list[dict[str, Any]]:
+    root = root or repo_root()
+    save_dir = saves_dir_path(root)
+    if not save_dir.exists():
+        return []
+    rows: list[dict[str, Any]] = []
+    for path in save_dir.glob("*.json"):
+        try:
+            payload = json.loads(path.read_text(encoding="utf-8"))
+            rows.append(
+                {
+                    "save_id": str(payload.get("save_id") or path.stem),
+                    "label": str(payload.get("label") or path.stem),
+                    "reason": str(payload.get("reason") or "manual"),
+                    "created_at": str(payload.get("created_at") or ""),
+                    "path": str(path.relative_to(root)),
+                    "summary": payload.get("summary") or summarize_save_payload(payload),
+                }
+            )
+        except Exception:
+            rows.append(
+                {
+                    "save_id": path.stem,
+                    "label": path.stem,
+                    "reason": "unreadable",
+                    "created_at": "",
+                    "path": str(path.relative_to(root)),
+                    "summary": {},
+                    "error": "invalid_save_file",
+                }
+            )
+    return sorted(rows, key=lambda row: row.get("created_at", ""), reverse=True)
+
+
+def progress_save_path(save_id: str, root: Path | None = None) -> Path:
+    if not re.match(r"^[A-Za-z0-9._-]+$", save_id):
+        raise ValueError("invalid_save_id")
+    path = saves_dir_path(root) / f"{save_id}.json"
+    save_dir = saves_dir_path(root).resolve()
+    resolved = path.resolve()
+    if save_dir not in resolved.parents:
+        raise ValueError("invalid_save_path")
+    return path
+
+
+def load_progress_save(
+    save_id: str,
+    root: Path | None = None,
+    personal: dict[str, Any] | None = None,
+) -> dict[str, Any]:
+    root = root or repo_root()
+    path = progress_save_path(save_id, root)
+    if not path.exists():
+        raise FileNotFoundError(save_id)
+    payload = json.loads(path.read_text(encoding="utf-8"))
+    progress = payload.get("progress")
+    if not isinstance(progress, dict) or not isinstance(progress.get("tasks"), dict):
+        raise ValueError("invalid_save_payload")
+
+    backup = create_progress_save(
+        root=root,
+        label=f"读档前恢复点 · {save_id}",
+        personal=personal,
+        reason="auto-before-load",
+    )
+
+    restored = normalize_progress(progress)
+    save_progress(restored, root)
+    sync_progress_data_js(restored, root)
+
+    events = payload.get("events") if isinstance(payload.get("events"), list) else []
+    log_file = action_log_path(root)
+    log_file.parent.mkdir(parents=True, exist_ok=True)
+    log_file.write_text(
+        "".join(json.dumps(event, ensure_ascii=False) + "\n" for event in events),
+        encoding="utf-8",
+    )
+    feedback = write_feedback_payload(restored, root)
+    return {
+        "save_id": save_id,
+        "label": str(payload.get("label") or save_id),
+        "created_at": str(payload.get("created_at") or ""),
+        "backup": backup,
+        "summary": summarize_save_payload(payload),
+        "personal": payload.get("personal") or {},
+        "tasks": restored.get("tasks", {}),
+        "lanes": restored.get("lanes", {}),
+        "feedback": feedback.get("feedback", {}),
+    }
 
 
 def mark_task(

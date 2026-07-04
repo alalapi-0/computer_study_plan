@@ -994,3 +994,29 @@
 
 - 未改动 `records/` 下真实学习记录。
 - 未引入前端框架、数据库、后端服务或大型新依赖。
+
+## 41. 2026-07-04 Web UI 存档与读档
+
+### 41.1 本轮新增
+
+- `records/saves/README.md`：说明 Web UI 学习进度快照目录。
+- `scripts/progress_lib.py`：新增本地快照创建、列表、读档恢复、读档前自动恢复点等公共函数。
+- `scripts/progress_server.py`：新增 `GET /api/saves`、`POST /api/saves`、`POST /api/saves/<save_id>/load`。
+- `progress.html`：新增“存档与读档”导航入口与操作卡片。
+
+### 41.2 本轮修改
+
+- `README.md`：同步 Web UI 支持存档/读档，并说明读档前自动创建恢复点。
+- `docs/reports/WEB_UI_USER_TEST_2026_07_04.md`：追加存档与读档补测记录。
+
+### 41.3 验证
+
+- API 验证：创建测试存档、读档恢复、自动恢复点创建均通过；测试快照含 286 个任务、7 条动作记录。
+- 真实浏览器测试：用户可在 Web UI 输入存档备注、点击创建存档、从列表点击读档并确认；读档后恢复点显示正常。
+- 桌面端 1280px 与移动端 390px 均无整页横向溢出；当前 URL 无 console error。
+
+### 41.4 风险边界核对
+
+- 本轮 API/UI 测试产生的 `codex-*test-save` 临时快照已删除。
+- 未删除 `records/action_logs/events.jsonl` 中已有真实动作记录。
+- 未引入数据库、前端框架、后端框架或大型新依赖。

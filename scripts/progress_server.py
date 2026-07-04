@@ -13,16 +13,20 @@ from pathlib import Path
 from urllib.parse import urlparse
 
 from progress_lib import (
+    create_progress_save,
     events_by_task,
+    list_progress_saves,
     list_status,
     load_action_events,
     load_progress,
+    load_progress_save,
     mark_task,
     repo_root,
     sync_progress_data_js,
 )
 
 TASK_API = re.compile(r"^/api/tasks/([^/]+)/(done|undo)$")
+SAVE_LOAD_API = re.compile(r"^/api/saves/([A-Za-z0-9._-]+)/load$")
 
 
 class ProgressRequestHandler(SimpleHTTPRequestHandler):
@@ -70,6 +74,15 @@ class ProgressRequestHandler(SimpleHTTPRequestHandler):
                 payload = {"version": 1, "feedback": {}}
             self.end_json(HTTPStatus.OK, payload)
             return
+        if path == "/api/saves":
+            self.end_json(
+                HTTPStatus.OK,
+                {
+                    "version": 1,
+                    "saves": list_progress_saves(self.repo_root),
+                },
+            )
+            return
         if path == "/api/health":
             self.end_json(HTTPStatus.OK, {"ok": True, "service": "progress_server"})
             return
@@ -77,10 +90,60 @@ class ProgressRequestHandler(SimpleHTTPRequestHandler):
 
     def do_POST(self) -> None:
         path = urlparse(self.path).path
+        payload = {}
+        length = int(self.headers.get("Content-Length") or 0)
+        if length:
+            try:
+                payload = json.loads(self.rfile.read(length).decode("utf-8"))
+            except json.JSONDecodeError:
+                self.end_json(HTTPStatus.BAD_REQUEST, {"ok": False, "error": "invalid_json"})
+                return
+
         if path == "/api/sync":
             data = load_progress(self.repo_root)
             sync_progress_data_js(data, self.repo_root)
             self.end_json(HTTPStatus.OK, {"ok": True, "tasks": len(data.get("tasks", {}))})
+            return
+        if path == "/api/saves":
+            result = create_progress_save(
+                root=self.repo_root,
+                label=str(payload.get("label", ""))[:120],
+                personal=payload.get("personal") if isinstance(payload.get("personal"), dict) else {},
+                reason="manual",
+            )
+            self.end_json(
+                HTTPStatus.OK,
+                {
+                    "ok": True,
+                    "save": result,
+                    "saves": list_progress_saves(self.repo_root),
+                },
+            )
+            return
+
+        save_match = SAVE_LOAD_API.match(path)
+        if save_match:
+            try:
+                result = load_progress_save(
+                    save_match.group(1),
+                    root=self.repo_root,
+                    personal=payload.get("personal") if isinstance(payload.get("personal"), dict) else {},
+                )
+                self.end_json(
+                    HTTPStatus.OK,
+                    {
+                        "ok": True,
+                        "loaded": result,
+                        "tasks": result.get("tasks", {}),
+                        "lanes": result.get("lanes", {}),
+                        "feedback": result.get("feedback", {}),
+                        "saves": list_progress_saves(self.repo_root),
+                    },
+                )
+            except FileNotFoundError:
+                self.end_json(HTTPStatus.NOT_FOUND, {"ok": False, "error": "save_not_found"})
+            except ValueError as exc:
+                self.end_json(HTTPStatus.BAD_REQUEST, {"ok": False, "error": str(exc)})
             return
 
         match = TASK_API.match(path)
@@ -90,14 +153,6 @@ class ProgressRequestHandler(SimpleHTTPRequestHandler):
 
         task_id = match.group(1)
         action = match.group(2)
-        payload = {}
-        length = int(self.headers.get("Content-Length") or 0)
-        if length:
-            try:
-                payload = json.loads(self.rfile.read(length).decode("utf-8"))
-            except json.JSONDecodeError:
-                self.end_json(HTTPStatus.BAD_REQUEST, {"ok": False, "error": "invalid_json"})
-                return
         try:
             result = mark_task(
                 task_id,
