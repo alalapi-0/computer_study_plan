@@ -1885,77 +1885,77 @@ window.ROUNDS_DATA = [
     "id": "round_17",
     "title": "Round 17 · 服务化收口",
     "lane": "engineering",
-    "difficulty": "⭐⭐⭐☆☆",
+    "difficulty": "⭐⭐⭐⭐☆",
     "duration": "3 周",
     "weeks": [
       {
         "id": "round17-week1",
-        "title": "第 1 周：基础练习",
+        "title": "第 1 周：APIRouter 服务拆分",
         "tasks": [
           {
             "id": "r17-w1-read",
             "type": "reading",
-            "title": "阅读 week1/notes.md",
+            "title": "阅读：APIRouter、main.py 与路由职责",
             "file": "rounds/round_17/week1/notes.md"
           },
           {
             "id": "r17-w1-ex1",
             "type": "exercise",
-            "title": "练习1",
+            "title": "练习：生成 APIRouter 多文件服务结构",
             "file": "rounds/round_17/week1/exercises.py"
           },
           {
             "id": "r17-w1-self",
             "type": "test",
-            "title": "第1周自测",
+            "title": "自测：自己写 route_inventory.json",
             "file": "rounds/round_17/week1/exercises.py"
           }
         ]
       },
       {
         "id": "round17-week2",
-        "title": "第 2 周：进阶练习",
+        "title": "第 2 周：配置、元数据与日志",
         "tasks": [
           {
             "id": "r17-w2-read",
             "type": "reading",
-            "title": "阅读 week2/notes.md",
+            "title": "阅读：Settings、API 元数据与 logging",
             "file": "rounds/round_17/week2/notes.md"
           },
           {
             "id": "r17-w2-ex2",
             "type": "exercise",
-            "title": "练习2",
+            "title": "练习：生成配置、元数据与日志入口",
             "file": "rounds/round_17/week2/exercises.py"
           },
           {
             "id": "r17-w2-self",
             "type": "test",
-            "title": "第2周自测",
+            "title": "自测：自己写 .env.example 与日志 demo",
             "file": "rounds/round_17/week2/exercises.py"
           }
         ]
       },
       {
         "id": "round17-week3",
-        "title": "第 3 周：综合练习",
+        "title": "第 3 周：认证、CORS 与部署检查",
         "tasks": [
           {
             "id": "r17-w3-read",
             "type": "reading",
-            "title": "阅读 week3/notes.md",
+            "title": "阅读：Bearer token、CORS、Dockerfile 与 preflight",
             "file": "rounds/round_17/week3/notes.md"
           },
           {
             "id": "r17-w3-ex3",
             "type": "exercise",
-            "title": "练习3",
+            "title": "练习：生成认证、CORS 与部署检查",
             "file": "rounds/round_17/week3/exercises.py"
           },
           {
             "id": "r17-w3-self",
             "type": "test",
-            "title": "第3周自测",
+            "title": "自测：自己写部署前检查清单",
             "file": "rounds/round_17/week3/exercises.py"
           }
         ]
@@ -1967,19 +1967,19 @@ window.ROUNDS_DATA = [
           {
             "id": "r17-fin-comp",
             "type": "exercise",
-            "title": "综合练习",
+            "title": "综合练习：完整服务化收口项目包",
             "file": "rounds/round_17/final/comprehensive_exercise.py"
           },
           {
             "id": "r17-fin-sheet",
             "type": "output",
-            "title": "完成本 Round 小抄",
+            "title": "产出：完成 Round 17 服务化收口小抄",
             "file": "rounds/round_17/final/service_wrapup_cheatsheet.md"
           },
           {
             "id": "r17-fin-acc1",
             "type": "test",
-            "title": "验收：Round 17 核心目标",
+            "title": "验收：解释路由拆分、配置、日志、认证、CORS 与 Docker 边界",
             "file": "round_17.md"
           }
         ]

@@ -1593,3 +1593,40 @@
 - 未引入大型新依赖；未安装 FastAPI / uvicorn；未创建后端服务。
 - 自动脚本只写入 `~/cli-lab/round16` 沙盒；生成的 `requirements.txt` 是学习产物，不改变仓库运行依赖。
 - `npm run check:mcp` 配置层通过；`npm run check:cursor-mcp` 显示当前线程部分 MCP 仍需 approval，因此本轮真实浏览器检查使用本机 Google Chrome + Playwright 完成。
+
+## 60. 2026-07-04 TASK-RR-48 Round 17 内容填充与服务化收口练习
+
+### 60.1 本轮修改
+
+- `rounds/round_17/README.md`：从“最小实操骨架”更新为 Web UI 可练习说明，明确页面路径、沙盒产物、依赖边界和外链策略。
+- `rounds/round_17/week1|week2|week3/notes.md`：补齐 APIRouter 服务拆分、Settings/metadata/logging、Bearer auth、CORS、Dockerfile 与 preflight 的学习步骤、自测命令和完成标准。
+- `rounds/round_17/week1|week2|week3/exercises.py`：改为默认可非交互运行，自动生成服务化示例项目、静态检查报告和下一步提示，只自动记录对应练习任务。
+- `rounds/round_17/final/comprehensive_exercise.py`：改为 Web UI 默认可运行的服务化收口项目包练习，生成 routers、settings、logging、auth、schemas、CORS、Dockerfile、`service_contract.json` 和最终静态验收报告，只自动记录 `r17-fin-comp`。
+- `rounds/round_17/final/service_wrapup_cheatsheet.md` 与 `round_17.md`：补齐 Web UI 完成路径、服务化收口小抄和最终验收自问。
+- `scripts/build_rounds_data.py` / `rounds_data.js`：将 Round 17 UI 任务标题从“练习1 / 练习2 / 练习3”改为用户能理解的动作标题，并同步四星难度。
+- `scripts/progress_lib.py`：浏览器终端路径解析同时接受 `~/round17`、`~/cli-lab/round17` 和沙盒内绝对路径，避免用户按直觉输入时被映射到 `~/cli-lab/cli-lab/...`。
+- `progress.html`：取消顶部“今日学习”卡片的 sticky 行为，修复滚动到 Round 清单时遮挡任务区的问题。
+
+### 60.2 用户视角问题修复
+
+- Round 17 原 notes 太短，用户不知道如何只通过 Web UI 完成服务化收口练习。
+- Round 17 原脚本只写 marker 文件，没有形成可检查的路由拆分、配置日志、认证/CORS、部署清单或合同产物。
+- Round 17 原任务标题过泛，用户无法判断分别要练 APIRouter、Settings/logging 还是安全部署。
+- 浏览器终端原后端路径解析不兼容 `~/cli-lab/round17`，用户按页面文案直觉输入时会进入错误的双层目录。
+- 顶部卡片 sticky 在真实滚动截图中遮挡 Round 清单，已改为普通内容流。
+
+### 60.3 验证
+
+- API 验证：`r17-w1-ex1`、`r17-w2-ex2`、`r17-w3-ex3`、`r17-fin-comp` 均可通过 `/api/tasks/<id>/run` 运行成功；`r17-w1-self/run` 返回 `task_not_runnable`。
+- 浏览器终端验证：`/api/terminal?cwd=~/round17` 与 `/api/terminal?cwd=~/cli-lab/round17` 均映射为 `~/round17`；终端 API 可执行 `pwd` / 手写 `smoke.py` / `cd ~/round17/week1_auto`；`docker build -t demo .` 返回 `terminal_command_not_allowed:docker`。
+- 真实浏览器验证：`progress.html?round=round_17` 可选中 Round 17；12 个任务、4 个运行按钮、9 个终端按钮均可见；Week 1 notes 可在阅读器中直接阅读；点击“运行”有确认框，结果弹窗显示“运行成功”和 `static_check_report.json`；终端输入 `pwd` 输出 `/Users/alalapi/cli-lab/round17`。
+- 文档阅读与外链验证：Week 1 notes 包含 Web UI 学习路径和浏览器终端自测；FastAPI Bigger Applications 与 Metadata 外链渲染为新标签页打开，`rel` 包含 `noreferrer noopener`。
+- 移动端验证：390px 宽度无整页横向溢出；任务按钮换行后不重叠；顶部卡片不再 sticky。
+- 静态与数据验证：`build_rounds_data.py`、`generate_task_feedback.py`、Python 语法编译、`check_protocol_sync.py`、`validate_learning_data.py`、`node --check progress_ui.js`、`git diff --check`、`agent_gate.py --verify` 均通过。
+
+### 60.4 风险边界核对
+
+- 本轮 API/UI 验证产生的进度、动作、反馈和终端历史均已从测试前快照恢复。
+- 未引入大型新依赖；未安装 FastAPI / uvicorn；未执行 Docker。
+- 自动脚本只写入 `~/cli-lab/round17` 沙盒；生成的 `requirements.txt` 和 `Dockerfile` 是学习产物，不改变仓库运行依赖。
+- `npm run check:mcp` 配置层通过；`npm run check:cursor-mcp` 退出 0，但提示当前线程 filesystem 仍需 approval。本轮真实浏览器检查使用 Codex 应用内浏览器完成，DOM 快照能力在该运行时不可用时改用只读 DOM 检查与稳定选择器点击。

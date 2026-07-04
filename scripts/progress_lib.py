@@ -428,16 +428,30 @@ def terminal_root() -> Path:
     return root.resolve()
 
 
+def terminal_path_candidate(raw: str, root: Path, current: Path | None = None) -> Path:
+    """Resolve user-facing terminal paths into the ~/cli-lab sandbox."""
+    text = raw.strip() or "~"
+    if text in {"~", "$HOME"}:
+        return root
+    for prefix in ("~/cli-lab", "$HOME/cli-lab"):
+        if text == prefix:
+            return root
+        if text.startswith(prefix + "/"):
+            return root / text[len(prefix) + 1 :]
+    if text.startswith("~/"):
+        return root / text[2:]
+    if text.startswith("$HOME/"):
+        return root / text[len("$HOME/") :]
+    if text.startswith("/"):
+        return Path(text)
+    return (current or root) / text
+
+
 def clamp_terminal_cwd(cwd: str | None = None) -> Path:
     root = terminal_root()
     if not cwd:
         return root
-    text = str(cwd).strip()
-    if text in {"~", "$HOME"}:
-        return root
-    candidate = Path(text.replace("~", str(root), 1)).expanduser()
-    if not candidate.is_absolute():
-        candidate = root / candidate
+    candidate = terminal_path_candidate(str(cwd), root)
     resolved = candidate.resolve()
     if resolved != root and root not in resolved.parents:
         raise ValueError("terminal_cwd_outside_sandbox")
@@ -447,15 +461,7 @@ def clamp_terminal_cwd(cwd: str | None = None) -> Path:
 
 def resolve_terminal_cd(current: Path, target: str | None) -> Path:
     root = terminal_root()
-    raw = (target or "~").strip() or "~"
-    if raw in {"~", "$HOME"}:
-        candidate = root
-    elif raw.startswith("~/"):
-        candidate = root / raw[2:]
-    elif raw.startswith("/"):
-        candidate = Path(raw)
-    else:
-        candidate = current / raw
+    candidate = terminal_path_candidate(target or "~", root, current=current)
     resolved = candidate.resolve()
     if resolved != root and root not in resolved.parents:
         raise ValueError("terminal_path_outside_sandbox")

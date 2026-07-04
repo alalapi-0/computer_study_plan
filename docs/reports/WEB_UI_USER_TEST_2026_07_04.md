@@ -363,6 +363,7 @@ python3 -m py_compile rounds/round_12/week1/exercises.py rounds/round_12/week2/e
 python3 -m py_compile rounds/round_13/week1/exercises.py rounds/round_13/week2/exercises.py rounds/round_13/week3/exercises.py rounds/round_13/final/comprehensive_exercise.py
 python3 -m py_compile rounds/round_14/week1/exercises.py rounds/round_14/week2/exercises.py rounds/round_14/week3/exercises.py rounds/round_14/final/comprehensive_exercise.py
 python3 -m py_compile rounds/round_15/week1/exercises.py rounds/round_15/week2/exercises.py rounds/round_15/week3/exercises.py rounds/round_15/final/comprehensive_exercise.py
+python3 -m py_compile rounds/round_17/week1/exercises.py rounds/round_17/week2/exercises.py rounds/round_17/week3/exercises.py rounds/round_17/final/comprehensive_exercise.py
 python3 scripts/agent_gate.py --verify
 git diff --check
 ```
@@ -372,3 +373,24 @@ git diff --check
 核心 Web UI 闭环已成立：用户可以从 Web UI 找到下一条任务，打开资料或脚本，运行受控练习脚本，写入学习记录，完成或撤销任务，并看到记录历史与反馈建议。
 
 仍建议后续继续增强：继续逐轮补齐计划内容质量，并把更多考试主线任务从“阅读骨架”升级为可检查产物。
+
+## Round 17 内容填充与服务化收口补测
+
+- before 问题：Round 17 仍是最小骨架，notes 只列目标和自查，缺少 Web UI 学习路径和浏览器终端自测命令。
+- before 问题：Round 17 脚本只写 marker 文件，没有形成 APIRouter 拆分、Settings/logging、auth/CORS、Dockerfile、部署检查或服务合同等可检查产物。
+- before 问题：Round 17 任务标题仍是“练习1 / 练习2 / 练习3”，用户无法判断要练路由拆分、配置日志还是安全部署。
+- before 问题：浏览器终端后端不兼容 `~/cli-lab/round17` 这种用户直觉路径，会错误映射到双层 `cli-lab` 目录。
+- before 问题：顶部“今日学习”卡片 sticky，在滚动到 Round 清单时遮挡任务区。
+- 修复：Round 17 README、Week 1–3 notes、final 小抄已补齐 APIRouter、Settings、metadata、logging、Bearer auth、CORS、Dockerfile、preflight、Web UI 完成路径和验收自问。
+- 修复：Round 17 Python 脚本改为非交互运行，自动生成多文件服务结构、配置日志入口、安全部署检查、最终服务化项目包和静态检查报告，只自动记录脚本实际完成的练习任务。
+- 修复：Round 17 UI 任务标题改为“生成 APIRouter 多文件服务结构”“生成配置、元数据与日志入口”“生成认证、CORS 与部署检查”等动作标题，并同步四星难度。
+- 修复：终端路径解析同时兼容 `~/round17`、`~/cli-lab/round17` 和沙盒内绝对路径；顶部卡片取消 sticky，避免遮挡 Round 清单。
+- 边界：本轮不安装 FastAPI / uvicorn，不启动长期服务，不执行 Docker；生成真实代码形状，并用 Python 标准库做静态合同验证。
+- API 验证：`r17-w1-ex1`、`r17-w2-ex2`、`r17-w3-ex3`、`r17-fin-comp` 均可运行成功；`r17-w1-self/run` 返回 `task_not_runnable`。
+- 浏览器终端验证：`~/round17` 与 `~/cli-lab/round17` 均映射到 `~/round17`；终端 API 能在任务 `r17-w1-self` 下执行 `pwd` / 手写 `smoke.py` / `cd ~/round17/week1_auto`；`docker build -t demo .` 返回 `terminal_command_not_allowed:docker`。
+- UI 验证：Codex 应用内浏览器打开 `progress.html?round=round_17` 后直接选中 Round 17；12 个任务、4 个运行按钮、9 个终端按钮均可见；Week 1 notes 可在阅读器中直接阅读；点击“运行”有确认框，确认后运行结果弹窗显示“运行成功”和 `static_check_report.json`；终端输入 `pwd` 输出 `/Users/alalapi/cli-lab/round17`。
+- 文档阅读验证：Week 1 notes 包含 Web UI 学习路径和浏览器终端自测；FastAPI Bigger Applications 与 Metadata 外链渲染为 `_blank` 新标签，`rel` 包含 `noreferrer noopener`。
+- 移动端验证：390px 宽度无整页横向溢出；任务按钮换行后不重叠。
+- 截图：`/tmp/round17_web_ui_current.png`（恢复真实记录后的 Round 17 页面，显示 0/12 完成）；阅读弹窗 `/tmp/round17_reading_modal.png`；运行结果 `/tmp/round17_run_result.png`；终端 `/tmp/round17_terminal_ui.png`；移动端 `/tmp/round17_mobile_ui.png`。
+- 清理：本轮 API/UI 测试产生的进度、动作、反馈和终端历史已从测试前快照恢复。
+- 工具备注：应用内浏览器的 DOM snapshot 接口在本页报运行时兼容错误；本轮改用同一应用内浏览器的只读 DOM evaluate、稳定 CSS selector 点击、确认框处理和截图完成真实页面验证。

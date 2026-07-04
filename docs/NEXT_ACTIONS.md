@@ -767,6 +767,24 @@ TASK-011 实际产物：
 
 ---
 
+## TASK-RR-48：Stage 1 填充 · Round 17 Web UI 可完成练习
+
+- 状态：**done**（2026-07-04）
+- 背景：Round 17 已有最小骨架，但 notes 只列目标和自查，脚本只写 marker；任务标题仍是“练习1 / 练习2 / 练习3”，用户无法判断要练 APIRouter 拆分、配置日志、认证/CORS 还是部署检查。
+- 目标：让 Round 17 用户只通过 Web UI 就能阅读服务化收口资料，运行自动练习，在浏览器映射终端中完成服务结构 / 配置 / 部署清单自测，并手动记录最终小抄与验收。
+- 实际产物：
+  - `rounds/round_17/README.md` 更新为 Web UI 可练习说明，明确自动练习只写入 `~/cli-lab/round17`，不要求安装依赖、运行 Docker 或启动长期服务。
+  - `rounds/round_17/week1|week2|week3/notes.md` 补齐 APIRouter、Settings、metadata、logging、Bearer auth、CORS、Dockerfile 和 preflight 的学习步骤、自测命令和完成标准。
+  - `rounds/round_17/week1|week2|week3/exercises.py` 改为默认可非交互运行，自动生成多文件服务结构、配置日志入口、安全部署检查和静态检查报告，只自动记录对应练习任务。
+  - `rounds/round_17/final/comprehensive_exercise.py` 改为 Web UI 默认可运行的服务化收口项目包练习，生成 routers、settings、logging、auth、CORS、Dockerfile、contract 和最终验收报告，只自动记录 `r17-fin-comp`。
+  - `rounds/round_17/final/service_wrapup_cheatsheet.md` 与 `round_17.md` 补齐 Web UI 完成路径、服务化清单和最终验收自问。
+  - `scripts/build_rounds_data.py` / `rounds_data.js` 为 Round 17 输出清晰任务标题，并同步四星难度。
+  - `scripts/progress_lib.py` 兼容浏览器终端中的 `~/cli-lab/round17` 与 `~/round17` 两种用户路径写法；`progress.html` 取消顶部卡片 sticky，避免滚动到 Round 清单时遮挡任务区。
+- 验收：API 可运行 Round 17 四个练习脚本；自测任务拒绝误运行；浏览器终端可绑定 `r17-w1-self` 到 `~/round17` 并执行 `pwd` / 手写脚本；`docker build -t demo .` 被拦截；Week 1 notes 可在阅读器中直接阅读；FastAPI 官方外链可新标签页打开；运行结果弹窗可见；桌面端和 390px 移动端无横向溢出；测试记录已恢复。
+- 是否需要用户介入：否。
+
+---
+
 ## TASK-RR-26：Stage 1 增强 · Round 05 接入进度系统
 
 - 状态：**done**（2026-06-15）

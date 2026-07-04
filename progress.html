@@ -32,7 +32,6 @@
     }
     .container { max-width: 1040px; margin: 0 auto; }
     .top-bar {
-      position: sticky; top: 0; z-index: 40;
       backdrop-filter: blur(12px);
       background: rgba(255,255,255,0.92);
       border: 1px solid var(--border);
@@ -784,9 +783,7 @@
     .rail-note p { font-size: 0.8rem; line-height: 1.65; }
 
     .top-bar {
-      position: sticky;
-      top: 1.25rem;
-      z-index: 35;
+      position: relative;
       display: flex;
       align-items: flex-end;
       justify-content: space-between;

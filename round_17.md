@@ -16,6 +16,19 @@
 
 ---
 
+## Web UI 使用方式
+
+本轮已经接入 Web UI 学习闭环：
+
+1. 启动本地服务：`python3 scripts/progress_server.py --host 127.0.0.1 --port 8777`
+2. 打开：`http://127.0.0.1:8777/progress.html?round=round_17`
+3. 每周先点“打开资料”阅读，再点练习任务的“运行”生成沙盒产物。
+4. 自测任务点“终端”，在浏览器里完成最小命令练习后手动标记完成。
+
+自动练习只写入 `~/cli-lab/round17`，不要求在 Web UI 里安装依赖、启动 `uvicorn` 或运行 Docker。
+
+---
+
 ## 本轮目标
 
 完成本轮后，你能做到：

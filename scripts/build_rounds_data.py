@@ -28,6 +28,7 @@ DIFFICULTY_BY_ROUND = {
     14: "⭐⭐⭐☆☆",
     15: "⭐⭐⭐☆☆",
     16: "⭐⭐⭐⭐☆",
+    17: "⭐⭐⭐⭐☆",
 }
 
 
@@ -944,6 +945,87 @@ def build_standard_round(root: Path, num: int) -> dict | None:
                     ],
                 },
                 {"id": "round16-final", "title": "最终验收", "tasks": final_tasks},
+            ],
+        }
+
+    if num == 17:
+        final_tasks = []
+        if comp:
+            final_tasks.append(
+                {
+                    "id": "r17-fin-comp",
+                    "type": "exercise",
+                    "title": "综合练习：完整服务化收口项目包",
+                    "file": comp,
+                }
+            )
+        if sheet:
+            final_tasks.append(
+                {
+                    "id": "r17-fin-sheet",
+                    "type": "output",
+                    "title": "产出：完成 Round 17 服务化收口小抄",
+                    "file": sheet,
+                }
+            )
+        final_tasks.append(
+            {
+                "id": "r17-fin-acc1",
+                "type": "test",
+                "title": "验收：解释路由拆分、配置、日志、认证、CORS 与 Docker 边界",
+                "file": "round_17.md",
+            }
+        )
+        return {
+            "id": "round_17",
+            "title": round_title(root, num),
+            "lane": "engineering",
+            "difficulty": DIFFICULTY_BY_ROUND.get(num, "⭐⭐⭐⭐☆"),
+            "duration": "3 周",
+            "weeks": [
+                {
+                    "id": "round17-week1",
+                    "title": "第 1 周：APIRouter 服务拆分",
+                    "tasks": [
+                        {
+                            "id": "r17-w1-read",
+                            "type": "reading",
+                            "title": "阅读：APIRouter、main.py 与路由职责",
+                            "file": "rounds/round_17/week1/notes.md",
+                        },
+                        {"id": "r17-w1-ex1", "type": "exercise", "title": "练习：生成 APIRouter 多文件服务结构", "file": ex1},
+                        {"id": "r17-w1-self", "type": "test", "title": "自测：自己写 route_inventory.json", "file": ex1},
+                    ],
+                },
+                {
+                    "id": "round17-week2",
+                    "title": "第 2 周：配置、元数据与日志",
+                    "tasks": [
+                        {
+                            "id": "r17-w2-read",
+                            "type": "reading",
+                            "title": "阅读：Settings、API 元数据与 logging",
+                            "file": "rounds/round_17/week2/notes.md",
+                        },
+                        {"id": "r17-w2-ex2", "type": "exercise", "title": "练习：生成配置、元数据与日志入口", "file": ex2},
+                        {"id": "r17-w2-self", "type": "test", "title": "自测：自己写 .env.example 与日志 demo", "file": ex2},
+                    ],
+                },
+                {
+                    "id": "round17-week3",
+                    "title": "第 3 周：认证、CORS 与部署检查",
+                    "tasks": [
+                        {
+                            "id": "r17-w3-read",
+                            "type": "reading",
+                            "title": "阅读：Bearer token、CORS、Dockerfile 与 preflight",
+                            "file": "rounds/round_17/week3/notes.md",
+                        },
+                        {"id": "r17-w3-ex3", "type": "exercise", "title": "练习：生成认证、CORS 与部署检查", "file": ex3},
+                        {"id": "r17-w3-self", "type": "test", "title": "自测：自己写部署前检查清单", "file": ex3},
+                    ],
+                },
+                {"id": "round17-final", "title": "最终验收", "tasks": final_tasks},
             ],
         }
 
