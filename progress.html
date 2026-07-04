@@ -202,6 +202,73 @@
     .save-meta { color: var(--text-muted); font-size: 0.75rem; margin-top: 0.2rem; }
     .save-empty { color: var(--text-muted); font-size: 0.82rem; }
 
+    /* ── Browser terminal ── */
+    .terminal-box {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+      background: #0e1714;
+      color: #d9f4e9;
+      font-family: "SF Mono","Fira Code",ui-monospace,monospace;
+    }
+    .terminal-output {
+      min-height: 240px;
+      max-height: 360px;
+      overflow: auto;
+      padding: 0.85rem;
+      font-size: 0.78rem;
+      line-height: 1.55;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+    .terminal-line.muted { color: #94aca4; }
+    .terminal-entry { margin-bottom: 0.75rem; }
+    .terminal-command { color: #9be7d2; font-weight: 700; }
+    .terminal-output pre {
+      margin: 0.25rem 0 0;
+      white-space: pre-wrap;
+      word-break: break-word;
+      color: #e8f3ef;
+      font: inherit;
+    }
+    .terminal-stderr { color: #fecaca !important; }
+    .terminal-result {
+      display: inline-flex;
+      margin-left: 0.35rem;
+      color: #fde68a;
+      font-size: 0.72rem;
+    }
+    .terminal-input-row {
+      display: grid;
+      grid-template-columns: max-content minmax(0, 1fr) max-content;
+      gap: 0.55rem;
+      align-items: center;
+      border-top: 1px solid rgba(232,243,239,0.12);
+      padding: 0.65rem 0.75rem;
+      background: #10241f;
+    }
+    .terminal-prompt { color: #9be7d2; font-size: 0.78rem; white-space: nowrap; }
+    .terminal-input {
+      min-width: 0;
+      border: 1px solid rgba(232,243,239,0.16);
+      background: #0e1714;
+      color: #e8f3ef;
+      border-radius: 8px;
+      padding: 0.48rem 0.58rem;
+      font: inherit;
+      font-size: 0.78rem;
+    }
+    .terminal-input:focus {
+      outline: 2px solid rgba(155,231,210,0.22);
+      border-color: rgba(155,231,210,0.55);
+    }
+    .terminal-tools {
+      display: flex;
+      gap: 0.6rem;
+      flex-wrap: wrap;
+      margin-top: 0.75rem;
+    }
+
     /* ── Stage panel ── */
     .stage-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 0.6rem; }
     .stage-item {
@@ -301,6 +368,8 @@
     .task-btn.undo { border-color: var(--yellow); color: var(--yellow); }
     .task-btn.read { border-color: var(--accent2); color: var(--accent2); }
     .task-btn.read:hover { background: rgba(78,205,196,0.1); }
+    .task-btn.run { border-color: var(--pink); color: var(--pink); }
+    .task-btn.run:hover { background: rgba(190,18,60,0.08); }
     .task-btn.record { border-color: var(--accent); color: var(--accent); }
     .task-btn.record:hover { background: rgba(37,99,235,0.08); }
     .task-feedback {
@@ -432,6 +501,27 @@
     .record-list li p { margin: 0.35rem 0 0; color: var(--text-muted); }
     .record-empty { color: var(--text-muted); }
     .code-doc-note { color: var(--text-muted); }
+    .run-panel { display: flex; flex-direction: column; gap: 0.65rem; }
+    .run-status {
+      display: inline-flex; width: fit-content; padding: 0.25rem 0.6rem; border-radius: 999px;
+      font-size: 0.78rem; border: 1px solid var(--border);
+    }
+    .run-status.ok { color: var(--green); border-color: var(--green); background: rgba(22,163,74,0.08); }
+    .run-status.failed,
+    .run-status.timeout { color: var(--yellow); border-color: var(--yellow); background: rgba(180,83,9,0.08); }
+    .run-meta {
+      display: grid;
+      gap: 0.35rem;
+      color: var(--text-muted);
+      font-size: 0.78rem;
+    }
+    .run-output {
+      max-height: 260px;
+      overflow: auto;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+    .run-hint { color: var(--text-muted); font-size: 0.82rem; }
 
     @media (max-width: 640px) {
       body { padding: 1rem 0.9rem 4rem; }
@@ -949,6 +1039,7 @@
     }
     .task-btn:hover { background: var(--card-hover); border-color: var(--border-strong); }
     .task-btn.read { color: var(--accent2); border-color: rgba(15,118,110,0.45); }
+    .task-btn.run { color: var(--pink); border-color: rgba(190,18,60,0.38); background: #fff8fa; }
     .task-btn.record { color: var(--accent); border-color: rgba(37,99,235,0.38); }
     .task-btn.done { color: var(--green); border-color: rgba(21,128,61,0.45); background: #f4fbf7; }
     .task-btn.undo { color: var(--yellow); border-color: rgba(180,83,9,0.45); background: #fffaf0; }
@@ -1105,6 +1196,13 @@
       .save-toolbar .btn,
       .save-item .task-btn { width: 100%; }
       .save-item { grid-template-columns: minmax(0, 1fr); }
+      .terminal-output { min-height: 220px; max-height: 320px; }
+      .terminal-input-row {
+        grid-template-columns: 1fr;
+        gap: 0.45rem;
+      }
+      .terminal-input-row .task-btn { width: 100%; }
+      .terminal-tools .btn { flex: 1 1 150px; }
       .toast {
         left: 0.8rem;
         right: 0.8rem;
@@ -1129,6 +1227,7 @@
     <a class="nav-item active" href="#today">今日学习</a>
     <a class="nav-item" href="#lanes">主线进度</a>
     <a class="nav-item" href="#config">本周配置</a>
+    <a class="nav-item" href="#terminal">练习终端</a>
     <a class="nav-item" href="#saves">存档读档</a>
     <a class="nav-item" href="#rounds">Round 清单</a>
   </nav>
@@ -1219,10 +1318,30 @@
   </div>
 </div>
 
-<!-- ── Block 4: 存档与读档 ── -->
+<!-- ── Block 4: 练习终端 ── -->
+<div class="card" id="terminal">
+  <h2>练习终端</h2>
+  <div class="card-sub">浏览器映射到本机 <code>~/cli-lab</code> 沙盒。适合练习 `pwd`、`ls`、`cd`、`mkdir`、`touch`、`cat`、管道、重定向和 Git 最小流程；危险命令、远程命令和仓库外路径会被拦截。</div>
+  <div class="terminal-box">
+    <div class="terminal-output" id="terminalOutput">
+      <div class="terminal-line muted">正在连接练习终端…</div>
+    </div>
+    <div class="terminal-input-row">
+      <span class="terminal-prompt" id="terminalPrompt">~ $</span>
+      <input id="terminalInput" class="terminal-input" spellcheck="false" autocomplete="off" placeholder="输入命令后按 Enter，例如：pwd" />
+      <button class="task-btn run" type="button" id="terminalRun">执行</button>
+    </div>
+  </div>
+  <div class="terminal-tools">
+    <button class="btn" type="button" id="terminalReset">回到 ~/cli-lab</button>
+    <button class="btn" type="button" id="terminalClear">清屏</button>
+  </div>
+</div>
+
+<!-- ── Block 5: 存档与读档 ── -->
 <div class="card" id="saves">
   <h2>存档与读档</h2>
-  <div class="card-sub">存档会保存进度、动作记录、任务反馈、本周任务和倒计时。读档前会自动创建恢复点，防止误操作。</div>
+  <div class="card-sub">存档会保存进度、动作记录、任务反馈、终端历史、本周任务和倒计时。读档前会自动创建恢复点，防止误操作。</div>
   <div class="save-toolbar">
     <input class="save-label-input" id="saveLabel" placeholder="存档备注，例如：软考第一轮启动前" />
     <button class="btn" type="button" onclick="createSave()">创建存档</button>
@@ -1275,9 +1394,9 @@
   </div>
 </div>
 
-<script src="progress_data.js?v=20260704c"></script>
-<script src="rounds_data.js?v=20260704c"></script>
-<script src="progress_ui.js?v=20260704c"></script>
+<script src="progress_data.js?v=20260704d"></script>
+<script src="rounds_data.js?v=20260704d"></script>
+<script src="progress_ui.js?v=20260704d"></script>
 <script>
 const ROUNDS = window.ROUNDS_DATA || [];
 
@@ -1444,6 +1563,7 @@ function renderContinue() {
         <div class="continue-meta">${round.title} / ${week.title} / ${round.lane}</div>
         <div class="continue-actions">
           ${canRead ? `<button type="button" class="task-btn read task-open" data-file="${task.file}" data-title="${task.title}">${fileLabel(task.file, task.type)}</button>` : ""}
+          ${taskRunButton(task)}
           ${taskRecordButton(task.id)}
           ${taskActionButtons(task.id, false)}
         </div>
@@ -1647,6 +1767,7 @@ function renderRoundsForLane(laneKey) {
           </div>
           <div class="task-actions">
             ${canRead ? `<button type="button" class="task-btn read task-open" data-file="${task.file}" data-title="${task.title}">打开</button>` : ""}
+            ${taskRunButton(task)}
             ${taskRecordButton(task.id)}
             ${taskActionButtons(task.id, done)}
           </div>
@@ -1768,7 +1889,8 @@ function saveSummaryText(save) {
   const done = Number.isFinite(Number(s.done_count)) ? Number(s.done_count) : 0;
   const total = Number.isFinite(Number(s.total)) ? Number(s.total) : 0;
   const events = Number.isFinite(Number(s.event_count)) ? Number(s.event_count) : 0;
-  return `${done}/${total} 完成 · ${events} 条记录 · ${formatSaveTime(save.created_at)}`;
+  const terminal = Number.isFinite(Number(s.terminal_command_count)) ? Number(s.terminal_command_count) : 0;
+  return `${done}/${total} 完成 · ${events} 条记录 · ${terminal} 条终端命令 · ${formatSaveTime(save.created_at)}`;
 }
 
 function renderSaves(saves) {
@@ -1905,6 +2027,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   await loadFeedbackData();
   await loadEventData();
   await loadProgress();
+  await loadTerminalState();
   await loadSaves();
 });
 </script>

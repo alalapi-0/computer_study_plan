@@ -1020,3 +1020,32 @@
 - 本轮 API/UI 测试产生的 `codex-*test-save` 临时快照已删除。
 - 未删除 `records/action_logs/events.jsonl` 中已有真实动作记录。
 - 未引入数据库、前端框架、后端框架或大型新依赖。
+
+## 42. 2026-07-04 Web UI 练习执行与浏览器终端
+
+### 42.1 本轮新增
+
+- `scripts/progress_lib.py`：新增白名单练习脚本执行、输出摘要、`run_exercise` 动作事件、浏览器终端沙盒命令执行与命令历史记录。
+- `scripts/progress_server.py`：新增 `POST /api/tasks/<id>/run`、`GET /api/terminal`、`POST /api/terminal/run`。
+- `progress.html`：练习 / 自测任务新增“运行”按钮；新增“练习终端”卡片与导航入口。
+- `progress_ui.js`：新增运行确认、运行结果弹窗、终端输入输出渲染、清屏和回到 `~/cli-lab`。
+- `records/terminal/README.md`：说明 Web UI 终端历史记录。
+
+### 42.2 安全边界
+
+- 任务脚本执行只允许 `rounds_data.js` 已登记任务对应的 `rounds/round_XX/weekN|final/(exercises|comprehensive_exercise).sh|py`。
+- 任务脚本工作目录固定为 `~/cli-lab/roundN`，超时 20 秒。
+- 浏览器终端工作目录限制在 `~/cli-lab` 内，命令白名单 + 危险模式拦截，超时 10 秒。
+- 浏览器终端不允许真实远程操作、网络拉取、仓库外绝对路径和 `..` 路径。
+
+### 42.3 验证
+
+- API 验证：`POST /api/tasks/r07-w1-ex1/run` 可运行白名单 Python 练习脚本并返回输出摘要；`POST /api/terminal/run` 可执行 `pwd`、`cd`、管道类命令；`cat /etc/passwd` 被拦截。
+- 存档验证：创建临时存档时，摘要包含 `terminal_command_count`；临时存档与测试命令历史已清理。
+- 真实浏览器测试：桌面端可见“练习终端”卡片；在 UI 输入 `pwd` 能返回 `/Users/alalapi/cli-lab`；输入 `cat /etc/passwd` 会在 UI 中显示 `terminal_command_blocked`；桌面端无整页横向溢出。
+- 静态与数据验证：`build_rounds_data.py`、`generate_task_feedback.py`、`validate_learning_data.py`、`check_protocol_sync.py`、`agent_gate.py --verify`、`node --check progress_ui.js`、Python 编译、JSON 校验均通过。
+
+### 42.4 风险边界核对
+
+- 未引入数据库、前端框架、后端框架或大型新依赖。
+- 未扩大到 VPS / SSH / 远程服务器执行。

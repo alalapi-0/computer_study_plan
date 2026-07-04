@@ -10,7 +10,7 @@ import sys
 from http import HTTPStatus
 from http.server import ThreadingHTTPServer, SimpleHTTPRequestHandler
 from pathlib import Path
-from urllib.parse import urlparse
+from urllib.parse import parse_qs, urlparse
 
 from progress_lib import (
     create_progress_save,
@@ -22,10 +22,14 @@ from progress_lib import (
     load_progress_save,
     mark_task,
     repo_root,
+    run_task_script,
+    run_terminal_command,
     sync_progress_data_js,
+    terminal_state,
 )
 
 TASK_API = re.compile(r"^/api/tasks/([^/]+)/(done|undo)$")
+TASK_RUN_API = re.compile(r"^/api/tasks/([^/]+)/run$")
 SAVE_LOAD_API = re.compile(r"^/api/saves/([A-Za-z0-9._-]+)/load$")
 
 
@@ -83,6 +87,14 @@ class ProgressRequestHandler(SimpleHTTPRequestHandler):
                 },
             )
             return
+        if path == "/api/terminal":
+            query = parse_qs(urlparse(self.path).query)
+            cwd_value = query.get("cwd", [""])[0]
+            try:
+                self.end_json(HTTPStatus.OK, {"ok": True, "terminal": terminal_state(cwd_value)})
+            except ValueError as exc:
+                self.end_json(HTTPStatus.BAD_REQUEST, {"ok": False, "error": str(exc)})
+            return
         if path == "/api/health":
             self.end_json(HTTPStatus.OK, {"ok": True, "service": "progress_server"})
             return
@@ -121,6 +133,20 @@ class ProgressRequestHandler(SimpleHTTPRequestHandler):
             )
             return
 
+        if path == "/api/terminal/run":
+            try:
+                result = run_terminal_command(
+                    command=str(payload.get("command", ""))[:500],
+                    cwd=str(payload.get("cwd", ""))[:500],
+                    root=self.repo_root,
+                )
+                self.end_json(HTTPStatus.OK, {"ok": True, "terminal": result})
+            except ValueError as exc:
+                self.end_json(HTTPStatus.BAD_REQUEST, {"ok": False, "error": str(exc)})
+            except Exception as exc:  # pragma: no cover - safety net for local server
+                self.end_json(HTTPStatus.INTERNAL_SERVER_ERROR, {"ok": False, "error": str(exc)})
+            return
+
         save_match = SAVE_LOAD_API.match(path)
         if save_match:
             try:
@@ -144,6 +170,30 @@ class ProgressRequestHandler(SimpleHTTPRequestHandler):
                 self.end_json(HTTPStatus.NOT_FOUND, {"ok": False, "error": "save_not_found"})
             except ValueError as exc:
                 self.end_json(HTTPStatus.BAD_REQUEST, {"ok": False, "error": str(exc)})
+            return
+
+        run_match = TASK_RUN_API.match(path)
+        if run_match:
+            try:
+                execution = run_task_script(run_match.group(1), root=self.repo_root)
+                self.end_json(
+                    HTTPStatus.OK,
+                    {
+                        "ok": True,
+                        "execution": execution,
+                        "tasks": execution.get("tasks", {}),
+                        "lanes": execution.get("lanes", {}),
+                        "feedback": execution.get("feedback", {}),
+                    },
+                )
+            except KeyError:
+                self.end_json(HTTPStatus.NOT_FOUND, {"ok": False, "error": f"unknown task: {run_match.group(1)}"})
+            except FileNotFoundError:
+                self.end_json(HTTPStatus.NOT_FOUND, {"ok": False, "error": "script_not_found"})
+            except ValueError as exc:
+                self.end_json(HTTPStatus.BAD_REQUEST, {"ok": False, "error": str(exc)})
+            except Exception as exc:  # pragma: no cover - safety net for local server
+                self.end_json(HTTPStatus.INTERNAL_SERVER_ERROR, {"ok": False, "error": str(exc)})
             return
 
         match = TASK_API.match(path)
@@ -182,7 +232,7 @@ def main() -> int:
     url = f"http://{args.host}:{args.port}/progress.html"
     print(f"Serving {root}")
     print(f"Open: {url}")
-    print("API: POST /api/tasks/<id>/done | /undo ; GET /api/progress")
+    print("API: POST /api/tasks/<id>/done | /undo | /run ; POST /api/terminal/run ; GET /api/progress")
     try:
         server.serve_forever()
     except KeyboardInterrupt:

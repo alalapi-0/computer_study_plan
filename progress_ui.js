@@ -3,6 +3,8 @@
 let feedbackMap = {};
 let eventMap = {};
 let apiReady = false;
+let terminalHistory = [];
+let terminalCwd = "";
 
 async function detectApi() {
   if (window.location.protocol === "file:") {
@@ -97,6 +99,113 @@ function showToast(msg, kind) {
   el._t = setTimeout(() => { el.style.opacity = "0"; }, 2200);
 }
 
+function terminalPrompt(cwdDisplay) {
+  return `${cwdDisplay || "~"} $`;
+}
+
+function renderTerminal() {
+  const output = document.getElementById("terminalOutput");
+  const prompt = document.getElementById("terminalPrompt");
+  if (!output || !prompt) return;
+  prompt.textContent = terminalPrompt(terminalHistory.length ? terminalHistory[terminalHistory.length - 1].cwd_display : "~");
+  if (!terminalHistory.length) {
+    output.innerHTML = `<div class="terminal-line muted">终端已映射到 <code>~/cli-lab</code> 沙盒。试试 <code>pwd</code>、<code>mkdir round0</code>、<code>ls</code>。</div>`;
+    return;
+  }
+  output.innerHTML = terminalHistory.map((entry) => {
+    if (entry.kind === "error") {
+      return `<div class="terminal-entry"><div class="terminal-command">${escapeHtml(entry.prompt)} ${escapeHtml(entry.command)}</div><pre class="terminal-stderr">${escapeHtml(entry.error)}</pre></div>`;
+    }
+    const stdout = entry.stdout ? `<pre>${escapeHtml(entry.stdout)}</pre>` : "";
+    const stderr = entry.stderr ? `<pre class="terminal-stderr">${escapeHtml(entry.stderr)}</pre>` : "";
+    const status = entry.result && entry.result !== "ok" ? `<span class="terminal-result ${escapeHtml(entry.result)}">${escapeHtml(entry.result)}</span>` : "";
+    return `<div class="terminal-entry"><div class="terminal-command">${escapeHtml(entry.prompt)} ${escapeHtml(entry.command)} ${status}</div>${stdout}${stderr}</div>`;
+  }).join("");
+  output.scrollTop = output.scrollHeight;
+}
+
+async function loadTerminalState() {
+  const input = document.getElementById("terminalInput");
+  if (!apiReady) {
+    terminalHistory = [{ kind: "error", prompt: "~ $", command: "", error: "请用 python3 scripts/progress_server.py 启动后使用练习终端。", cwd_display: "~" }];
+    renderTerminal();
+    if (input) input.disabled = true;
+    return;
+  }
+  if (input) input.disabled = false;
+  try {
+    const res = await fetch(`/api/terminal?cwd=${encodeURIComponent(terminalCwd || "")}&_=${Date.now()}`);
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || "terminal_state_failed");
+    terminalCwd = data.terminal.cwd || "";
+    renderTerminal();
+  } catch (err) {
+    terminalHistory.push({ kind: "error", prompt: "~ $", command: "", error: err.message, cwd_display: "~" });
+    renderTerminal();
+  }
+}
+
+async function runTerminalCommand(command) {
+  if (!apiReady) {
+    showToast("请先运行 python3 scripts/progress_server.py 启动服务", "warn");
+    return;
+  }
+  const value = String(command || "").trim();
+  if (!value) return;
+  const input = document.getElementById("terminalInput");
+  if (input) input.disabled = true;
+  const currentPrompt = document.getElementById("terminalPrompt")?.textContent || "~ $";
+  try {
+    const res = await fetch("/api/terminal/run", {
+      method: "POST",
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ command: value, cwd: terminalCwd }),
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || "terminal_run_failed");
+    const term = data.terminal || {};
+    terminalCwd = term.cwd || terminalCwd;
+    if (term.clear) {
+      terminalHistory = [];
+    } else {
+      terminalHistory.push({
+        command: value,
+        prompt: currentPrompt,
+        result: term.result || "ok",
+        returncode: term.returncode,
+        stdout: term.stdout || "",
+        stderr: term.stderr || "",
+        cwd_display: term.cwd_display || "~",
+      });
+    }
+    renderTerminal();
+  } catch (err) {
+    terminalHistory.push({
+      kind: "error",
+      command: value,
+      prompt: currentPrompt,
+      error: err.message,
+      cwd_display: "~",
+    });
+    renderTerminal();
+    showToast("命令被拦截或执行失败", "warn");
+  } finally {
+    if (input) {
+      input.disabled = false;
+      input.value = "";
+      input.focus();
+    }
+  }
+}
+
+async function resetTerminal() {
+  terminalCwd = "";
+  await runTerminalCommand("cd ~");
+}
+
 function feedbackFor(taskId) {
   return feedbackMap[taskId] || null;
 }
@@ -136,6 +245,58 @@ function taskRecordButton(taskId) {
   return `<button type="button" class="task-btn record task-record-open" data-task="${taskId}">${label}</button>`;
 }
 
+function isRunnableTask(task) {
+  return !!(task && /\.(sh|py)$/i.test(task.file || "") && ["exercise", "test"].includes(task.type));
+}
+
+function taskRunButton(task) {
+  if (!apiReady || !isRunnableTask(task)) return "";
+  return `<button type="button" class="task-btn run task-run" data-task="${task.id}">运行</button>`;
+}
+
+async function postTaskRun(taskId) {
+  if (!apiReady) {
+    showToast("请先运行 python3 scripts/progress_server.py 启动服务", "warn");
+    return null;
+  }
+  const meta = taskMeta(taskId);
+  const file = meta?.task?.file || "";
+  const title = meta?.task?.title || taskId;
+  const roundId = meta?.round?.id || "";
+  const roundMatch = roundId.match(/round_(\d{2})/);
+  const sandbox = roundMatch
+    ? `~/cli-lab/round${Number(roundMatch[1])}`
+    : "~/cli-lab";
+  const ok = window.confirm(
+    `将在本地沙盒执行白名单练习脚本：\n${file}\n\n工作目录：${sandbox}\n脚本可能写入沙盒、调用打卡脚本并追加动作记录。继续？`
+  );
+  if (!ok) return null;
+
+  const res = await fetch(`/api/tasks/${encodeURIComponent(taskId)}/run`, {
+    method: "POST",
+    headers: {
+      "Accept": "application/json",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({}),
+  });
+  const data = await res.json();
+  if (!res.ok) {
+    showToast(data.error || "运行失败", "error");
+    return null;
+  }
+  progressData = data.tasks || progressData;
+  lanesData = data.lanes || lanesData;
+  feedbackMap = data.feedback || feedbackMap;
+  await loadFeedbackData();
+  await loadEventData();
+  render();
+  openExecutionResult(title, data.execution || {});
+  const result = data.execution?.result || "";
+  showToast(result === "ok" ? "练习脚本运行完成" : "练习脚本已结束，请查看输出", result === "ok" ? "ok" : "warn");
+  return data;
+}
+
 function bindTaskActions(container) {
   container.querySelectorAll(".task-btn[data-action]").forEach((btn) => {
     btn.addEventListener("click", async (e) => {
@@ -151,6 +312,15 @@ function bindTaskActions(container) {
     btn.addEventListener("click", (e) => {
       e.stopPropagation();
       openRecordViewer(btn.getAttribute("data-task"));
+    });
+  });
+  container.querySelectorAll(".task-run").forEach((btn) => {
+    btn.addEventListener("click", async (e) => {
+      e.stopPropagation();
+      const id = btn.getAttribute("data-task");
+      btn.disabled = true;
+      await postTaskRun(id);
+      btn.disabled = false;
     });
   });
   container.querySelectorAll(".task-open").forEach((btn) => {
@@ -260,7 +430,46 @@ function renderRecordBody(taskId, done, fb, events) {
 function actionLabel(actionType) {
   if (actionType === "mark_done") return "标记完成";
   if (actionType === "undo_done") return "撤销完成";
+  if (actionType === "run_exercise") return "运行练习";
   return actionType || "动作";
+}
+
+function openExecutionResult(title, execution) {
+  const modal = document.getElementById("readerModal");
+  const body = document.getElementById("readerBody");
+  const heading = document.getElementById("readerTitle");
+  if (!modal || !body || !heading) return;
+  heading.textContent = `运行结果 · ${title}`;
+  body.innerHTML = renderExecutionResult(execution);
+  modal.classList.add("open");
+  modal.setAttribute("aria-hidden", "false");
+}
+
+function renderExecutionResult(execution) {
+  const result = execution.result || "unknown";
+  const statusText = {
+    ok: "运行成功",
+    failed: "脚本返回非零状态",
+    timeout: "运行超时，已停止",
+  }[result] || "运行结束";
+  const stdout = execution.stdout || "";
+  const stderr = execution.stderr || "";
+  return `
+    <div class="run-panel">
+      <div class="run-status ${escapeHtml(result)}">${escapeHtml(statusText)}</div>
+      <div class="run-meta">
+        <span>脚本：<code>${escapeHtml(execution.script_path || "")}</code></span>
+        <span>沙盒：<code>${escapeHtml(execution.sandbox_path || "")}</code></span>
+        <span>返回码：<code>${escapeHtml(execution.returncode ?? "—")}</code></span>
+        <span>耗时：<code>${escapeHtml(execution.duration_ms || 0)}ms</code></span>
+      </div>
+      <h4>标准输出</h4>
+      <pre class="run-output"><code>${escapeHtml(stdout || "（无输出）")}</code></pre>
+      <h4>错误输出</h4>
+      <pre class="run-output"><code>${escapeHtml(stderr || "（无错误输出）")}</code></pre>
+      <p class="run-hint">运行结果已写入动作记录。若脚本只是生成练习产物但未自动打卡，请在同一任务旁点击“完成”或打开“记录”补充备注。</p>
+    </div>
+  `;
 }
 
 function closeMarkdownViewer() {
@@ -405,10 +614,25 @@ function renderCodeDocument(src, filePath) {
 document.addEventListener("DOMContentLoaded", () => {
   const closeBtn = document.getElementById("readerClose");
   const modal = document.getElementById("readerModal");
+  const terminalInput = document.getElementById("terminalInput");
+  const terminalRun = document.getElementById("terminalRun");
+  const terminalClear = document.getElementById("terminalClear");
+  const terminalReset = document.getElementById("terminalReset");
   if (closeBtn) closeBtn.addEventListener("click", closeMarkdownViewer);
   if (modal) {
     modal.addEventListener("click", (e) => {
       if (e.target === modal) closeMarkdownViewer();
     });
   }
+  if (terminalInput) {
+    terminalInput.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        runTerminalCommand(terminalInput.value);
+      }
+    });
+  }
+  if (terminalRun && terminalInput) terminalRun.addEventListener("click", () => runTerminalCommand(terminalInput.value));
+  if (terminalClear) terminalClear.addEventListener("click", () => runTerminalCommand("clear"));
+  if (terminalReset) terminalReset.addEventListener("click", resetTerminal);
 });

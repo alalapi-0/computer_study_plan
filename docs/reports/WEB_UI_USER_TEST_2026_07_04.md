@@ -48,12 +48,31 @@
 
 ## 存档与读档补测
 
-- 新增能力：Web UI 可创建本地学习进度快照，快照保存 `progress.json`、动作日志、任务反馈、本周任务与考试倒计时。
+- 新增能力：Web UI 可创建本地学习进度快照，快照保存 `progress.json`、动作日志、任务反馈、浏览器终端命令历史、本周任务与考试倒计时。
 - 安全策略：读档前自动创建“读档前恢复点”，避免误读档后无法恢复。
 - API 验证：`GET /api/saves`、`POST /api/saves`、`POST /api/saves/<save_id>/load` 均通过；测试快照含 286 个任务、7 条动作记录。
 - UI 验证：用户可在“存档与读档”卡片输入备注、点击“创建存档”、在列表点击“读档”、确认后完成恢复；读档后自动恢复点出现在列表。
 - 布局验证：桌面端 1280px 无横向溢出；390px 移动端无整页横向溢出；当前 URL 无 console error。
 - 清理：本轮 API/UI 测试产生的 `codex-*test-save` 临时快照已删除，未保留为真实用户存档。
+
+## 练习脚本运行补测
+
+- 新增能力：Web UI 在练习 / 自测任务旁显示“运行”按钮，可从浏览器触发本地白名单脚本。
+- 安全策略：服务端不接收任意命令，只按 `rounds_data.js` 中的任务 ID 反查脚本；脚本路径必须匹配 `rounds/round_XX/weekN|final/(exercises|comprehensive_exercise).sh|py`；工作目录固定为 `~/cli-lab/roundN`；运行超时为 20 秒。
+- 记录策略：运行成功、失败或超时都会追加 `run_exercise` 动作事件，记录脚本路径、沙盒路径、返回码、耗时与输出摘要。
+- 用户理解：点击运行前有浏览器确认框，说明脚本路径、沙盒目录和可能写入动作记录；运行后弹出输出面板。
+- API 验证：`r07-w1-ex1` 对应 `rounds/round_07/week1/exercises.py` 可运行成功，输出包含 `工作目录` 与 `TXT 行数`；测试事件已恢复清理。
+
+## 浏览器练习终端补测
+
+- 新增能力：Web UI 新增“练习终端”卡片，用户可在浏览器内输入命令并看到输出，工作目录映射到本机 `~/cli-lab` 沙盒。
+- 安全策略：`cd` 由后端解析并限制在 `~/cli-lab` 内；普通命令使用白名单；危险命令、远程命令、网络命令、仓库外绝对路径、`..` 路径和输入重定向会被拦截；命令超时为 10 秒。
+- 记录策略：命令历史写入 `records/terminal/commands.jsonl`，不混入任务完成事件；任务是否完成仍由“完成 / 记录”决定。
+- 用户理解：页面说明终端只映射沙盒，不是无限制系统终端；提供“回到 ~/cli-lab”和“清屏”按钮。
+- API 验证：`pwd` 返回 `/Users/alalapi/cli-lab`；`cd codex-ui-cd-test` 后 `pwd` 返回沙盒子目录；`cat /etc/passwd` 返回 400 并显示 `terminal_command_blocked`。
+- UI 验证：桌面端真实页面存在“练习终端”卡片和输入框；输入 `pwd` 后输出 `/Users/alalapi/cli-lab`；输入 `cat /etc/passwd` 后输出区显示 `terminal_command_blocked`；页面无整页横向溢出。
+- 存档验证：临时终端命令后创建测试存档，摘要包含 `terminal_command_count: 1`；测试存档和测试终端历史已清理。
+- 工具备注：浏览器控制插件在接受运行确认框后出现控制会话超时，但服务端日志显示 `/api/tasks/r07-w1-ex1/run` 已 200 返回；后续用 API 与页面状态检查完成验证。
 
 ## 验证命令
 
@@ -67,11 +86,11 @@ python3 scripts/check_protocol_sync.py
 python3 -m json.tool progress.json
 python3 -m json.tool records/feedback/task_feedback.json
 node --check progress_ui.js
-python3 -m py_compile scripts/progress_lib.py scripts/progress_server.py scripts/generate_task_feedback.py scripts/mark_done_cli.py scripts/sync_progress_data.py scripts/build_rounds_data.py
+python3 -m py_compile scripts/progress_lib.py scripts/progress_server.py scripts/generate_task_feedback.py scripts/mark_done_cli.py scripts/sync_progress_data.py scripts/build_rounds_data.py scripts/check_protocol_sync.py scripts/validate_learning_data.py
 ```
 
 ## 当前结论
 
-核心 Web UI 闭环已成立：用户可以从 Web UI 找到下一条任务，打开资料或脚本，写入学习记录，完成或撤销任务，并看到记录历史与反馈建议。
+核心 Web UI 闭环已成立：用户可以从 Web UI 找到下一条任务，打开资料或脚本，运行受控练习脚本，写入学习记录，完成或撤销任务，并看到记录历史与反馈建议。
 
-仍建议后续继续增强：把“脚本练习如何在沙盒中执行”的说明做成更明确的 UI 引导；如果未来要完全不切终端执行练习，需要单独设计安全的本地命令执行权限模型。
+仍建议后续继续增强：继续逐轮补齐计划内容质量，并把更多考试主线任务从“阅读骨架”升级为可检查产物。

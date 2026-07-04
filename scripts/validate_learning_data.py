@@ -8,8 +8,8 @@ import sys
 from pathlib import Path
 
 
-ALLOWED_ACTION_TYPES = {"mark_done", "undo_done"}
-ALLOWED_RESULTS = {"ok", "noop_already_done"}
+ALLOWED_ACTION_TYPES = {"mark_done", "undo_done", "run_exercise"}
+ALLOWED_RESULTS = {"ok", "noop_already_done", "failed", "timeout"}
 ALLOWED_FEEDBACK_TYPES = {"completed", "not_started", "in_progress"}
 
 

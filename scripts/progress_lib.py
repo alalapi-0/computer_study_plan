@@ -5,7 +5,12 @@ from __future__ import annotations
 
 import datetime
 import json
+import os
 import re
+import shlex
+import subprocess
+import sys
+import time
 import uuid
 from pathlib import Path
 from typing import Any
@@ -52,6 +57,14 @@ def feedback_json_path(root: Path | None = None) -> Path:
 
 def saves_dir_path(root: Path | None = None) -> Path:
     return (root or repo_root()) / "records/saves"
+
+
+def rounds_js_path(root: Path | None = None) -> Path:
+    return (root or repo_root()) / "rounds_data.js"
+
+
+def terminal_log_path(root: Path | None = None) -> Path:
+    return (root or repo_root()) / "records/terminal/commands.jsonl"
 
 
 def load_progress(root: Path | None = None) -> dict[str, Any]:
@@ -126,6 +139,7 @@ def append_action_event(
     root: Path | None = None,
     note: str = "",
     evidence_path: str = "",
+    details: dict[str, Any] | None = None,
 ) -> str:
     log_file = action_log_path(root)
     log_file.parent.mkdir(parents=True, exist_ok=True)
@@ -141,6 +155,8 @@ def append_action_event(
         "note": note,
         "evidence_path": evidence_path,
     }
+    if details:
+        event["details"] = details
     with log_file.open("a", encoding="utf-8") as f:
         f.write(json.dumps(event, ensure_ascii=False) + "\n")
     return action_id
@@ -167,6 +183,485 @@ def events_by_task(events: list[dict[str, Any]]) -> dict[str, list[dict[str, Any
             continue
         grouped.setdefault(str(task_id), []).append(event)
     return grouped
+
+
+def load_rounds_metadata(root: Path | None = None) -> list[dict[str, Any]]:
+    path = rounds_js_path(root)
+    if not path.exists():
+        return []
+    text = path.read_text(encoding="utf-8")
+    marker = "window.ROUNDS_DATA = "
+    if marker not in text:
+        return []
+    raw = text.split(marker, 1)[1].strip()
+    if raw.endswith(";"):
+        raw = raw[:-1].strip()
+    payload = json.loads(raw)
+    return payload if isinstance(payload, list) else []
+
+
+def task_metadata(task_id: str, root: Path | None = None) -> dict[str, Any] | None:
+    for round_item in load_rounds_metadata(root):
+        for week in round_item.get("weeks", []):
+            for task in week.get("tasks", []):
+                if task.get("id") == task_id:
+                    return {
+                        "round": round_item,
+                        "week": week,
+                        "task": task,
+                    }
+    return None
+
+
+RUNNABLE_SCRIPT_RE = re.compile(
+    r"^rounds/round_(\d{2})/(week[1-3]|final)/(exercises|comprehensive_exercise)\.(sh|py)$"
+)
+RUN_TIMEOUT_SECONDS = 20
+MAX_RUN_OUTPUT_CHARS = 8000
+
+
+def safe_runnable_script(file_path: str, root: Path | None = None) -> tuple[Path, int]:
+    match = RUNNABLE_SCRIPT_RE.match(file_path)
+    if not match:
+        raise ValueError("script_not_whitelisted")
+    root = root or repo_root()
+    script = (root / file_path).resolve()
+    root_resolved = root.resolve()
+    if root_resolved not in script.parents:
+        raise ValueError("script_outside_repo")
+    if not script.exists() or not script.is_file():
+        raise FileNotFoundError(file_path)
+    return script, int(match.group(1))
+
+
+def runnable_task_execution_plan(task_id: str, root: Path | None = None) -> dict[str, Any]:
+    meta = task_metadata(task_id, root)
+    if not meta:
+        raise ValueError("task_metadata_not_found")
+    task = meta["task"]
+    file_path = str(task.get("file") or "")
+    script, round_num = safe_runnable_script(file_path, root)
+    sandbox = Path.home() / "cli-lab" / f"round{round_num}"
+    suffix = script.suffix.lower()
+    if suffix == ".sh":
+        command = ["/bin/bash", str(script)]
+    elif suffix == ".py":
+        command = [sys.executable, str(script)]
+    else:
+        raise ValueError("unsupported_script_type")
+    return {
+        "task_id": task_id,
+        "title": str(task.get("title") or task_id),
+        "file": file_path,
+        "script": script,
+        "round_id": str(meta["round"].get("id") or resolve_round_id(task_id)),
+        "sandbox": sandbox,
+        "command": command,
+    }
+
+
+def output_excerpt(value: Any, limit: int = MAX_RUN_OUTPUT_CHARS) -> str:
+    if value is None:
+        return ""
+    if isinstance(value, bytes):
+        text = value.decode("utf-8", errors="replace")
+    else:
+        text = str(value)
+    if len(text) <= limit:
+        return text
+    return text[:limit] + "\n...[output truncated]"
+
+
+def run_task_script(task_id: str, root: Path | None = None) -> dict[str, Any]:
+    root = root or repo_root()
+    data = load_progress(root)
+    tasks = data["tasks"]
+    if task_id not in tasks:
+        raise KeyError(task_id)
+
+    plan = runnable_task_execution_plan(task_id, root)
+    plan["sandbox"].mkdir(parents=True, exist_ok=True)
+
+    env = os.environ.copy()
+    env.update(
+        {
+            "PROGRESS_UI_RUN": "1",
+            "COMPUTER_STUDY_PLAN_ROOT": str(root),
+            "PYTHONUNBUFFERED": "1",
+        }
+    )
+
+    started = time.monotonic()
+    timed_out = False
+    returncode: int | None = None
+    stdout = ""
+    stderr = ""
+    try:
+        proc = subprocess.run(
+            plan["command"],
+            cwd=plan["sandbox"],
+            env=env,
+            input="",
+            capture_output=True,
+            text=True,
+            timeout=RUN_TIMEOUT_SECONDS,
+            check=False,
+        )
+        returncode = proc.returncode
+        stdout = proc.stdout or ""
+        stderr = proc.stderr or ""
+        result = "ok" if proc.returncode == 0 else "failed"
+    except subprocess.TimeoutExpired as exc:
+        timed_out = True
+        stdout = output_excerpt(exc.stdout)
+        stderr = output_excerpt(exc.stderr)
+        result = "timeout"
+
+    duration_ms = int((time.monotonic() - started) * 1000)
+
+    latest = load_progress(root)
+    task = latest["tasks"].get(task_id, tasks[task_id])
+    note = f"Web UI 执行练习脚本：{plan['file']}；结果：{result}"
+    action_id = append_action_event(
+        task_id,
+        task.get("lane", "engineering"),
+        "run_exercise",
+        result,
+        root=root,
+        note=note,
+        evidence_path=str(plan["sandbox"]),
+        details={
+            "script_path": plan["file"],
+            "sandbox_path": str(plan["sandbox"]),
+            "returncode": returncode,
+            "timed_out": timed_out,
+            "duration_ms": duration_ms,
+            "stdout_excerpt": output_excerpt(stdout),
+            "stderr_excerpt": output_excerpt(stderr),
+        },
+    )
+    feedback = write_feedback_payload(latest, root)
+
+    total = len(latest["tasks"])
+    done_count = sum(1 for item in latest["tasks"].values() if item.get("done"))
+    return {
+        "ok": True,
+        "execution_ok": result == "ok",
+        "task_id": task_id,
+        "action_id": action_id,
+        "result": result,
+        "returncode": returncode,
+        "timed_out": timed_out,
+        "duration_ms": duration_ms,
+        "script_path": plan["file"],
+        "sandbox_path": str(plan["sandbox"]),
+        "stdout": output_excerpt(stdout),
+        "stderr": output_excerpt(stderr),
+        "tasks": latest.get("tasks", {}),
+        "lanes": latest.get("lanes", {}),
+        "feedback": feedback.get("feedback", {}),
+        "total": total,
+        "done_count": done_count,
+    }
+
+
+TERMINAL_TIMEOUT_SECONDS = 10
+MAX_TERMINAL_OUTPUT_CHARS = 6000
+TERMINAL_ALLOWED_COMMANDS = {
+    "awk",
+    "bash",
+    "cat",
+    "chmod",
+    "cp",
+    "date",
+    "echo",
+    "find",
+    "git",
+    "grep",
+    "head",
+    "ls",
+    "mkdir",
+    "mv",
+    "printf",
+    "pwd",
+    "python3",
+    "sed",
+    "sh",
+    "sort",
+    "tail",
+    "touch",
+    "uniq",
+    "wc",
+    "whoami",
+}
+TERMINAL_DENIED_PATTERNS = [
+    r"`",
+    r"\$\(",
+    r"\b(?:sudo|su|ssh|scp|rsync|curl|wget|nc|netcat)\b",
+    r"\b(?:rm|rmdir)\b",
+    r"\b(?:python|python3)\s+-c\b",
+    r"\bgit\s+(?:clone|fetch|pull|push|remote)\b",
+    r"\b(?:chmod|mv|cp)\b[^\n]*(?:/Users/|/etc/|/var/|/System/|/Applications/)",
+    r"(?:^|[\s\"'])/(?!dev/null(?:$|[\s\"']))",
+    r"\.\.",
+    r"<",
+]
+
+
+def terminal_root() -> Path:
+    root = Path.home() / "cli-lab"
+    root.mkdir(parents=True, exist_ok=True)
+    return root.resolve()
+
+
+def clamp_terminal_cwd(cwd: str | None = None) -> Path:
+    root = terminal_root()
+    if not cwd:
+        return root
+    text = str(cwd).strip()
+    if text in {"~", "$HOME"}:
+        return root
+    candidate = Path(text.replace("~", str(root), 1)).expanduser()
+    if not candidate.is_absolute():
+        candidate = root / candidate
+    resolved = candidate.resolve()
+    if resolved != root and root not in resolved.parents:
+        raise ValueError("terminal_cwd_outside_sandbox")
+    resolved.mkdir(parents=True, exist_ok=True)
+    return resolved
+
+
+def resolve_terminal_cd(current: Path, target: str | None) -> Path:
+    root = terminal_root()
+    raw = (target or "~").strip() or "~"
+    if raw in {"~", "$HOME"}:
+        candidate = root
+    elif raw.startswith("~/"):
+        candidate = root / raw[2:]
+    elif raw.startswith("/"):
+        candidate = Path(raw)
+    else:
+        candidate = current / raw
+    resolved = candidate.resolve()
+    if resolved != root and root not in resolved.parents:
+        raise ValueError("terminal_path_outside_sandbox")
+    resolved.mkdir(parents=True, exist_ok=True)
+    return resolved
+
+
+def terminal_command_words(command: str) -> list[str]:
+    normalized = command.replace("|", " | ").replace(">>", " >> ").replace(">", " > ")
+    try:
+        tokens = shlex.split(normalized)
+    except ValueError as exc:
+        raise ValueError(f"terminal_parse_error:{exc}") from exc
+    words: list[str] = []
+    expect_command = True
+    for token in tokens:
+        if token in {"|", ">", ">>"}:
+            expect_command = token == "|"
+            continue
+        if expect_command:
+            words.append(token)
+            expect_command = False
+    return words
+
+
+def validate_terminal_command(command: str) -> None:
+    if not command.strip():
+        raise ValueError("terminal_empty_command")
+    if len(command) > 500:
+        raise ValueError("terminal_command_too_long")
+    if any(ord(ch) < 32 and ch not in "\t\n" for ch in command):
+        raise ValueError("terminal_control_character")
+    for pattern in TERMINAL_DENIED_PATTERNS:
+        if re.search(pattern, command):
+            raise ValueError("terminal_command_blocked")
+    words = terminal_command_words(command)
+    if not words:
+        raise ValueError("terminal_no_command")
+    for word in words:
+        base = Path(word).name
+        if base not in TERMINAL_ALLOWED_COMMANDS:
+            raise ValueError(f"terminal_command_not_allowed:{base}")
+
+
+def append_terminal_command_event(
+    command: str,
+    cwd: Path,
+    result: str,
+    root: Path | None = None,
+    returncode: int | None = None,
+    stdout: str = "",
+    stderr: str = "",
+    duration_ms: int = 0,
+) -> str:
+    log_file = terminal_log_path(root)
+    log_file.parent.mkdir(parents=True, exist_ok=True)
+    command_id = str(uuid.uuid4())
+    payload = {
+        "command_id": command_id,
+        "timestamp": datetime.datetime.now().isoformat(timespec="seconds"),
+        "cwd": str(cwd),
+        "command": command,
+        "result": result,
+        "returncode": returncode,
+        "duration_ms": duration_ms,
+        "stdout_excerpt": output_excerpt(stdout, MAX_TERMINAL_OUTPUT_CHARS),
+        "stderr_excerpt": output_excerpt(stderr, MAX_TERMINAL_OUTPUT_CHARS),
+    }
+    with log_file.open("a", encoding="utf-8") as f:
+        f.write(json.dumps(payload, ensure_ascii=False) + "\n")
+    return command_id
+
+
+def load_terminal_commands(root: Path | None = None) -> list[dict[str, Any]]:
+    path = terminal_log_path(root)
+    if not path.exists():
+        return []
+    rows: list[dict[str, Any]] = []
+    for line in path.read_text(encoding="utf-8").splitlines():
+        line = line.strip()
+        if not line:
+            continue
+        rows.append(json.loads(line))
+    return rows
+
+
+def write_terminal_commands(commands: list[dict[str, Any]], root: Path | None = None) -> None:
+    path = terminal_log_path(root)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(
+        "".join(json.dumps(item, ensure_ascii=False) + "\n" for item in commands),
+        encoding="utf-8",
+    )
+
+
+def terminal_state(cwd: str | None = None) -> dict[str, Any]:
+    root = terminal_root()
+    current = clamp_terminal_cwd(cwd)
+    cwd_display = "~" if current == root else "~/" + str(current.relative_to(root))
+    return {
+        "root": str(root),
+        "cwd": str(current),
+        "cwd_display": cwd_display,
+        "allowed": sorted(TERMINAL_ALLOWED_COMMANDS),
+        "timeout_seconds": TERMINAL_TIMEOUT_SECONDS,
+    }
+
+
+def run_terminal_command(command: str, cwd: str | None = None, root: Path | None = None) -> dict[str, Any]:
+    root = root or repo_root()
+    current = clamp_terminal_cwd(cwd)
+    command = command.strip()
+
+    if command == "clear":
+        state = terminal_state(str(current))
+        return {
+            "ok": True,
+            "result": "ok",
+            "command": command,
+            "cwd": state["cwd"],
+            "cwd_display": state["cwd_display"],
+            "stdout": "",
+            "stderr": "",
+            "clear": True,
+        }
+
+    if command.startswith("cd") and (command == "cd" or command.startswith("cd ")):
+        try:
+            parts = shlex.split(command)
+        except ValueError as exc:
+            raise ValueError(f"terminal_parse_error:{exc}") from exc
+        if len(parts) > 2:
+            raise ValueError("terminal_cd_too_many_args")
+        new_cwd = resolve_terminal_cd(current, parts[1] if len(parts) == 2 else "~")
+        command_id = append_terminal_command_event(
+            command,
+            new_cwd,
+            "ok",
+            root=root,
+            returncode=0,
+            stdout="",
+            stderr="",
+            duration_ms=0,
+        )
+        state = terminal_state(str(new_cwd))
+        return {
+            "ok": True,
+            "result": "ok",
+            "command_id": command_id,
+            "command": command,
+            "cwd": state["cwd"],
+            "cwd_display": state["cwd_display"],
+            "returncode": 0,
+            "stdout": "",
+            "stderr": "",
+        }
+
+    validate_terminal_command(command)
+    env = os.environ.copy()
+    lab_root = terminal_root()
+    env.update(
+        {
+            "HOME": str(lab_root),
+            "PWD": str(current),
+            "COMPUTER_STUDY_PLAN_TERMINAL": "1",
+            "PYTHONUNBUFFERED": "1",
+        }
+    )
+
+    started = time.monotonic()
+    timed_out = False
+    returncode: int | None = None
+    stdout = ""
+    stderr = ""
+    try:
+        proc = subprocess.run(
+            ["/bin/zsh", "-lc", command],
+            cwd=current,
+            env=env,
+            input="",
+            capture_output=True,
+            text=True,
+            timeout=TERMINAL_TIMEOUT_SECONDS,
+            check=False,
+        )
+        returncode = proc.returncode
+        stdout = proc.stdout or ""
+        stderr = proc.stderr or ""
+        result = "ok" if proc.returncode == 0 else "failed"
+    except subprocess.TimeoutExpired as exc:
+        timed_out = True
+        stdout = output_excerpt(exc.stdout, MAX_TERMINAL_OUTPUT_CHARS)
+        stderr = output_excerpt(exc.stderr, MAX_TERMINAL_OUTPUT_CHARS)
+        result = "timeout"
+
+    duration_ms = int((time.monotonic() - started) * 1000)
+    command_id = append_terminal_command_event(
+        command,
+        current,
+        result,
+        root=root,
+        returncode=returncode,
+        stdout=stdout,
+        stderr=stderr,
+        duration_ms=duration_ms,
+    )
+    state = terminal_state(str(current))
+    return {
+        "ok": True,
+        "result": result,
+        "command_id": command_id,
+        "command": command,
+        "cwd": state["cwd"],
+        "cwd_display": state["cwd_display"],
+        "returncode": returncode,
+        "timed_out": timed_out,
+        "duration_ms": duration_ms,
+        "stdout": output_excerpt(stdout, MAX_TERMINAL_OUTPUT_CHARS),
+        "stderr": output_excerpt(stderr, MAX_TERMINAL_OUTPUT_CHARS),
+    }
 
 
 def build_feedback_payload(progress: dict[str, Any], events: list[dict[str, Any]]) -> dict[str, Any]:
@@ -238,11 +733,13 @@ def summarize_save_payload(payload: dict[str, Any]) -> dict[str, Any]:
     progress = payload.get("progress") or {}
     tasks = progress.get("tasks") or {}
     events = payload.get("events") or []
+    terminal_commands = payload.get("terminal_commands") or []
     done_count = sum(1 for item in tasks.values() if isinstance(item, dict) and item.get("done"))
     return {
         "total": len(tasks),
         "done_count": done_count,
         "event_count": len(events) if isinstance(events, list) else 0,
+        "terminal_command_count": len(terminal_commands) if isinstance(terminal_commands, list) else 0,
     }
 
 
@@ -256,6 +753,7 @@ def create_progress_save(
     data = load_progress(root)
     events = load_action_events(root)
     feedback = read_feedback_payload(root)
+    terminal_commands = load_terminal_commands(root)
     created_at = datetime.datetime.now().isoformat(timespec="seconds")
     stamp = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
     slug = save_id_from_label(label or reason, fallback=reason or "save")
@@ -277,6 +775,7 @@ def create_progress_save(
         "progress": data,
         "events": events,
         "feedback": feedback,
+        "terminal_commands": terminal_commands,
         "personal": personal or {},
     }
     payload["summary"] = summarize_save_payload(payload)
@@ -368,6 +867,9 @@ def load_progress_save(
         "".join(json.dumps(event, ensure_ascii=False) + "\n" for event in events),
         encoding="utf-8",
     )
+    if "terminal_commands" in payload:
+        terminal_commands = payload.get("terminal_commands") if isinstance(payload.get("terminal_commands"), list) else []
+        write_terminal_commands(terminal_commands, root)
     feedback = write_feedback_payload(restored, root)
     return {
         "save_id": save_id,
