@@ -288,6 +288,87 @@ def build_standard_round(root: Path, num: int) -> dict | None:
             ],
         }
 
+    if num == 3:
+        final_tasks = []
+        if comp:
+            final_tasks.append(
+                {
+                    "id": "r03-fin-comp",
+                    "type": "exercise",
+                    "title": "综合练习：标签统计器 + 复杂度估算",
+                    "file": comp,
+                }
+            )
+        if sheet:
+            final_tasks.append(
+                {
+                    "id": "r03-fin-sheet",
+                    "type": "output",
+                    "title": "产出：完成 Round 03 Python 与复杂度小抄",
+                    "file": sheet,
+                }
+            )
+        final_tasks.append(
+            {
+                "id": "r03-fin-acc1",
+                "type": "test",
+                "title": "验收：解释函数、dict 计数与复杂度",
+                "file": "round_03.md",
+            }
+        )
+        return {
+            "id": "round_03",
+            "title": round_title(root, num),
+            "lane": "engineering",
+            "difficulty": DIFFICULTY_BY_ROUND.get(num, "⭐⭐☆☆☆"),
+            "duration": "3 周",
+            "weeks": [
+                {
+                    "id": "round03-week1",
+                    "title": "第 1 周：Python 基础语法",
+                    "tasks": [
+                        {
+                            "id": "r03-w1-read",
+                            "type": "reading",
+                            "title": "阅读：Python 脚本、变量、条件、循环、函数",
+                            "file": "rounds/round_03/week1/notes.md",
+                        },
+                        {"id": "r03-w1-ex1", "type": "exercise", "title": "练习：运行第一个 Python 小程序", "file": ex1},
+                        {"id": "r03-w1-self", "type": "test", "title": "自测：自己写 square.py", "file": ex1},
+                    ],
+                },
+                {
+                    "id": "round03-week2",
+                    "title": "第 2 周：list/dict 与函数拆分",
+                    "tasks": [
+                        {
+                            "id": "r03-w2-read",
+                            "type": "reading",
+                            "title": "阅读：list/dict 与函数拆分",
+                            "file": "rounds/round_03/week2/notes.md",
+                        },
+                        {"id": "r03-w2-ex2", "type": "exercise", "title": "练习：统计标签出现次数", "file": ex2},
+                        {"id": "r03-w2-self", "type": "test", "title": "自测：自己写 count_words.py", "file": ex2},
+                    ],
+                },
+                {
+                    "id": "round03-week3",
+                    "title": "第 3 周：复杂度观察",
+                    "tasks": [
+                        {
+                            "id": "r03-w3-read",
+                            "type": "reading",
+                            "title": "阅读：复杂度直觉",
+                            "file": "rounds/round_03/week3/notes.md",
+                        },
+                        {"id": "r03-w3-ex3", "type": "exercise", "title": "练习：观察线性与平方级增长", "file": ex3},
+                        {"id": "r03-w3-self", "type": "test", "title": "自测：解释 O(n) 与 O(n^2)", "file": ex3},
+                    ],
+                },
+                {"id": "round03-final", "title": "最终验收", "tasks": final_tasks},
+            ],
+        }
+
     return {
         "id": f"round_{num:02d}",
         "title": round_title(root, num),

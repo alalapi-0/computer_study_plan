@@ -1,6 +1,6 @@
 # Round 03 · Python 基础与复杂度入门
 
-这个目录是 Round 03 的最小实操骨架，聚焦 Python 基础语法与复杂度直觉。
+这个目录是 Round 03 的 Web UI 可学习版本，聚焦 Python 基础语法、list/dict、函数拆分和复杂度直觉。
 
 > **仓库根**：`~/PycharmProjects/computer_study_plan`  
 > **练习沙盒**：`~/cli-lab/round3`  
@@ -27,6 +27,15 @@ round_03/
 
 ## 使用方式
 
-1. 每周先看 `weekN/notes.md`，再执行 `weekN/exercises.sh`。
-2. 练习仅在 `~/cli-lab/round3` 沙盒生成文件。
-3. 本轮为最小骨架版，后续按需要接入 `r03-*` 进度任务。
+1. 用 `python3 scripts/progress_server.py` 启动 Web UI。
+2. 在 `progress.html` 打开 Round 03。
+3. 每周先点“打开”阅读 `notes.md`。
+4. 对 `exercise` 类型任务点“运行”，脚本会在 `~/cli-lab/round3/*_auto` 生成示例代码并自动记录对应练习任务。
+5. 对“自测 / 产出 / 验收”任务点“终端”或“记录”，自己在浏览器映射终端中写代码、运行、解释，再手动记录完成。
+
+## 终端边界
+
+- Web UI 练习终端映射到 `~/cli-lab`，点任务行“终端”会自动切到 `~/cli-lab/round3`。
+- 可以在终端里运行 `python3 xxx.py`、`cat`、`grep`、`wc`、`ls` 等白名单命令。
+- 命令历史会写入 `records/terminal/commands.jsonl`，但“执行过命令”不等于“任务完成”。
+- 自测与验收必须由你理解后手动点“完成 / 记录”，脚本不会替你打卡。

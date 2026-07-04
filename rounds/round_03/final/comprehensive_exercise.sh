@@ -1,16 +1,18 @@
 #!/bin/bash
-# Round 03 · Final 综合练习
+# Round 03 · Final 综合练习（Web UI 可运行）
 
 set -e
 
 REPO_ROOT="$(cd "$(dirname "$0")/../../.." && pwd)"
+LAB="$HOME/cli-lab/round3/final_auto"
 
 mark() {
   bash "$REPO_ROOT/mark_done.sh" "$1"
 }
 
-mkdir -p ~/cli-lab/round3/final
-cd ~/cli-lab/round3/final
+rm -rf "$LAB"
+mkdir -p "$LAB"
+cd "$LAB"
 
 cat > mini_analyzer.py <<'EOF'
 def summarize(labels):
@@ -21,18 +23,24 @@ def summarize(labels):
 
 data = ["ok", "ok", "error", "warn", "ok", "error"]
 print(summarize(data))
+
+def estimate_ops(n):
+    return {"linear": n, "quadratic": n * n}
+
+for n in [10, 100]:
+    print(n, estimate_ops(n))
 EOF
 
 python3 mini_analyzer.py
 
+cat > final_notes.md <<'EOF'
+# Round 03 Final 自动练习产物
+
+- mini_analyzer.py：统计标签出现次数，并打印线性 / 平方级操作量估算。
+- 这只是自动综合练习。
+- 小抄 r03-fin-sheet 与验收 r03-fin-acc1 仍需用户自己阅读、解释并在 Web UI 手动记录。
+EOF
+
 mark r03-fin-comp
 
-echo "请检查 rounds/round_03/final/complexity_cheatsheet.md 后按回车..."
-read
-mark r03-fin-sheet
-
-echo "请确认你能解释线性与平方级复杂度差异后按回车..."
-read
-mark r03-fin-acc1
-
-echo "Final 完成。"
+echo "Round 03 Final 自动练习完成。请继续手动完成 r03-fin-sheet 与 r03-fin-acc1。"

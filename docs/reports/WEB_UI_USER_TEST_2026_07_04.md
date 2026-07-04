@@ -109,6 +109,23 @@
 - 静态语义验证：脚本型 `exercise` 任务共 101 个，脚本型非 `exercise` 任务共 66 个；运行按钮谓词为 `task.type === "exercise"`。
 - 清理：本轮 API/UI 测试产生的进度、动作、反馈和终端历史已从测试前快照恢复。
 
+## Round 03 内容填充与 Python 练习补测
+
+- before 问题：Round 03 仍偏最小骨架，notes 缺少“在 Web UI 中如何创建、运行、解释 Python 脚本”的步骤。
+- before 问题：Round 03 任务标题仍是“练习1 / 练习2 / 练习3”，用户无法判断每个任务的实际产出。
+- before 问题：Round 03 脚本会等待回车，并可能连带标记自测、小抄和验收，不适合浏览器一键运行。
+- before 问题：`progress.html?round03=1` 这类直达链接不会选中 Round 03，用户从报告或任务链接进入后仍需要自己找 Round。
+- 修复：Round 03 README、Week 1–3 notes、final 小抄已补齐 Python 基础、list/dict、函数拆分、复杂度直觉、自测命令和验收自问。
+- 修复：Round 03 脚本改为非交互运行，只自动记录脚本实际完成的练习任务；自测、小抄和验收仍由用户手动完成并记录。
+- 修复：Round 03 UI 任务标题改为“运行第一个 Python 小程序”“统计标签出现次数”“观察线性与平方级增长”等动作标题。
+- 修复：`progress.html` 支持 `?round=round_03`、`?round03=1` 等直达 Round 参数。
+- API 验证：`r03-w1-ex1`、`r03-w2-ex2`、`r03-w3-ex3`、`r03-fin-comp` 均可运行成功；`r03-w1-self/run` 返回 `task_not_runnable`。
+- 浏览器终端验证：`~/round3` 可作为映射目录；终端能在任务 `r03-w1-self` 下写入并运行 Python 文件；`python3 -c` 仍被拦截。
+- UI 验证：真实浏览器打开 `progress.html?round=round_03` 后直接选中 Round 03；自测任务不显示“运行”但显示“终端”；点击后当前任务为“自测：自己写 square.py”，工作目录为 `~/round3`；输入 `pwd` 输出 `/Users/alalapi/cli-lab/round3`。
+- 移动端验证：390px 宽度无整页横向溢出。
+- 清理：本轮 API/UI 测试产生的进度、动作、反馈和终端历史已从测试前快照恢复。
+- 工具备注：应用内浏览器插件本轮打开本地页时出现控制超时；已使用本机 Playwright 打开同一 Web UI 完成真实渲染与点击验证。
+
 ## 验证命令
 
 ```bash

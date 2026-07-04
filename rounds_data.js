@@ -425,19 +425,19 @@ window.ROUNDS_DATA = [
           {
             "id": "r03-w1-read",
             "type": "reading",
-            "title": "阅读 week1/notes.md",
+            "title": "阅读：Python 脚本、变量、条件、循环、函数",
             "file": "rounds/round_03/week1/notes.md"
           },
           {
             "id": "r03-w1-ex1",
             "type": "exercise",
-            "title": "练习1",
+            "title": "练习：运行第一个 Python 小程序",
             "file": "rounds/round_03/week1/exercises.sh"
           },
           {
             "id": "r03-w1-self",
             "type": "test",
-            "title": "第1周自测",
+            "title": "自测：自己写 square.py",
             "file": "rounds/round_03/week1/exercises.sh"
           }
         ]
@@ -449,19 +449,19 @@ window.ROUNDS_DATA = [
           {
             "id": "r03-w2-read",
             "type": "reading",
-            "title": "阅读 week2/notes.md",
+            "title": "阅读：list/dict 与函数拆分",
             "file": "rounds/round_03/week2/notes.md"
           },
           {
             "id": "r03-w2-ex2",
             "type": "exercise",
-            "title": "练习2",
+            "title": "练习：统计标签出现次数",
             "file": "rounds/round_03/week2/exercises.sh"
           },
           {
             "id": "r03-w2-self",
             "type": "test",
-            "title": "第2周自测",
+            "title": "自测：自己写 count_words.py",
             "file": "rounds/round_03/week2/exercises.sh"
           }
         ]
@@ -473,19 +473,19 @@ window.ROUNDS_DATA = [
           {
             "id": "r03-w3-read",
             "type": "reading",
-            "title": "阅读 week3/notes.md",
+            "title": "阅读：复杂度直觉",
             "file": "rounds/round_03/week3/notes.md"
           },
           {
             "id": "r03-w3-ex3",
             "type": "exercise",
-            "title": "练习3",
+            "title": "练习：观察线性与平方级增长",
             "file": "rounds/round_03/week3/exercises.sh"
           },
           {
             "id": "r03-w3-self",
             "type": "test",
-            "title": "第3周自测",
+            "title": "自测：解释 O(n) 与 O(n^2)",
             "file": "rounds/round_03/week3/exercises.sh"
           }
         ]
@@ -497,19 +497,19 @@ window.ROUNDS_DATA = [
           {
             "id": "r03-fin-comp",
             "type": "exercise",
-            "title": "综合练习",
+            "title": "综合练习：标签统计器 + 复杂度估算",
             "file": "rounds/round_03/final/comprehensive_exercise.sh"
           },
           {
             "id": "r03-fin-sheet",
             "type": "output",
-            "title": "完成本 Round 小抄",
+            "title": "产出：完成 Round 03 Python 与复杂度小抄",
             "file": "rounds/round_03/final/complexity_cheatsheet.md"
           },
           {
             "id": "r03-fin-acc1",
             "type": "test",
-            "title": "验收：Round 03 核心目标",
+            "title": "验收：解释函数、dict 计数与复杂度",
             "file": "round_03.md"
           }
         ]

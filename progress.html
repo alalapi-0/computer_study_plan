@@ -1564,6 +1564,47 @@ let progressData = {};
 let lanesData    = {};
 const LANE_PRIORITY = ["soft_exam", "math2", "cs408", "engineering"];
 const READABLE_FILE_RE = /\.(md|txt|sh|py)$/i;
+let initialRouteApplied = false;
+
+function normalizeRoundParam(value) {
+  const raw = String(value || "").trim().toLowerCase();
+  if (!raw) return "";
+  const direct = raw.match(/^round_(\d{2})$/);
+  if (direct) return `round_${direct[1]}`;
+  const compact = raw.match(/^round(\d{1,2})$/);
+  if (compact) return `round_${compact[1].padStart(2, "0")}`;
+  const numeric = raw.match(/^(\d{1,2})$/);
+  if (numeric) return `round_${numeric[1].padStart(2, "0")}`;
+  return raw;
+}
+
+function applyInitialRoute() {
+  if (initialRouteApplied) return;
+  initialRouteApplied = true;
+  const params = new URLSearchParams(window.location.search || "");
+  let roundId = normalizeRoundParam(params.get("round") || params.get("activeRound"));
+  if (!roundId) {
+    for (const [key, value] of params.entries()) {
+      const match = key.toLowerCase().match(/^round_?(\d{1,2})$/);
+      if (match && value !== "0" && value !== "false") {
+        roundId = `round_${match[1].padStart(2, "0")}`;
+        break;
+      }
+    }
+  }
+  const requestedRound = ROUNDS.find(r => r.id === roundId);
+  if (requestedRound) {
+    activeLane = requestedRound.lane || activeLane;
+    activeRound = requestedRound.id;
+    return;
+  }
+  const lane = params.get("lane");
+  if (lane && lanesData[lane]) {
+    activeLane = lane;
+    const firstRound = ROUNDS.find(r => r.lane === lane);
+    activeRound = firstRound ? firstRound.id : activeRound;
+  }
+}
 
 // ============================================================
 // Load progress
@@ -1613,6 +1654,7 @@ async function loadProgress() {
   const now = new Date().toLocaleTimeString("zh-CN");
   document.getElementById("lastUpdated").textContent =
     `上次读取：${now}${window.location.protocol === "file:" ? "（本地文件模式，需手动刷新页面）" : ""}`;
+  applyInitialRoute();
   render();
 }
 

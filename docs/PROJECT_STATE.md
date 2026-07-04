@@ -1109,3 +1109,36 @@
 
 - 未放宽终端沙盒：仍限制在 `~/cli-lab` 内，远程 Git、网络命令、危险删除、命令串联和仓库外路径继续拦截。
 - 未引入前端框架、数据库、后端框架或大型新依赖。
+
+## 45. 2026-07-04 TASK-RR-33 Round 03 内容填充与 Python 基础练习
+
+### 45.1 本轮修改
+
+- `rounds/round_03/README.md`：从“最小骨架”更新为 Web UI 可练习说明，明确阅读、运行、自测、最终验收的页面操作路径。
+- `rounds/round_03/week1|week2|week3/notes.md`：补齐 Python 基础语法、list/dict、函数拆分与复杂度直觉的学习步骤、自测命令和完成标准。
+- `rounds/round_03/week1|week2|week3/exercises.sh` 与 `final/comprehensive_exercise.sh`：改为非交互运行，只自动记录脚本实际完成的练习任务；自测、小抄和验收仍由用户手动记录。
+- `rounds/round_03/final/complexity_cheatsheet.md`：补齐 Python 基础、复杂度判断和最终验收自问。
+- `scripts/build_rounds_data.py` / `rounds_data.js`：将 Round 03 UI 任务标题从“练习1/2/3”改为用户能理解的动作标题。
+- `progress.html`：新增 URL 初始路由解析，支持 `?round=round_03`、`?round03=1` 等直达 Round 参数。
+
+### 45.2 用户视角问题修复
+
+- Round 03 原 notes 过短，用户不知道如何只通过 Web UI 完成 Python 文件创建、运行和解释。
+- Round 03 原脚本会等待回车并可能连带标记自测 / 小抄 / 验收，不适合浏览器运行闭环。
+- Round 03 任务标题过泛，用户无法从 UI 判断每个练习的具体产出。
+- 报告或外部链接中的 Round 直达参数原先不会切换 active Round，用户打开后仍落在默认 Round。
+
+### 45.3 验证
+
+- API 验证：`r03-w1-ex1`、`r03-w2-ex2`、`r03-w3-ex3`、`r03-fin-comp` 均可通过 `/api/tasks/<id>/run` 运行成功；`r03-w1-self/run` 返回 `task_not_runnable`。
+- 浏览器终端验证：`/api/terminal?cwd=~/round3` 返回 `~/round3`；终端可在任务 `r03-w1-self` 下写入并运行 `hello.py`；`python3 -c` 仍被拦截。
+- 真实浏览器验证：`progress.html?round=round_03` 会直接选中 Round 03；自测任务不显示“运行”但显示“终端”；点击“终端”后当前任务绑定为“自测：自己写 square.py”，工作目录为 `~/round3`；UI 输入 `pwd` 输出 `/Users/alalapi/cli-lab/round3`。
+- 移动端验证：390px 宽度无整页横向溢出。
+- 静态与数据验证：`build_rounds_data.py`、`generate_task_feedback.py`、`check_protocol_sync.py`、`validate_learning_data.py`、`agent_gate.py --verify`、`bash -n`、`node --check progress_ui.js`、Python 编译、JSON 校验、`git diff --check` 均通过。
+- MCP 验证：`npm run check:mcp` 通过；`npm run check:cursor-mcp` 可在 CLI 层列出 chrome-devtools / playwright / context7 / github / stitch 等工具，filesystem 仍显示 Cursor 侧需审批。
+
+### 45.4 风险边界核对
+
+- 本轮 API/UI 验证产生的进度、动作、反馈和终端历史均已从测试前快照恢复。
+- 未放宽终端沙盒边界；仍限制在 `~/cli-lab` 内并拦截危险命令。
+- 未引入前端框架、数据库、后端框架或大型新依赖。

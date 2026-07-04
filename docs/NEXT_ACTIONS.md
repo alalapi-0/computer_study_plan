@@ -524,6 +524,23 @@ TASK-011 实际产物：
 
 ---
 
+## TASK-RR-33：Stage 1 填充 · Round 03 Web UI 可完成练习
+
+- 状态：**done**（2026-07-04）
+- 背景：Round 03 是 Python 基础补强与复杂度直觉，原内容仍偏“最小骨架”，任务标题泛化，脚本会把自动练习和用户自测边界混在一起。
+- 目标：让 Round 03 用户只通过 Web UI 就能阅读、运行 Python 练习脚本、在浏览器映射终端中手写自测脚本，并手动记录小抄 / 验收。
+- 实际产物：
+  - `rounds/round_03/README.md` 更新为 Web UI 使用说明。
+  - `rounds/round_03/week1|week2|week3/notes.md` 补齐 Python 语法、list/dict、复杂度观察的页面学习路径与自测命令。
+  - `rounds/round_03/week1|week2|week3/exercises.sh` 与 `final/comprehensive_exercise.sh` 改为非交互运行，只打卡脚本实际完成的练习任务。
+  - `rounds/round_03/final/complexity_cheatsheet.md` 补齐 Python 小抄、复杂度小抄与最终验收自问。
+  - `scripts/build_rounds_data.py` / `rounds_data.js` 为 Round 03 输出清晰任务标题。
+  - `progress.html` 支持 `?round=round_03`、`?round03=1` 等直达 Round 参数，方便从报告或任务链接直接进入目标轮次。
+- 验收：API 可运行 Round 03 四个练习脚本；自测任务拒绝误运行；浏览器终端可绑定 `r03-w1-self` 到 `~/round3` 并执行 `pwd`；桌面端和 390px 移动端无横向溢出；测试记录已恢复。
+- 是否需要用户介入：否。
+
+---
+
 ## TASK-RR-26：Stage 1 增强 · Round 05 接入进度系统
 
 - 状态：**done**（2026-06-15）
