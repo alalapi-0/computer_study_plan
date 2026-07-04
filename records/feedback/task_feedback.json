@@ -3150,6 +3150,204 @@
       "feedback_type": "not_started",
       "message": "尚未开始，建议先做一个 15 分钟启动动作。",
       "next_suggestion": "先阅读资料，或完成一条最小练习。"
+    },
+    "linux-plan-start": {
+      "task_id": "linux-plan-start",
+      "lane": "engineering",
+      "done": false,
+      "action_count": 0,
+      "last_action_type": null,
+      "last_action_at": null,
+      "feedback_type": "not_started",
+      "message": "尚未开始，建议先做一个 15 分钟启动动作。",
+      "next_suggestion": "先阅读资料，或完成一条最小练习。"
+    },
+    "vps-stage-start": {
+      "task_id": "vps-stage-start",
+      "lane": "engineering",
+      "done": false,
+      "action_count": 0,
+      "last_action_type": null,
+      "last_action_at": null,
+      "feedback_type": "not_started",
+      "message": "尚未开始，建议先做一个 15 分钟启动动作。",
+      "next_suggestion": "先阅读资料，或完成一条最小练习。"
+    },
+    "vps-00-repo-scan": {
+      "task_id": "vps-00-repo-scan",
+      "lane": "engineering",
+      "done": false,
+      "action_count": 0,
+      "last_action_type": null,
+      "last_action_at": null,
+      "feedback_type": "not_started",
+      "message": "尚未开始，建议先做一个 15 分钟启动动作。",
+      "next_suggestion": "先阅读资料，或完成一条最小练习。"
+    },
+    "vps-01-repo-cleanup": {
+      "task_id": "vps-01-repo-cleanup",
+      "lane": "engineering",
+      "done": false,
+      "action_count": 0,
+      "last_action_type": null,
+      "last_action_at": null,
+      "feedback_type": "not_started",
+      "message": "尚未开始，建议先做一个 15 分钟启动动作。",
+      "next_suggestion": "先阅读资料，或完成一条最小练习。"
+    },
+    "vps-02-module-anchor": {
+      "task_id": "vps-02-module-anchor",
+      "lane": "engineering",
+      "done": false,
+      "action_count": 0,
+      "last_action_type": null,
+      "last_action_at": null,
+      "feedback_type": "not_started",
+      "message": "尚未开始，建议先做一个 15 分钟启动动作。",
+      "next_suggestion": "先阅读资料，或完成一条最小练习。"
+    },
+    "vps-03-permission-levels": {
+      "task_id": "vps-03-permission-levels",
+      "lane": "engineering",
+      "done": false,
+      "action_count": 0,
+      "last_action_type": null,
+      "last_action_at": null,
+      "feedback_type": "not_started",
+      "message": "尚未开始，建议先做一个 15 分钟启动动作。",
+      "next_suggestion": "先阅读资料，或完成一条最小练习。"
+    },
+    "vps-04-ssh-basics": {
+      "task_id": "vps-04-ssh-basics",
+      "lane": "engineering",
+      "done": false,
+      "action_count": 0,
+      "last_action_type": null,
+      "last_action_at": null,
+      "feedback_type": "not_started",
+      "message": "尚未开始，建议先做一个 15 分钟启动动作。",
+      "next_suggestion": "先阅读资料，或完成一条最小练习。"
+    },
+    "vps-05-first-readonly-check": {
+      "task_id": "vps-05-first-readonly-check",
+      "lane": "engineering",
+      "done": false,
+      "action_count": 0,
+      "last_action_type": null,
+      "last_action_at": null,
+      "feedback_type": "not_started",
+      "message": "尚未开始，建议先做一个 15 分钟启动动作。",
+      "next_suggestion": "先阅读资料，或完成一条最小练习。"
+    },
+    "vps-06-remote-dirs": {
+      "task_id": "vps-06-remote-dirs",
+      "lane": "engineering",
+      "done": false,
+      "action_count": 0,
+      "last_action_type": null,
+      "last_action_at": null,
+      "feedback_type": "not_started",
+      "message": "尚未开始，建议先做一个 15 分钟启动动作。",
+      "next_suggestion": "先阅读资料，或完成一条最小练习。"
+    },
+    "vps-07-github-sync": {
+      "task_id": "vps-07-github-sync",
+      "lane": "engineering",
+      "done": false,
+      "action_count": 0,
+      "last_action_type": null,
+      "last_action_at": null,
+      "feedback_type": "not_started",
+      "message": "尚未开始，建议先做一个 15 分钟启动动作。",
+      "next_suggestion": "先阅读资料，或完成一条最小练习。"
+    },
+    "vps-08-tmux-training": {
+      "task_id": "vps-08-tmux-training",
+      "lane": "engineering",
+      "done": false,
+      "action_count": 0,
+      "last_action_type": null,
+      "last_action_at": null,
+      "feedback_type": "not_started",
+      "message": "尚未开始，建议先做一个 15 分钟启动动作。",
+      "next_suggestion": "先阅读资料，或完成一条最小练习。"
+    },
+    "vps-09-network-check": {
+      "task_id": "vps-09-network-check",
+      "lane": "engineering",
+      "done": false,
+      "action_count": 0,
+      "last_action_type": null,
+      "last_action_at": null,
+      "feedback_type": "not_started",
+      "message": "尚未开始，建议先做一个 15 分钟启动动作。",
+      "next_suggestion": "先阅读资料，或完成一条最小练习。"
+    },
+    "vps-10-remote-api-minimal": {
+      "task_id": "vps-10-remote-api-minimal",
+      "lane": "engineering",
+      "done": false,
+      "action_count": 0,
+      "last_action_type": null,
+      "last_action_at": null,
+      "feedback_type": "not_started",
+      "message": "尚未开始，建议先做一个 15 分钟启动动作。",
+      "next_suggestion": "先阅读资料，或完成一条最小练习。"
+    },
+    "vps-11-minimal-service": {
+      "task_id": "vps-11-minimal-service",
+      "lane": "engineering",
+      "done": false,
+      "action_count": 0,
+      "last_action_type": null,
+      "last_action_at": null,
+      "feedback_type": "not_started",
+      "message": "尚未开始，建议先做一个 15 分钟启动动作。",
+      "next_suggestion": "先阅读资料，或完成一条最小练习。"
+    },
+    "vps-12-sop-and-vultragent": {
+      "task_id": "vps-12-sop-and-vultragent",
+      "lane": "engineering",
+      "done": false,
+      "action_count": 0,
+      "last_action_type": null,
+      "last_action_at": null,
+      "feedback_type": "not_started",
+      "message": "尚未开始，建议先做一个 15 分钟启动动作。",
+      "next_suggestion": "先阅读资料，或完成一条最小练习。"
+    },
+    "plans-overview-start": {
+      "task_id": "plans-overview-start",
+      "lane": "engineering",
+      "done": false,
+      "action_count": 0,
+      "last_action_type": null,
+      "last_action_at": null,
+      "feedback_type": "not_started",
+      "message": "尚未开始，建议先做一个 15 分钟启动动作。",
+      "next_suggestion": "先阅读资料，或完成一条最小练习。"
+    },
+    "soft_exam-overview-start": {
+      "task_id": "soft_exam-overview-start",
+      "lane": "soft_exam",
+      "done": false,
+      "action_count": 0,
+      "last_action_type": null,
+      "last_action_at": null,
+      "feedback_type": "not_started",
+      "message": "尚未开始，建议先做一个 15 分钟启动动作。",
+      "next_suggestion": "先阅读资料，或完成一条最小练习。"
+    },
+    "math2-overview-start": {
+      "task_id": "math2-overview-start",
+      "lane": "math2",
+      "done": false,
+      "action_count": 0,
+      "last_action_type": null,
+      "last_action_at": null,
+      "feedback_type": "not_started",
+      "message": "尚未开始，建议先做一个 15 分钟启动动作。",
+      "next_suggestion": "先阅读资料，或完成一条最小练习。"
     }
   }
 }

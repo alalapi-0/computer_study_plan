@@ -2407,6 +2407,27 @@ window.ROUNDS_DATA = [
     ]
   },
   {
+    "id": "plan_overview",
+    "title": "学习计划 · 总览",
+    "lane": "engineering",
+    "difficulty": "⭐☆☆☆☆",
+    "duration": "持续",
+    "weeks": [
+      {
+        "id": "plan_overview_week",
+        "title": "计划文档阅读",
+        "tasks": [
+          {
+            "id": "plans-overview-start",
+            "type": "reading",
+            "title": "阅读学习计划专题总览",
+            "file": "plans/README.md"
+          }
+        ]
+      }
+    ]
+  },
+  {
     "id": "plan_soft_exam",
     "title": "软考 · 启动模块",
     "lane": "soft_exam",
@@ -2417,6 +2438,12 @@ window.ROUNDS_DATA = [
         "id": "plan_soft_exam_week",
         "title": "计划文档阅读",
         "tasks": [
+          {
+            "id": "soft_exam-overview-start",
+            "type": "reading",
+            "title": "阅读软考中级主线总览",
+            "file": "plans/soft_exam/README.md"
+          },
           {
             "id": "soft_exam-ds-start",
             "type": "reading",
@@ -2451,6 +2478,12 @@ window.ROUNDS_DATA = [
         "title": "计划文档阅读",
         "tasks": [
           {
+            "id": "math2-overview-start",
+            "type": "reading",
+            "title": "阅读数学二主线总览",
+            "file": "plans/math2/README.md"
+          },
+          {
             "id": "math2-limits-start",
             "type": "reading",
             "title": "阅读数学二极限启动骨架",
@@ -2480,8 +2513,128 @@ window.ROUNDS_DATA = [
           {
             "id": "cs408-ds-start",
             "type": "reading",
-            "title": "阅读 408 数据结构计划入口",
+            "title": "阅读 408 / 0854 主线总览",
             "file": "plans/408/README.md"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "plan_linux",
+    "title": "Linux · 工程专项",
+    "lane": "engineering",
+    "difficulty": "⭐☆☆☆☆",
+    "duration": "持续",
+    "weeks": [
+      {
+        "id": "plan_linux_week",
+        "title": "计划文档阅读",
+        "tasks": [
+          {
+            "id": "linux-plan-start",
+            "type": "reading",
+            "title": "阅读 Linux 工程专项路线",
+            "file": "plans/linux/README.md"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "plan_vps",
+    "title": "VPS · 远程实操支线",
+    "lane": "engineering",
+    "difficulty": "⭐☆☆☆☆",
+    "duration": "持续",
+    "weeks": [
+      {
+        "id": "plan_vps_week",
+        "title": "计划文档阅读",
+        "tasks": [
+          {
+            "id": "vps-stage-start",
+            "type": "reading",
+            "title": "阅读 VPS 支线总纲",
+            "file": "rounds/stage_03_vps_remote_ops/README.md"
+          },
+          {
+            "id": "vps-00-repo-scan",
+            "type": "reading",
+            "title": "阅读 VPS-00：扫描仓库与生成治理报告",
+            "file": "rounds/stage_03_vps_remote_ops/round_vps_00_repo_scan.md"
+          },
+          {
+            "id": "vps-01-repo-cleanup",
+            "type": "reading",
+            "title": "阅读 VPS-01：执行仓库治理与文档合并",
+            "file": "rounds/stage_03_vps_remote_ops/round_vps_01_repo_cleanup.md"
+          },
+          {
+            "id": "vps-02-module-anchor",
+            "type": "reading",
+            "title": "阅读 VPS-02：建立 VPS 模块总纲",
+            "file": "rounds/stage_03_vps_remote_ops/round_vps_02_module_anchor.md"
+          },
+          {
+            "id": "vps-03-permission-levels",
+            "type": "reading",
+            "title": "阅读 VPS-03：远程操作权限等级与安全规则",
+            "file": "rounds/stage_03_vps_remote_ops/round_vps_03_permission_levels.md"
+          },
+          {
+            "id": "vps-04-ssh-basics",
+            "type": "reading",
+            "title": "阅读 VPS-04：SSH 与远程 Linux 基础",
+            "file": "rounds/stage_03_vps_remote_ops/round_vps_04_ssh_basics.md"
+          },
+          {
+            "id": "vps-05-first-readonly-check",
+            "type": "reading",
+            "title": "阅读 VPS-05：首次远程只读检查",
+            "file": "rounds/stage_03_vps_remote_ops/round_vps_05_first_readonly_check.md"
+          },
+          {
+            "id": "vps-06-remote-dirs",
+            "type": "reading",
+            "title": "阅读 VPS-06：远程学习目录与测试文件",
+            "file": "rounds/stage_03_vps_remote_ops/round_vps_06_remote_dirs.md"
+          },
+          {
+            "id": "vps-07-github-sync",
+            "type": "reading",
+            "title": "阅读 VPS-07：GitHub 同步与远程运行",
+            "file": "rounds/stage_03_vps_remote_ops/round_vps_07_github_sync.md"
+          },
+          {
+            "id": "vps-08-tmux-training",
+            "type": "reading",
+            "title": "阅读 VPS-08：tmux 后台任务训练",
+            "file": "rounds/stage_03_vps_remote_ops/round_vps_08_tmux_training.md"
+          },
+          {
+            "id": "vps-09-network-check",
+            "type": "reading",
+            "title": "阅读 VPS-09：网络连通性与端口检查",
+            "file": "rounds/stage_03_vps_remote_ops/round_vps_09_network_check.md"
+          },
+          {
+            "id": "vps-10-remote-api-minimal",
+            "type": "reading",
+            "title": "阅读 VPS-10：远程 API 调用最小实验",
+            "file": "rounds/stage_03_vps_remote_ops/round_vps_10_remote_api_minimal.md"
+          },
+          {
+            "id": "vps-11-minimal-service",
+            "type": "reading",
+            "title": "阅读 VPS-11：最小 Web/API 服务部署",
+            "file": "rounds/stage_03_vps_remote_ops/round_vps_11_minimal_service.md"
+          },
+          {
+            "id": "vps-12-sop-and-vultragent",
+            "type": "reading",
+            "title": "阅读 VPS-12：SOP 与 VULTRagent 需求草案",
+            "file": "rounds/stage_03_vps_remote_ops/round_vps_12_sop_and_vultragent.md"
           }
         ]
       }

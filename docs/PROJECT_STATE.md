@@ -3,149 +3,167 @@
 ## 1. 项目概览
 - **仓库名称**：`computer_study_plan`（基于当前目录名判断）。
 - **唯一本地工作副本**：`~/PycharmProjects/computer_study_plan`（绝对路径 `/Users/alalapi/PycharmProjects/computer_study_plan`）。IDE 工作区、文档中的「仓库根」、Git 操作均指此目录；详见 `docs/WORKSPACE.md`。
-- **练习沙盒（非仓库）**：Round 00 等终端练习使用 `~/cli-lab/round0`，与 Git 根分离。
-- **项目类型判断**：当前以**学习型仓库**为主，附带少量脚本与可视化看板能力（混合了文档 + 轻量 CLI + 静态页面）。
+- **练习沙盒（非仓库）**：工程实操练习统一写入 `~/cli-lab/roundN`，与 Git 根分离；自动练习不得把临时产物提交进仓库。
+- **项目类型判断**：当前是一个**本地优先的 Web UI 学习系统**，以 JSON 文件、轻量 Python 服务、静态前端和 per-Round 练习脚本支撑学习推进、记录、反馈、浏览器终端、存档读档。
 - **当前主入口（基于实际文件）**：
   - `README.md`：总入口与学习路线说明。
-  - `progress.html`：进度可视化看板入口（静态页面）。
+  - `progress.html`：Web UI 学习工作台入口。
+  - `scripts/progress_server.py`：Web UI 本地 API 服务，承载完成/撤销、运行练习、动作记录、终端映射、存档读档。
+  - `progress_ui.js`：任务列表、阅读器、记录弹窗、运行结果、终端绑定等前端交互。
   - `mark_done.sh`：命令行进度标记工具。
-  - `rounds/round_00/week*/exercises.sh`、`rounds/round_00/final/comprehensive_exercise.sh`：Round 00 的练习执行入口。
+  - `rounds/round_00` 至 `rounds/round_21`：工程实操线 22 个 Round 的 notes、练习脚本和最终验收材料。
 - **是否已形成可运行项目骨架**：
-  - 对“学习进度跟踪 + Round 00 练习”而言，**已形成最小可运行骨架**。
-  - 对 README 中描述的 Round 01–21 实操代码能力而言，**尚未形成对应代码骨架**（当前主要是大纲文档）。
+  - 对“只通过 Web UI 推进学习、记录进度、运行练习、使用浏览器终端、存档读档”的目标而言，**已形成可运行闭环**。
+  - 对工程实操线而言，Round 00–21 均已展开到 `rounds/round_XX/`，并已注册到 Web UI 任务数据。
+  - 软考 / 数学二 / 408 / Linux / VPS 当前在 Web UI 中以计划文档阅读任务作为启动入口；具体考题、院校、考纲与真实远程操作仍按官方最新来源或用户授权补充，不在仓库中缓存或擅自执行。
 
 ## 2. 仓库目录与关键文件
 
 ### 2.1 主要目录结构（实际存在）
 - 根目录：包含 `round_00.md` 至 `round_21.md`、进度相关文件与脚本。
-- `rounds/round_00/`：唯一已展开的轮次目录，含 `week1/week2/week3/final` 子目录及脚本/笔记。
-- `docs/`：本次新增，用于沉淀项目状态文档。
+- `rounds/round_00/` 至 `rounds/round_21/`：均已展开，含 `week1/week2/week3/final` 子目录及脚本/笔记。
+- `plans/`：软考、数学二、408 和 Linux 的长期学习计划入口；现有计划文档已注册到 Web UI。VPS 支线文档位于 `rounds/stage_03_vps_remote_ops/`，也已注册为阅读任务。
+- `records/`：动作日志、任务反馈、存档文件、周复盘/错题等记录目录。
+- `docs/`：路线图、阶段计划、状态记录、测试报告和治理文档。
 
-> ⚠ 历史记录：根目录原有 `plan_round_00.txt` ~ `plan_round_21.txt`（22 份初版提示词文本），已于 **2026-05-12** 路线重定向时由用户授权删除，内容已被对应 `round_XX.md` 完整吸收。
+> 历史记录：根目录原有 `plan_round_00.txt` ~ `plan_round_21.txt`（22 份初版提示词文本），已于 **2026-05-12** 路线重定向时由用户授权删除，内容已被对应 `round_XX.md` 完整吸收。
 
 ### 2.2 关键文件与作用
 - `README.md`：项目介绍、路线图、目录说明、进度系统说明。
 - `CONVERSION_PROTOCOL.md`：Round md 标准结构与进度系统协议（v2.0，已移除 txt 转换流程）。
-- `progress.json`：进度状态"单一事实源"（任务完成状态 + 四主线 lanes，v2）。
+- `progress.json`：进度状态单一事实源（任务完成状态 + 四主线 lanes，v2）。
 - `progress_data.js`：由脚本生成，供前端看板读取。
-- `progress.html`：可视化展示进度。
+- `rounds_data.js`：由 `scripts/build_rounds_data.py` 生成，注册 Round 00–21 与计划入口任务。
+- `progress.html` / `progress_ui.js`：Web UI 页面与交互逻辑。
+- `scripts/progress_server.py` / `scripts/progress_lib.py`：本地 API、存档读档、终端映射、脚本运行、记录与反馈逻辑。
 - `mark_done.sh`：更新 `progress.json` 并同步生成 `progress_data.js`。
-- `round_00.md`~`round_21.md`：21+1 轮学习说明文档（路线重定向后定位为"工程实操线素材库"）。
+- `records/action_logs/events.jsonl`：Web UI / 脚本动作事件日志。
+- `records/feedback/task_feedback.json`：由动作与进度生成的任务反馈。
+- `records/saves/`：Web UI 存档读档快照目录。
 - `plan_round_00.txt`~`plan_round_21.txt`：已于 2026-05-12 由用户授权删除（仅 git history 可追溯）。
 
 ## 3. round00-round21 文档与实际实现对应关系
 
 ### 3.1 轮次文件存在性检查
 - `round_00.md` 到 `round_21.md`：**全部存在**（22 个）。
+- `rounds/round_00/` 到 `rounds/round_21/`：**全部存在**（22 个）。
 - `plan_round_00.txt` 到 `plan_round_21.txt`：**已于 2026-05-12 删除**（路线重定向，用户授权）。
 
 ### 3.2 实际代码/脚本落地情况
-- **已落地为真实脚本的轮次**：仅确认 `rounds/round_00/`。
-  - 包含：`week1/2/3` 的 `notes.md` 与 `exercises.sh`，以及 `final/comprehensive_exercise.sh`。
-- **其余轮次（Round 01–21）**：当前仓库未发现对应 `rounds/round_01`~`rounds/round_21` 的展开目录与可执行代码文件；主要为根目录下的路线文档（`.md`）与规划文本（`.txt`）。
+- **已落地为真实脚本的轮次**：`rounds/round_00/` 至 `rounds/round_21/`。
+  - Round 00 有 11 个 exercise 任务，覆盖最初终端入门闭环。
+  - Round 01 有 4 个 exercise 任务；Round 02 有 10 个 exercise 任务；Round 03–21 各有 4 个 exercise 任务。
+  - 截至 2026-07-05，`rounds_data.js` 注册 28 个 Web UI 分组：22 个工程 Round + 6 个计划/支线入口（学习计划总览、软考、数学二、408、Linux、VPS）。
+  - 当前 Web UI 可见任务总数为 304，其中 exercise 任务为 101；任务文件引用均存在。
 
 ### 3.3 文档与实现脱节情况（已确认不一致点）
-1. **README 的“项目结构”展示了完整 `rounds/` 展开结构趋势，但当前实际仅有 `rounds/round_00`。**
-2. 多个高轮次文档（如 Round 07、Round 09、Round 21）描述了 `ai_prep_tool.py`、`tests/`、PyTorch/NLP 脚本等目标与示例，但仓库中未发现对应真实 `.py` 源文件与目录落地。
-3. 路线层面“已规划完整”，实现层面“仅 Round 00 实体化”，当前应按“**规划先行、实现滞后**”认定。
+1. 本文件 2026-04/05 的历史状态日志仍保留在后文，若与本节冲突，以本节和当前文件系统为准。
+2. 软考、数学二、408 计划入口仍是“计划文档阅读 + 手动记录”层级，不包含官方题目或院校数据；这是官方信息约束下的有意边界。
+3. VPS 支线文档已以阅读任务接入 Web UI；涉及真实远程操作仍需用户授权，不能由页面或自动脚本默认执行。
 
 ### 3.4 当前代码实现大致对应轮次
-- **明确可执行并闭环的部分**：Round 00（终端入门 + 进度打卡系统）。
-- **Round 01–21**：目前主要对应“学习大纲/学习说明”阶段，落地实现未确认或尚未实现。
+- **明确可执行并闭环的部分**：Round 00–21 工程实操线。每轮均可在 Web UI 中阅读 notes、运行 exercise 脚本、使用浏览器映射终端完成自测，并手动记录产出/验收。
+- **计划入口部分**：`plan_overview`、`plan_soft_exam`、`plan_math2`、`plan_cs408`、`plan_linux`、`plan_vps` 以阅读任务形式接入 Web UI，适合先建立路线感和学习记录。
 
 ## 4. 当前已实现功能
 
 ### 4.1 已实现的核心功能
 1. **学习任务进度持久化**：`progress.json` 保存任务完成状态与时间。
-2. **进度写入 CLI**：`mark_done.sh` 支持标记完成、撤销、状态查看。
-3. **前端进度看板展示**：`progress.html` + `progress_data.js` 实现可视化查看。
-4. **Round 00 练习脚本执行链路**：week1~3 与 final 脚本可调用 `mark_done.sh` 自动打卡。
+2. **Web UI 任务操作**：页面可完成 / 撤销任务，可写备注和证据路径。
+3. **动作事件记录**：`records/action_logs/events.jsonl` 记录完成、撤销、运行练习、终端命令等动作。
+4. **任务反馈**：`records/feedback/task_feedback.json` 基于进度和动作日志生成反馈与下一步建议。
+5. **页面内文档阅读**：Markdown / 脚本可在阅读弹窗中查看，外部链接以新标签页打开。
+6. **练习脚本运行**：Web UI 可按任务 ID 触发白名单脚本，脚本只写 `~/cli-lab/roundN` 沙盒。
+7. **浏览器映射终端**：Web UI 提供受限终端，工作目录限制在 `~/cli-lab`，危险命令和网络/安装命令被拦截。
+8. **存档与读档**：Web UI 可创建学习进度快照，读档前自动创建恢复点，并恢复进度、记录、反馈、终端历史和本地 UI 配置。
+9. **CLI 兼容**：`mark_done.sh` 仍支持命令行标记、撤销和状态查看。
 
 ### 4.2 已实现的辅助功能
-- 任务 ID 体系（`w1-*`、`w2-*`、`w3-*`、`fin-*`）与状态列表展示。
-- 文档生成流程规范（`CONVERSION_PROTOCOL.md`）已建立。
+- 任务 ID 体系覆盖 Round 00–21 与计划入口任务。
+- `scripts/build_rounds_data.py` 可从现有 Round 目录生成 `rounds_data.js` 并合并 `progress.json`。
+- `scripts/generate_task_feedback.py` 可重建任务反馈。
+- `scripts/check_protocol_sync.py`、`scripts/validate_learning_data.py`、`scripts/agent_gate.py --verify` 用于基础一致性验证。
+- 桌面与 390px 移动端布局已在最近多轮真实浏览器测试中覆盖。
 
 ### 4.3 已实现但不完整的功能
-- 进度系统目前只覆盖 Round 00 任务集合，未覆盖 Round 01–21。
-- 学习路线已覆盖到 Round 21，但对应脚本/项目代码未成体系落地。
+- Web UI 采用轻量本地服务与 JSON 文件，没有引入数据库或账号系统；这是当前设计选择，不是缺陷。
+- 计划类主线（软考 / 数学二 / 408）和 Linux/VPS 支线先接入阅读记录任务，后续如要变成“每模块练习 + 错题录入 + 模考记录 / 远程实操记录”的完整闭环，还需要按官方信息或用户授权继续展开。
+- Cursor MCP CLI 层仍可能显示 `needs approval`，但本项目当前测试可使用 Codex 应用内浏览器和本地命令完成。
 
 ### 4.4 当前仅能跑通 demo 的部分
-- Round 00 练习更接近教学 demo/手把手任务，而非可复用业务应用。
+- 每个 Round 的自动练习以教学型、可检查产物为主；高依赖技术栈（FastAPI、PyTorch、scikit-learn、transformers 等）默认生成真实代码形状，并用 Python 标准库 smoke check 验证，不在 Web UI 中安装大依赖。
 
 ### 4.5 当前仅有文档、暂无落地代码的部分
-- Round 01–21 中涉及的 Python 工程化、测试体系、API、数据库、ML/NLP 训练等内容，当前仓库内未发现同名模块或工程目录落地（按“尚未实现/未确认”记录）。
+- 院校招生目录、最新考试大纲、具体真题/考点条目不在仓库中缓存；需要用户或联网官方源确认后再写入对应计划或记录。
 
 ## 5. 当前可运行能力
 
 ### 5.1 启动与使用方式（实际可执行）
-1. **CLI 方式**：
+1. **Web UI 方式（推荐）**：
+   - `python3 scripts/progress_server.py --host 127.0.0.1 --port 8787`
+   - 打开 `http://127.0.0.1:8787/progress.html`
+   - 可用 `?round=round_21`、`?round=round_05` 等参数直达指定 Round。
+2. **CLI 方式**：
    - `bash mark_done.sh`（查看任务）
    - `bash mark_done.sh <task-id>`（标记完成）
    - `bash mark_done.sh <task-id> --undo`（撤销）
-2. **静态看板方式**：
-   - 直接打开 `progress.html`（手动刷新查看最新状态）
-   - 或 `python3 -m http.server 8000` 后访问 `http://localhost:8000/progress.html`
-3. **Round 00 脚本方式**：运行 `rounds/round_00/week*/exercises.sh` 与 `rounds/round_00/final/comprehensive_exercise.sh`。
+3. **脚本方式**：
+   - 各 Round 的 `week*/exercises.{sh,py}` 与 `final/comprehensive_exercise.{sh,py}` 可直接运行。
+   - 直接运行会写入进度记录；测试时必须先备份并恢复 `progress.json`、`progress_data.js`、动作日志和反馈文件。
 
 ### 5.2 环境与依赖文件检查
 - `requirements.txt`：未发现。
 - `pyproject.toml`：未发现。
 - `Dockerfile` / `docker-compose.yml`：未发现。
-- 显式虚拟环境说明：在部分文档示例中出现（例如 Round 09 的示例片段），但仓库未提供统一依赖清单。
+- 当前 Web UI 和自动练习以 Python 标准库、Shell、Node 语法检查为主，不要求全仓库依赖清单。
+- 高依赖技术栈只作为学习产物代码形状出现，不在 Web UI 默认路径中安装。
 
 ### 5.3 入口类型判断
-- API 入口：未确认（未发现服务框架代码）。
-- CLI 入口：已存在（`mark_done.sh`，以及 Round 00 各练习 shell 脚本）。
-- 脚本入口：已存在（Round 00）。
-- 测试入口：未确认（未发现 `tests/` 实体目录与测试脚本文件）。
+- API 入口：`scripts/progress_server.py`（本地轻量 HTTP 服务）。
+- CLI 入口：已存在（`mark_done.sh`，以及 Round 00–21 各练习脚本）。
+- 脚本入口：已存在（Round 00–21）。
+- 测试入口：以仓库验证脚本和真实浏览器/API 回归为主，目前未引入单独测试框架。
 
 ### 5.4 配置、日志、数据库文件现状
-- 配置文件：未确认（未发现独立配置模块）。
-- 日志文件：仓库未内置运行日志产物；脚本以终端输出为主。
-- 数据库文件：未发现（如 `.db`/`.sqlite`）。
+- 配置文件：`.cursor/mcp.json` 为项目级 MCP 配置；本地 UI 个性配置保存在浏览器 localStorage 并可进入存档快照。
+- 日志文件：动作日志为 `records/action_logs/events.jsonl`；终端命令历史为 `records/terminal/commands.jsonl`（按需生成）。
+- 数据库文件：未使用数据库，当前仍采用 JSON / JSONL 文件。
 
 ### 5.5 最小可运行闭环判断
-- **已具备的闭环**：Round 00 学习任务执行 → 调用 `mark_done.sh` 写入状态 → `progress_data.js` 同步 → `progress.html` 展示。
-- **未具备的闭环**：Round 01–21 对应的代码执行、数据持久化、测试验证、服务化运行闭环。
+- **已具备的 Web UI 闭环**：页面阅读资料 → 运行练习脚本 → 使用浏览器终端自测 → 写备注/证据并标记完成 → 事件日志和反馈更新 → 创建存档 → 读档恢复。
+- **已具备的 Round 覆盖**：Round 00–21 均有可读 notes、可运行练习、最终验收材料和任务注册。
+- **仍需官方信息或授权的闭环**：软考 / 数学二 / 408 具体题目、院校目录、最新大纲和真实 VPS 操作必须以后续官方源或用户授权为准。
 
 ## 6. 数据、状态记录与反馈机制现状
 
 ### 6.1 当前已有能力
-- **数据层**：有基础 JSON 状态存储（`progress.json`）。
-- **服务层**：以 shell 脚本形式提供状态更新服务（`mark_done.sh`），无独立服务进程。
-- **日志层**：仅终端输出，未形成结构化日志与日志轮转。
-- **反馈展示层**：有前端进度看板（`progress.html`）用于可视化反馈。
+- **数据层**：`progress.json`、`progress_data.js`、`rounds_data.js`、`records/action_logs/events.jsonl`、`records/feedback/task_feedback.json`、`records/saves/*.json`。
+- **服务层**：`scripts/progress_server.py` 提供本地 API；`mark_done.sh` 保持 CLI 兼容。
+- **日志层**：动作日志与终端命令日志均为结构化 JSONL。
+- **反馈展示层**：Web UI 展示任务状态、记录历史、反馈建议、运行结果和存档摘要。
 
 ### 6.2 “根据用户动作进行记录和反馈”机制评估
-- 在 **Round 00 学习任务** 范围内：**部分已实现**（用户执行脚本/命令后可记录并反馈）。
-- 在 **全项目（Round 01–21）** 范围内：**核心能力缺失**，缺失点如下：
-  1. **数据层**：缺少统一的多轮次任务/学习事件数据模型。
-  2. **服务层**：无统一应用服务承载多轮次记录逻辑。
-  3. **日志层**：无可检索的结构化事件日志。
-  4. **事件层**：未建立“用户动作事件”标准（事件类型、payload、时间戳规范）。
-  5. **用户状态层**：未看到用户维度状态（仅单份全局进度，且当前只覆盖 Round 00 任务）。
-  6. **前后端交互层**：无 API，前端依赖本地文件读取，不支持实时或多端一致状态。
-  7. **反馈展示层**：展示层仅聚焦 Round 00，不覆盖全路线。
+- 在 **Round 00–21 工程实操线** 范围内：已实现 Web UI 动作记录与反馈闭环。
+- 在 **计划入口任务** 范围内：已实现阅读、记录、完成/撤销、存档读档；练习题、官方资料和真实远程操作仍需后续按官方源或授权扩展。
+- 在 **用户维度** 范围内：当前是单用户本地学习系统，无账号/多人权限模型。
 
 ## 7. 当前存在的关键问题
-1. **文档规划与代码落地明显脱节**：Round 01–21 多为路线文档，代码仓库尚未对应展开。
-2. **项目入口不统一**：当前同时存在 README 指导、shell 脚本、静态页面，但缺少统一主程序/统一命令入口。
-3. **状态记录范围过窄**：进度系统仅覆盖 Round 00，无法支撑全路线持续跟踪。
-4. **缺少可验证工程能力**：未发现测试目录、依赖清单、构建/运行标准化配置，难以稳定迭代。
-5. **“用户动作→记录→反馈”全链路未成型**：仅在局部脚本层成立，尚未升级为全项目机制。
+1. 本文件 2026-04/05 的历史状态日志仍保留大量早期状态记录，读者必须以本节和最新编号日志为准。
+2. 计划类主线（软考 / 数学二 / 408）仍是启动级任务，不是完整题库或模考系统；Linux/VPS 支线是阅读与授权前准备入口，不默认执行真实远程操作。
+3. Cursor MCP 在 CLI 层可能需要用户到 Cursor 设置中 approve；当前 Codex 线程可用工具与 Cursor 工具注册状态不完全相同。
+4. 项目仍刻意避免数据库、前端框架和大型依赖；未来若学习记录规模显著增长，可能需要重新评估存储模型。
 
 ## 8. 最优先的下一步事项
-> 以下仅基于当前现状，按优先级排序（不扩散设计）。
+> `python3 scripts/agent_gate.py --json --no-require-clean` 在 2026-07-05 返回 `no automatable task found`。在用户没有新增任务前，下一步应以审计、维护和官方信息驱动的增量为主。
 
-1. **先统一全仓库状态模型**：把 Round 01–21 的任务结构纳入 `progress.json`（或新统一数据结构），解决“只能记录 Round 00”的核心断层。
-2. **补齐轮次落地最小骨架**：至少为 Round 01（可再含 Round 02）建立与 Round 00 同级的 `rounds/round_XX/` 目录、notes、exercises 脚本与可执行链路。
-3. **建立最小依赖与运行规范**：补充 `requirements.txt` 或 `pyproject.toml`（二选一）及基础运行说明，降低后续迭代不确定性。
-4. **补最小测试检查**：至少为状态写入脚本（`mark_done.sh` 相关逻辑）增加基础校验脚本，防止进度文件损坏。
-5. **校正文档与现实不一致点**：在 README 明确“已实现轮次 / 规划轮次”，避免将规划误读为已落地功能。
+1. 如用户继续推进考试主线，优先把软考 / 数学二 / 408 的计划入口扩展为可检查产物，但必须以最新官方信息为准。
+2. 如用户启动 VPS 支线，先走 `docs/templates/remote_operation_confirmation.md`，再把真实远程结果记录回 Web UI。
+3. 保持每次 UI 修改都做 before/after 浏览器验证和记录文件恢复。
+4. 继续维护日期化 Web UI 测试报告，避免测试证据散落。
 
 ## 9. 本次扫描结论
-- 当前仓库的真实状态可概括为：**“完整学习路线文档已铺开到 Round 21，但代码落地主要停留在 Round 00 与进度系统原型。”**
-- 因此后续迭代应优先处理“状态模型扩展 + 轮次落地骨架 + 文档对齐”三件事，先把“可持续更新底座”建立起来，再做大规模重构或功能扩展。
+- 当前仓库的真实状态可概括为：**“Web UI 学习系统核心闭环已实现，工程实操线 Round 00–21 已全部接入页面并具备可运行/可检查练习；现有计划和 VPS 支线文档也已接入页面阅读与记录。”**
+- 本轮之后，完成状态不应再用“Round 01–21 未落地”或“计划文档未接入 UI”来描述；若要继续推进，应转向官方考试主线扩展、真实学习记录、VPS 授权实操或用户新增需求。
 
 ## 10. 更新日志
 - 2026-04-28 11:24: 基于当前仓库代码完成项目现状扫描并更新文档。
@@ -1770,3 +1788,39 @@
 - 本轮 API/UI 验证产生的进度、动作、反馈和终端历史均已从测试前快照恢复。
 - 未引入大型新依赖；未安装 torch / transformers / scikit-learn；未下载预训练模型；未创建后端服务。
 - 自动脚本只写入 `~/cli-lab/round21` 沙盒；生成的 NLP 示例代码、样例数据和静态检查结果不进入仓库。
+
+## 65. 2026-07-05 TASK-RR-53 Web UI 总目标完成审计与计划入口补齐
+
+### 65.1 本轮修改
+
+- `scripts/build_rounds_data.py`：计划入口从 3 个扩展为 6 个，新增 `plan_overview`、`plan_linux`、`plan_vps`，并把软考 / 数学二主线 README 纳入已有计划分组。
+- `rounds_data.js`：注册 28 个 Web UI 分组、304 个任务；其中 101 个 exercise 任务保持不变。
+- `progress.json` / `progress_data.js` / `records/feedback/task_feedback.json`：同步新增 18 个正式阅读任务。
+- `progress.html`：添加内联 favicon，清除浏览器默认 `/favicon.ico` 404 控制台噪声。
+- `docs/reports/WEB_UI_COMPLETION_AUDIT_2026_07_05.md`：新增总目标完成审计报告。
+- `docs/NEXT_ACTIONS.md`：新增已完成的 `TASK-RR-53`，避免后续重复审计同一缺口。
+
+### 65.2 用户视角问题修复
+
+- 现有 `plans/` 总览、软考 README、数学二 README、Linux 专项 README 原先不能直接从 Web UI 打开，已改为页面内阅读任务。
+- VPS 支线 14 份文档原先只能在文件树里读，已改为 Web UI 阅读 / 记录任务。
+- VPS 任务保持阅读型入口，不显示“运行”或“终端”，避免把需要用户授权的真实远程操作误导为可自动执行。
+- 页面 favicon 缺失导致 Chrome 控制台出现 404 噪声，已清理。
+
+### 65.3 验证
+
+- 数据验证：`rounds_data.js` 为 28 个分组、304 个任务、101 个 exercise；所有任务文件引用均存在。
+- 全量练习 API 验证：101 个 exercise 任务均通过 `/api/tasks/<id>/run` 运行成功，无失败。
+- 存档读档 API 验证：创建测试存档、临时完成任务、读档恢复、自动恢复点和存档列表均通过。
+- 真实浏览器验证：系统 Chrome + Playwright 打开 `plan_overview`、`plan_soft_exam`、`plan_math2`、`plan_cs408`、`plan_linux`、`plan_vps`、`round_00`、`round_21`，面板、按钮、终端卡片、存档卡片均可见且无横向溢出。
+- 文档阅读验证：`plan_vps` 可在阅读弹窗中打开，正文显示 `Stage 03 · VPS 远程操作`，并包含“用户授权”安全提示。
+- 外部链接验证：`round_05.md` 阅读弹窗渲染 5 个 `https://` 链接，均为新标签打开并带 `noreferrer noopener`。
+- 移动端验证：390px 宽度下 `plan_vps` 14 个任务可见，按钮换行后不重叠，整页无横向溢出。
+- 控制台验证：添加 favicon 后 Chrome 回归 `consoleErrors: []`。
+
+### 65.4 风险边界核对
+
+- 本轮测试产生的临时进度、动作、存档和终端历史已恢复或清理；保留的数据文件变更仅来自新增正式阅读任务。
+- 未引入大型新依赖；使用 Codex 桌面运行时自带 Node 包和系统 Chrome 做浏览器回归。
+- 软考 / 数学二 / 408 的具体题目、考点、院校招生数据和最新大纲仍必须以后续官方源为准。
+- VPS Level 2 及以上真实远程操作仍需用户授权，Web UI 当前只提供阅读、记录与准备入口。

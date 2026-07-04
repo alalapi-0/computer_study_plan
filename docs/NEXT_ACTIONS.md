@@ -8,6 +8,22 @@
 
 ---
 
+## TASK-RR-53：Web UI 总目标完成审计与计划入口补齐
+
+- 状态：**done**（2026-07-05）
+- 背景：用户要求优先确保功能稳定实现，用户可以只通过 Web UI 完成学习推进、记录、文档阅读、外部链接跳转、练习脚本运行、浏览器映射终端、存档读档。
+- 目标：用用户视角审计 Web UI 核心闭环，确认 Round 00–21 工程实操线可运行，并把现有学习计划 / 支线文档全部接入页面阅读与记录。
+- 实际产物：
+  - `scripts/build_rounds_data.py` 新增 `plan_overview`、`plan_linux`、`plan_vps` 等阅读入口，并补齐软考 / 数学二主线 README。
+  - `rounds_data.js` 注册 28 个 Web UI 分组、304 个任务，其中 101 个 exercise 任务仍可运行。
+  - `progress.json` / `progress_data.js` / `records/feedback/task_feedback.json` 同步新增 18 个阅读任务。
+  - 新增 `docs/reports/WEB_UI_COMPLETION_AUDIT_2026_07_05.md` 记录 API、存档读档、浏览器桌面/移动端和计划入口覆盖验证。
+- 验收：所有任务文件引用存在；101 个 exercise 任务通过 `/api/tasks/<id>/run` 全量 API 验证；存档读档 API 验证通过；真实浏览器验证计划入口、Round 00、Round 21 和移动端无横向溢出。
+- 风险边界：真实考试题目 / 最新大纲 / 院校数据仍必须以后续官方源为准；VPS Level 2+ 真实远程操作仍需用户授权。
+- 是否需要用户介入：否。
+
+---
+
 ## TASK-RR-00：路线重定向 + 治理 + 路线骨架 + 四主线进度
 
 - 状态：**done**（2026-05-12 完成）

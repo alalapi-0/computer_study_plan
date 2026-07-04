@@ -1450,6 +1450,96 @@ window.PROGRESS_DATA = {
       "done": false,
       "done_at": null,
       "lane": "cs408"
+    },
+    "linux-plan-start": {
+      "done": false,
+      "done_at": null,
+      "lane": "engineering"
+    },
+    "vps-stage-start": {
+      "done": false,
+      "done_at": null,
+      "lane": "engineering"
+    },
+    "vps-00-repo-scan": {
+      "done": false,
+      "done_at": null,
+      "lane": "engineering"
+    },
+    "vps-01-repo-cleanup": {
+      "done": false,
+      "done_at": null,
+      "lane": "engineering"
+    },
+    "vps-02-module-anchor": {
+      "done": false,
+      "done_at": null,
+      "lane": "engineering"
+    },
+    "vps-03-permission-levels": {
+      "done": false,
+      "done_at": null,
+      "lane": "engineering"
+    },
+    "vps-04-ssh-basics": {
+      "done": false,
+      "done_at": null,
+      "lane": "engineering"
+    },
+    "vps-05-first-readonly-check": {
+      "done": false,
+      "done_at": null,
+      "lane": "engineering"
+    },
+    "vps-06-remote-dirs": {
+      "done": false,
+      "done_at": null,
+      "lane": "engineering"
+    },
+    "vps-07-github-sync": {
+      "done": false,
+      "done_at": null,
+      "lane": "engineering"
+    },
+    "vps-08-tmux-training": {
+      "done": false,
+      "done_at": null,
+      "lane": "engineering"
+    },
+    "vps-09-network-check": {
+      "done": false,
+      "done_at": null,
+      "lane": "engineering"
+    },
+    "vps-10-remote-api-minimal": {
+      "done": false,
+      "done_at": null,
+      "lane": "engineering"
+    },
+    "vps-11-minimal-service": {
+      "done": false,
+      "done_at": null,
+      "lane": "engineering"
+    },
+    "vps-12-sop-and-vultragent": {
+      "done": false,
+      "done_at": null,
+      "lane": "engineering"
+    },
+    "plans-overview-start": {
+      "done": false,
+      "done_at": null,
+      "lane": "engineering"
+    },
+    "soft_exam-overview-start": {
+      "done": false,
+      "done_at": null,
+      "lane": "soft_exam"
+    },
+    "math2-overview-start": {
+      "done": false,
+      "done_at": null,
+      "lane": "math2"
     }
   }
 };

@@ -1883,41 +1883,62 @@ def build_standard_round(root: Path, num: int) -> dict | None:
 
 
 LANE_PLAN_TASKS = [
-    ("soft_exam-ds-start", "soft_exam", "阅读软考数据结构骨架", "plans/soft_exam/ds.md"),
-    ("soft_exam-os-start", "soft_exam", "阅读软考操作系统骨架", "plans/soft_exam/os.md"),
-    ("soft_exam-db-start", "soft_exam", "阅读软考数据库骨架", "plans/soft_exam/db.md"),
-    ("math2-limits-start", "math2", "阅读数学二极限启动骨架", "plans/math2/limits.md"),
-    ("math2-la-start", "math2", "阅读数学二线性代数启动骨架", "plans/math2/la_matrix.md"),
-    ("cs408-ds-start", "cs408", "阅读 408 数据结构计划入口", "plans/408/README.md"),
+    ("plans-overview-start", "overview", "engineering", "阅读学习计划专题总览", "plans/README.md"),
+    ("soft_exam-overview-start", "soft_exam", "soft_exam", "阅读软考中级主线总览", "plans/soft_exam/README.md"),
+    ("soft_exam-ds-start", "soft_exam", "soft_exam", "阅读软考数据结构骨架", "plans/soft_exam/ds.md"),
+    ("soft_exam-os-start", "soft_exam", "soft_exam", "阅读软考操作系统骨架", "plans/soft_exam/os.md"),
+    ("soft_exam-db-start", "soft_exam", "soft_exam", "阅读软考数据库骨架", "plans/soft_exam/db.md"),
+    ("math2-overview-start", "math2", "math2", "阅读数学二主线总览", "plans/math2/README.md"),
+    ("math2-limits-start", "math2", "math2", "阅读数学二极限启动骨架", "plans/math2/limits.md"),
+    ("math2-la-start", "math2", "math2", "阅读数学二线性代数启动骨架", "plans/math2/la_matrix.md"),
+    ("cs408-ds-start", "cs408", "cs408", "阅读 408 / 0854 主线总览", "plans/408/README.md"),
+    ("linux-plan-start", "linux", "engineering", "阅读 Linux 工程专项路线", "plans/linux/README.md"),
+    ("vps-stage-start", "vps", "engineering", "阅读 VPS 支线总纲", "rounds/stage_03_vps_remote_ops/README.md"),
+    ("vps-00-repo-scan", "vps", "engineering", "阅读 VPS-00：扫描仓库与生成治理报告", "rounds/stage_03_vps_remote_ops/round_vps_00_repo_scan.md"),
+    ("vps-01-repo-cleanup", "vps", "engineering", "阅读 VPS-01：执行仓库治理与文档合并", "rounds/stage_03_vps_remote_ops/round_vps_01_repo_cleanup.md"),
+    ("vps-02-module-anchor", "vps", "engineering", "阅读 VPS-02：建立 VPS 模块总纲", "rounds/stage_03_vps_remote_ops/round_vps_02_module_anchor.md"),
+    ("vps-03-permission-levels", "vps", "engineering", "阅读 VPS-03：远程操作权限等级与安全规则", "rounds/stage_03_vps_remote_ops/round_vps_03_permission_levels.md"),
+    ("vps-04-ssh-basics", "vps", "engineering", "阅读 VPS-04：SSH 与远程 Linux 基础", "rounds/stage_03_vps_remote_ops/round_vps_04_ssh_basics.md"),
+    ("vps-05-first-readonly-check", "vps", "engineering", "阅读 VPS-05：首次远程只读检查", "rounds/stage_03_vps_remote_ops/round_vps_05_first_readonly_check.md"),
+    ("vps-06-remote-dirs", "vps", "engineering", "阅读 VPS-06：远程学习目录与测试文件", "rounds/stage_03_vps_remote_ops/round_vps_06_remote_dirs.md"),
+    ("vps-07-github-sync", "vps", "engineering", "阅读 VPS-07：GitHub 同步与远程运行", "rounds/stage_03_vps_remote_ops/round_vps_07_github_sync.md"),
+    ("vps-08-tmux-training", "vps", "engineering", "阅读 VPS-08：tmux 后台任务训练", "rounds/stage_03_vps_remote_ops/round_vps_08_tmux_training.md"),
+    ("vps-09-network-check", "vps", "engineering", "阅读 VPS-09：网络连通性与端口检查", "rounds/stage_03_vps_remote_ops/round_vps_09_network_check.md"),
+    ("vps-10-remote-api-minimal", "vps", "engineering", "阅读 VPS-10：远程 API 调用最小实验", "rounds/stage_03_vps_remote_ops/round_vps_10_remote_api_minimal.md"),
+    ("vps-11-minimal-service", "vps", "engineering", "阅读 VPS-11：最小 Web/API 服务部署", "rounds/stage_03_vps_remote_ops/round_vps_11_minimal_service.md"),
+    ("vps-12-sop-and-vultragent", "vps", "engineering", "阅读 VPS-12：SOP 与 VULTRagent 需求草案", "rounds/stage_03_vps_remote_ops/round_vps_12_sop_and_vultragent.md"),
 ]
 
 LANE_PLAN_ROUNDS = [
+    ("overview", "学习计划 · 总览", "engineering"),
     ("soft_exam", "软考 · 启动模块", "soft_exam"),
     ("math2", "数学二 · 启动模块", "math2"),
     ("cs408", "408 · 启动模块", "cs408"),
+    ("linux", "Linux · 工程专项", "engineering"),
+    ("vps", "VPS · 远程实操支线", "engineering"),
 ]
 
 
 def build_plan_rounds(root: Path) -> list[dict]:
     rounds = []
-    for lane, title, _ in LANE_PLAN_ROUNDS:
+    for plan_key, title, lane in LANE_PLAN_ROUNDS:
         tasks = [
             {"id": tid, "type": "reading", "title": ttitle, "file": file}
-            for tid, tlane, ttitle, file in LANE_PLAN_TASKS
-            if tlane == lane and (root / file).exists()
+            for tid, tplan_key, _tlane, ttitle, file in LANE_PLAN_TASKS
+            if tplan_key == plan_key and (root / file).exists()
         ]
         if not tasks:
             continue
         rounds.append(
             {
-                "id": f"plan_{lane}",
+                "id": f"plan_{plan_key}",
                 "title": title,
                 "lane": lane,
                 "difficulty": "⭐☆☆☆☆",
                 "duration": "持续",
                 "weeks": [
                     {
-                        "id": f"plan_{lane}_week",
+                        "id": f"plan_{plan_key}_week",
                         "title": "计划文档阅读",
                         "tasks": tasks,
                     }
@@ -1938,7 +1959,7 @@ def merge_tasks(data: dict, rounds: list[dict]) -> int:
                     continue
                 tasks[tid] = {"done": False, "done_at": None, "lane": rnd.get("lane", "engineering")}
                 added += 1
-    for tid, lane, _title, _file in LANE_PLAN_TASKS:
+    for tid, _plan_key, lane, _title, _file in LANE_PLAN_TASKS:
         if tid in tasks:
             continue
         tasks[tid] = {"done": False, "done_at": None, "lane": lane}
