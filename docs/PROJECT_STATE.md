@@ -465,3 +465,24 @@ open http://127.0.0.1:8777/progress.html
 
 - 主动扫描已确认受影响 Round 文件不再残留相对 Round Web UI 入口。
 - 标准验证与浏览器回检见本轮提交记录。
+
+## 25. 2026-07-06 TASK-RR-74 第二十轮项目用户视角评测与转换协议更新
+
+状态：done
+
+本轮评测报告：
+
+- `docs/reports/PROJECT_USER_REVIEW_2026_07_06_ROUND20.md`
+
+本轮发现并修复：
+
+- `CONVERSION_PROTOCOL.md` 新增 Round 流程仍把 `mark_done.sh` 当成同步数据主路径，已改为 `npm run build:rounds`、`npm run sync:progress` 和反馈生成脚本。
+- 协议仍要求在 `progress.html` 追加 `ROUNDS` 静态元数据，已改为当前 `scripts/build_rounds_data.py` 生成 `rounds_data.js` 的事实。
+- 进度系统职责表仍把 `progress.html` 描述成只读看板，已补本地 API、Web UI、动作日志、存档与任务反馈职责。
+- 协议仍说所有状态变更必须通过 `mark_done.sh`，已改为 Web UI `记录并完成` / `撤销完成` 优先，CLI 保留为补录与撤销工具。
+- 协议和工作区脚本表仍弱化 8777 本地服务入口，已明确静态打开仅用于只读检查。
+
+验证摘要：
+
+- 主动扫描已确认转换协议不再残留旧 `http.server 8000` 和 `progress.html` 内置 `ROUNDS` 指引。
+- 标准验证与浏览器回检见本轮提交记录。

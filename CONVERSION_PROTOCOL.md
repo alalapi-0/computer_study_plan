@@ -235,13 +235,19 @@
    ↓
 2. 创建 rounds/round_XX/ 目录及所有文件（按 Section 7 规范）
    ↓
-3. 在 progress.json 的 tasks 对象里追加该 Round 所有任务
-   - 默认 done: false
-   - 必填 lane 字段（engineering / soft_exam / math2 / cs408 之一）
+3. 注册任务与显示元数据
+   - 工程 Round 优先更新 `scripts/build_rounds_data.py` 的生成规则，然后运行 `npm run build:rounds`
+   - 计划类任务同样通过当前生成脚本或明确的数据维护点注册，不直接改 `progress.html`
+   - `progress.json` 中新增任务默认 done: false，必填 lane 字段（engineering / soft_exam / math2 / cs408 之一）
    ↓
-4. 运行一次 `bash mark_done.sh`（无参数）使 progress_data.js 同步更新
+4. 同步衍生数据
+   - 运行 `npm run build:rounds` 生成 `rounds_data.js` 并合并工程 Round 任务
+   - 必要时运行 `npm run sync:progress` 只同步 `progress_data.js`
+   - 任务反馈需要更新时运行 `python3 scripts/generate_task_feedback.py`
    ↓
-5. 在 progress.html 的 ROUNDS 数组末尾追加该 Round 的静态元数据
+5. 验证 Web UI 与 CLI
+   - `bash mark_done.sh --lane engineering --limit 8`
+   - `python3 scripts/progress_server.py` 后打开 `http://127.0.0.1:8777/progress.html?round=round_XX`
    ↓
 6. 更新本文件（CONVERSION_PROTOCOL.md）：
    - Section 6 当前轮次状态表新增一行
@@ -338,17 +344,21 @@ rounds/round_XX/
 
 ## 8. 进度系统维护规范
 
-进度系统由四个文件协同工作：
+进度系统由数据文件、生成脚本、本地 API 和 Web UI 协同工作：
 
 | 文件 | 作用 |
 |------|------|
 | `progress.json` | **唯一状态来源**，记录任务状态、时间戳与所属主线（lane） |
-| `progress_data.js` | `progress.json` 的 JS 镜像，由 `mark_done.sh` 自动生成，供 `progress.html` 在 `file://` 协议下读取 |
-| `mark_done.sh` | CLI 工具，标记/取消任务，同时写入以上两个文件 |
-| `progress.html` | 只读展示看板，优先 `fetch progress.json`（`http://`），回退读取 `progress_data.js`（`file://`） |
+| `progress_data.js` | `progress.json` 的 JS 镜像，由工具生成，供前端只读加载和无 API 检查兜底 |
+| `rounds_data.js` | Round / 计划分组与任务展示元数据，由 `scripts/build_rounds_data.py` 生成 |
+| `scripts/progress_server.py` | 本地学习服务，提供 Web UI 写入、练习脚本运行、存档、动作日志等 API |
+| `progress.html` / `progress_ui.js` | 学习工作区：内联教程、工程任务终端、任务清单、记录并完成、存档与复盘 |
+| `mark_done.sh` | CLI 兼容工具，用于快速查看、补标记或撤销任务状态 |
+| `records/action_logs/events.jsonl` | Web UI / CLI 动作日志，用于回看与任务反馈 |
+| `records/feedback/task_feedback.json` | 任务反馈镜像，由 `scripts/generate_task_feedback.py` 生成 |
 
-> `progress_data.js` 由工具自动维护，**不可手动编辑**。
-> `progress.html` 不再允许在浏览器里手动勾选，所有状态变更必须通过 `mark_done.sh` 进行。
+> `progress_data.js`、`rounds_data.js` 和 `records/feedback/task_feedback.json` 由工具自动维护，**不可手动编辑**。
+> 状态变更优先通过 Web UI 的 `记录并完成` / `撤销完成`，CLI 作为快速查看、补标记和撤销工具保留。
 
 ### 8.1 progress.json 结构（v2 起）
 
@@ -369,25 +379,34 @@ rounds/round_XX/
 
 规则：
 
-- 每次新增 Round，在 `progress.json` 的 `tasks` 对象里追加该 Round 所有任务
+- 每次新增 Round，优先通过 `scripts/build_rounds_data.py` 生成或合并任务；只有计划类特殊任务才手动维护 `progress.json`
 - `lane` 必填，必须是 `lanes` 中已注册的 key
 - `task-id` 全局唯一，建议格式：`rXX-wN-taskShort`（如 `r01-w1-read`）；Round 00 沿用简写（`w1-read` 等）
-- `done_at` 由 `mark_done.sh` 自动写入，格式 `YYYY-MM-DD HH:MM`
+- `done_at` 由 Web UI 本地 API 或 `mark_done.sh` 自动写入，格式 `YYYY-MM-DD HH:MM`
+- 学习备注、证据路径和撤销动作进入 `records/action_logs/events.jsonl`
 
 ### 8.2 mark_done.sh 用法
 
 ```bash
-# 标记完成
+# 查看紧凑状态
+bash mark_done.sh
+
+# 按主线查看前 N 个未完成任务
+bash mark_done.sh --lane engineering --limit 8
+
+# 查看完整任务
+bash mark_done.sh --all
+
+# 标记完成（CLI 补录）
 bash mark_done.sh <task-id>
 
 # 取消完成
 bash mark_done.sh <task-id> --undo
-
-# 查看所有任务状态（按 lane 分组）
-bash mark_done.sh
 ```
 
-### 8.3 ROUNDS 数组（`progress.html` 中的静态元数据）
+### 8.3 `rounds_data.js` 展示元数据
+
+Round / 计划任务展示元数据不写在 `progress.html` 内。工程 Round 由 `scripts/build_rounds_data.py` 生成到 `rounds_data.js`；必要时修改生成脚本，而不是手动编辑生成文件。
 
 每个 Round 对象格式：
 
@@ -407,7 +426,6 @@ bash mark_done.sh
           id: "task-id",
           type: "reading|exercise|test|output",
           title: "任务描述",
-          cmd: "bash mark_done.sh task-id 或 '自动'",
           file: "对应文件路径"
         }
       ]
@@ -420,23 +438,28 @@ bash mark_done.sh
 
 | type | 显示标签 | 触发方式 |
 |------|---------|---------|
-| `reading`  | 阅读 | 手动：`bash mark_done.sh <id>` |
-| `exercise` | 练习 | 自动：运行 exercises.sh 时标记 |
-| `test`     | 自测 | 自动：exercises.sh 中用户确认后标记 |
-| `output`   | 产出 | 自动：综合练习脚本中确认后标记 |
+| `reading`  | 阅读 | Web UI 点击 `读教程` 后，通过 `记录并完成` 保存 |
+| `exercise` | 练习 | Web UI `运行脚本` 执行白名单脚本；脚本可自动记录练习完成 |
+| `test`     | 自测 | Web UI `终端练习` 中完成后，由用户 `记录并完成` |
+| `output`   | 产出 | 用户完成小抄、验收或项目产物后 `记录并完成` |
 
 ### 8.5 打开进度看板
 
-**方式一（推荐）**：直接双击 `progress.html`，浏览器打开；完成练习后按 `⌘R` 刷新。
-
-**方式二（自动刷新）**：
+**方式一（推荐 · 可写 Web UI）**：
 
 ```bash
-python3 -m http.server 8000
-open http://localhost:8000/progress.html
+cd ~/PycharmProjects/computer_study_plan
+python3 scripts/progress_server.py
+open http://127.0.0.1:8777/progress.html
 ```
 
-方式二下，看板每 30 秒自动刷新。
+也可以使用：
+
+```bash
+npm run serve
+```
+
+**方式二（只读检查）**：双击 `progress.html` 或用普通静态服务器打开，只适合看布局和只读进度；没有写 API、练习脚本运行、动作日志和浏览器终端能力，不作为日常学习入口。
 
 ---
 
@@ -496,3 +519,4 @@ open http://localhost:8000/progress.html
 | v1.1 | 2026-04-11 | 新增 `rounds/` 展开目录规范、进度系统维护规范、完整新增流程 |
 | v1.3 | 2026-04-11 | 新增 `progress_data.js` 作为 JS 镜像，支持 file:// 双击打开 |
 | v2.0 | 2026-05-12 | **重大变更**：移除"txt → md 转换"全部流程；删除 22 份 `plan_round_XX.txt`；progress 数据结构升级到 v2（新增 `lanes` 与 `tasks[].lane`）；新增多主线（engineering / soft_exam / math2 / cs408） |
+| v2.1 | 2026-07-06 | 将新增 Round 流程、进度系统职责和看板打开方式同步为当前 `progress_server.py` + Web UI + 生成脚本模型 |
