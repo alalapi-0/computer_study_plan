@@ -82,7 +82,7 @@
 - 先在变更报告中列出拟删除文件清单；
 - 说明删除理由；
 - 如果有内容残值，先确认已迁移；
-- 如果是 Round 00 相关文件、`progress.json`、`mark_done.sh`、主线 Round md 文档或用户明确标注为真实学习记录的内容，默认禁止删除，除非用户明确授权。
+- 如果是 Round 00 相关文件、进度系统核心文件（`progress.json`、`progress_data.js`、`rounds_data.js`、`progress.html`、`progress_ui.js`、`scripts/progress_server.py`、`mark_done.sh`、`records/action_logs/`、`records/feedback/`）、主线 Round md 文档或用户明确标注为真实学习记录的内容，默认禁止删除，除非用户明确授权。
 - 已删除的对象（不再保护）：`plan_round_XX.txt`（22 份初版提示词文本，于 2026-05-12 经用户授权统一清理，内容已由 `round_XX.md` 完整吸收）。
 
 ## 5. 合并文件的硬约束

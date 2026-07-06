@@ -13,11 +13,15 @@
 - [ ] 已确认**未触碰**以下高保护对象：
   - [ ] `progress.json`
   - [ ] `progress_data.js`
+  - [ ] `rounds_data.js`
   - [ ] `progress.html`
+  - [ ] `progress_ui.js`
+  - [ ] `scripts/progress_server.py`
   - [ ] `mark_done.sh`
   - [ ] `rounds/round_00/`
   - [ ] 任意 `round_XX.md`（未经用户授权）
-  - [ ] 用户明确标注为真实学习记录的 `records/` 内容
+  - [ ] `records/action_logs/`、`records/feedback/`（除非本轮明确是生成 / 清理进度系统产物）
+  - [ ] 用户明确标注为真实学习记录的 `records/` 内容（当前仓库未标注则不按真实学习记录保护）
 
 ## B. 提案
 
@@ -47,6 +51,7 @@
 - [ ] `git diff --check` 无白空格 / 行尾问题。
 - [ ] Round 00 最小闭环验证：`bash mark_done.sh` 仍可运行。
 - [ ] 涉及 JSON 时：`python3 -m json.tool progress.json` 通过。
+- [ ] 涉及进度系统时：`python3 scripts/validate_learning_data.py` 通过；如修改 Round 元数据，已运行 `npm run build:rounds`。
 
 ## F. 报告
 

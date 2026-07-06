@@ -34,10 +34,11 @@
 
 **默认不允许动的**（除非用户单独授权）：
 
-- `progress.json`、`progress_data.js`、`progress.html`、`mark_done.sh`
+- `progress.json`、`progress_data.js`、`rounds_data.js`、`progress.html`、`progress_ui.js`、`scripts/progress_server.py`、`mark_done.sh`
+- `records/action_logs/`、`records/feedback/`（除非本轮明确是生成 / 清理进度系统产物）
 - `rounds/round_00/` 下任何文件
 - `round_XX.md`（任意主线 Round）
-- `records/` 下任何已写入的用户真实学习记录
+- `records/` 下用户明确标注为真实学习记录的内容（当前仓库未标注则不按真实学习记录保护）
 - `AGENTS.md`、`CONVERSION_PROTOCOL.md`、`docs/CODEX_LONG_TERM_PLAN.md`、`docs/AUTO_ADVANCE_PROTOCOL.md`、`docs/DECISIONS.md`、`docs/MASTER_STUDY_ROADMAP.md`、`docs/STAGE_PLAN.md`
 
 ## 操作权限等级
@@ -59,18 +60,19 @@
    - `git status`、`git diff --check`
    - `bash mark_done.sh`（确认 Round 00 仍可运行）
    - `python3 -m json.tool progress.json`
+   - `python3 scripts/validate_learning_data.py`（确认进度数据与 Web UI 数据镜像一致）
 
 ## 命令示例
 
 ```bash
-git checkout -b codex/vps-01-repo-cleanup
-git status
+git status --short --branch
 git add docs/governance/ docs/modules/ docs/checklists/ docs/templates/ rounds/stage_03_vps_remote_ops/
 git status
 bash mark_done.sh
 python3 -m json.tool progress.json
+python3 scripts/validate_learning_data.py
 git commit -m "VPS-01: integrate VPS module documents and governance"
-git push -u origin codex/vps-01-repo-cleanup
+git push origin main
 ```
 
 ## 验收标准
@@ -86,12 +88,12 @@ git push -u origin codex/vps-01-repo-cleanup
 
 - 不删除高保护对象。
 - 不在未确认情况下批量删除"看起来重复"的文件。
-- 不在 main 分支直接执行。
+- 不在未验证通过的情况下提交或推送 `main`。
 - 不引入新依赖。
 
 ## 输出物
 
-- 一次干净的 commit，对应 PR 描述。
+- 一次干净的 commit 和已同步的 `origin/main`。
 - 更新后的 `docs/PROJECT_STATE.md` 与 `docs/NEXT_ACTIONS.md`。
 
 ## 下一轮接口

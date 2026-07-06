@@ -26,7 +26,8 @@
 - [ ] 删除文件已先经 `docs/templates/repository_cleanup_confirmation.md` 走完确认流程。
 - [ ] 主线 Round 概览（`round_00.md` ~ `round_21.md`）未被破坏。
 - [ ] Round 00 最小可运行闭环未被破坏：`bash mark_done.sh` 可正常运行。
-- [ ] `progress.json` 与 `progress_data.js` 数据未被意外覆盖。
+- [ ] 进度系统核心文件未被意外覆盖：`progress.json`、`progress_data.js`、`rounds_data.js`、`progress.html`、`progress_ui.js`、`scripts/progress_server.py`、`mark_done.sh`。
+- [ ] 涉及进度系统时，`python3 scripts/validate_learning_data.py` 通过；如修改 Round 元数据，已运行 `npm run build:rounds`。
 - [ ] `README.md` 的"项目结构"在必要时已同步。
 
 ## D. 最小服务部署验收（适用于 VPS-11 等部署 Round）

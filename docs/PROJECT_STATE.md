@@ -59,7 +59,10 @@ open http://127.0.0.1:8777/progress.html
 - `rounds_data.js`
 - `progress.html`
 - `progress_ui.js`
+- `scripts/progress_server.py`
 - `mark_done.sh`
+- `records/action_logs/`
+- `records/feedback/`
 - `rounds/round_00/`
 - `round_00.md` 至 `round_21.md`
 
@@ -528,4 +531,25 @@ open http://127.0.0.1:8777/progress.html
 验证摘要：
 
 - 主动扫描已确认治理 / 进度规则不再把 `progress.html` 描述为静态看板或最小展示。
+- 标准验证与浏览器回检见本轮提交记录。
+
+## 28. 2026-07-06 TASK-RR-77 第二十三轮项目用户视角评测与清理保护规则对齐
+
+状态：done
+
+本轮评测报告：
+
+- `docs/reports/PROJECT_USER_REVIEW_2026_07_06_ROUND23.md`
+
+本轮发现并修复：
+
+- `docs/checklists/repository_cleanup_checklist.md` 的高保护对象仍只列旧四件套，已补入 `rounds_data.js`、`progress_ui.js`、`scripts/progress_server.py`、动作日志和反馈目录。
+- `docs/templates/repository_cleanup_confirmation.md` 的删除确认模板仍遗漏当前 Web UI / 本地 API / 生成数据风险，已同步当前进度系统保护范围。
+- VPS-01 仍沿用旧保护清单并要求独立分支推送，已改为当前 `main` 直推流程和完整验证。
+- VPS-02 仍使用旧“不修改进度系统”四件套，VPS-02 / VPS-03 仍保留独立分支命令，已改为当前保护范围与 `origin/main` 推送示例。
+- 项目验收 checklist 与仓库删除规则仍弱化当前进度系统边界，已补充 Web UI、`rounds_data.js`、本地 API、动作日志和反馈。
+
+验证摘要：
+
+- 主动扫描已确认受影响清理 / VPS 文档不再残留旧四件套保护口径或分支推送示例。
 - 标准验证与浏览器回检见本轮提交记录。

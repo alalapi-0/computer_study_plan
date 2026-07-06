@@ -25,10 +25,11 @@
 
 > 高保护对象（**默认禁止删除**，必须用户单独逐项确认）：
 >
-> - `progress.json`、`progress_data.js`、`progress.html`、`mark_done.sh`
+> - `progress.json`、`progress_data.js`、`rounds_data.js`、`progress.html`、`progress_ui.js`、`scripts/progress_server.py`、`mark_done.sh`
+> - `records/action_logs/`、`records/feedback/`（除非本轮明确是生成 / 清理进度系统产物）
 > - `rounds/round_00/` 下所有文件
 > - 任意 `round_XX.md`
-> - 用户明确标注为真实学习记录的 `records/` 内容
+> - 用户明确标注为真实学习记录的 `records/` 内容（当前仓库未标注则不按真实学习记录保护）
 > - `AGENTS.md`、`README.md`、`CONVERSION_PROTOCOL.md`、`docs/CODEX_LONG_TERM_PLAN.md`、`docs/PROJECT_STATE.md`、`docs/NEXT_ACTIONS.md`、`docs/DECISIONS.md`、`docs/AUTO_ADVANCE_PROTOCOL.md`、`docs/MASTER_STUDY_ROADMAP.md`、`docs/STAGE_PLAN.md`
 
 ## 4. 拟重命名文件
@@ -55,6 +56,7 @@
 - 是否影响 Round 00 闭环？[ ] 否 / [ ] 需用户确认
 - 是否影响主线 Round 概览？[ ] 否 / [ ] 需用户确认
 - 是否影响 `progress.json` 数据？[ ] 否 / [ ] 需用户确认
+- 是否影响 Web UI / 本地 API / 生成数据（`progress_ui.js`、`scripts/progress_server.py`、`rounds_data.js`、动作日志、反馈）？[ ] 否 / [ ] 需用户确认
 - 是否影响 README 入口？[ ] 否 / [ ] 已同步
 
 ## 8. 回滚方式
@@ -83,5 +85,6 @@
 - 实际重命名文件：______
 - Round 00 验证：[ ] 通过（`bash mark_done.sh` 可正常运行）
 - `progress.json` 校验：[ ] 通过（`python3 -m json.tool progress.json` 通过）
+- 进度系统校验：[ ] 通过（`python3 scripts/validate_learning_data.py` 通过；必要时已重新生成 `rounds_data.js` / 反馈）
 - commit hash：______
 - push 状态：[ ] 已 push 到 origin/main / [ ] 已 push 到独立分支（原因：______） / [ ] 未 push（原因：______）

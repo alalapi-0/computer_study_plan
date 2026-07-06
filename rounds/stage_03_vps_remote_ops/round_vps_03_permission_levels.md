@@ -54,13 +54,14 @@
 ## 命令示例
 
 ```bash
-git checkout -b codex/vps-03-permission-levels
+git status --short --branch
 # 修改文档
 git add docs/governance/ docs/checklists/ docs/templates/
 git status
 bash mark_done.sh
+python3 scripts/validate_learning_data.py
 git commit -m "VPS-03: establish remote operation permission levels"
-git push -u origin codex/vps-03-permission-levels
+git push origin main
 ```
 
 ## 验收标准
