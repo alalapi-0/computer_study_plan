@@ -1672,7 +1672,7 @@
       <div class="workspace-panel-head">
         <div>
           <h3>练习终端</h3>
-          <div class="card-sub">工程任务可映射到本机 <code>~/cli-lab</code> 沙盒。任务行出现“终端练习”时可直接绑定。</div>
+          <div class="card-sub">工程任务会自动映射到本机 <code>~/cli-lab</code> 沙盒；点击“终端练习”可切换或重新聚焦。</div>
         </div>
       </div>
       <div class="terminal-workspace">
@@ -1681,7 +1681,7 @@
             <div class="terminal-panel-title">当前任务</div>
             <div class="terminal-context" id="terminalContext">
               <div class="terminal-context-title">未绑定任务</div>
-              <div class="terminal-context-meta">工程任务出现“终端练习”按钮时，这里会切到对应 Round 的沙盒目录。</div>
+              <div class="terminal-context-meta">切到工程实操任务后，这里会自动进入对应 Round 的沙盒目录。</div>
             </div>
           </div>
           <div class="terminal-state-list">
@@ -1798,10 +1798,10 @@
   </div>
 </div>
 
-<!-- ── Block 5: 阶段进度（Stage 0–7） ── -->
+<!-- ── Block 5: 阶段参考（Stage 0–7） ── -->
 <div class="card" id="stages">
-  <h2>阶段进度（Stage 0–7）</h2>
-  <div class="card-sub">详见 <code style="background:rgba(255,255,255,0.08);padding:0.05em 0.35em;border-radius:4px;font-family:monospace">docs/STAGE_PLAN.md</code>。Stage 0 是治理状态；其他 Stage 按关联 lane 完成率近似计算。</div>
+  <h2>阶段参考（Stage 0–7）</h2>
+  <div class="card-sub">这里是导航参考：Stage 0 是治理状态；其他 Stage 仅按关联 lane 近似，不代表阶段验收已完成。详见 <code style="background:rgba(255,255,255,0.08);padding:0.05em 0.35em;border-radius:4px;font-family:monospace">docs/STAGE_PLAN.md</code>。</div>
   <div class="stage-list" id="stageList"></div>
 </div>
 
@@ -1843,9 +1843,9 @@
   </div>
 </div>
 
-<script src="progress_data.js?v=20260706h"></script>
-<script src="rounds_data.js?v=20260706h"></script>
-<script src="progress_ui.js?v=20260706h"></script>
+<script src="progress_data.js?v=20260706i"></script>
+<script src="rounds_data.js?v=20260706i"></script>
+<script src="progress_ui.js?v=20260706i"></script>
 <script>
 const ROUNDS = window.ROUNDS_DATA || [];
 
@@ -2179,9 +2179,9 @@ function renderStages() {
     item.className = "stage-item";
     item.innerHTML = `
       <div class="stage-name">${stage.name}</div>
-      <div class="stage-lane">${stage.lane ? "lane: " + stage.lane + (note ? " · " + note : "") : note}</div>
+      <div class="stage-lane">${stage.lane ? "近似参考: " + stage.lane + " lane" + (note ? " · " + note : "") : note}</div>
       <div class="bar-wrap"><div class="bar-fill" style="width:${pct}%"></div></div>
-      <div class="stage-pct">${label || "不计入"}</div>
+      <div class="stage-pct">${stage.lane ? label + " 近似" : (label || "不计入")}</div>
     `;
     el.appendChild(item);
   });

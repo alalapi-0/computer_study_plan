@@ -18,9 +18,7 @@ const TERMINAL_QUICK_COMMANDS = [
   "pwd",
   "ls",
   "ls -la",
-  "cat next_steps.txt",
-  "git status",
-  "git log --oneline --max-count=5",
+  "find . -maxdepth 2 -type f",
 ];
 
 async function detectApi() {
@@ -148,6 +146,15 @@ function taskUsesTerminal(task) {
   return ["reading", "exercise", "test", "output"].includes(task.type);
 }
 
+function terminalQuickCommands() {
+  const meta = terminalTaskContext();
+  const commands = [...TERMINAL_QUICK_COMMANDS];
+  if (meta?.round?.id === "round_00" && meta?.week?.id?.includes("week1")) {
+    commands.push("cd notes", "pwd", "cd ..");
+  }
+  return [...new Set(commands)];
+}
+
 async function autoBindTerminalForTask(taskId) {
   if (!apiReady || !taskId || activeTerminalTaskId || autoBindingTerminalTaskId === taskId) return;
   const meta = taskMeta(taskId);
@@ -186,7 +193,7 @@ function renderTerminalContext() {
       : "等待连接";
   }
   if (quickEl) {
-    quickEl.innerHTML = TERMINAL_QUICK_COMMANDS.map((cmd) => (
+    quickEl.innerHTML = terminalQuickCommands().map((cmd) => (
       `<button type="button" class="terminal-chip" data-command="${escapeHtml(cmd)}">${escapeHtml(cmd)}</button>`
     )).join("");
     quickEl.querySelectorAll(".terminal-chip").forEach((btn) => {
@@ -206,7 +213,7 @@ function renderTerminalContext() {
     }
     contextEl.innerHTML = `
       <div class="terminal-context-title">未绑定任务</div>
-      <div class="terminal-context-meta">工程任务出现“终端练习”按钮时，这里会切到对应 Round 的沙盒目录。</div>
+      <div class="terminal-context-meta">打开工程任务时会自动绑定；任务行的“终端练习”用于切换或重新聚焦。</div>
     `;
     return;
   }
@@ -237,10 +244,10 @@ function renderTerminal() {
   renderTerminalContext();
   if (!terminalHistory.length) {
     if (idleForCurrentTask) {
-      output.innerHTML = `<div class="terminal-line muted">当前任务以阅读和记录为主，不需要终端。切到工程实操任务后，可用“终端练习”绑定沙盒目录。</div>`;
+      output.innerHTML = `<div class="terminal-line muted">当前任务以阅读和记录为主，不需要终端。切到工程实操任务后，终端会自动绑定沙盒目录。</div>`;
       return;
     }
-    output.innerHTML = `<div class="terminal-line muted">终端已映射到 <code>~/cli-lab</code> 沙盒。任务行的“终端练习”会把这里切到对应 Round 目录。</div>`;
+    output.innerHTML = `<div class="terminal-line muted">终端已映射到 <code>~/cli-lab</code> 沙盒。工程任务会自动绑定到对应 Round 目录。</div>`;
     return;
   }
   output.innerHTML = terminalHistory.map((entry) => {
