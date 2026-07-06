@@ -24,14 +24,14 @@
 | `composition` | 计算机组成基础 | 软考浅，408 深 | P0 | [composition.md](composition.md) | 已有启动骨架 |
 | `network` | 计算机网络 | 软考广，408 计算题深 | P0 | [network.md](network.md) | 已有启动骨架 |
 | `se` | 软件工程 | 仅软考考 | P0 | [se.md](se.md) | 已有启动骨架 |
-| `uml` | UML / 设计模式 | 仅软考考 | P0 | `uml.md` | 待建 |
-| `oo` | 面向对象 | 仅软考考 | P0 | `oo.md` | 待建 |
-| `security` | 信息安全 | 仅软考考 | P0 | `security.md` | 待建 |
-| `c_lang` | 程序设计语言（C） | 软考主语言 / 408 表达语言 | P0 | `c_lang.md` | 待建 |
-| `standards` | 标准化与知识产权 | 仅软考考 | P1 | `standards.md` | 待建 |
-| `english` | 英语阅读理解 | 仅软考考 | P1 | `english.md` | 待建 |
+| `uml` | UML / 设计模式 | 仅软考考 | P0 | [uml.md](uml.md) | 已有启动骨架 |
+| `oo` | 面向对象 | 仅软考考 | P0 | [oo.md](oo.md) | 已有启动骨架 |
+| `security` | 信息安全 | 仅软考考 | P0 | [security.md](security.md) | 已有启动骨架 |
+| `c_lang` | 程序设计语言（C） | 软考主语言 / 408 表达语言 | P0 | [c_lang.md](c_lang.md) | 已有启动骨架 |
+| `standards` | 标准化与知识产权 | 仅软考考 | P1 | [standards.md](standards.md) | 已有启动骨架 |
+| `english` | 英语阅读理解 | 仅软考考 | P1 | [english.md](english.md) | 已有启动骨架 |
 
-> 当前先维护 [os.md](os.md)、[ds.md](ds.md)、[db.md](db.md)、[composition.md](composition.md)、[network.md](network.md)、[se.md](se.md) 六个启动骨架。其他模块后续按真实学习节奏补，不为了凑文件数提前写空壳。
+> 当前 12 个模块均已有启动骨架；真实学习时仍按优先级推进，不为了填满骨架而提前写细节。
 
 ---
 
@@ -52,7 +52,7 @@
 读完本总览后，不需要一次补完所有模块。完成当前 Web UI 任务前，只需留下三类可检查产物：
 
 - 选定本周先推进的 1-2 个模块，并写进 Web UI 的本次记录。
-- 打开对应模块骨架（优先 [os.md](os.md)、[ds.md](ds.md)、[db.md](db.md)），各写 1 条最容易混淆的概念边界。
+- 打开对应模块骨架（优先 [os.md](os.md)、[ds.md](ds.md)、[db.md](db.md)、[composition.md](composition.md)、[network.md](network.md)、[se.md](se.md)），各写 1 条最容易混淆的概念边界。
 - 写清下一步动作，例如“先补操作系统进程/内存概念地图”，不要只写“已阅读”。
 
 ---
@@ -65,7 +65,7 @@
 | 操作系统 | [plans/soft_exam/os.md](os.md) | [plans/408/os.md](../408/os.md) | 同上 |
 | 计算机网络 | [plans/soft_exam/network.md](network.md) | [plans/408/network.md](../408/network.md) | 同上 |
 | 计算机组成 | [plans/soft_exam/composition.md](composition.md) | [plans/408/composition.md](../408/composition.md) | 同上 |
-| C 语言 | `plans/soft_exam/c_lang.md` | `plans/408/...`（按需） | 软考主笔记，408 引用 |
+| C 语言 | [plans/soft_exam/c_lang.md](c_lang.md) | [plans/408/ds.md](../408/ds.md)（表达语言关联） | 软考主笔记，408 数据结构表达时引用 |
 
 ---
 

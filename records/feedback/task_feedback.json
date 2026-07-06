@@ -3348,6 +3348,105 @@
       "feedback_type": "not_started",
       "message": "尚未开始，建议先做一个 15 分钟启动动作。",
       "next_suggestion": "先阅读资料，或完成一条最小练习。"
+    },
+    "soft_exam-composition-start": {
+      "task_id": "soft_exam-composition-start",
+      "lane": "soft_exam",
+      "done": false,
+      "action_count": 0,
+      "last_action_type": null,
+      "last_action_at": null,
+      "feedback_type": "not_started",
+      "message": "尚未开始，建议先做一个 15 分钟启动动作。",
+      "next_suggestion": "先阅读资料，或完成一条最小练习。"
+    },
+    "soft_exam-network-start": {
+      "task_id": "soft_exam-network-start",
+      "lane": "soft_exam",
+      "done": false,
+      "action_count": 0,
+      "last_action_type": null,
+      "last_action_at": null,
+      "feedback_type": "not_started",
+      "message": "尚未开始，建议先做一个 15 分钟启动动作。",
+      "next_suggestion": "先阅读资料，或完成一条最小练习。"
+    },
+    "soft_exam-se-start": {
+      "task_id": "soft_exam-se-start",
+      "lane": "soft_exam",
+      "done": false,
+      "action_count": 0,
+      "last_action_type": null,
+      "last_action_at": null,
+      "feedback_type": "not_started",
+      "message": "尚未开始，建议先做一个 15 分钟启动动作。",
+      "next_suggestion": "先阅读资料，或完成一条最小练习。"
+    },
+    "soft_exam-uml-start": {
+      "task_id": "soft_exam-uml-start",
+      "lane": "soft_exam",
+      "done": false,
+      "action_count": 0,
+      "last_action_type": null,
+      "last_action_at": null,
+      "feedback_type": "not_started",
+      "message": "尚未开始，建议先做一个 15 分钟启动动作。",
+      "next_suggestion": "先阅读资料，或完成一条最小练习。"
+    },
+    "soft_exam-oo-start": {
+      "task_id": "soft_exam-oo-start",
+      "lane": "soft_exam",
+      "done": false,
+      "action_count": 0,
+      "last_action_type": null,
+      "last_action_at": null,
+      "feedback_type": "not_started",
+      "message": "尚未开始，建议先做一个 15 分钟启动动作。",
+      "next_suggestion": "先阅读资料，或完成一条最小练习。"
+    },
+    "soft_exam-security-start": {
+      "task_id": "soft_exam-security-start",
+      "lane": "soft_exam",
+      "done": false,
+      "action_count": 0,
+      "last_action_type": null,
+      "last_action_at": null,
+      "feedback_type": "not_started",
+      "message": "尚未开始，建议先做一个 15 分钟启动动作。",
+      "next_suggestion": "先阅读资料，或完成一条最小练习。"
+    },
+    "soft_exam-c-lang-start": {
+      "task_id": "soft_exam-c-lang-start",
+      "lane": "soft_exam",
+      "done": false,
+      "action_count": 0,
+      "last_action_type": null,
+      "last_action_at": null,
+      "feedback_type": "not_started",
+      "message": "尚未开始，建议先做一个 15 分钟启动动作。",
+      "next_suggestion": "先阅读资料，或完成一条最小练习。"
+    },
+    "soft_exam-standards-start": {
+      "task_id": "soft_exam-standards-start",
+      "lane": "soft_exam",
+      "done": false,
+      "action_count": 0,
+      "last_action_type": null,
+      "last_action_at": null,
+      "feedback_type": "not_started",
+      "message": "尚未开始，建议先做一个 15 分钟启动动作。",
+      "next_suggestion": "先阅读资料，或完成一条最小练习。"
+    },
+    "soft_exam-english-start": {
+      "task_id": "soft_exam-english-start",
+      "lane": "soft_exam",
+      "done": false,
+      "action_count": 0,
+      "last_action_type": null,
+      "last_action_at": null,
+      "feedback_type": "not_started",
+      "message": "尚未开始，建议先做一个 15 分钟启动动作。",
+      "next_suggestion": "先阅读资料，或完成一条最小练习。"
     }
   }
 }

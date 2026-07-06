@@ -1540,6 +1540,51 @@ window.PROGRESS_DATA = {
       "done": false,
       "done_at": null,
       "lane": "math2"
+    },
+    "soft_exam-composition-start": {
+      "done": false,
+      "done_at": null,
+      "lane": "soft_exam"
+    },
+    "soft_exam-network-start": {
+      "done": false,
+      "done_at": null,
+      "lane": "soft_exam"
+    },
+    "soft_exam-se-start": {
+      "done": false,
+      "done_at": null,
+      "lane": "soft_exam"
+    },
+    "soft_exam-uml-start": {
+      "done": false,
+      "done_at": null,
+      "lane": "soft_exam"
+    },
+    "soft_exam-oo-start": {
+      "done": false,
+      "done_at": null,
+      "lane": "soft_exam"
+    },
+    "soft_exam-security-start": {
+      "done": false,
+      "done_at": null,
+      "lane": "soft_exam"
+    },
+    "soft_exam-c-lang-start": {
+      "done": false,
+      "done_at": null,
+      "lane": "soft_exam"
+    },
+    "soft_exam-standards-start": {
+      "done": false,
+      "done_at": null,
+      "lane": "soft_exam"
+    },
+    "soft_exam-english-start": {
+      "done": false,
+      "done_at": null,
+      "lane": "soft_exam"
     }
   }
 };

@@ -2461,6 +2461,60 @@ window.ROUNDS_DATA = [
             "type": "reading",
             "title": "阅读软考数据库骨架",
             "file": "plans/soft_exam/db.md"
+          },
+          {
+            "id": "soft_exam-composition-start",
+            "type": "reading",
+            "title": "阅读软考计算机组成骨架",
+            "file": "plans/soft_exam/composition.md"
+          },
+          {
+            "id": "soft_exam-network-start",
+            "type": "reading",
+            "title": "阅读软考计算机网络骨架",
+            "file": "plans/soft_exam/network.md"
+          },
+          {
+            "id": "soft_exam-se-start",
+            "type": "reading",
+            "title": "阅读软考软件工程骨架",
+            "file": "plans/soft_exam/se.md"
+          },
+          {
+            "id": "soft_exam-uml-start",
+            "type": "reading",
+            "title": "阅读软考 UML / 设计模式骨架",
+            "file": "plans/soft_exam/uml.md"
+          },
+          {
+            "id": "soft_exam-oo-start",
+            "type": "reading",
+            "title": "阅读软考面向对象骨架",
+            "file": "plans/soft_exam/oo.md"
+          },
+          {
+            "id": "soft_exam-security-start",
+            "type": "reading",
+            "title": "阅读软考信息安全骨架",
+            "file": "plans/soft_exam/security.md"
+          },
+          {
+            "id": "soft_exam-c-lang-start",
+            "type": "reading",
+            "title": "阅读软考 C 语言骨架",
+            "file": "plans/soft_exam/c_lang.md"
+          },
+          {
+            "id": "soft_exam-standards-start",
+            "type": "reading",
+            "title": "阅读软考标准化与知识产权骨架",
+            "file": "plans/soft_exam/standards.md"
+          },
+          {
+            "id": "soft_exam-english-start",
+            "type": "reading",
+            "title": "阅读软考英语阅读骨架",
+            "file": "plans/soft_exam/english.md"
           }
         ]
       }

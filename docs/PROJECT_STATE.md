@@ -38,7 +38,7 @@ open http://127.0.0.1:8777/progress.html
 ## 3. 当前实现事实
 
 - `rounds/round_00` 至 `rounds/round_21` 均已展开为可读 notes、可运行练习脚本和最终验收材料。
-- `rounds_data.js` 提供 28 个 Round / 计划分组；`progress.json` 跟踪 304 个任务，其中 101 个 exercise 任务可通过本地 API 运行。
+- `rounds_data.js` 提供 28 个 Round / 计划分组；`progress.json` 跟踪 313 个任务，其中 101 个 exercise 任务可通过本地 API 运行。
 - 计划入口已接入 Web UI：学习计划总览、软考、数学二、408、Linux、VPS 支线。
 - Web UI 已支持：
   - 当前任务聚焦。
@@ -358,4 +358,25 @@ open http://127.0.0.1:8777/progress.html
 验证摘要：
 
 - 默认、soft_exam、math2、cs408、Round 12、Round 21 与 390px 移动端页面均无旧文案、无横向溢出、无 console 错误。
+- 标准验证与浏览器回检见本轮提交记录。
+
+## 20. 2026-07-06 TASK-RR-69 第十五轮项目用户视角评测与软考模块任务补齐
+
+状态：done
+
+本轮评测报告：
+
+- `docs/reports/PROJECT_USER_REVIEW_2026_07_06_ROUND15.md`
+
+本轮发现并修复：
+
+- Web UI 软考主线仍只注册总览、数据结构、操作系统、数据库 4 个任务，已扩展为总览 + 12 个模块阅读任务。
+- 软考 `uml.md`、`oo.md`、`security.md`、`c_lang.md`、`standards.md`、`english.md` 仍是 `待建`，已新增启动骨架并从 README 链接。
+- `docs/STAGE_PLAN.md` Stage 2 仍只列 `os.md`、`ds.md`、`db.md` 三个骨架，已改为 12 个模块均有启动骨架。
+- `docs/KNOWLEDGE_MAPPING.md` 仍把 UML、C 语言、信息安全、标准化与知识产权写成待建，已同步为已有启动骨架。
+- 新任务加入后已运行 `npm run build:rounds` 和 `generate_task_feedback.py`，同步 `rounds_data.js`、`progress.json`、`progress_data.js` 与反馈 JSON。
+
+验证摘要：
+
+- 当前 `progress.json` 跟踪 313 个任务；soft_exam lane 为 13 个任务。
 - 标准验证与浏览器回检见本轮提交记录。
