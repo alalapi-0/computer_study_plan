@@ -1136,6 +1136,27 @@
       box-shadow: none;
       margin-bottom: 1rem;
     }
+    .workspace .top-bar {
+      padding: 0.85rem 1rem;
+    }
+    .workspace .top-bar header {
+      margin-bottom: 0.4rem;
+    }
+    .workspace .top-bar header h1 {
+      font-size: 1.35rem;
+    }
+    .workspace .top-bar header p {
+      max-width: 52rem;
+      margin-top: 0.2rem;
+      font-size: 0.88rem;
+    }
+    .workspace .banner.ok {
+      padding: 0.58rem 0.8rem;
+      margin-bottom: 0.8rem;
+      font-size: 0.78rem;
+      border-color: rgba(15,118,110,0.35);
+      background: #edf8f5;
+    }
 
     .global-progress {
       display: grid;
@@ -1440,10 +1461,11 @@
       .rail-brand { margin-bottom: 1rem; }
       .side-nav {
         display: flex;
+        flex-wrap: wrap;
         gap: 0.5rem;
         max-width: 100%;
         min-width: 0;
-        overflow-x: auto;
+        overflow-x: visible;
         margin-bottom: 0;
         padding-bottom: 0.05rem;
       }
@@ -1576,7 +1598,7 @@
 <header>
   <div class="eyebrow">四主线学习系统</div>
   <h1>今日学习</h1>
-  <p>阅读资料、写入记录、完成打卡都在这里闭环。先推进下一条任务，再回看主线进度与 Round 清单。</p>
+  <p>先在学习工作区完成一个小动作；需要总览、存档或配置时再展开管理信息。</p>
 </header>
 <div class="last-updated" style="margin-top:0.75rem;margin-bottom:0">
   <span id="lastUpdated">正在加载…</span>
@@ -2034,7 +2056,7 @@ function renderContinue() {
       <div><strong>3</strong><span>完成后写一条记录，再点击完成。</span></div>
     </div>
     <div class="continue-actions">
-      ${canRead ? `<button type="button" class="task-btn read task-open" data-task="${task.id}" data-file="${task.file}" data-title="${task.title}">读教程</button>` : ""}
+      ${canRead ? `<button type="button" class="task-btn read task-open" data-task="${task.id}" data-file="${task.file}" data-title="${task.title}">${fileActionLabel(task.file, task.type)}</button>` : ""}
       ${taskRunButton(task)}
       ${taskTerminalButton(task)}
       ${taskRecordButton(task.id)}
@@ -2244,7 +2266,7 @@ function renderRoundsForLane(laneKey) {
             ${renderFeedbackHint(task.id)}
           </div>
           <div class="task-actions">
-            ${canRead ? `<button type="button" class="task-btn read task-open" data-task="${task.id}" data-file="${task.file}" data-title="${task.title}">读教程</button>` : ""}
+            ${canRead ? `<button type="button" class="task-btn read task-open" data-task="${task.id}" data-file="${task.file}" data-title="${task.title}">${fileActionLabel(task.file, task.type)}</button>` : ""}
             ${taskRunButton(task)}
             ${taskTerminalButton(task)}
             ${taskRecordButton(task.id)}

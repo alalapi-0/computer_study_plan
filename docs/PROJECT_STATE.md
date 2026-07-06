@@ -1855,3 +1855,32 @@
 - 未修改 `records/` 下真实学习记录。
 - 未引入大型新依赖；未切换数据库、前端框架或后端架构。
 - 未放宽浏览器终端安全白名单；真实远程、网络、安装类命令边界不变。
+
+## 67. 2026-07-06 TASK-RR-55 Web UI 第二轮用户评测与首屏细节收紧
+
+### 67.1 本轮评测结论
+
+- 第一轮学习工作区改版后继续评测，新增 `docs/reports/WEB_UI_USER_REVIEW_2026_07_06_ROUND2.md`。
+- 第二轮累计 5 个新问题：顶部说明仍偏高、API 状态横幅过重、移动端导航末项被裁切、脚本任务按钮语义不准、终端绑定滚动位置不稳定。
+
+### 67.2 本轮修改
+
+- `progress.html`：压缩顶部 `今日学习` 区域的文字和高度，降低进入学习工作区前的视觉负担。
+- `progress.html`：降低 API 成功横幅视觉权重，让当前任务成为首要焦点。
+- `progress.html`：移动端导航改为自然换行，避免 390px 宽度下 `进度设置` 入口被裁切。
+- `progress_ui.js` / `progress.html`：新增 `fileActionLabel()`，Markdown 学习资料显示“读教程”，Shell / Python 脚本显示“看脚本”，其他文件显示“打开资料”。
+- `progress_ui.js`：终端绑定后使用确定性滚动，并继续使用 `focus({ preventScroll: true })` 避免输入框聚焦额外滚动。
+
+### 67.3 验证
+
+- 静态验证：`node --check progress_ui.js`、`python3 scripts/check_protocol_sync.py`、`python3 scripts/validate_learning_data.py`、`python3 -m json.tool progress.json` 均通过。
+- 真实浏览器桌面验证：`progress.html?round=round_02` 下当前任务、内联教程、终端输出和终端输入框同屏可见；页面无横向溢出。
+- 任务按钮验证：`r02-w1-ex1` 等练习脚本任务显示“看脚本”，阅读任务显示“读教程”。
+- 终端绑定验证：点击 `r02-w1-self` 的“终端练习”后当前任务、脚本预览和 `~/round2` 终端保持在同一学习工作区。
+- 移动端验证：390px 视口无横向溢出，顶部导航换行显示完整入口。
+
+### 67.4 风险边界核对
+
+- 未修改 `records/` 下真实学习记录。
+- 未引入大型新依赖；未切换数据库、前端框架或后端架构。
+- 未放宽浏览器终端安全白名单。

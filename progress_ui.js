@@ -179,7 +179,7 @@ function renderTerminalContext() {
     <div class="terminal-context-meta">${escapeHtml(meta.round.title)} / ${escapeHtml(meta.week.title)}</div>
     <div class="terminal-context-path">${escapeHtml(meta.task.file || "手动练习")}</div>
     <div class="terminal-context-actions">
-      ${canRead ? `<button type="button" class="task-btn read task-open" data-task="${escapeHtml(meta.task.id)}" data-file="${escapeHtml(meta.task.file)}" data-title="${escapeHtml(meta.task.title)}">读教程</button>` : ""}
+      ${canRead ? `<button type="button" class="task-btn read task-open" data-task="${escapeHtml(meta.task.id)}" data-file="${escapeHtml(meta.task.file)}" data-title="${escapeHtml(meta.task.title)}">${fileActionLabel(meta.task.file, meta.task.type)}</button>` : ""}
       ${taskRecordButton(meta.task.id)}
       ${taskActionButtons(meta.task.id, done)}
     </div>
@@ -272,7 +272,7 @@ async function openTaskTerminal(taskId) {
       await openInlineReader(meta.task.file, meta.task.title, taskId, { silent: true });
     }
     renderContinue();
-    document.getElementById("learnWorkspace")?.scrollIntoView({ behavior: "smooth", block: "start" });
+    document.getElementById("learnWorkspace")?.scrollIntoView({ behavior: "auto", block: "start" });
     setTimeout(() => document.getElementById("terminalInput")?.focus({ preventScroll: true }), 220);
   } catch (err) {
     showToast(err.message || "终端切换失败", "error");
@@ -372,6 +372,13 @@ function taskActionButtons(taskId, done) {
     return `<button type="button" class="task-btn undo" data-task="${taskId}" data-action="undo">撤销</button>`;
   }
   return `<button type="button" class="task-btn done" data-task="${taskId}" data-action="done">完成</button>`;
+}
+
+function fileActionLabel(filePath, taskType) {
+  const file = String(filePath || "");
+  if (/\.(sh|py)$/i.test(file)) return "看脚本";
+  if (taskType === "reading" || /\.md$/i.test(file)) return "读教程";
+  return "打开资料";
 }
 
 function taskRecordButton(taskId) {
