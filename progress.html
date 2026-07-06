@@ -593,6 +593,27 @@
     .record-status.done { color: var(--green); border-color: var(--green); background: rgba(22,163,74,0.08); }
     .record-status.open { color: var(--yellow); border-color: var(--yellow); background: rgba(180,83,9,0.08); }
     .record-suggestion { color: var(--accent2); }
+    .record-template {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: #f8fafc;
+      padding: 0.7rem 0.8rem;
+      color: var(--text-muted);
+      font-size: 0.82rem;
+    }
+    .record-template strong {
+      display: block;
+      color: var(--text);
+      margin-bottom: 0.35rem;
+    }
+    .record-template p { margin: 0.25rem 0; }
+    .record-template code {
+      background: #e8f0ff;
+      border-radius: 4px;
+      padding: 0.08rem 0.28rem;
+      color: var(--text);
+      font-size: 0.78rem;
+    }
     .record-label { font-size: 0.78rem; color: var(--text-muted); }
     .record-input {
       width: 100%; border: 1px solid var(--border); border-radius: 8px;
@@ -1146,6 +1167,10 @@
     .workspace-surface.no-terminal-task .learning-grid {
       grid-template-columns: minmax(240px, 0.72fr) minmax(0, 1.28fr);
     }
+    .workspace-surface.no-terminal-task .workspace-jumpbar a[href="#terminal"],
+    .workspace-surface.no-terminal-task #inlineReaderPanel a[href="#terminal"] {
+      display: none;
+    }
     .workspace-surface.no-terminal-task .terminal-panel {
       display: none;
     }
@@ -1556,6 +1581,7 @@
       .workspace-head .card-sub { display: none; }
       .workflow-steps { justify-content: flex-start; }
       .workflow-steps span { padding: 0.2rem 0.42rem; font-size: 0.68rem; }
+      .workspace-panel-actions { justify-content: flex-start; }
       .workspace-jumpbar {
         display: flex;
         position: sticky;
@@ -1572,6 +1598,7 @@
       .workspace-surface.no-terminal-task .learning-grid { grid-template-columns: minmax(0, 1fr); }
       .inline-reader-panel,
       .terminal-panel { min-height: auto; }
+      #inlineReaderPopout { display: none; }
       .task-flow-list { margin: 0.65rem 0; }
       .inline-reader-body { max-height: 300px; }
       .continue-note {
@@ -1908,9 +1935,9 @@
   </div>
 </div>
 
-<script src="progress_data.js?v=20260706j"></script>
-<script src="rounds_data.js?v=20260706j"></script>
-<script src="progress_ui.js?v=20260706j"></script>
+<script src="progress_data.js?v=20260706k"></script>
+<script src="rounds_data.js?v=20260706k"></script>
+<script src="progress_ui.js?v=20260706k"></script>
 <script>
 const ROUNDS = window.ROUNDS_DATA || [];
 

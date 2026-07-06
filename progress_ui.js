@@ -742,6 +742,11 @@ function renderRecordBody(taskId, done, fb, events, options = {}, meta = null) {
       <div class="record-status ${done ? "done" : "open"}">${done ? "当前状态：已完成" : "当前状态：未完成"}</div>
       <p>${escapeHtml(fb?.message || "暂无反馈。")}</p>
       <p class="record-suggestion">${escapeHtml(fb?.next_suggestion || "")}</p>
+      <div class="record-template">
+        <strong>记录参考</strong>
+        <p>${escapeHtml(placeholders.note)}</p>
+        <p>证据示例：<code>${escapeHtml(placeholders.evidence)}</code></p>
+      </div>
       <label class="record-label">本次记录${done && !options.requireNote ? "（建议填写）" : "（必填）"}</label>
       <textarea id="recordNote" class="record-input" placeholder="${escapeHtml(placeholders.note)}"></textarea>
       <label class="record-label">证据路径（可选）</label>
@@ -759,7 +764,7 @@ function renderRecordBody(taskId, done, fb, events, options = {}, meta = null) {
 function actionLabel(actionType) {
   if (actionType === "mark_done") return "记录并完成";
   if (actionType === "undo_done") return "撤销完成";
-  if (actionType === "run_exercise") return "运行练习";
+  if (actionType === "run_exercise") return "运行脚本";
   return actionType || "动作";
 }
 
