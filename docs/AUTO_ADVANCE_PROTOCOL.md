@@ -30,7 +30,7 @@
 4. 将该任务在 `docs/NEXT_ACTIONS.md` 中标记为 `in_progress`。
 5. 阅读任务涉及的现有文件，确认真实状态。
 6. 做最小必要修改。
-7. 运行验证（`python3 scripts/agent_gate.py --verify`）。
+7. 运行验证（`python3 scripts/agent_gate.py --verify`；涉及 Round 元数据或反馈生成时再补 `npm run build:rounds`、`npm run sync:progress` 和 `python3 scripts/generate_task_feedback.py`）。
 8. 将该任务标记为 `done`，并更新后续任务状态。
 9. 更新 `docs/PROJECT_STATE.md`。
 10. 必要时更新 `docs/DECISIONS.md`、`README.md`、`AGENTS.md` 或长期规划文档。
@@ -53,10 +53,23 @@ git diff --check
 python3 -m json.tool <file>
 ```
 
-如果修改了 `mark_done.sh`、`progress.json`、`progress_data.js` 或进度系统行为，至少运行：
+如果修改了 `mark_done.sh`、`progress.json`、`progress_data.js`、`rounds_data.js`、`progress.html`、`progress_ui.js`、`scripts/progress_server.py`、动作日志、反馈或进度系统行为，至少运行：
 
 ```bash
-bash mark_done.sh
+git diff --check
+node --check progress_ui.js
+python3 scripts/check_protocol_sync.py
+python3 scripts/validate_learning_data.py
+python3 -m json.tool progress.json
+bash mark_done.sh --limit 5
+```
+
+如修改 Round / 计划任务元数据或反馈生成逻辑，还必须按需运行：
+
+```bash
+npm run build:rounds
+npm run sync:progress
+python3 scripts/generate_task_feedback.py
 ```
 
 如果新增脚本或测试工具，应运行对应最小验证命令，并在最终汇报中说明结果。

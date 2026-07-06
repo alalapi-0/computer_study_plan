@@ -24,7 +24,7 @@
 
 【本轮范围】
 - 只选择一个 UI 改造切片（例如 progress.html 的某一区块）
-- 不改变业务逻辑（progress.json、mark_done.sh 闭环必须保持可用）
+- 不改变业务逻辑（`progress.json`、`progress_data.js`、`rounds_data.js`、`progress.html`、`progress_ui.js`、`scripts/progress_server.py`、`mark_done.sh`、动作日志和反馈闭环必须保持可用）
 - 不大范围重构无关文件
 
 【标准流程】

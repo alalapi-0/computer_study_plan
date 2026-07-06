@@ -25,7 +25,7 @@
 ## 工作原则
 
 - 每轮只做一个明确任务，优先选择 `docs/NEXT_ACTIONS.md` 中最高优先级且不需要用户介入的任务。
-- 不破坏 Round 00 已有可运行能力，尤其是 `rounds/round_00/`、`progress.json`、`progress_data.js`、`progress.html`、`mark_done.sh` 的最小闭环。
+- 不破坏 Round 00 与 Web UI 已有可运行能力，尤其是 `rounds/round_00/`、`progress.json`、`progress_data.js`、`rounds_data.js`、`progress.html`、`progress_ui.js`、`scripts/progress_server.py`、`mark_done.sh`、`records/action_logs/`、`records/feedback/` 的最小闭环。
 - `records/` 当前不视为高保护区；如后续出现真实学习记录，再由用户明确标注保护范围。
 - 不缓存具体考题、考点条目、院校招生数据；涉及考试内容一律以**最新官方信息**为准。
 - 不把未来规划写成已完成事实。

@@ -166,13 +166,20 @@ def pick_optional_round_task() -> GateTask | None:
 
 def run_verify() -> int:
     commands = [
-        [sys.executable, "scripts/check_protocol_sync.py"],
-        [sys.executable, "scripts/validate_learning_data.py"],
-        ["python3", "-m", "json.tool", "progress.json"],
+        (["git", "diff", "--check"], False),
+        (["node", "--check", "progress_ui.js"], False),
+        ([sys.executable, "scripts/check_protocol_sync.py"], False),
+        ([sys.executable, "scripts/validate_learning_data.py"], False),
+        (["python3", "-m", "json.tool", "progress.json"], True),
+        (["bash", "mark_done.sh", "--limit", "5"], False),
     ]
-    for cmd in commands:
+    for cmd, quiet in commands:
         print("$", " ".join(cmd))
-        proc = subprocess.run(cmd, cwd=REPO_ROOT)
+        proc = subprocess.run(
+            cmd,
+            cwd=REPO_ROOT,
+            stdout=subprocess.DEVNULL if quiet else None,
+        )
         if proc.returncode != 0:
             return proc.returncode
     return 0
@@ -251,8 +258,12 @@ def main() -> int:
         "branch_hint": "main",
         "commit_to_main": True,
         "verify_commands": [
+            "git diff --check",
+            "node --check progress_ui.js",
             "python3 scripts/check_protocol_sync.py",
             "python3 scripts/validate_learning_data.py",
+            "python3 -m json.tool progress.json",
+            "bash mark_done.sh --limit 5",
         ],
     }
 

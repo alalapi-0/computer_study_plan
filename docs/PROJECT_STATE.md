@@ -574,3 +574,25 @@ open http://127.0.0.1:8777/progress.html
 
 - 主动扫描已确认 Stage Plan / README 不再残留本轮目标旧说法。
 - 标准验证与浏览器回检见本轮提交记录。
+
+## 30. 2026-07-06 TASK-RR-79 第二十五轮项目用户视角评测与自动推进验证口径对齐
+
+状态：done
+
+本轮评测报告：
+
+- `docs/reports/PROJECT_USER_REVIEW_2026_07_06_ROUND25.md`
+
+本轮发现并修复：
+
+- `AGENTS.md` 的最小闭环保护范围仍停在旧四件套，已扩展为当前 Web UI / 本地 API / 生成数据 / 动作日志 / 反馈组合。
+- `docs/AUTO_ADVANCE_PROTOCOL.md` 的验证流程未说明 Round 元数据和反馈生成需要额外同步，已补 `build:rounds`、`sync:progress` 与反馈生成提示。
+- 自动推进协议修改进度系统时只要求 `bash mark_done.sh`，已补当前低成本验证基线。
+- Cursor UI prompt 仍把业务闭环缩成 `progress.json` 与 `mark_done.sh`，已扩展为当前进度系统闭环。
+- Cursor browser UI runbook 仍把本仓库描述成“进度看板 / 本地静态页”，已改为本地 Web UI 学习工作区，并明确数据 / API / 日志 / 反馈闭环。
+- `scripts/agent_gate.py --verify` 已扩展为运行 `git diff --check`、`node --check progress_ui.js`、协议 / 数据校验、JSON 校验和 CLI 摘要。
+
+验证摘要：
+
+- 主动扫描已确认目标自动推进 / UI runbook 文件不再残留本轮旧说法。
+- 标准验证与浏览器回检见本轮提交记录。

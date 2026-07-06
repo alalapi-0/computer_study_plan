@@ -1,6 +1,6 @@
 # Cursor 浏览器 UI 推进 Runbook
 
-> 本仓库用于学习总控与进度看板；当需要优化 `progress.html` 等本地 Web 页面 UI 时，按本文执行。
+> 本仓库用于学习总控与 Web UI 学习工作区；当需要优化 `progress.html` / `progress_ui.js` / 本地 API 等本地 Web 页面 UI 时，按本文执行。
 > 详细工具注册排查见 [`cursor_tool_registry_check.md`](cursor_tool_registry_check.md)。
 
 ---
@@ -23,7 +23,7 @@
 
 ### 普通本地 Web 项目 UI 优化
 
-本仓库（如 `progress.html`、本地静态页）属于此类。优先使用：
+本仓库（如 `progress.html`、`progress_ui.js`、`scripts/progress_server.py` 提供的本地 Web UI）属于此类。优先使用：
 
 | 工具 | 用途 |
 |---|---|
@@ -76,7 +76,7 @@
 4. 保存 **before** screenshot
 5. 读取 Stitch 设计文档或调用 Stitch MCP 获取设计输入
 6. 选择一个 UI 改造切片（每轮一个）
-7. 修改代码（不改变业务逻辑）
+7. 修改代码（保持 `progress.json`、数据镜像、Round 元数据、本地 API、动作日志与反馈闭环可用）
 8. 重新打开页面
 9. 检查 console / network
 10. 检查响应式（常见 viewport）
