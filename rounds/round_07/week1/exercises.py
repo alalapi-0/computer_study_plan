@@ -75,8 +75,8 @@ def main() -> None:
         "\n".join(
             [
                 "Week 1 自动练习已生成 labels.txt / labels.csv / labels.json / labels.jsonl。",
-                "自测请在 Web UI 点击 r07-w1-self 的“终端”，进入 ~/cli-lab/round7 后自己写 read_formats.py。",
-                "能解释 json 一次读取、jsonl 逐行读取、csv DictReader 后，再手动点“记录 / 完成”。",
+                "自测请在 Web UI 点击 r07-w1-self 的“终端练习”，进入 ~/cli-lab/round7 后自己写 read_formats.py。",
+                "能解释 json 一次读取、jsonl 逐行读取、csv DictReader 后，再点击“记录并完成”。",
             ]
         )
         + "\n",
@@ -91,7 +91,7 @@ def main() -> None:
     print("jsonl-count:", result["jsonl_count"])
 
     mark("r07-w1-ex1")
-    print("Week 1 自动练习完成。请继续手动完成 r07-w1-self。")
+    print("Week 1 自动练习完成。请继续在 Web UI 点击“记录并完成”保存 r07-w1-self。")
 
 
 if __name__ == "__main__":

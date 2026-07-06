@@ -27,17 +27,19 @@ round_00/
 
 ## 使用方式
 
-1. 每周开始前先阅读 `weekN/notes.md`
-2. 再打开 Terminal，对照 `weekN/exercises.sh` 手敲每个命令
-3. 完成后在 `progress.html` 里勾选对应任务
+1. 在仓库根启动本地 Web UI。
+2. 打开 Round 00，点击「读教程」阅读 `weekN/notes.md`。
+3. 工程任务会自动联动 `~/cli-lab/round0` 终端；按教程手敲命令。
+4. 完成一个最小动作后点击「记录并完成」，在弹窗里写下本次记录后保存。
 
 ## 进度追踪
 
-在仓库根目录打开 `progress.html`：
+在仓库根目录启动本地服务并打开看板：
 
 ```bash
 cd ~/PycharmProjects/computer_study_plan
-open progress.html   # 或：python3 -m http.server 8000 后浏览器访问
+python3 scripts/progress_server.py
+open http://127.0.0.1:8777/progress.html?round=round_00
 ```
 
-练习脚本会自动定位仓库根并调用 `mark_done.sh`，无需在 `~/cli-lab` 下执行打卡命令。
+练习脚本会自动定位仓库根并调用 `mark_done.sh`；阅读、自测、小抄和验收类任务仍以 Web UI 的「记录并完成」为准。

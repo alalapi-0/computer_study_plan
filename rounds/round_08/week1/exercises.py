@@ -75,8 +75,8 @@ def write_project(base: Path) -> None:
     )
     (base / "next_steps.txt").write_text(
         "Week 1 自动练习已生成 ai_prep_tool 项目骨架和无依赖测试入口。\n"
-        "自测请在 Web UI 点击 r08-w1-self 的“终端”，自己写 tests/test_basic.py 并运行。\n"
-        "能解释 README、.gitignore、tests 和 run_tests.py 后，再手动点“记录 / 完成”。\n",
+        "自测请在 Web UI 点击 r08-w1-self 的“终端练习”，自己写 tests/test_basic.py 并运行。\n"
+        "能解释 README、.gitignore、tests 和 run_tests.py 后，再点击“记录并完成”。\n",
         encoding="utf-8",
     )
 
@@ -108,7 +108,7 @@ def main() -> None:
     print("files:", "README.md, .gitignore, ai_prep_tool.py, tests/test_basic.py, run_tests.py")
 
     mark("r08-w1-ex1")
-    print("Week 1 自动练习完成。请继续手动完成 r08-w1-self。")
+    print("Week 1 自动练习完成。请继续在 Web UI 点击“记录并完成”保存 r08-w1-self。")
 
 
 if __name__ == "__main__":

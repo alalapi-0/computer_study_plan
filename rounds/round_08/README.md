@@ -35,12 +35,12 @@ round_08/
    python3 scripts/progress_server.py
    ```
 
-2. 浏览器打开 `http://127.0.0.1:8765/progress.html?round=round_08`。
+2. 浏览器打开 `http://127.0.0.1:8777/progress.html?round=round_08`。
 3. 在 Round 08 任务列表里按顺序完成：
-   - 阅读任务：点“打开”，直接在页面中读 `notes.md`、脚本和 `round_08.md`。
-   - 自动练习：点“运行”，脚本会在 `~/cli-lab/round8/*_auto` 生成项目骨架、测试、数据库或接口排练产物，并自动记录对应练习完成。
-   - 自测任务：点“终端”，在浏览器映射终端中自己创建文件、运行脚本；确认理解后再手动点“记录 / 完成”。
-   - 小抄与验收：读 `final/upgrade_route_cheatsheet.md`，能解释后再手动完成记录。
+   - 阅读任务：点“读教程”，直接在页面中读 `notes.md`、脚本和 `round_08.md`。
+   - 自动练习：点“运行脚本”，脚本会在 `~/cli-lab/round8/*_auto` 生成项目骨架、测试、数据库或接口排练产物，并自动记录对应练习完成。
+   - 自测任务：点“终端练习”，在浏览器映射终端中自己创建文件、运行脚本；确认理解后再点击“记录并完成”。
+   - 小抄与验收：读 `final/upgrade_route_cheatsheet.md`，能解释后再点击“记录并完成”保存记录。
 
 ### 命令行备用
 
@@ -56,6 +56,6 @@ python3 rounds/round_08/final/comprehensive_exercise.py
 ## 完成边界
 
 - 自动脚本只标记 `r08-w1-ex1`、`r08-w2-ex2`、`r08-w3-ex3`、`r08-fin-comp`。
-- `r08-w*-self`、`r08-fin-sheet`、`r08-fin-acc1` 必须由用户通过 Web UI 阅读、手写、自测和手动记录。
+- `r08-w*-self`、`r08-fin-sheet`、`r08-fin-acc1` 必须由用户通过 Web UI 阅读、手写、自测和点击“记录并完成”保存记录。
 - 本轮不在仓库中引入 pytest / FastAPI / uvicorn 等新依赖，也不启动真实后端服务；服务化先做接口形状和升级路线排练。
 - 所有临时数据都在 `~/cli-lab/round8`，不写入仓库、也不污染 `records/` 的真实学习记录。

@@ -7,8 +7,8 @@
 
 ## 在 Web UI 中怎么学
 
-1. 点“练习：贪心选择与 DP 爬楼梯”的“运行”，查看自动生成的 `greedy_dp_demo.py`。
-2. 点“自测：自己写 coin_change_dp.py”的“终端”，在 `~/cli-lab/round5` 下完成自测脚本。
+1. 点“练习：贪心选择与 DP 爬楼梯”的“运行脚本”，查看自动生成的 `greedy_dp_demo.py`。
+2. 点“自测：自己写 coin_change_dp.py”的“终端练习”，在 `~/cli-lab/round5` 下完成自测脚本。
 3. 推荐自测命令：
 
 ```bash
@@ -18,7 +18,7 @@ printf 'def coin_change(amount, coins):\n    dp = [0] + [10**9] * amount\n    fo
 python3 coin_change_dp.py
 ```
 
-4. 能解释 `dp[x]` 表示什么、为什么贪心不一定总最优后，再手动记录自测完成。
+4. 能解释 `dp[x]` 表示什么、为什么贪心不一定总最优后，再点击“记录并完成”保存自测记录。
 
 ## 贪心和 DP 的差异
 

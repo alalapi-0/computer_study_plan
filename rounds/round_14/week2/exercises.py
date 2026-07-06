@@ -84,7 +84,7 @@ def write_contract() -> dict:
     report = json.loads((LAB / "contract_report.json").read_text(encoding="utf-8"))
     report.update({"returncode": proc.returncode, "sandbox": str(LAB)})
     (LAB / "next_steps.txt").write_text(
-        "在浏览器终端写 request.json 和 error.json，用 python3 -m json.tool 检查，再手动记录 r14-w2-self。\n",
+        "在浏览器终端写 request.json 和 error.json，用 python3 -m json.tool 检查，再点击“记录并完成”保存记录 r14-w2-self。\n",
         encoding="utf-8",
     )
     return report

@@ -3,10 +3,10 @@
 ## Web UI 学习路径
 
 1. 阅读本文，先理解 Dockerfile 的每一行承担什么职责。
-2. 点击 `练习：生成 Dockerfile 与发布检查` 的“运行”按钮。
+2. 点击 `练习：生成 Dockerfile 与发布检查` 的“运行脚本”按钮。
 3. 查看 `Dockerfile`、`.dockerignore`、`release_check.py` 和 `release_report.json`。
-4. 点击自测任务的“终端”，自己写一个最小 Dockerfile 文件并用 `cat` 检查。
-5. 自测完成后，手动点击“完成”记录 `r13-w3-self`。
+4. 点击自测任务的“终端练习”，自己写一个最小 Dockerfile 文件并用 `cat` 检查。
+5. 自测完成后，点击“记录并完成”记录 `r13-w3-self`。
 
 ## 你要理解的事
 

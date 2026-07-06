@@ -7,8 +7,8 @@
 
 ## 在 Web UI 中怎么学
 
-1. 点“练习：进程查看与长任务日志”的“运行”，查看自动生成的 `worker.py`、`worker.log` 和 `process_snapshot.txt`。
-2. 点“自测：自己写 worker_monitor.sh”的“终端”，浏览器终端会进入 `~/cli-lab/round6`。
+1. 点“练习：进程查看与长任务日志”的“运行脚本”，查看自动生成的 `worker.py`、`worker.log` 和 `process_snapshot.txt`。
+2. 点“自测：自己写 worker_monitor.sh”的“终端练习”，浏览器终端会进入 `~/cli-lab/round6`。
 3. 自己写一个长任务观察脚本：
 
 ```bash
@@ -20,7 +20,7 @@ ps aux | grep worker.py | grep -v grep
 cat worker.log
 ```
 
-4. 这个浏览器终端只开放只读 `ps` 查看，不开放 `kill`、真实 `nohup` 或 `tmux` 会话操作。能解释这些命令的用途后，再手动记录自测完成。
+4. 这个浏览器终端只开放只读 `ps` 查看，不开放 `kill`、真实 `nohup` 或 `tmux` 会话操作。能解释这些命令的用途后，再点击“记录并完成”保存自测记录。
 
 ## 模式直觉
 

@@ -123,7 +123,7 @@ def write_routes() -> dict:
     report = json.loads((LAB / "route_test_report.json").read_text(encoding="utf-8"))
     report.update({"returncode": proc.returncode, "sandbox": str(LAB)})
     (LAB / "next_steps.txt").write_text(
-        "在浏览器终端写 mini_router.py，说明 GET health / POST run / 404 的判断，再手动记录 r14-w3-self。\n",
+        "在浏览器终端写 mini_router.py，说明 GET health / POST run / 404 的判断，再点击“记录并完成”保存记录 r14-w3-self。\n",
         encoding="utf-8",
     )
     return report

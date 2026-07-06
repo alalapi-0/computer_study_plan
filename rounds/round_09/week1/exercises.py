@@ -73,8 +73,8 @@ def write_project(base: Path) -> dict[str, bool]:
     (base / "layout_report.txt").write_text(report, encoding="utf-8")
     (base / "next_steps.txt").write_text(
         "Week 1 自动练习已生成 README、.gitignore、ai_prep_tool.py、tests/test_dedup.py 和 run_tests.py。\n"
-        "自测请在 Web UI 点击 r09-w1-self 的“终端”，自己写 README / .gitignore / ai_prep_tool.py。\n"
-        "能解释 README 和 .gitignore 的作用后，再手动点“记录 / 完成”。\n",
+        "自测请在 Web UI 点击 r09-w1-self 的“终端练习”，自己写 README / .gitignore / ai_prep_tool.py。\n"
+        "能解释 README 和 .gitignore 的作用后，再点击“记录并完成”。\n",
         encoding="utf-8",
     )
     return checks
@@ -91,7 +91,7 @@ def main() -> None:
         print(f"{key}:", "OK" if ok else "MISSING")
 
     mark("r09-w1-ex1")
-    print("Week 1 自动练习完成。请继续手动完成 r09-w1-self。")
+    print("Week 1 自动练习完成。请继续在 Web UI 点击“记录并完成”保存 r09-w1-self。")
 
 
 if __name__ == "__main__":

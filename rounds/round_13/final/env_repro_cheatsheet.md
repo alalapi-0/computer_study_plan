@@ -4,7 +4,7 @@
 
 1. 在 Round 13 页面逐周阅读 notes。
 2. 运行三周自动练习，确认产物都写入 `~/cli-lab/round13`。
-3. 用浏览器终端完成三条自测任务，并手动记录完成。
+3. 用浏览器“终端练习”完成三条自测任务，并点击“记录并完成”。
 4. 运行最终综合练习，检查 `final_auto/ai_prep_tool_release` 与 `dist/ai_prep_tool_release.zip`。
 5. 对照本小抄完成 `r13-fin-sheet`，再用自己的话解释最终验收。
 

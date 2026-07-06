@@ -40,9 +40,9 @@ cat > final_notes.md <<'EOF'
 - batch_process.sh：批量处理 input/raw.log，过滤 INFO，替换下划线，并写入 output/clean.log。
 - output/clean.log：清洗后的结果。
 - 这只是自动综合练习。
-- 小抄 r06-fin-sheet 与验收 r06-fin-acc1 仍需用户自己阅读、解释并在 Web UI 手动记录。
+- 小抄 r06-fin-sheet 与验收 r06-fin-acc1 仍需用户自己阅读、解释并在 Web UI 点击“记录并完成”保存记录。
 EOF
 
 mark r06-fin-comp
 
-echo "Round 06 Final 自动练习完成。请继续手动完成 r06-fin-sheet 与 r06-fin-acc1。"
+echo "Round 06 Final 自动练习完成。请继续在 Web UI 点击“记录并完成”保存 r06-fin-sheet 与 r06-fin-acc1。"

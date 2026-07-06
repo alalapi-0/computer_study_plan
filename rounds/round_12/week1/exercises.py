@@ -89,7 +89,7 @@ def run_batch(input_dir: Path, output_dir: Path) -> dict:
             encoding="utf-8",
         )
     (LAB / "next_steps.txt").write_text(
-        "自己在浏览器终端写一个 scan_demo.py，再手动记录 r12-w1-self。\n",
+        "自己在浏览器终端写一个 scan_demo.py，再点击“记录并完成”保存记录 r12-w1-self。\n",
         encoding="utf-8",
     )
     return report

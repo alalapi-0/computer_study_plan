@@ -54,13 +54,13 @@ python3 report.py
 cat > next_steps.txt <<'EOF'
 Week 2 自动练习已生成 stats.py 和 report.py。
 
-自测请在 Web UI 点 r03-w2-self 的“终端”，进入 ~/cli-lab/round3 后自己完成：
+自测请在 Web UI 点 r03-w2-self 的“终端练习”，进入 ~/cli-lab/round3 后自己完成：
 1. 新建 week2_self 目录。
 2. 写一个 count_words.py，使用 list、dict 和函数。
 3. 运行 python3 count_words.py。
-4. 能解释 dict.get(key, 0) 后，手动点“记录 / 完成”。
+4. 能解释 dict.get(key, 0) 后，点击“记录并完成”。
 EOF
 
 mark r03-w2-ex2
 
-echo "Week 2 自动练习完成。请继续手动完成 r03-w2-self。"
+echo "Week 2 自动练习完成。请继续在 Web UI 点击“记录并完成”保存 r03-w2-self。"

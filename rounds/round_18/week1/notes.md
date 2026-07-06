@@ -9,8 +9,8 @@
 1. 在 Web UI 打开本文件，先读完 `ndarray`、`shape`、`dtype`、`axis`、广播、向量化这 6 个词。
 2. 回到任务行，点击“练习：生成 NumPy 数组、axis 与广播示例”。
 3. 运行结果里确认生成了 `array_concepts.json` 和 `static_check_report.json`。
-4. 点击“终端”，在 `~/round18` 下完成下面的自测命令。
-5. 打开“记录”，写下你对 `axis=0` 和 `axis=1` 的一句话解释。
+4. 点击“终端练习”，在 `~/round18` 下完成下面的自测命令。
+5. 打开“记录并完成”弹窗，写下你对 `axis=0` 和 `axis=1` 的一句话解释。
 
 ## 必会概念
 

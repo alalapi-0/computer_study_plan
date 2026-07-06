@@ -121,8 +121,8 @@ def main() -> None:
     (LAB / "week1_report.txt").write_text(result.stdout, encoding="utf-8")
     (LAB / "next_steps.txt").write_text(
         "Week 1 自动练习已生成 cli.py、core.py、io_utils.py 并跑通样例。\n"
-        "自测请在 Web UI 点击 r10-w1-self 的“终端”，自己写一个薄 CLI 调用核心函数。\n"
-        "能解释入口、核心逻辑和 IO 三者职责后，再手动点“记录 / 完成”。\n",
+        "自测请在 Web UI 点击 r10-w1-self 的“终端练习”，自己写一个薄 CLI 调用核心函数。\n"
+        "能解释入口、核心逻辑和 IO 三者职责后，再点击“记录并完成”。\n",
         encoding="utf-8",
     )
 
@@ -131,7 +131,7 @@ def main() -> None:
     print("output:", LAB / "output" / "result.txt")
 
     mark("r10-w1-ex1")
-    print("Week 1 自动练习完成。请继续手动完成 r10-w1-self。")
+    print("Week 1 自动练习完成。请继续在 Web UI 点击“记录并完成”保存 r10-w1-self。")
 
 
 if __name__ == "__main__":

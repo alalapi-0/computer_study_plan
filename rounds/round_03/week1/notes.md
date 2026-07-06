@@ -8,9 +8,9 @@
 
 ## 在 Web UI 中怎么学
 
-1. 点本任务的“打开”阅读本页。
-2. 点“练习：运行第一个 Python 小程序”的“运行”，系统会在 `~/cli-lab/round3/week1_auto` 生成示例文件并运行。
-3. 点自测任务的“终端”，浏览器终端会进入 `~/cli-lab/round3`。
+1. 点本任务的“读教程”阅读本页。
+2. 点“练习：运行第一个 Python 小程序”的“运行脚本”，系统会在 `~/cli-lab/round3/week1_auto` 生成示例文件并运行。
+3. 点自测任务的“终端练习”，浏览器终端会进入 `~/cli-lab/round3`。
 4. 自己新建一个目录，例如：
 
 ```bash
@@ -20,7 +20,7 @@ printf 'def square(x):\n    return x * x\n\nfor i in range(1, 4):\n    print(i, 
 python3 square.py
 ```
 
-5. 能解释输出后，再在自测任务旁点“记录 / 完成”。
+5. 能解释输出后，再在自测任务旁点“记录并完成”。
 
 ## 最小语法地图
 

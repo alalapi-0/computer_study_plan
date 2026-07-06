@@ -140,8 +140,8 @@ def main() -> None:
     (LAB / "week2_report.txt").write_text(result.stdout + "\n" + log_text, encoding="utf-8")
     (LAB / "next_steps.txt").write_text(
         "Week 2 自动练习已生成 config.ini、config.py、log_utils.py，并写出 output/result.txt 与 logs/app.log。\n"
-        "自测请在 Web UI 点击 r10-w2-self 的“终端”，自己读取 config.ini 并初始化 logging。\n"
-        "能解释 fallback、日志级别和日志文件位置后，再手动点“记录 / 完成”。\n",
+        "自测请在 Web UI 点击 r10-w2-self 的“终端练习”，自己读取 config.ini 并初始化 logging。\n"
+        "能解释 fallback、日志级别和日志文件位置后，再点击“记录并完成”。\n",
         encoding="utf-8",
     )
 
@@ -151,7 +151,7 @@ def main() -> None:
     print("log:", LAB / "logs" / "app.log")
 
     mark("r10-w2-ex2")
-    print("Week 2 自动练习完成。请继续手动完成 r10-w2-self。")
+    print("Week 2 自动练习完成。请继续在 Web UI 点击“记录并完成”保存 r10-w2-self。")
 
 
 if __name__ == "__main__":

@@ -84,7 +84,7 @@ def main() -> None:
     }
     (LAB / "command_report.json").write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     (LAB / "next_steps.txt").write_text(
-        "自己在浏览器终端写 subprocess_demo.py，再手动记录 r12-w2-self。\n",
+        "自己在浏览器终端写 subprocess_demo.py，再点击“记录并完成”保存记录 r12-w2-self。\n",
         encoding="utf-8",
     )
     if proc.returncode != 0 or not zip_path.exists():

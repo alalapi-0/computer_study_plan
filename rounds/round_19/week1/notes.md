@@ -15,8 +15,8 @@
 1. 在 Round 19 面板打开本阅读任务。
 2. 点击“练习：生成 X/y 切分与最小分类闭环”，生成 `~/cli-lab/round19/week1_auto/train_test_split`。
 3. 打开运行结果，确认看到 `minimal_classifier.py`、`holdout_split_demo.py` 和 `static_check_report.json`。
-4. 点击“自测：自己写 train_test_split_demo.py”的“终端”，完成下面的手写自测。
-5. 自测通过后手动记录自测任务。
+4. 点击“自测：自己写 train_test_split_demo.py”的“终端练习”，完成下面的手写自测。
+5. 自测通过后点击“记录并完成”保存自测记录。
 
 ## 概念速记
 

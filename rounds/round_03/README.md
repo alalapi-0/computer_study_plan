@@ -28,14 +28,14 @@ round_03/
 ## 使用方式
 
 1. 用 `python3 scripts/progress_server.py` 启动 Web UI。
-2. 在 `progress.html` 打开 Round 03。
-3. 每周先点“打开”阅读 `notes.md`。
-4. 对 `exercise` 类型任务点“运行”，脚本会在 `~/cli-lab/round3/*_auto` 生成示例代码并自动记录对应练习任务。
-5. 对“自测 / 产出 / 验收”任务点“终端”或“记录”，自己在浏览器映射终端中写代码、运行、解释，再手动记录完成。
+2. 打开 `http://127.0.0.1:8777/progress.html?round=round_03`。
+3. 每周先点“读教程”阅读 `notes.md`。
+4. 对 `exercise` 类型任务点“运行脚本”，脚本会在 `~/cli-lab/round3/*_auto` 生成示例代码并自动记录对应练习任务。
+5. 对“自测 / 产出 / 验收”任务点“终端练习”或“记录并完成”，自己在浏览器映射终端中写代码、运行、解释，再点击“记录并完成”。
 
 ## 终端边界
 
-- Web UI 练习终端映射到 `~/cli-lab`，点任务行“终端”会自动切到 `~/cli-lab/round3`。
+- Web UI “终端练习”映射到 `~/cli-lab`，点任务行“终端练习”会自动切到 `~/cli-lab/round3`。
 - 可以在终端里运行 `python3 xxx.py`、`cat`、`grep`、`wc`、`ls` 等白名单命令。
 - 命令历史会写入 `records/terminal/commands.jsonl`，但“执行过命令”不等于“任务完成”。
-- 自测与验收必须由你理解后手动点“完成 / 记录”，脚本不会替你打卡。
+- 自测与验收必须由你理解后点击“记录并完成”，脚本不会替你打卡。

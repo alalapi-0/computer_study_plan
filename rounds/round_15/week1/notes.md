@@ -3,10 +3,10 @@
 ## Web UI 学习路径
 
 1. 在 Round 15 页面阅读本文。
-2. 点击“练习：生成 FastAPI 读接口骨架”的“运行”按钮。
+2. 点击“练习：生成 FastAPI 读接口骨架”的“运行脚本”按钮。
 3. 在运行结果里确认生成了 `app/main.py`、`route_table.json` 和 `static_check_report.json`。
-4. 点击“自测：自己写 mini_api_routes.py”的“终端”按钮，手敲下面的自测命令。
-5. 自测完成后，手动点击“完成”记录 `r15-w1-self`。
+4. 点击“自测：自己写 mini_api_routes.py”的“终端练习”按钮，手敲下面的自测命令。
+5. 自测完成后，点击“记录并完成”记录 `r15-w1-self`。
 
 ## 本周要建立的直觉
 

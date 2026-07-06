@@ -118,8 +118,8 @@ def main() -> None:
         "\n".join(
             [
                 "Week 2 自动练习已生成 input/labels.txt、output/result.txt 和 logs/week2.log。",
-                "自测请在 Web UI 点击 r07-w2-self 的“终端”，自己写 cli_logger.py 并观察 --help 与日志文件。",
-                "能解释 argparse 参数、默认值、store_true 和 logging 文件输出后，再手动点“记录 / 完成”。",
+                "自测请在 Web UI 点击 r07-w2-self 的“终端练习”，自己写 cli_logger.py 并观察 --help 与日志文件。",
+                "能解释 argparse 参数、默认值、store_true 和 logging 文件输出后，再点击“记录并完成”。",
             ]
         )
         + "\n",
@@ -133,7 +133,7 @@ def main() -> None:
     print("log-file:", DEFAULT_LOG)
 
     mark("r07-w2-ex2")
-    print("Week 2 自动练习完成。请继续手动完成 r07-w2-self。")
+    print("Week 2 自动练习完成。请继续在 Web UI 点击“记录并完成”保存 r07-w2-self。")
 
 
 if __name__ == "__main__":

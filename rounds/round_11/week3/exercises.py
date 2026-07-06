@@ -144,8 +144,8 @@ def main() -> None:
     (LAB / "persistence_report.txt").write_text(report, encoding="utf-8")
     (LAB / "next_steps.txt").write_text(
         "Week 3 自动练习已生成 db.py、ai_prep_tool.py、check_runs.py，并验证每次运行都会写入 runs.db。\n"
-        "自测请在 Web UI 点击 r11-w3-self 的“终端”，自己把 insert_run 接入一个小脚本。\n"
-        "能解释一条 runs 记录代表一次运行后，再手动点“记录 / 完成”。\n",
+        "自测请在 Web UI 点击 r11-w3-self 的“终端练习”，自己把 insert_run 接入一个小脚本。\n"
+        "能解释一条 runs 记录代表一次运行后，再点击“记录并完成”。\n",
         encoding="utf-8",
     )
 
@@ -155,7 +155,7 @@ def main() -> None:
     print(listing.stdout.strip())
 
     mark("r11-w3-ex3")
-    print("Week 3 自动练习完成。请继续手动完成 r11-w3-self。")
+    print("Week 3 自动练习完成。请继续在 Web UI 点击“记录并完成”保存 r11-w3-self。")
 
 
 if __name__ == "__main__":

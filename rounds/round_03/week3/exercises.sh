@@ -35,13 +35,13 @@ python3 complexity_demo.py
 cat > next_steps.txt <<'EOF'
 Week 3 自动练习已生成 complexity_demo.py。
 
-自测请在 Web UI 点 r03-w3-self 的“终端”，进入 ~/cli-lab/round3 后自己完成：
+自测请在 Web UI 点 r03-w3-self 的“终端练习”，进入 ~/cli-lab/round3 后自己完成：
 1. 新建 week3_self 目录。
 2. 写一个 growth.py，打印 n、n、n*n。
 3. 运行 python3 growth.py。
-4. 能解释 O(n) 与 O(n^2) 后，手动点“记录 / 完成”。
+4. 能解释 O(n) 与 O(n^2) 后，点击“记录并完成”。
 EOF
 
 mark r03-w3-ex3
 
-echo "Week 3 自动练习完成。请继续手动完成 r03-w3-self。"
+echo "Week 3 自动练习完成。请继续在 Web UI 点击“记录并完成”保存 r03-w3-self。"

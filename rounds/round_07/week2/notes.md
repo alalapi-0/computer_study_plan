@@ -7,14 +7,14 @@
 
 ## Web UI 学习路径
 
-1. 先点击本文件“阅读”，理解参数和日志分别解决什么问题。
-2. 点击 `r07-w2-ex2` 的“运行”。脚本会在 `~/cli-lab/round7/week2_auto` 生成：
+1. 先点击本文件“读教程”，理解参数和日志分别解决什么问题。
+2. 点击 `r07-w2-ex2` 的“运行脚本”。脚本会在 `~/cli-lab/round7/week2_auto` 生成：
    - `input/labels.txt`
    - `output/result.txt`
    - `logs/week2.log`
    - `next_steps.txt`
 3. 运行输出里应能看到 `cli-output`、`processed`、`dedup` 和 `log-file`。
-4. 点击 `r07-w2-self` 的“终端”，自己写一个带参数和日志的小脚本。
+4. 点击 `r07-w2-self` 的“终端练习”，自己写一个带参数和日志的小脚本。
 
 ## 参数与日志的分工
 
@@ -39,7 +39,7 @@ cat logs/run.log
 python3 cli_logger.py --help
 ```
 
-能说明 `--input`、`--output`、默认值和日志文件后，回到任务行手动点“记录 / 完成”。
+能说明 `--input`、`--output`、默认值和日志文件后，回到任务行点击“记录并完成”。
 
 ## 本周自查
 

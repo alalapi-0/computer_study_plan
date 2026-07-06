@@ -62,8 +62,8 @@ def main() -> None:
     (LAB / "schema_report.txt").write_text("\n".join(report) + "\n", encoding="utf-8")
     (LAB / "next_steps.txt").write_text(
         "Week 1 自动练习已创建 runs.db、runs 表并插入第一条参数化记录。\n"
-        "自测请在 Web UI 点击 r11-w1-self 的“终端”，自己写 sqlite3 建表和插入脚本。\n"
-        "能解释 ? 占位符和 conn.commit() 后，再手动点“记录 / 完成”。\n",
+        "自测请在 Web UI 点击 r11-w1-self 的“终端练习”，自己写 sqlite3 建表和插入脚本。\n"
+        "能解释 ? 占位符和 conn.commit() 后，再点击“记录并完成”。\n",
         encoding="utf-8",
     )
 
@@ -72,7 +72,7 @@ def main() -> None:
     print("row_count:", len(rows))
 
     mark("r11-w1-ex1")
-    print("Week 1 自动练习完成。请继续手动完成 r11-w1-self。")
+    print("Week 1 自动练习完成。请继续在 Web UI 点击“记录并完成”保存 r11-w1-self。")
 
 
 if __name__ == "__main__":

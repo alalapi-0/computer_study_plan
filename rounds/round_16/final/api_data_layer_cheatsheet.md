@@ -6,7 +6,7 @@
 2. Week 2：阅读资料，运行“GET /runs 与上传接口”。
 3. Week 3：阅读资料，运行“错误合同与 TestClient 示例”。
 4. Final：运行“完整 API/Data Layer 项目骨架”。
-5. 每个自测用页面终端完成后，再点击“完成”记录。
+5. 每个自测用页面“终端练习”完成后，再点击“记录并完成”记录。
 
 ## 一条请求的主链
 
@@ -42,6 +42,6 @@ HTTP request
 ## 最小通过标准
 
 - 能在 Web UI 中打开三周笔记和本小抄。
-- 四个自动练习都能通过“运行”按钮生成 `static_check_report.json` 或 `round16_final_summary.json`。
-- 自测能在浏览器终端完成，不需要离开页面。
+- 四个自动练习都能通过“运行脚本”按钮生成 `static_check_report.json` 或 `round16_final_summary.json`。
+- 自测能在浏览器“终端练习”完成，不需要离开页面。
 - 能解释 API 层、核心逻辑层、数据层各自职责。

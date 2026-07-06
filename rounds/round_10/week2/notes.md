@@ -10,7 +10,7 @@
 1. 打开本文件，先确认配置和日志分别解决什么问题：
    - 配置：用户不改代码也能调参数。
    - 日志：程序出问题时能追踪发生过什么。
-2. 点击 `r10-w2-ex2` 的“运行”。脚本会在 `~/cli-lab/round10/week2_auto/ai_prep_tool` 生成：
+2. 点击 `r10-w2-ex2` 的“运行脚本”。脚本会在 `~/cli-lab/round10/week2_auto/ai_prep_tool` 生成：
    - `config.ini`
    - `config.py`
    - `log_utils.py`
@@ -19,7 +19,7 @@
    - `output/result.txt`
    - `logs/app.log`
 3. 运行结果会验证 `min_length = 3` 生效，短记录被过滤，日志里能看到 `filter_records` 和 `dedup_records`。
-4. 点击 `r10-w2-self` 的“终端”，自己读取一个 `config.ini` 并初始化日志。
+4. 点击 `r10-w2-self` 的“终端练习”，自己读取一个 `config.ini` 并初始化日志。
 
 ## 配置最小规则
 
@@ -45,7 +45,7 @@ printf 'import configparser\n\nconfig = configparser.ConfigParser()\nconfig.read
 python3 read_config.py
 ```
 
-看到 `2` 和 `logs` 后，回到任务行手动点“记录 / 完成”。
+看到 `2` 和 `logs` 后，回到任务行点击“记录并完成”。
 
 ## 本周自查
 

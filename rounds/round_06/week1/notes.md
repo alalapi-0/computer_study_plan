@@ -7,8 +7,8 @@
 
 ## 在 Web UI 中怎么学
 
-1. 点“练习：find/xargs/sed/awk 日志清洗”的“运行”，查看自动生成的 `log_clean_demo.sh`、`logs/` 和 `reports/`。
-2. 点“自测：自己写 find_text_report.sh”的“终端”，浏览器终端会进入 `~/cli-lab/round6`。
+1. 点“练习：find/xargs/sed/awk 日志清洗”的“运行脚本”，查看自动生成的 `log_clean_demo.sh`、`logs/` 和 `reports/`。
+2. 点“自测：自己写 find_text_report.sh”的“终端练习”，浏览器终端会进入 `~/cli-lab/round6`。
 3. 自己写一个批量统计脚本：
 
 ```bash
@@ -21,7 +21,7 @@ chmod +x find_text_report.sh
 bash find_text_report.sh
 ```
 
-4. 能解释为什么 `-print0 | xargs -0` 更安全后，再手动记录自测完成。
+4. 能解释为什么 `-print0 | xargs -0` 更安全后，再点击“记录并完成”保存自测记录。
 
 ## 命令直觉
 

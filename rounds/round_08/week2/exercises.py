@@ -64,8 +64,8 @@ def main() -> None:
     (LAB / "runs_report.txt").write_text(report, encoding="utf-8")
     (LAB / "next_steps.txt").write_text(
         "Week 2 自动练习已生成 runs.db 和 runs_report.txt。\n"
-        "自测请在 Web UI 点击 r08-w2-self 的“终端”，自己写 runs_db.py 完成建表、插入、查询。\n"
-        "能解释参数化 SQL、commit 和数据库存放位置后，再手动点“记录 / 完成”。\n",
+        "自测请在 Web UI 点击 r08-w2-self 的“终端练习”，自己写 runs_db.py 完成建表、插入、查询。\n"
+        "能解释参数化 SQL、commit 和数据库存放位置后，再点击“记录并完成”。\n",
         encoding="utf-8",
     )
 
@@ -74,7 +74,7 @@ def main() -> None:
     print("latest-run:", rows[0])
 
     mark("r08-w2-ex2")
-    print("Week 2 自动练习完成。请继续手动完成 r08-w2-self。")
+    print("Week 2 自动练习完成。请继续在 Web UI 点击“记录并完成”保存 r08-w2-self。")
 
 
 if __name__ == "__main__":

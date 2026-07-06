@@ -12,22 +12,22 @@
    ```bash
    python3 scripts/progress_server.py
    ```
-2. 打开 `http://127.0.0.1:8765/progress.html?round=round_12`。
+2. 打开 `http://127.0.0.1:8777/progress.html?round=round_12`。
 3. 每周按顺序完成三件事：
-   - 点“打开 / 阅读”查看 notes。
-   - 点“运行”执行对应 `exercises.py`，它会在 `~/cli-lab/round12` 下生成可检查产物。
-   - 点“终端”进入浏览器映射终端，按 notes 的自测命令自己再写一遍最小脚本。
+   - 点“读教程”查看 notes。
+   - 点“运行脚本”执行对应 `exercises.py`，它会在 `~/cli-lab/round12` 下生成可检查产物。
+   - 点“终端练习”进入浏览器映射终端，按 notes 的自测命令自己再写一遍最小脚本。
 4. 最终验收：
    - 运行 `final/comprehensive_exercise.py`。
    - 阅读并补全 `final/pipeline_automation_cheatsheet.md`。
-   - 用“记录 / 完成”手动记录小抄和口头解释类任务。
+   - 用“记录并完成”点击“记录并完成”保存小抄和口头解释类任务。
 
 ## 安全边界
 
 - 自动脚本只写入 `~/cli-lab/round12`，不写入仓库练习产物。
 - 本轮会生成 `cron` / `nohup` / `tmux` 示例文本，但不会修改系统 crontab，也不会启动真实后台任务。
 - 浏览器终端仍然只允许安全白名单命令；`ssh`、`scp`、`rsync`、网络命令和高风险系统操作会被拦截。
-- 自动脚本只标记对应练习任务：`r12-w1-ex1`、`r12-w2-ex2`、`r12-w3-ex3`、`r12-fin-comp`。自测、小抄、验收需要用户自己完成后手动记录。
+- 自动脚本只标记对应练习任务：`r12-w1-ex1`、`r12-w2-ex2`、`r12-w3-ex3`、`r12-fin-comp`。自测、小抄、验收需要用户自己完成后点击“记录并完成”保存记录。
 
 ## 目录结构
 

@@ -90,8 +90,8 @@ def main() -> None:
     report = run_tests(LAB)
     (LAB / "next_steps.txt").write_text(
         "Week 3 自动练习已生成 ai_prep_tool.py、tests/test_dedup.py 和 run_tests.py。\n"
-        "自测请在 Web UI 点击 r09-w3-self 的“终端”，自己写 test_dedup.py 并运行。\n"
-        "能解释纯函数、边界样例和 pytest 风格命名后，再手动点“记录 / 完成”。\n",
+        "自测请在 Web UI 点击 r09-w3-self 的“终端练习”，自己写 test_dedup.py 并运行。\n"
+        "能解释纯函数、边界样例和 pytest 风格命名后，再点击“记录并完成”。\n",
         encoding="utf-8",
     )
 
@@ -100,7 +100,7 @@ def main() -> None:
     print("test-file:", LAB / "tests" / "test_dedup.py")
 
     mark("r09-w3-ex3")
-    print("Week 3 自动练习完成。请继续手动完成 r09-w3-self。")
+    print("Week 3 自动练习完成。请继续在 Web UI 点击“记录并完成”保存 r09-w3-self。")
 
 
 if __name__ == "__main__":

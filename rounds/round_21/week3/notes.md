@@ -4,8 +4,8 @@
 
 1. 先复盘 Week 1 的 token ids 和 Week 2 的 embedding。
 2. 点“练习：生成传统文本特征与子词对照示例”，生成本周产物。
-3. 点“终端”，运行短命令 smoke check。
-4. 能比较 TF-IDF 与 embedding 后，手动完成本周自测记录。
+3. 点“终端练习”，运行短命令 smoke check。
+4. 能比较 TF-IDF 与 embedding 后，点击“记录并完成”保存本周自测记录。
 
 ## 本周核心直觉
 
@@ -37,7 +37,7 @@ text -> tokens -> counts / TF-IDF vector -> linear classifier
 
 ## 自动练习产物
 
-点“运行”后会生成：
+点“运行脚本”后会生成：
 
 - `~/cli-lab/round21/week3_auto/text_features/traditional_text_features.py`
 - `~/cli-lab/round21/week3_auto/text_features/subword_compare.py`
@@ -47,7 +47,7 @@ text -> tokens -> counts / TF-IDF vector -> linear classifier
 
 ## 浏览器终端自测
 
-在本周练习运行成功后，打开“终端”，逐行输入：
+在本周练习运行成功后，点击“终端练习”，逐行输入：
 
 ```bash
 cd ~/round21/week3_auto/text_features

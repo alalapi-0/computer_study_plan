@@ -295,3 +295,25 @@ open http://127.0.0.1:8777/progress.html
 - 桌面与 390px 移动端浏览器回检确认：`details.open=false` 时 `.secondary-tools-body` 为 `display:none`，存档区没有可见尺寸。
 - 页面无横向溢出；任务清单说明已显示 `读教程`。
 - 终端自动联动相关文案和终端记录文档已同步当前完成流程。
+
+## 17. 2026-07-06 TASK-RR-66 第十二轮项目用户视角评测与 Round 指引统一
+
+状态：done
+
+本轮评测报告：
+
+- `docs/reports/PROJECT_USER_REVIEW_2026_07_06_ROUND12.md`
+
+本轮发现并修复：
+
+- README 仓库结构把 `rounds/round_00/` 写成“已完成”，已改为“已展开并接入 Web UI”，避免误读为用户已经学完。
+- `rounds/round_00/README.md` 和 Round 00 最终脚本仍引导静态 `progress.html` / `python3 -m http.server 8000`，已改为 `scripts/progress_server.py` 与 `http://127.0.0.1:8777/progress.html?round=round_00`。
+- 多个 Round README 仍使用 `8765`、`8778`、`8787` 或相对 `progress.html?round=...`，已统一到当前 8777 Web UI 入口。
+- Round README、notes、exercise 输出和 final 小抄中的旧按钮名已统一为 `读教程`、`运行脚本`、`终端练习`、`记录并完成`。
+- `docs/DECISIONS.md` 和 `docs/AUTO_ADVANCE_PROTOCOL.md` 已同步当前 Web UI / 本地 API / JSONL 记录事实与必读文档清单。
+
+验证摘要：
+
+- 文本回扫确认当前 Round 00–21 入口不再残留旧端口、静态 8000 看板入口或旧按钮组合。
+- Shell 脚本语法检查覆盖 Round 00–06 仍涉及的 `.sh` 入口。
+- 标准验证与浏览器回检见本轮提交记录。

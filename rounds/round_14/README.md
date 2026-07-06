@@ -1,6 +1,6 @@
 # Round 14 · HTTP 与 API 设计基础
 
-Round 14 的目标是把“HTTP 请求/响应、方法、状态码、JSON 合同、REST 路由草图”讲清楚，并为下一轮 FastAPI 做准备。用户应当可以只通过 Web UI 完成阅读、运行练习脚本、浏览器终端自测、手动记录小抄和最终验收。
+Round 14 的目标是把“HTTP 请求/响应、方法、状态码、JSON 合同、REST 路由草图”讲清楚，并为下一轮 FastAPI 做准备。用户应当可以只通过 Web UI 完成阅读、运行练习脚本、浏览器终端自测、点击“记录并完成”保存小抄和最终验收。
 
 > **仓库根**：`~/PycharmProjects/computer_study_plan`  
 > **练习沙盒**：`~/cli-lab/round14`  
@@ -9,10 +9,10 @@ Round 14 的目标是把“HTTP 请求/响应、方法、状态码、JSON 合同
 ## Web UI 完成路径
 
 1. 启动本地服务：`python3 scripts/progress_server.py`。
-2. 打开 `progress.html?round=round_14`。
-3. 逐周点击“阅读”打开 notes，点击“运行”生成标准沙盒产物。
-4. 对自测任务点击“终端”，在浏览器终端中手敲最小命令。
-5. 最后运行综合练习，阅读并手动完成 `http_api_cheatsheet.md` 与验收解释。
+2. 打开 `http://127.0.0.1:8777/progress.html?round=round_14`。
+3. 逐周点击“读教程”打开 notes，点击“运行脚本”生成标准沙盒产物。
+4. 对自测任务点击“终端练习”，在浏览器终端中手敲最小命令。
+5. 最后运行综合练习，阅读并点击“记录并完成”保存 `http_api_cheatsheet.md` 与验收解释。
 
 ## 本轮安全边界
 

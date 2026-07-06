@@ -3,10 +3,10 @@
 ## Web UI 学习路径
 
 1. 在 Round 15 页面阅读本文。
-2. 点击“练习：生成请求体和响应模型骨架”的“运行”按钮。
+2. 点击“练习：生成请求体和响应模型骨架”的“运行脚本”按钮。
 3. 在结果里确认生成了 `app/schemas.py`、`app/main.py`、`samples/request_run.json` 和 `model_check_report.json`。
-4. 点击“自测：自己写 request_run.json”的“终端”按钮，手敲 JSON 校验命令。
-5. 自测完成后，手动点击“完成”记录 `r15-w2-self`。
+4. 点击“自测：自己写 request_run.json”的“终端练习”按钮，手敲 JSON 校验命令。
+5. 自测完成后，点击“记录并完成”记录 `r15-w2-self`。
 
 ## 本周要建立的直觉
 

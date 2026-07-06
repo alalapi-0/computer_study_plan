@@ -5,7 +5,7 @@
 1. 在 Round 20 面板完成三周阅读。
 2. 依次运行三周自动练习，检查 `~/cli-lab/round20/week*_auto` 里的 `static_check_report.json`。
 3. 运行最终综合练习，检查 `~/cli-lab/round20/final_auto/pytorch_intro_lab/final_static_check_report.json`。
-4. 手动完成本小抄任务和最终验收任务。
+4. 点击“记录并完成”保存本小抄任务和最终验收任务。
 
 ## 一句话主线
 

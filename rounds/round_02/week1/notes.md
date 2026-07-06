@@ -8,9 +8,9 @@
 
 ## 在 Web UI 里怎么学
 
-1. 阅读本文件后，点击“练习：覆盖与追加 / 去重统计 / 日志过滤流水线”的运行按钮。
+1. 阅读本文件后，点击“练习：覆盖与追加 / 去重统计 / 日志过滤流水线”的“运行脚本”按钮。
 2. 脚本会在 `~/cli-lab/round2/week1/script_lab` 里生成 `fruits.txt`、`animals.txt`、`app.log` 等材料。
-3. 自测时打开“练习终端”，进入 `~/cli-lab/round2/week1/self_check`，自己造一个小日志并统计 `error` 行数。
+3. 自测时打开“终端练习”，进入 `~/cli-lab/round2/week1/self_check`，自己造一个小日志并统计 `error` 行数。
 4. 能解释每个命令在流水线里做什么后，再在 Web UI 中手动标记自测任务。
 
 ## 核心概念速查

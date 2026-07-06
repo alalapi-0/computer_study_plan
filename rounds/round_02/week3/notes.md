@@ -8,9 +8,9 @@
 
 ## 在 Web UI 里怎么学
 
-1. 阅读本文件后，点击 Week 3 的三个练习运行按钮。
+1. 阅读本文件后，点击 Week 3 的三个“运行脚本”按钮。
 2. 脚本会在 `~/cli-lab/round2/week3/git_lab_auto` 中创建一个可重复生成的本地 Git 仓库。
-3. 自测时打开“练习终端”，在 `~/cli-lab/round2/week3/git_lab_manual` 中手敲最小 Git 闭环。
+3. 自测时打开“终端练习”，在 `~/cli-lab/round2/week3/git_lab_manual` 中手敲最小 Git 闭环。
 4. 能解释 `git status` 和 `git log --oneline` 后，再在 Web UI 中手动标记自测任务。
 
 ## 最小闭环命令

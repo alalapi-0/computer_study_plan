@@ -8,8 +8,8 @@
 
 ## 在 Web UI 中怎么学
 
-1. 点“练习：DFS、BFS 与回溯最小例子”的“运行”，查看自动生成的 `graph_backtracking_demo.py`。
-2. 点“自测：自己写 bfs_levels.py”的“终端”，在 `~/cli-lab/round5` 下完成自测脚本。
+1. 点“练习：DFS、BFS 与回溯最小例子”的“运行脚本”，查看自动生成的 `graph_backtracking_demo.py`。
+2. 点“自测：自己写 bfs_levels.py”的“终端练习”，在 `~/cli-lab/round5` 下完成自测脚本。
 3. 推荐自测命令：
 
 ```bash
@@ -19,7 +19,7 @@ printf 'from collections import deque\n\ngraph = {\"A\": [\"B\", \"C\"], \"B\": 
 python3 bfs_levels.py
 ```
 
-4. 能解释 DFS 和 BFS 的访问顺序差异后，再手动记录自测完成。
+4. 能解释 DFS 和 BFS 的访问顺序差异后，再点击“记录并完成”保存自测记录。
 
 ## 模式直觉
 

@@ -88,7 +88,7 @@ def write_project() -> dict:
     report = json.loads((LAB / "release_report.json").read_text(encoding="utf-8"))
     report.update({"check_returncode": proc.returncode, "stdout": proc.stdout.strip(), "sandbox": str(LAB)})
     (LAB / "next_steps.txt").write_text(
-        "在浏览器终端自己写一个最小 Dockerfile，并手动记录 r13-w3-self；不要执行 docker build。\n",
+        "在浏览器终端自己写一个最小 Dockerfile，并点击“记录并完成”保存记录 r13-w3-self；不要执行 docker build。\n",
         encoding="utf-8",
     )
     return report

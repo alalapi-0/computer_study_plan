@@ -3,10 +3,10 @@
 ## Web UI 学习路径
 
 1. 在 Round 15 页面阅读本文。
-2. 点击“练习：生成文档示例与 OpenAPI 预览”的“运行”按钮。
+2. 点击“练习：生成文档示例与 OpenAPI 预览”的“运行脚本”按钮。
 3. 在结果里确认生成了 `openapi_preview.json`、`docs_examples.json` 和 `docs_quality_report.json`。
-4. 点击“自测：自己写 docs_example.json”的“终端”按钮，手敲 JSON 示例。
-5. 自测完成后，手动点击“完成”记录 `r15-w3-self`。
+4. 点击“自测：自己写 docs_example.json”的“终端练习”按钮，手敲 JSON 示例。
+5. 自测完成后，点击“记录并完成”记录 `r15-w3-self`。
 
 ## 为什么要写示例数据
 

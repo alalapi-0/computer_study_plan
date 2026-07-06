@@ -10,7 +10,7 @@
 2. 点击“练习：生成读、清洗、统计、导出分析流程”。
 3. 在运行结果中确认生成 `messy_sample_data.csv`、`data_analysis.py`、`analysis_contract.json` 和 `static_check_report.json`。
 4. 用终端完成自测：手写一个不依赖 pandas 的最小清洗统计脚本。
-5. 在“记录”里写下你的分析流程五步：load、explore、clean、analyze、export。
+5. 在“记录并完成”弹窗里写下你的分析流程五步：load、explore、clean、analyze、export。
 
 ## 分析流程
 

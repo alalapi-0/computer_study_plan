@@ -8,8 +8,8 @@
 
 ## 在 Web UI 中怎么学
 
-1. 点“练习：list 遍历、过滤与统计”的“运行”，查看自动生成的 `list_demo.py`。
-2. 点“自测：自己写 scores.py”的“终端”，浏览器终端会进入 `~/cli-lab/round4`。
+1. 点“练习：list 遍历、过滤与统计”的“运行脚本”，查看自动生成的 `list_demo.py`。
+2. 点“自测：自己写 scores.py”的“终端练习”，浏览器终端会进入 `~/cli-lab/round4`。
 3. 自己写一个小脚本：
 
 ```bash
@@ -19,7 +19,7 @@ printf 'scores = [82, 57, 91, 73, 45]\npassed = []\nfor score in scores:\n    if
 python3 scores.py
 ```
 
-4. 能解释 `append`、`len`、索引访问、过滤条件后，再手动记录自测完成。
+4. 能解释 `append`、`len`、索引访问、过滤条件后，再点击“记录并完成”保存自测记录。
 
 ## list 直觉
 

@@ -7,14 +7,14 @@
 
 ## Web UI 学习路径
 
-1. 先点击本文件“阅读”，看清最终工具的函数边界。
-2. 点击 `r07-w3-ex3` 的“运行”。脚本会在 `~/cli-lab/round7/week3_auto` 生成：
+1. 先点击本文件“读教程”，看清最终工具的函数边界。
+2. 点击 `r07-w3-ex3` 的“运行脚本”。脚本会在 `~/cli-lab/round7/week3_auto` 生成：
    - `input/records.jsonl`
    - `output/processed.jsonl`
    - `output/summary.json`
    - `next_steps.txt`
 3. 运行输出里应能看到 `deduped: 4 -> 3` 和 `label-stats`。
-4. 点击 `r07-w3-self` 的“终端”，自己写一个 `mini_prep_tool.py`，完成读取、去重、统计、输出。
+4. 点击 `r07-w3-self` 的“终端练习”，自己写一个 `mini_prep_tool.py`，完成读取、去重、统计、输出。
 
 ## 函数拆分建议
 
@@ -41,7 +41,7 @@ python3 mini_prep_tool.py
 cat processed.jsonl
 ```
 
-能解释每个函数的输入输出后，回到任务行手动点“记录 / 完成”。
+能解释每个函数的输入输出后，回到任务行点击“记录并完成”。
 
 ## 本周自查
 

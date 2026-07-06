@@ -57,4 +57,4 @@ cat cron_examples.txt
 
 mark r06-w3-ex3
 
-echo "Week 3 自动练习完成。请继续手动完成 r06-w3-self。"
+echo "Week 3 自动练习完成。请继续在 Web UI 点击“记录并完成”保存 r06-w3-self。"

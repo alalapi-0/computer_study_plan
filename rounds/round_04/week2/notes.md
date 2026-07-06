@@ -8,8 +8,8 @@
 
 ## 在 Web UI 中怎么学
 
-1. 点“练习：stack 与 queue 出入顺序”的“运行”，查看自动生成的 `stack_queue_demo.py`。
-2. 点“自测：自己写 browser_history.py”的“终端”，在 `~/cli-lab/round4` 下完成自测脚本。
+1. 点“练习：stack 与 queue 出入顺序”的“运行脚本”，查看自动生成的 `stack_queue_demo.py`。
+2. 点“自测：自己写 browser_history.py”的“终端练习”，在 `~/cli-lab/round4` 下完成自测脚本。
 3. 推荐自测命令：
 
 ```bash
@@ -19,7 +19,7 @@ printf 'from collections import deque\n\nback_stack = []\nback_stack.append(\"ho
 python3 browser_history.py
 ```
 
-4. 能解释为什么 back 用栈、排队任务用队列后，再手动记录自测完成。
+4. 能解释为什么 back 用栈、排队任务用队列后，再点击“记录并完成”保存自测记录。
 
 ## 栈与队列的场景
 

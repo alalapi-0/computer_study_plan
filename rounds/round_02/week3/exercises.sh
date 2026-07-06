@@ -62,10 +62,10 @@ mark r02-w3-ex9
 
 cat > next_steps.txt <<'EOF'
 Week 3 下一步：
-- 在 Web UI 练习终端中进入 ~/cli-lab/round2/week3/git_lab_manual。
+- 在 Web UI “终端练习”中进入 ~/cli-lab/round2/week3/git_lab_manual。
 - 自己完成 git init / status / add / commit / log。
-- 确认能解释 status 与 log 后，再手动标记 r02-w3-self。
+- 确认能解释 status 与 log 后，再点击“记录并完成”保存 r02-w3-self。
 EOF
 
 echo "脚本已完成 r02-w3-ex7 / r02-w3-ex8 / r02-w3-ex9。"
-echo "阅读任务与自测任务请在 Web UI 中确认后手动完成。"
+echo "阅读任务与自测任务请在 Web UI 中点击“记录并完成”保存记录。"

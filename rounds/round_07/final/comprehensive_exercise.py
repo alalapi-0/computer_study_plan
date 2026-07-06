@@ -147,7 +147,7 @@ def main() -> None:
     print("- log:", DEFAULT_LOG)
 
     mark("r07-fin-comp")
-    print("Round 07 Final 自动练习完成。请继续手动完成 r07-fin-sheet 与 r07-fin-acc1。")
+    print("Round 07 Final 自动练习完成。请继续在 Web UI 点击“记录并完成”保存 r07-fin-sheet 与 r07-fin-acc1。")
 
 
 if __name__ == "__main__":

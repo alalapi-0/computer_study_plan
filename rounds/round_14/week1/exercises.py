@@ -69,7 +69,7 @@ def write_report() -> dict:
     }
     (LAB / "http_report.json").write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     (LAB / "next_steps.txt").write_text(
-        "自己在浏览器终端写 method_quiz.txt，解释 GET/POST/404/500，再手动记录 r14-w1-self。\n",
+        "自己在浏览器终端写 method_quiz.txt，解释 GET/POST/404/500，再点击“记录并完成”保存记录 r14-w1-self。\n",
         encoding="utf-8",
     )
     return report

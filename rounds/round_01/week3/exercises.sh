@@ -42,4 +42,4 @@ mark r01-w3-ex3
 
 echo
 echo "脚本已完成练习任务 r01-w3-ex3。"
-echo "下一步：在 Web UI 的练习终端中手动执行 less study_log.txt 和 man ls；浏览器会直接显示输出，确认理解后再标记 r01-w3-self。"
+echo "下一步：在 Web UI 的“终端练习”中手动执行 less study_log.txt 和 man ls；浏览器会直接显示输出，确认理解后点击“记录并完成”保存 r01-w3-self。"

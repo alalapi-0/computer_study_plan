@@ -76,8 +76,8 @@ def main() -> None:
         "\n".join(
             [
                 "Week 3 自动练习已生成 records.jsonl、processed.jsonl 和 summary.json。",
-                "自测请在 Web UI 点击 r07-w3-self 的“终端”，自己写 mini_prep_tool.py。",
-                "能解释读取、去重 key、Counter 统计、输出文件后，再手动点“记录 / 完成”。",
+                "自测请在 Web UI 点击 r07-w3-self 的“终端练习”，自己写 mini_prep_tool.py。",
+                "能解释读取、去重 key、Counter 统计、输出文件后，再点击“记录并完成”。",
             ]
         )
         + "\n",
@@ -90,7 +90,7 @@ def main() -> None:
     print("summary:", report_file)
 
     mark("r07-w3-ex3")
-    print("Week 3 自动练习完成。请继续手动完成 r07-w3-self。")
+    print("Week 3 自动练习完成。请继续在 Web UI 点击“记录并完成”保存 r07-w3-self。")
 
 
 if __name__ == "__main__":

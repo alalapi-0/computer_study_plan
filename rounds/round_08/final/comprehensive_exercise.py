@@ -103,7 +103,7 @@ def main() -> None:
     print("- summary:", LAB / "round08_summary.json")
 
     mark("r08-fin-comp")
-    print("Round 08 Final 自动练习完成。请继续手动完成 r08-fin-sheet 与 r08-fin-acc1。")
+    print("Round 08 Final 自动练习完成。请继续在 Web UI 点击“记录并完成”保存 r08-fin-sheet 与 r08-fin-acc1。")
 
 
 if __name__ == "__main__":

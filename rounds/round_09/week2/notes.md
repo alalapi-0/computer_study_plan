@@ -7,15 +7,15 @@
 
 ## Web UI 学习路径
 
-1. 先点击本文件“打开”，理解 feature / hotfix 都是在本地沙盒仓库中排练。
-2. 点击 `r09-w2-ex2` 的“运行”。脚本会在 `~/cli-lab/round9/week2_auto/workflow_demo` 自动完成：
+1. 先点击本文件“读教程”，理解 feature / hotfix 都是在本地沙盒仓库中排练。
+2. 点击 `r09-w2-ex2` 的“运行脚本”。脚本会在 `~/cli-lab/round9/week2_auto/workflow_demo` 自动完成：
    - `git init`
    - 配置本地 user name / email
    - `main` 初始提交
    - `feature/improve-readme` 分支提交并合并
    - `hotfix/empty-input` 分支提交并合并
    - 输出 `git_log.txt`
-3. 点击 `r09-w2-self` 的“终端”，自己在 `~/cli-lab/round9` 里建一个小仓库，完整走一次分支流程。
+3. 点击 `r09-w2-self` 的“终端练习”，自己在 `~/cli-lab/round9` 里建一个小仓库，完整走一次分支流程。
 
 ## 安全边界
 
@@ -47,7 +47,7 @@ git branch -d feature/readme-note
 git log --oneline
 ```
 
-能解释为什么先开分支再合并后，回到任务行手动点“记录 / 完成”。
+能解释为什么先开分支再合并后，回到任务行点击“记录并完成”。
 
 ## 本周自查
 

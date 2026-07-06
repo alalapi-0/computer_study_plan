@@ -33,14 +33,14 @@ ps aux | grep -E "python|bash|zsh" | grep -v grep | head -5 | tee process_snapsh
 cat > long_task_notes.txt <<'EOF'
 Week 2 自动练习已生成 worker.py、worker.log 和 process_snapshot.txt。
 
-自测请在 Web UI 点 r06-w2-self 的“终端”，进入 ~/cli-lab/round6 后自己完成：
+自测请在 Web UI 点 r06-w2-self 的“终端练习”，进入 ~/cli-lab/round6 后自己完成：
 1. 新建 week2_self 目录。
 2. 写一个 worker.py，让它 sleep 2 秒。
 3. 用 python3 worker.py > worker.log & 放到后台运行。
 4. 用 ps aux | grep worker.py 观察进程，用 cat worker.log 看输出。
-5. 能解释后台运行、nohup、tmux 的差异后，手动点“记录 / 完成”。
+5. 能解释后台运行、nohup、tmux 的差异后，点击“记录并完成”。
 EOF
 
 mark r06-w2-ex2
 
-echo "Week 2 自动练习完成。请继续手动完成 r06-w2-self。"
+echo "Week 2 自动练习完成。请继续在 Web UI 点击“记录并完成”保存 r06-w2-self。"

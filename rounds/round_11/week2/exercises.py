@@ -112,8 +112,8 @@ def main() -> None:
     (LAB / "query_report.txt").write_text(result.stdout, encoding="utf-8")
     (LAB / "next_steps.txt").write_text(
         "Week 2 自动练习已生成 db.py、check_runs.py，并验证全部查询和按 format 查询。\n"
-        "自测请在 Web UI 点击 r11-w2-self 的“终端”，自己封装 insert_run/get_all_runs。\n"
-        "能解释参数化 SELECT 和 sqlite3.Row 后，再手动点“记录 / 完成”。\n",
+        "自测请在 Web UI 点击 r11-w2-self 的“终端练习”，自己封装 insert_run/get_all_runs。\n"
+        "能解释参数化 SELECT 和 sqlite3.Row 后，再点击“记录并完成”。\n",
         encoding="utf-8",
     )
 
@@ -122,7 +122,7 @@ def main() -> None:
     print("db:", LAB / "runs.db")
 
     mark("r11-w2-ex2")
-    print("Week 2 自动练习完成。请继续手动完成 r11-w2-self。")
+    print("Week 2 自动练习完成。请继续在 Web UI 点击“记录并完成”保存 r11-w2-self。")
 
 
 if __name__ == "__main__":

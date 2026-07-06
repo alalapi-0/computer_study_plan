@@ -7,8 +7,8 @@
 
 ## 在 Web UI 中怎么学
 
-1. 点“练习：远程同步与 cron 命令排练”的“运行”，查看自动生成的 `remote_rehearsal.md` 和 `cron_examples.txt`。
-2. 点“自测：自己写 remote_ops_plan.md”的“终端”，浏览器终端会进入 `~/cli-lab/round6`。
+1. 点“练习：远程同步与 cron 命令排练”的“运行脚本”，查看自动生成的 `remote_rehearsal.md` 和 `cron_examples.txt`。
+2. 点“自测：自己写 remote_ops_plan.md”的“终端练习”，浏览器终端会进入 `~/cli-lab/round6`。
 3. 自己写一份不执行真实远程命令的操作计划：
 
 ```bash
@@ -18,7 +18,7 @@ printf '# remote ops rehearsal\n\nssh: ssh user@host\nscp: scp app.log user@host
 cat remote_ops_plan.md
 ```
 
-4. Web UI 终端会拦截 `ssh`、`scp`、`rsync`、`crontab` 等真实远程或系统级命令。能解释命令结构后，再手动记录自测完成。
+4. Web UI 终端会拦截 `ssh`、`scp`、`rsync`、`crontab` 等真实远程或系统级命令。能解释命令结构后，再点击“记录并完成”保存自测记录。
 
 ## 安全边界
 

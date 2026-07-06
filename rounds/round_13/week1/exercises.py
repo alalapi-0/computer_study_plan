@@ -74,7 +74,7 @@ def write_files() -> dict:
     }
     (LAB / "env_report.json").write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     (LAB / "next_steps.txt").write_text(
-        "在浏览器终端自己创建 week1_self/.venv_self，并手动记录 r13-w1-self。\n",
+        "在浏览器终端自己创建 week1_self/.venv_self，并点击“记录并完成”保存记录 r13-w1-self。\n",
         encoding="utf-8",
     )
     return report

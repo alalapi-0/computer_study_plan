@@ -3,10 +3,10 @@
 ## Web UI 学习路径
 
 1. 在 `progress.html?round=round_21` 展开 Round 21。
-2. 点本任务的“阅读”，先把 tokenization、vocab、encode/decode 的流程看完。
+2. 点本任务的“读教程”，先把 tokenization、vocab、encode/decode 的流程看完。
 3. 点“练习：生成手写 tokenizer 与词表编号示例”，生成本周产物。
-4. 点“终端”，运行本页下方短命令，看 `tokenizer_summary.json`。
-5. 能解释输出后，再手动完成“自测：终端运行 tokenizer smoke check”。
+4. 点“终端练习”，运行本页下方短命令，看 `tokenizer_summary.json`。
+5. 能解释输出后，再点击“记录并完成”保存“自测：终端运行 tokenizer smoke check”。
 
 ## 本周要建立的直觉
 
@@ -42,7 +42,7 @@ text -> tokens -> token ids -> padded ids -> tensor
 
 ## 自动练习产物
 
-点“运行”后会生成：
+点“运行脚本”后会生成：
 
 - `~/cli-lab/round21/week1_auto/tokenizer_vocab/manual_tokenizer.py`
 - `~/cli-lab/round21/week1_auto/tokenizer_vocab/sample_texts.json`
@@ -53,7 +53,7 @@ text -> tokens -> token ids -> padded ids -> tensor
 
 ## 浏览器终端自测
 
-在本周练习运行成功后，打开“终端”，逐行输入：
+在本周练习运行成功后，点击“终端练习”，逐行输入：
 
 ```bash
 cd ~/round21/week1_auto/tokenizer_vocab

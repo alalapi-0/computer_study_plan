@@ -7,6 +7,9 @@
 开始任何一轮前，Codex 必须确认：
 
 - 已读取 `AGENTS.md`
+- 已读取 `docs/WORKSPACE.md`
+- 已读取 `docs/MASTER_STUDY_ROADMAP.md`
+- 已读取 `docs/STAGE_PLAN.md`
 - 已读取 `docs/CODEX_LONG_TERM_PLAN.md`
 - 已读取 `docs/PROJECT_STATE.md`
 - 已读取 `docs/NEXT_ACTIONS.md`

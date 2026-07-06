@@ -44,13 +44,13 @@ python3 greedy_dp_demo.py
 cat > next_steps.txt <<'EOF'
 Week 3 自动练习已生成 greedy_dp_demo.py。
 
-自测请在 Web UI 点 r05-w3-self 的“终端”，进入 ~/cli-lab/round5 后自己完成：
+自测请在 Web UI 点 r05-w3-self 的“终端练习”，进入 ~/cli-lab/round5 后自己完成：
 1. 新建 week3_self 目录。
 2. 写一个 coin_change_dp.py，使用 dp[x] 表示凑出金额 x 的最少硬币数。
 3. 运行 python3 coin_change_dp.py。
-4. 能解释贪心和 DP 的判断差异后，手动点“记录 / 完成”。
+4. 能解释贪心和 DP 的判断差异后，点击“记录并完成”。
 EOF
 
 mark r05-w3-ex3
 
-echo "Week 3 自动练习完成。请继续手动完成 r05-w3-self。"
+echo "Week 3 自动练习完成。请继续在 Web UI 点击“记录并完成”保存 r05-w3-self。"

@@ -65,7 +65,7 @@ def main() -> None:
     (LAB / "workflow_transcript.txt").write_text("\n".join(transcript) + "\n", encoding="utf-8")
     (LAB / "next_steps.txt").write_text(
         "Week 2 自动练习已在本地沙盒仓库完成 feature 与 hotfix 分支合并。\n"
-        "自测请在 Web UI 点击 r09-w2-self 的“终端”，自己走一遍 git init / branch / commit / merge。\n"
+        "自测请在 Web UI 点击 r09-w2-self 的“终端练习”，自己走一遍 git init / branch / commit / merge。\n"
         "只在 ~/cli-lab/round9 内练习，不做 push/pull/remote。\n",
         encoding="utf-8",
     )
@@ -76,7 +76,7 @@ def main() -> None:
     print("log-file:", LAB / "git_log.txt")
 
     mark("r09-w2-ex2")
-    print("Week 2 自动练习完成。请继续手动完成 r09-w2-self。")
+    print("Week 2 自动练习完成。请继续在 Web UI 点击“记录并完成”保存 r09-w2-self。")
 
 
 if __name__ == "__main__":

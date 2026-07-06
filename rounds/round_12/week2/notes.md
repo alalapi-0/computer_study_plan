@@ -3,9 +3,9 @@
 ## Web UI 学习路径
 
 1. 先阅读本文件，分清 `subprocess` 的返回码、stdout、stderr。
-2. 点“运行”执行 `week2/exercises.py`，它会在 `~/cli-lab/round12/week2_auto/archive_pipeline` 生成外部 worker、输出摘要和 zip 归档。
-3. 打开“终端”，自己写一个 `subprocess_demo.py`，跑一次 `ls` 并打印返回码。
-4. 用“记录”写下：为什么自动化脚本不能只看 stdout，必须看 returncode。
+2. 点“运行脚本”执行 `week2/exercises.py`，它会在 `~/cli-lab/round12/week2_auto/archive_pipeline` 生成外部 worker、输出摘要和 zip 归档。
+3. 点击“终端练习”，自己写一个 `subprocess_demo.py`，跑一次 `ls` 并打印返回码。
+4. 用“记录并完成”写下：为什么自动化脚本不能只看 stdout，必须看 returncode。
 
 ## 本周目标
 
@@ -25,7 +25,7 @@
 
 ## 浏览器终端自测
 
-在 Round 12 页面点本周自测的“终端”，运行：
+在 Round 12 页面点本周自测的“终端练习”，运行：
 
 ```bash
 mkdir -p subprocess_self

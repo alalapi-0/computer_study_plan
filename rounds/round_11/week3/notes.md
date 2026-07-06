@@ -8,14 +8,14 @@
 ## Web UI 学习路径
 
 1. 打开本文件，先确认接入点：工具处理完成后，调用 `insert_run()` 写入一条历史记录。
-2. 点击 `r11-w3-ex3` 的“运行”。脚本会在 `~/cli-lab/round11/week3_auto/ai_prep_tool` 生成：
+2. 点击 `r11-w3-ex3` 的“运行脚本”。脚本会在 `~/cli-lab/round11/week3_auto/ai_prep_tool` 生成：
    - `db.py`
    - `ai_prep_tool.py`
    - `check_runs.py`
    - `runs.db`
    - `persistence_report.txt`
 3. 运行结果会验证工具运行两次后，`runs.db` 中有两条记录。
-4. 点击 `r11-w3-self` 的“终端”，自己把 `insert_run()` 接入一个小处理脚本。
+4. 点击 `r11-w3-self` 的“终端练习”，自己把 `insert_run()` 接入一个小处理脚本。
 
 ## 接入顺序
 
@@ -42,7 +42,7 @@ printf 'import sqlite3\n\ndef init_db():\n    conn = sqlite3.connect("runs.db")\
 python3 app_with_db.py
 ```
 
-看到 `2` 后，回到任务行手动点“记录 / 完成”。
+看到 `2` 后，回到任务行点击“记录并完成”。
 
 ## 本周自查
 

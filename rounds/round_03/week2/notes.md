@@ -8,8 +8,8 @@
 
 ## 在 Web UI 中怎么学
 
-1. 点“练习：统计标签出现次数”的“运行”，查看自动生成的 `stats.py` 输出。
-2. 点本周自测的“终端”，自己在 `~/cli-lab/round3` 下写一个小脚本。
+1. 点“练习：统计标签出现次数”的“运行脚本”，查看自动生成的 `stats.py` 输出。
+2. 点本周自测的“终端练习”，自己在 `~/cli-lab/round3` 下写一个小脚本。
 3. 推荐自测命令：
 
 ```bash
@@ -19,7 +19,7 @@ printf 'def count_words(words):\n    result = {}\n    for word in words:\n      
 python3 count_words.py
 ```
 
-4. 能解释 list、dict、函数拆分后，再手动记录自测完成。
+4. 能解释 list、dict、函数拆分后，再点击“记录并完成”保存自测记录。
 
 ## list / dict 直觉
 

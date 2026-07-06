@@ -68,11 +68,11 @@ mark r02-w1-ex3
 
 cat > next_steps.txt <<'EOF'
 Week 1 下一步：
-- 在 Web UI 练习终端中进入 ~/cli-lab/round2/week1/self_check。
+- 在 Web UI “终端练习”中进入 ~/cli-lab/round2/week1/self_check。
 - 自己创建 app.log。
 - 手敲 grep "error" app.log | wc -l。
-- 确认能解释 >、>>、| 后，再手动标记 r02-w1-self。
+- 确认能解释 >、>>、| 后，再点击“记录并完成”保存 r02-w1-self。
 EOF
 
 echo "脚本已完成 r02-w1-ex1 / r02-w1-ex2 / r02-w1-ex3。"
-echo "阅读任务与自测任务请在 Web UI 中确认后手动完成。"
+echo "阅读任务与自测任务请在 Web UI 中点击“记录并完成”保存记录。"

@@ -8,9 +8,9 @@
 
 ## 在 Web UI 里怎么学
 
-1. 阅读本文件后，点击 Week 2 的三个练习运行按钮。
+1. 阅读本文件后，点击 Week 2 的三个“运行脚本”按钮。
 2. 脚本会在 `~/cli-lab/round2/week2/script_lab` 里生成 `count_errors.sh`、`count_labels.sh`、`show_args.sh`。
-3. 自测时打开“练习终端”，进入 `~/cli-lab/round2/week2/self_check`，用 `printf` 写一个最小参数脚本。
+3. 自测时打开“终端练习”，进入 `~/cli-lab/round2/week2/self_check`，用 `printf` 写一个最小参数脚本。
 4. 能解释 `$1`、`$@`、`$#` 的含义后，再在 Web UI 中手动标记自测任务。
 
 ## 脚本基础结构

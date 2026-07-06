@@ -4,10 +4,10 @@
 
 1. 打开 `progress.html?round=round_10`。
 2. 依次阅读 Week 1–3 notes。
-3. 点击三个练习任务的“运行”，生成自动练习产物。
-4. 点击三个自测任务的“终端”，自己写最小脚本并运行。
-5. 点击 `r10-fin-comp` 的“运行”，生成 `~/cli-lab/round10/final_auto/ai_prep_tool/round10_summary.json`。
-6. 能解释本小抄里的问题后，再手动记录 `r10-fin-sheet` 与 `r10-fin-acc1`。
+3. 点击三个练习任务的“运行脚本”，生成自动练习产物。
+4. 点击三个自测任务的“终端练习”，自己写最小脚本并运行。
+5. 点击 `r10-fin-comp` 的“运行脚本”，生成 `~/cli-lab/round10/final_auto/ai_prep_tool/round10_summary.json`。
+6. 能解释本小抄里的问题后，再点击“记录并完成”保存 `r10-fin-sheet` 与 `r10-fin-acc1`。
 
 ## 文件职责速查
 

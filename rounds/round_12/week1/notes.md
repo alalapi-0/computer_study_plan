@@ -3,9 +3,9 @@
 ## Web UI 学习路径
 
 1. 在 Round 12 页面打开本文件，先看清楚批处理的 4 个角色：`input/`、`output/`、`failures.log`、`batch_report.json`。
-2. 点“运行”执行 `week1/exercises.py`。脚本会在 `~/cli-lab/round12/week1_auto/batch_pipeline` 生成一个小批处理沙盒。
-3. 打开“终端”，自己在 `~/round12` 下写一个最小扫描脚本，确认你能不用复制自动脚本也写出目录遍历。
-4. 用“记录”写下：成功文件放哪、失败文件怎么记录、为什么输出名不能互相覆盖。
+2. 点“运行脚本”执行 `week1/exercises.py`。脚本会在 `~/cli-lab/round12/week1_auto/batch_pipeline` 生成一个小批处理沙盒。
+3. 点击“终端练习”，自己在 `~/round12` 下写一个最小扫描脚本，确认你能不用复制自动脚本也写出目录遍历。
+4. 用“记录并完成”写下：成功文件放哪、失败文件怎么记录、为什么输出名不能互相覆盖。
 
 ## 本周目标
 
@@ -33,7 +33,7 @@ batch_pipeline/
 
 ## 浏览器终端自测
 
-在 Round 12 页面点本周自测的“终端”，运行：
+在 Round 12 页面点本周自测的“终端练习”，运行：
 
 ```bash
 mkdir -p self_scan/input self_scan/output

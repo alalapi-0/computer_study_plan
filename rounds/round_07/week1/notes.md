@@ -8,14 +8,14 @@
 ## Web UI 学习路径
 
 1. 在 Round 07 里打开本文件，先读完“四种格式怎么读”的差异。
-2. 点击 `r07-w1-ex1` 的“运行”。脚本会在 `~/cli-lab/round7/week1_auto` 生成：
+2. 点击 `r07-w1-ex1` 的“运行脚本”。脚本会在 `~/cli-lab/round7/week1_auto` 生成：
    - `labels.txt`
    - `labels.csv`
    - `labels.json`
    - `labels.jsonl`
    - `next_steps.txt`
 3. 看运行输出里的 `formats`、`txt-count`、`csv-labels`、`json-count`、`jsonl-count`，确认四种格式都被读取到了。
-4. 点击 `r07-w1-self` 的“终端”，在 `~/cli-lab/round7` 里自己写一个 `read_formats.py`。
+4. 点击 `r07-w1-self` 的“终端练习”，在 `~/cli-lab/round7` 里自己写一个 `read_formats.py`。
 
 ## 四种格式的读取直觉
 
@@ -41,7 +41,7 @@ printf 'print(json.loads(Path("labels.json").read_text())["records"])\nfor line 
 python3 read_formats.py
 ```
 
-运行成功后，回到任务行手动点“记录 / 完成”。
+运行成功后，回到任务行点击“记录并完成”。
 
 ## 本周自查
 

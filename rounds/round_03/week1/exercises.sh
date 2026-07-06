@@ -39,13 +39,13 @@ python3 score_check.py
 cat > next_steps.txt <<'EOF'
 Week 1 自动练习已生成 app.py 和 score_check.py。
 
-自测请在 Web UI 点 r03-w1-self 的“终端”，进入 ~/cli-lab/round3 后自己完成：
+自测请在 Web UI 点 r03-w1-self 的“终端练习”，进入 ~/cli-lab/round3 后自己完成：
 1. 新建 week1_self 目录。
 2. 写一个 square.py，包含函数和 for 循环。
 3. 运行 python3 square.py。
-4. 能解释 return 与 print 的区别后，手动点“记录 / 完成”。
+4. 能解释 return 与 print 的区别后，点击“记录并完成”。
 EOF
 
 mark r03-w1-ex1
 
-echo "Week 1 自动练习完成。请继续手动完成 r03-w1-self。"
+echo "Week 1 自动练习完成。请继续在 Web UI 点击“记录并完成”保存 r03-w1-self。"

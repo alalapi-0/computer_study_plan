@@ -8,7 +8,7 @@
 ## Web UI 学习路径
 
 1. 在 Round 10 里打开本文件，先看清“拆分”的目的：入口只负责收参数，核心逻辑负责处理，IO 只负责读写。
-2. 点击 `r10-w1-ex1` 的“运行”。脚本会在 `~/cli-lab/round10/week1_auto/ai_prep_tool` 生成：
+2. 点击 `r10-w1-ex1` 的“运行脚本”。脚本会在 `~/cli-lab/round10/week1_auto/ai_prep_tool` 生成：
    - `cli.py`
    - `core.py`
    - `io_utils.py`
@@ -16,7 +16,7 @@
    - `output/result.txt`
    - `week1_report.txt`
 3. 运行结果会验证 `cli.py --input ... --output ... --min-length 2 --dedup` 可以跑通。
-4. 点击 `r10-w1-self` 的“终端”，自己写一个更小的 `cli.py` 调用核心函数。
+4. 点击 `r10-w1-self` 的“终端练习”，自己写一个更小的 `cli.py` 调用核心函数。
 
 ## 三个文件各管什么
 
@@ -36,7 +36,7 @@ printf 'import argparse\nfrom core import upper_text\n\ndef main():\n    parser 
 python3 cli.py --text round10
 ```
 
-看到 `ROUND10` 后，回到任务行手动点“记录 / 完成”。
+看到 `ROUND10` 后，回到任务行点击“记录并完成”。
 
 ## 本周自查
 

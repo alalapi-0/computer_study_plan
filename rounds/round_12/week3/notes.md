@@ -3,9 +3,9 @@
 ## Web UI 学习路径
 
 1. 先阅读本文件，记住本周只做“本地自动化排练”：写脚本、写示例、验证日志轮转，不写系统 crontab。
-2. 点“运行”执行 `week3/exercises.py`。脚本会生成 `log_utils.py`、`scripts/run_batch.sh`、`cron_example.txt`、`nohup_tmux_notes.txt` 和轮转日志。
-3. 打开“终端”，自己写一个小的 logging demo，观察日志文件出现。
-4. 用“记录”写下：cron、nohup、tmux 分别解决什么问题。
+2. 点“运行脚本”执行 `week3/exercises.py`。脚本会生成 `log_utils.py`、`scripts/run_batch.sh`、`cron_example.txt`、`nohup_tmux_notes.txt` 和轮转日志。
+3. 点击“终端练习”，自己写一个小的 logging demo，观察日志文件出现。
+4. 用“记录并完成”写下：cron、nohup、tmux 分别解决什么问题。
 
 ## 本周目标
 
@@ -22,7 +22,7 @@
 
 ## 浏览器终端自测
 
-在 Round 12 页面点本周自测的“终端”，运行：
+在 Round 12 页面点本周自测的“终端练习”，运行：
 
 ```bash
 mkdir -p log_self

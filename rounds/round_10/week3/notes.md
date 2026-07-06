@@ -8,14 +8,14 @@
 ## Web UI 学习路径
 
 1. 打开本文件，先确认“错误处理”的目标不是吞掉错误，而是让用户看到可理解的信息，让日志留下可排查线索。
-2. 点击 `r10-w3-ex3` 的“运行”。脚本会在 `~/cli-lab/round10/week3_auto/ai_prep_tool` 生成：
+2. 点击 `r10-w3-ex3` 的“运行脚本”。脚本会在 `~/cli-lab/round10/week3_auto/ai_prep_tool` 生成：
    - `errors.py`
    - `core.py`
    - `ai_prep_tool.py`
    - `pyproject.toml`
    - `error_report.txt`
 3. 运行结果会同时验证成功路径和缺失输入文件的错误路径。
-4. 点击 `r10-w3-self` 的“终端”，自己写一个带返回码的入口脚本。
+4. 点击 `r10-w3-self` 的“终端练习”，自己写一个带返回码的入口脚本。
 
 ## 可控错误的最小形状
 
@@ -48,7 +48,7 @@ printf 'class PrepToolError(Exception):\n    pass\n\ndef main():\n    try:\n    
 python3 app.py
 ```
 
-看到 `error: demo error` 后，回到任务行手动点“记录 / 完成”。
+看到 `error: demo error` 后，回到任务行点击“记录并完成”。
 
 ## 本周自查
 

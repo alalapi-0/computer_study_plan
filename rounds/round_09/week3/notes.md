@@ -7,14 +7,14 @@
 
 ## Web UI 学习路径
 
-1. 先点击本文件“打开”，理解“pytest 入门”先学测试思想，不急着安装依赖。
-2. 点击 `r09-w3-ex3` 的“运行”。脚本会在 `~/cli-lab/round9/week3_auto` 生成：
+1. 先点击本文件“读教程”，理解“pytest 入门”先学测试思想，不急着安装依赖。
+2. 点击 `r09-w3-ex3` 的“运行脚本”。脚本会在 `~/cli-lab/round9/week3_auto` 生成：
    - `ai_prep_tool.py`
    - `tests/test_dedup.py`
    - `run_tests.py`
    - `test_report.txt`
 3. 自动练习用标准库执行测试函数；文件命名保持 pytest 风格，后续真正安装 pytest 时可以继续用。
-4. 点击 `r09-w3-self` 的“终端”，自己写 `test_dedup.py` 并运行。
+4. 点击 `r09-w3-self` 的“终端练习”，自己写 `test_dedup.py` 并运行。
 
 ## 最小测试集
 
@@ -38,7 +38,7 @@ printf 'import importlib.util\nfrom pathlib import Path\nspec = importlib.util.s
 python3 run_tests.py
 ```
 
-能解释纯函数为什么更好测后，回到任务行手动点“记录 / 完成”。
+能解释纯函数为什么更好测后，回到任务行点击“记录并完成”。
 
 ## 本周自查
 

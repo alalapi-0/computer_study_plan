@@ -31,4 +31,4 @@ mark r01-w2-ex2
 
 echo
 echo "脚本已完成练习任务 r01-w2-ex2。"
-echo "下一步：在 Web UI 的练习终端中独立整理 week2_test，再手动标记 r01-w2-self。"
+echo "下一步：在 Web UI 的“终端练习”中独立整理 week2_test，再点击“记录并完成”保存 r01-w2-self。"

@@ -49,9 +49,9 @@ cat > final_notes.md <<'EOF'
 
 - data_toolkit.py：综合使用 dict、set、deque、list 和 stack 思路。
 - 这只是自动综合练习。
-- 小抄 r04-fin-sheet 与验收 r04-fin-acc1 仍需用户自己阅读、解释并在 Web UI 手动记录。
+- 小抄 r04-fin-sheet 与验收 r04-fin-acc1 仍需用户自己阅读、解释并在 Web UI 点击“记录并完成”保存记录。
 EOF
 
 mark r04-fin-comp
 
-echo "Round 04 Final 自动练习完成。请继续手动完成 r04-fin-sheet 与 r04-fin-acc1。"
+echo "Round 04 Final 自动练习完成。请继续在 Web UI 点击“记录并完成”保存 r04-fin-sheet 与 r04-fin-acc1。"

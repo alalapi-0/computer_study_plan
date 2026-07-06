@@ -216,7 +216,7 @@ npm run check:mcp
 │  └─ completed_tasks/             ← 完成的练习快照（可选）
 │
 └─ rounds/                         ← Round 实操目录（仅可执行内容进此）
-   ├─ round_00/                    ← 终端入门（已完成）
+   ├─ round_00/                    ← 终端入门（已展开并接入 Web UI）
    │  ├─ README.md
    │  ├─ week1/ week2/ week3/ final/
    ├─ round_01/                    ← 文件系统与基础命令（已展开）
@@ -283,7 +283,7 @@ cd ~/PycharmProjects/computer_study_plan
 
 看板包含：
 
-- 学习工作区（当前任务 + 内联教程 + 工程任务练习终端）
+- 学习工作区（当前任务 + 内联教程 + 工程任务终端）
 - 总进度与四主线进度（engineering / soft_exam / math2 / cs408）
 - 按主线查看任务（工程线为 Round 00–21，考试 / 数学 / 408 为计划任务；进度看板任务集合已与 `progress.json` 对齐）
 - 折叠管理区：本周任务、考试倒计时、存档与读档、Stage 0–7、当前关注项

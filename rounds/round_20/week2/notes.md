@@ -4,8 +4,8 @@
 
 1. 先读完本页，弄清 `nn.Module` 和训练循环的职责。
 2. 点击“练习：生成 nn.Module 与训练循环示例”，生成 `~/cli-lab/round20/week2_auto/training_loop`。
-3. 用浏览器终端运行标准库梯度下降 smoke check，验证“预测、loss、梯度、更新”的顺序。
-4. 手动完成自测记录：能看着输出说出一轮 batch 更新做了什么。
+3. 用浏览器“终端练习”运行标准库梯度下降 smoke check，验证“预测、loss、梯度、更新”的顺序。
+4. 点击“记录并完成”保存自测记录：能看着输出说出一轮 batch 更新做了什么。
 
 ## nn.Module 的直觉
 
@@ -51,7 +51,7 @@ class SimpleClassifier(nn.Module):
 
 ## 浏览器终端自测
 
-先点击本周“运行”按钮生成自动产物，再在 Web UI 终端中依次运行：
+先点击本周“运行脚本”按钮生成自动产物，再在 Web UI 终端中依次运行：
 
 ```bash
 cd ~/round20/week2_auto/training_loop

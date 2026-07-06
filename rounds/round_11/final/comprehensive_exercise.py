@@ -198,7 +198,7 @@ def main() -> None:
     print("- summary:", LAB / "round11_summary.json")
 
     mark("r11-fin-comp")
-    print("Round 11 Final 自动练习完成。请继续手动完成 r11-fin-sheet 与 r11-fin-acc1。")
+    print("Round 11 Final 自动练习完成。请继续在 Web UI 点击“记录并完成”保存 r11-fin-sheet 与 r11-fin-acc1。")
 
 
 if __name__ == "__main__":

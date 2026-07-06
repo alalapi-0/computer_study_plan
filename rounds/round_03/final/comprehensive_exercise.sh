@@ -38,9 +38,9 @@ cat > final_notes.md <<'EOF'
 
 - mini_analyzer.py：统计标签出现次数，并打印线性 / 平方级操作量估算。
 - 这只是自动综合练习。
-- 小抄 r03-fin-sheet 与验收 r03-fin-acc1 仍需用户自己阅读、解释并在 Web UI 手动记录。
+- 小抄 r03-fin-sheet 与验收 r03-fin-acc1 仍需用户自己阅读、解释并在 Web UI 点击“记录并完成”保存记录。
 EOF
 
 mark r03-fin-comp
 
-echo "Round 03 Final 自动练习完成。请继续手动完成 r03-fin-sheet 与 r03-fin-acc1。"
+echo "Round 03 Final 自动练习完成。请继续在 Web UI 点击“记录并完成”保存 r03-fin-sheet 与 r03-fin-acc1。"

@@ -8,11 +8,11 @@
 
 ## Web UI 完成路径
 
-1. 打开 `progress.html?round=round_15`。
+1. 打开 `http://127.0.0.1:8777/progress.html?round=round_15`。
 2. 按顺序阅读 Week 1、Week 2、Week 3 的资料。
-3. 点击每个练习任务的“运行”按钮，脚本会在 `~/cli-lab/round15` 下生成 FastAPI 项目文件和静态检查报告。
-4. 点击每个自测任务的“终端”按钮，在浏览器终端里手敲小文件或 JSON 检查命令。
-5. 最后阅读 `final/fastapi_basics_cheatsheet.md`，再手动记录最终验收。
+3. 点击每个练习任务的“运行脚本”按钮，脚本会在 `~/cli-lab/round15` 下生成 FastAPI 项目文件和静态检查报告。
+4. 点击每个自测任务的“终端练习”按钮，在浏览器终端里手敲小文件或 JSON 检查命令。
+5. 最后阅读 `final/fastapi_basics_cheatsheet.md`，再点击“记录并完成”保存最终验收。
 
 ## 安全边界
 

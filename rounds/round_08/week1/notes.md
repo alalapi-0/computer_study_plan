@@ -8,7 +8,7 @@
 ## Web UI 学习路径
 
 1. 在 Round 08 里打开本文件，先理解“项目收口”不是继续加功能，而是让已有功能更容易复查。
-2. 点击 `r08-w1-ex1` 的“运行”。脚本会在 `~/cli-lab/round8/week1_auto/ai_prep_tool` 生成：
+2. 点击 `r08-w1-ex1` 的“运行脚本”。脚本会在 `~/cli-lab/round8/week1_auto/ai_prep_tool` 生成：
    - `ai_prep_tool.py`
    - `README.md`
    - `.gitignore`
@@ -16,7 +16,7 @@
    - `run_tests.py`
    - `test_report.txt`
 3. 自动练习会用标准库执行 `run_tests.py`，不需要安装 pytest；`tests/test_basic.py` 保持 pytest 兼容风格，后续真正进入工程化路线时再安装 pytest。
-4. 点击 `r08-w1-self` 的“终端”，自己写一个最小测试文件并运行。
+4. 点击 `r08-w1-self` 的“终端练习”，自己写一个最小测试文件并运行。
 
 ## 为什么先收口
 
@@ -39,7 +39,7 @@ printf 'import importlib.util\nfrom pathlib import Path\nspec = importlib.util.s
 python3 run_tests.py
 ```
 
-运行成功后，回到任务行手动点“记录 / 完成”。
+运行成功后，回到任务行点击“记录并完成”。
 
 ## 本周自查
 

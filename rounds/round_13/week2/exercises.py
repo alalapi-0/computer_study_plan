@@ -113,7 +113,7 @@ def write_project() -> dict:
     }
     (LAB / "config_report.json").write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     (LAB / "next_steps.txt").write_text(
-        "在浏览器终端自己写一个小 pyproject.toml 或 .env.example 检查命令，再手动记录 r13-w2-self。\n",
+        "在浏览器终端自己写一个小 pyproject.toml 或 .env.example 检查命令，再点击“记录并完成”保存记录 r13-w2-self。\n",
         encoding="utf-8",
     )
     return report

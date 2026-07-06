@@ -47,13 +47,13 @@ python3 binary_window_demo.py
 cat > next_steps.txt <<'EOF'
 Week 1 自动练习已生成 binary_window_demo.py。
 
-自测请在 Web UI 点 r05-w1-self 的“终端”，进入 ~/cli-lab/round5 后自己完成：
+自测请在 Web UI 点 r05-w1-self 的“终端练习”，进入 ~/cli-lab/round5 后自己完成：
 1. 新建 week1_self 目录。
 2. 写一个 two_sum_sorted.py，使用左右双指针。
 3. 运行 python3 two_sum_sorted.py。
-4. 能解释双指针、滑动窗口、二分的触发条件后，手动点“记录 / 完成”。
+4. 能解释双指针、滑动窗口、二分的触发条件后，点击“记录并完成”。
 EOF
 
 mark r05-w1-ex1
 
-echo "Week 1 自动练习完成。请继续手动完成 r05-w1-self。"
+echo "Week 1 自动练习完成。请继续在 Web UI 点击“记录并完成”保存 r05-w1-self。"

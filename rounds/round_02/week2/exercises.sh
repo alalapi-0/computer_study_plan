@@ -87,11 +87,11 @@ bash check_file.sh
 
 cat > next_steps.txt <<'EOF'
 Week 2 下一步：
-- 在 Web UI 练习终端中进入 ~/cli-lab/round2/week2/self_check。
+- 在 Web UI “终端练习”中进入 ~/cli-lab/round2/week2/self_check。
 - 用 printf 写一个 show_args_self.sh。
 - 运行 bash show_args_self.sh one two。
-- 确认能解释 $1、$@、$# 后，再手动标记 r02-w2-self。
+- 确认能解释 $1、$@、$# 后，再点击“记录并完成”保存 r02-w2-self。
 EOF
 
 echo "脚本已完成 r02-w2-ex4 / r02-w2-ex5 / r02-w2-ex6。"
-echo "阅读任务与自测任务请在 Web UI 中确认后手动完成。"
+echo "阅读任务与自测任务请在 Web UI 中点击“记录并完成”保存记录。"

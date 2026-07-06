@@ -4,8 +4,8 @@
 
 1. 先读完本页，确认 Week 1 的 token id 是整数索引。
 2. 点“练习：生成 embedding 与文本分类示例”，生成本周代码形状。
-3. 点“终端”，运行短命令 smoke check。
-4. 能解释 `embedding_dim`、`padding_idx`、`mean pooling` 后，手动完成本周自测记录。
+3. 点“终端练习”，运行短命令 smoke check。
+4. 能解释 `embedding_dim`、`padding_idx`、`mean pooling` 后，点击“记录并完成”保存本周自测记录。
 
 ## 本周核心直觉
 
@@ -42,7 +42,7 @@ texts
 
 ## 自动练习产物
 
-点“运行”后会生成：
+点“运行脚本”后会生成：
 
 - `~/cli-lab/round21/week2_auto/embedding_classifier/embedding_demo.py`
 - `~/cli-lab/round21/week2_auto/embedding_classifier/text_classifier.py`
@@ -53,7 +53,7 @@ texts
 
 ## 浏览器终端自测
 
-在本周练习运行成功后，打开“终端”，逐行输入：
+在本周练习运行成功后，点击“终端练习”，逐行输入：
 
 ```bash
 cd ~/round21/week2_auto/embedding_classifier

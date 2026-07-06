@@ -2,9 +2,9 @@
 
 ## Web UI 完成路径
 
-1. 点击 `r07-fin-comp` 的“运行”，确认输出出现 `Summary`、`original`、`processed`、`removed`。
-2. 打开本文件“阅读”，按下面的小抄检查自己是否真的理解。
-3. 能说清楚读取、参数、日志、去重、输出之后，手动完成 `r07-fin-sheet` 和 `r07-fin-acc1`。
+1. 点击 `r07-fin-comp` 的“运行脚本”，确认输出出现 `Summary`、`original`、`processed`、`removed`。
+2. 打开本文件“读教程”，按下面的小抄检查自己是否真的理解。
+3. 能说清楚读取、参数、日志、去重、输出之后，点击“记录并完成”保存 `r07-fin-sheet` 和 `r07-fin-acc1`。
 
 ## 最小命令模板
 

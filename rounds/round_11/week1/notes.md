@@ -8,12 +8,12 @@
 ## Web UI 学习路径
 
 1. 在 Round 11 里打开本文件，先看清 `runs` 表的意义：一行记录代表一次工具运行。
-2. 点击 `r11-w1-ex1` 的“运行”。脚本会在 `~/cli-lab/round11/week1_auto/ai_prep_tool` 生成：
+2. 点击 `r11-w1-ex1` 的“运行脚本”。脚本会在 `~/cli-lab/round11/week1_auto/ai_prep_tool` 生成：
    - `runs.db`
    - `schema_report.txt`
    - `next_steps.txt`
 3. 运行结果会显示 `runs` 表字段和插入后的 `row_count`。
-4. 点击 `r11-w1-self` 的“终端”，自己写最小 sqlite3 建表和插入脚本。
+4. 点击 `r11-w1-self` 的“终端练习”，自己写最小 sqlite3 建表和插入脚本。
 
 ## runs 表最小字段
 
@@ -50,7 +50,7 @@ printf 'import sqlite3\n\nconn = sqlite3.connect("runs.db")\nconn.execute("CREAT
 python3 sqlite_demo.py
 ```
 
-看到 `1` 后，回到任务行手动点“记录 / 完成”。
+看到 `1` 后，回到任务行点击“记录并完成”。
 
 ## 本周自查
 

@@ -6,26 +6,26 @@
 
 - 日期：2026-05-05
 - 状态：Accepted
-- 背景：当前项目已有 `progress.json` 作为状态单一事实源，并由 `mark_done.sh` 写入、`progress_data.js` 镜像到静态页面。
-- 决策：当前阶段继续使用 JSON 作为任务状态、进度、后续 action log 与 feedback 原型的本地存储格式。
-- 原因：JSON 易读、易版本管理、无需服务进程，适合当前本地优先和初学者友好的目标。
+- 背景：当前项目已有 `progress.json` 作为状态单一事实源，并由 Web UI / `mark_done.sh` 写入、`progress_data.js` 镜像到页面。
+- 决策：当前阶段继续使用 JSON / JSONL 作为任务状态、动作记录、任务反馈和本地存档的存储格式。
+- 原因：JSON 易读、易版本管理，配合轻量本地服务即可支持当前单人学习工作流。
 - 后果：短期内无需引入数据库；当事件日志和查询需求明显超过 JSON 能力时，再评估 SQLite 或后端服务。
 
 ## ADR-0002: 当前阶段保留静态 progress.html，不立即引入前端框架
 
 - 日期：2026-05-05
 - 状态：Accepted
-- 背景：当前 `progress.html` 已能读取 `progress_data.js` 展示 Round 00 进度，但还不是完整交互式学习系统。
-- 决策：当前阶段保留静态 HTML + 原生 JavaScript 的实现方式，不立即引入 React、Vue 或其他前端框架。
+- 背景：当前 `progress.html` + `progress_ui.js` 已承担学习工作区、内联教程、工程终端、记录弹窗、练习脚本运行、存档和复盘入口。
+- 决策：当前阶段保留原生 HTML + JavaScript + 轻量本地服务的实现方式，不立即引入 React、Vue 或其他前端框架。
 - 原因：项目首先需要统一数据模型和任务体系，过早引入框架会增加维护成本和学习门槛。
-- 后果：短期交互能力会较克制；当静态页面难以承载任务操作、历史记录和反馈展示时，再评估前端架构升级。
+- 后果：继续控制前端复杂度；当原生页面难以承载更复杂的任务操作、历史记录查询和反馈展示时，再评估前端架构升级。
 
 ## ADR-0003: 当前阶段保留 mark_done.sh，不立即改成完整后端服务
 
 - 日期：2026-05-05
 - 状态：Accepted
-- 背景：`mark_done.sh` 已形成任务标记、撤销、状态查看和生成 `progress_data.js` 的最小闭环。
-- 决策：当前阶段继续保留并兼容 `mark_done.sh`，后续先在脚本层扩展 task registry、progress state 和 action log。
+- 背景：Web UI 已成为正式学习入口；`mark_done.sh` 仍提供任务标记、撤销、状态查看和生成 `progress_data.js` 的兼容闭环。
+- 决策：当前阶段继续保留并兼容 `mark_done.sh`，复杂交互优先通过 `scripts/progress_server.py` 提供本地 API。
 - 原因：shell + 内嵌 Python 的方式对本地学习足够轻量，也能保护 Round 00 现有可运行能力。
 - 后果：脚本复杂度需要被控制；如果后续读写逻辑明显变复杂，再拆出 Python 脚本或 API 服务。
 

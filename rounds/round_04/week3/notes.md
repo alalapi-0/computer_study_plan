@@ -8,8 +8,8 @@
 
 ## 在 Web UI 中怎么学
 
-1. 点“练习：dict 计数与 set 去重”的“运行”，查看自动生成的 `hash_demo.py`。
-2. 点“自测：自己写 tag_report.py”的“终端”，在 `~/cli-lab/round4` 下完成自测脚本。
+1. 点“练习：dict 计数与 set 去重”的“运行脚本”，查看自动生成的 `hash_demo.py`。
+2. 点“自测：自己写 tag_report.py”的“终端练习”，在 `~/cli-lab/round4` 下完成自测脚本。
 3. 推荐自测命令：
 
 ```bash
@@ -19,7 +19,7 @@ printf 'tags = [\"python\", \"linux\", \"python\", \"git\", \"linux\"]\ncounts =
 python3 tag_report.py
 ```
 
-4. 能解释 `dict.get()`、`set()`、`in` 判断后，再手动记录自测完成。
+4. 能解释 `dict.get()`、`set()`、`in` 判断后，再点击“记录并完成”保存自测记录。
 
 ## dict / set 直觉
 

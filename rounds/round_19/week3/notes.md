@@ -13,8 +13,8 @@
 1. 在 Round 19 面板打开本阅读任务。
 2. 点击“练习：生成预处理、Pipeline 与泄漏检查示例”。
 3. 查看运行结果中的 `preprocessing_correct.py`、`pipeline_demo.py`、`leakage_notes.py` 和 `static_check_report.json`。
-4. 点击“自测：自己写 scaler_rule_demo.py”的“终端”，完成手写预处理规则演示。
-5. 自测通过后手动记录自测任务。
+4. 点击“自测：自己写 scaler_rule_demo.py”的“终端练习”，完成手写预处理规则演示。
+5. 自测通过后点击“记录并完成”保存自测记录。
 
 ## 关键规则
 

@@ -47,9 +47,9 @@ cat > final_notes.md <<'EOF'
 
 - pattern_selector_demo.py：根据题面关键词给出初步算法模式建议。
 - 这只是自动综合练习。
-- 小抄 r05-fin-sheet 与验收 r05-fin-acc1 仍需用户自己阅读、解释并在 Web UI 手动记录。
+- 小抄 r05-fin-sheet 与验收 r05-fin-acc1 仍需用户自己阅读、解释并在 Web UI 点击“记录并完成”保存记录。
 EOF
 
 mark r05-fin-comp
 
-echo "Round 05 Final 自动练习完成。请继续手动完成 r05-fin-sheet 与 r05-fin-acc1。"
+echo "Round 05 Final 自动练习完成。请继续在 Web UI 点击“记录并完成”保存 r05-fin-sheet 与 r05-fin-acc1。"

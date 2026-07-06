@@ -8,8 +8,8 @@
 
 ## 在 Web UI 中怎么学
 
-1. 点“练习：二分查找与滑动窗口”的“运行”，查看自动生成的 `binary_window_demo.py`。
-2. 点“自测：自己写 two_sum_sorted.py”的“终端”，浏览器终端会进入 `~/cli-lab/round5`。
+1. 点“练习：二分查找与滑动窗口”的“运行脚本”，查看自动生成的 `binary_window_demo.py`。
+2. 点“自测：自己写 two_sum_sorted.py”的“终端练习”，浏览器终端会进入 `~/cli-lab/round5`。
 3. 自己写一个有序数组双指针脚本：
 
 ```bash
@@ -19,7 +19,7 @@ printf 'def two_sum_sorted(nums, target):\n    left, right = 0, len(nums) - 1\n 
 python3 two_sum_sorted.py
 ```
 
-4. 能解释为什么 `left` / `right` 会移动、什么时候该用二分后，再手动记录自测完成。
+4. 能解释为什么 `left` / `right` 会移动、什么时候该用二分后，再点击“记录并完成”保存自测记录。
 
 ## 模式直觉
 

@@ -7,13 +7,13 @@
 
 ## Web UI 学习路径
 
-1. 先点击本文件“打开”，理解服务化先从接口形状开始。
-2. 点击 `r08-w3-ex3` 的“运行”。脚本会在 `~/cli-lab/round8/week3_auto` 生成：
+1. 先点击本文件“读教程”，理解服务化先从接口形状开始。
+2. 点击 `r08-w3-ex3` 的“运行脚本”。脚本会在 `~/cli-lab/round8/week3_auto` 生成：
    - `api_contract.py`
    - `api_demo_output.json`
    - `fastapi_next_steps.md`
 3. 本轮 Web UI 不安装 FastAPI、不启动真实后端服务；自动练习用标准库模拟 `GET /health`、`POST /run`、`GET /runs` 三个响应。
-4. 点击 `r08-w3-self` 的“终端”，自己写一个 `api_contract.py` 并运行。
+4. 点击 `r08-w3-self` 的“终端练习”，自己写一个 `api_contract.py` 并运行。
 
 ## 接口形状先行
 
@@ -36,7 +36,7 @@ printf 'def health():\n    return {"status": "ok"}\n\ndef run(req):\n    return 
 python3 api_contract.py
 ```
 
-能解释三个接口的入参、响应和下一步如何接 SQLite 后，回到任务行手动点“记录 / 完成”。
+能解释三个接口的入参、响应和下一步如何接 SQLite 后，回到任务行点击“记录并完成”。
 
 ## 本周自查
 

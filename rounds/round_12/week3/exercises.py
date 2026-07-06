@@ -83,7 +83,7 @@ def write_files(package_dir: Path, scripts_dir: Path) -> Path:
     (LAB / "cron_example.txt").write_text(CRON_EXAMPLE, encoding="utf-8")
     (LAB / "nohup_tmux_notes.txt").write_text(NOHUP_TMUX_NOTES, encoding="utf-8")
     (LAB / "next_steps.txt").write_text(
-        "自己在浏览器终端写 log_demo.py，再手动记录 r12-w3-self。\n",
+        "自己在浏览器终端写 log_demo.py，再点击“记录并完成”保存记录 r12-w3-self。\n",
         encoding="utf-8",
     )
     return log_utils

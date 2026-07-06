@@ -12,8 +12,8 @@
 1. 在 Round 19 面板打开本阅读任务。
 2. 点击“练习：生成分类指标与过拟合观察示例”。
 3. 查看运行结果中的 `metrics_demo.py`、`overfitting_demo.py`、`stdlib_metrics_demo.py` 和 `static_check_report.json`。
-4. 点击“自测：自己写 metrics_from_counts.py”的“终端”，完成手写指标计算。
-5. 自测通过后手动记录自测任务。
+4. 点击“自测：自己写 metrics_from_counts.py”的“终端练习”，完成手写指标计算。
+5. 自测通过后点击“记录并完成”保存自测记录。
 
 ## 指标速记
 

@@ -8,7 +8,7 @@
 ## Web UI 学习路径
 
 1. 在 Round 09 里打开本文件，先看清“规范化”的目的：让别人能运行、能看懂、不会把副产物提交进去。
-2. 点击 `r09-w1-ex1` 的“运行”。脚本会在 `~/cli-lab/round9/week1_auto/ai_prep_tool` 生成：
+2. 点击 `r09-w1-ex1` 的“运行脚本”。脚本会在 `~/cli-lab/round9/week1_auto/ai_prep_tool` 生成：
    - `README.md`
    - `.gitignore`
    - `ai_prep_tool.py`
@@ -16,7 +16,7 @@
    - `input/`、`output/`、`logs/`
    - `layout_report.txt`
 3. 运行输出会列出 README 是否包含用途/运行方式、`.gitignore` 是否覆盖缓存/虚拟环境/输出/日志。
-4. 点击 `r09-w1-self` 的“终端”，自己写 README 和 `.gitignore` 的最小版本。
+4. 点击 `r09-w1-self` 的“终端练习”，自己写 README 和 `.gitignore` 的最小版本。
 
 ## README 最小检查项
 
@@ -47,7 +47,7 @@ python3 ai_prep_tool.py
 ls
 ```
 
-运行成功后，回到任务行手动点“记录 / 完成”。
+运行成功后，回到任务行点击“记录并完成”。
 
 ## 本周自查
 

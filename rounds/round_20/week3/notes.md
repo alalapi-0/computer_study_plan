@@ -5,7 +5,7 @@
 1. 先读本页，理解训练模式和推理模式为什么不同。
 2. 点击“练习：生成 eval/no_grad 与 checkpoint 示例”，生成 `~/cli-lab/round20/week3_auto/checkpoint_eval`。
 3. 在浏览器终端运行标准库保存/加载权重 smoke check，确认 checkpoint 语义。
-4. 手动完成小抄和验收：能解释保存的是参数，不是训练魔法。
+4. 点击“记录并完成”保存小抄和验收：能解释保存的是参数，不是训练魔法。
 
 ## eval 和 no_grad
 
@@ -44,7 +44,7 @@ model.eval()
 
 ## 浏览器终端自测
 
-先点击本周“运行”按钮生成自动产物，再在 Web UI 终端中依次运行：
+先点击本周“运行脚本”按钮生成自动产物，再在 Web UI 终端中依次运行：
 
 ```bash
 cd ~/round20/week3_auto/checkpoint_eval

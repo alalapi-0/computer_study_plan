@@ -3,10 +3,10 @@
 ## Web UI 学习路径
 
 1. 阅读本文，先分清“请求体”和“响应体”。
-2. 点击 `练习：生成 JSON API 合同` 的“运行”按钮。
+2. 点击 `练习：生成 JSON API 合同` 的“运行脚本”按钮。
 3. 查看 `api_contract.json`、`request_run.json`、`responses/*.json` 和 `contract_report.json`。
-4. 点击自测任务的“终端”，自己写一个 JSON 文件并用 `python3 -m json.tool` 检查。
-5. 自测完成后，手动点击“完成”记录 `r14-w2-self`。
+4. 点击自测任务的“终端练习”，自己写一个 JSON 文件并用 `python3 -m json.tool` 检查。
+5. 自测完成后，点击“记录并完成”记录 `r14-w2-self`。
 
 ## 你要理解的事
 
@@ -40,7 +40,7 @@ python3 -m json.tool error.json
 cat request.json
 ```
 
-本周不要用浏览器终端发真实网络请求。先把 JSON 合同写对，下一轮再进入真实服务。
+本周不要用浏览器“终端练习”发真实网络请求。先把 JSON 合同写对，下一轮再进入真实服务。
 
 ## 完成标准
 

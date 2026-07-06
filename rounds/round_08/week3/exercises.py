@@ -79,7 +79,7 @@ def main() -> None:
     print("runs:", demo["GET /runs"])
 
     mark("r08-w3-ex3")
-    print("Week 3 自动练习完成。请继续手动完成 r08-w3-self。")
+    print("Week 3 自动练习完成。请继续在 Web UI 点击“记录并完成”保存 r08-w3-self。")
 
 
 if __name__ == "__main__":

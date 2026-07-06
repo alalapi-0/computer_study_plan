@@ -9,8 +9,8 @@
 1. 在 Web UI 打开本文件，先读“CSV 到 DataFrame”的主链。
 2. 点击“练习：生成 CSV 读取、筛选与 groupby 示例”。
 3. 在运行结果中确认生成 `sample_data.csv`、`pandas_basics.py`、`select_filter.py`、`stats_groupby.py` 和 `static_check_report.json`。
-4. 用任务行的“终端”完成自测。
-5. 在“记录”里写下你最容易混淆的筛选语法。
+4. 用任务行的“终端练习”完成自测。
+5. 在“记录并完成”弹窗里写下你最容易混淆的筛选语法。
 
 ## 主链
 

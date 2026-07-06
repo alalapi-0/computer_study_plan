@@ -3,10 +3,10 @@
 ## Web UI 学习路径
 
 1. 在 Round 13 页面先阅读本文。
-2. 点击 `练习：生成 venv 结构与 requirements` 的“运行”按钮。
+2. 点击 `练习：生成 venv 结构与 requirements` 的“运行脚本”按钮。
 3. 在运行结果里确认 `env_report.json`、`requirements.txt` 和 `.venv_demo/pyvenv.cfg` 都已生成。
-4. 点击 `自测：自己创建 .venv_self` 的“终端”按钮，在浏览器终端中手敲下面的自测命令。
-5. 自测完成后，手动点击“完成”记录 `r13-w1-self`。
+4. 点击 `自测：自己创建 .venv_self` 的“终端练习”按钮，在浏览器终端中手敲下面的自测命令。
+5. 自测完成后，点击“记录并完成”记录 `r13-w1-self`。
 
 ## 你要理解的事
 

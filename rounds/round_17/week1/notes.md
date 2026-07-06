@@ -3,10 +3,10 @@
 ## Web UI 学习路径
 
 1. 在 Round 17 页面阅读本文。
-2. 点击“练习：生成 APIRouter 多文件服务结构”的“运行”按钮。
+2. 点击“练习：生成 APIRouter 多文件服务结构”的“运行脚本”按钮。
 3. 在运行结果里确认生成了 `api/main.py`、`api/routers/health.py`、`api/routers/runs.py`、`api/routers/jobs.py` 和 `static_check_report.json`。
-4. 点击“自测：自己写 route_inventory.json”的“终端”按钮，手敲下面的自测命令。
-5. 能解释“main 负责组装应用，router 文件按职责拆分”后，手动点击“完成”。
+4. 点击“自测：自己写 route_inventory.json”的“终端练习”按钮，手敲下面的自测命令。
+5. 能解释“main 负责组装应用，router 文件按职责拆分”后，点击“记录并完成”。
 
 ## 本周要建立的直觉
 

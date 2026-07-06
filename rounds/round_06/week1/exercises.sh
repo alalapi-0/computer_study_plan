@@ -48,13 +48,13 @@ chmod +x log_clean_demo.sh
 cat > next_steps.txt <<'EOF'
 Week 1 自动练习已生成 log_clean_demo.sh、logs/ 和 reports/。
 
-自测请在 Web UI 点 r06-w1-self 的“终端”，进入 ~/cli-lab/round6 后自己完成：
+自测请在 Web UI 点 r06-w1-self 的“终端练习”，进入 ~/cli-lab/round6 后自己完成：
 1. 新建 week1_self 目录。
 2. 写一个 find_text_report.sh。
 3. 使用 find -print0 | xargs -0 grep / wc 批量处理 .log 文件。
-4. 能解释 find、xargs、sed、awk 分工后，手动点“记录 / 完成”。
+4. 能解释 find、xargs、sed、awk 分工后，点击“记录并完成”。
 EOF
 
 mark r06-w1-ex1
 
-echo "Week 1 自动练习完成。请继续手动完成 r06-w1-self。"
+echo "Week 1 自动练习完成。请继续在 Web UI 点击“记录并完成”保存 r06-w1-self。"
