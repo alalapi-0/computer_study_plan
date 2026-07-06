@@ -37,7 +37,7 @@ async function detectApi() {
   if (!banner) return;
   if (apiReady) {
     banner.className = "banner ok";
-    banner.innerHTML = "<strong>网页打卡已启用</strong> — 在学习工作区可左侧读教程、右侧敲命令，并直接记录完成。";
+    banner.innerHTML = "<strong>网页打卡已启用</strong> — 在学习工作区可读教程、做练习并记录完成；工程任务支持右侧终端。";
     banner.style.display = "block";
   } else if (window.location.protocol !== "file:") {
     banner.className = "banner warn";
@@ -124,6 +124,10 @@ function terminalTaskContext() {
   return taskMeta(activeTerminalTaskId);
 }
 
+function currentWorkspaceTask() {
+  return typeof findNextTask === "function" ? findNextTask() : null;
+}
+
 function terminalCwdForRound(round) {
   const match = String(round?.id || "").match(/round_(\d{2})/);
   if (!match) return "~";
@@ -166,9 +170,17 @@ function renderTerminalContext() {
   if (!contextEl) return;
   const meta = terminalTaskContext();
   if (!meta) {
+    const current = currentWorkspaceTask();
+    if (current && !taskUsesTerminal(current.task)) {
+      contextEl.innerHTML = `
+      <div class="terminal-context-title">当前任务不需要终端</div>
+      <div class="terminal-context-meta">${escapeHtml(current.task.title)} 属于 ${escapeHtml(current.round.lane)}，先读资料并写记录即可。</div>
+    `;
+      return;
+    }
     contextEl.innerHTML = `
       <div class="terminal-context-title">未绑定任务</div>
-      <div class="terminal-context-meta">从任务行点击“终端练习”，这里会切到对应 Round 的沙盒目录。</div>
+      <div class="terminal-context-meta">工程任务出现“终端练习”按钮时，这里会切到对应 Round 的沙盒目录。</div>
     `;
     return;
   }
@@ -191,9 +203,16 @@ function renderTerminal() {
   const output = document.getElementById("terminalOutput");
   const prompt = document.getElementById("terminalPrompt");
   if (!output || !prompt) return;
+  const current = currentWorkspaceTask();
+  const idleForCurrentTask = !activeTerminalTaskId && current && !taskUsesTerminal(current.task);
+  document.getElementById("terminal")?.classList.toggle("terminal-idle", !!idleForCurrentTask);
   prompt.textContent = terminalPrompt(terminalCwdDisplay || "~");
   renderTerminalContext();
   if (!terminalHistory.length) {
+    if (idleForCurrentTask) {
+      output.innerHTML = `<div class="terminal-line muted">当前任务以阅读和记录为主，不需要终端。切到工程实操任务后，可用“终端练习”绑定沙盒目录。</div>`;
+      return;
+    }
     output.innerHTML = `<div class="terminal-line muted">终端已映射到 <code>~/cli-lab</code> 沙盒。任务行的“终端练习”会把这里切到对应 Round 目录。</div>`;
     return;
   }

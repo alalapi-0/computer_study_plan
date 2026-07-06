@@ -84,8 +84,8 @@ npm run check:mcp
 
 ### 3. UI 优化标准流程
 
-1. 启动项目（如 `python3 -m http.server 8000`）
-2. 打开页面 → 截图（before）
+1. 启动项目：`python3 scripts/progress_server.py`
+2. 打开 `http://127.0.0.1:8777/progress.html` → 截图（before）
 3. Stitch 设计输入（可选）
 4. 修改代码（每轮一个 UI 切片）
 5. 再打开页面 → console / network 检查

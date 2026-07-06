@@ -117,3 +117,25 @@ open http://127.0.0.1:8777/progress.html
 - 桌面 `progress.html?round=round_02` 当前任务显示 `读教程 / 终端练习 / 记录 / 完成`。
 - 点击当前阅读任务的 `终端练习` 后，终端工作目录绑定为 `~/round2`，内联教程仍为 `rounds/round_02/week1/notes.md`。
 - 390px 移动端无横向溢出，学习工作区从约 474px 提前到约 265px 开始，内联教程进入首屏。
+
+## 9. 2026-07-06 TASK-RR-58 第四轮项目用户视角评测与默认入口一致性修复
+
+状态：done
+
+本轮评测报告：
+
+- `docs/reports/PROJECT_USER_REVIEW_2026_07_06_ROUND4.md`
+
+本轮发现并修复：
+
+- README 的 UI 开发流程仍建议 `python3 -m http.server 8000`，已改为使用 `python3 scripts/progress_server.py` 和真实 8777 URL。
+- 默认软考阅读任务没有终端按钮，但任务卡和终端面板仍提示点击“终端练习”，已改为非工程任务显示“不需要终端”，并压缩终端面板。
+- 默认当前任务在 `soft_exam`，但 Round 浏览停在 `engineering / Round 00`，已让默认 Round 浏览跟随当前任务所在 lane。
+- `plans/soft_exam/README.md` 说所有模块文件都未创建，但 `os.md`、`ds.md`、`db.md` 已存在，已改为显示已有启动骨架和待建模块。
+- 错题系统要求抄写完整题面，和“不缓存具体考题”规则冲突，已改为自写题意摘要、来源定位、错误原因和订正思路。
+
+验证摘要：
+
+- 默认 `progress.html` 当前任务仍为软考阅读任务，但任务卡不再提示缺失的终端入口。
+- 默认 Round 浏览切到软考主线，而不是工程 Round 00。
+- 非工程默认任务下终端面板进入压缩提示状态；工程任务仍保留终端绑定能力。

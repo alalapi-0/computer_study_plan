@@ -1101,6 +1101,20 @@
       margin-bottom: 0.7rem;
       font-size: 0.78rem;
     }
+    .terminal-panel.terminal-idle {
+      min-height: auto;
+    }
+    .terminal-panel.terminal-idle .terminal-workspace {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .terminal-panel.terminal-idle .terminal-side-panel {
+      max-height: none;
+    }
+    .terminal-panel.terminal-idle .terminal-state-list,
+    .terminal-panel.terminal-idle .terminal-side-panel > div:last-child,
+    .terminal-panel.terminal-idle .terminal-workspace > div:not(.terminal-side-panel) {
+      display: none;
+    }
     .secondary-tools {
       background: var(--card);
       border: 1px solid var(--border);
@@ -1629,7 +1643,7 @@
     </div>
     <div class="workflow-steps" aria-label="推荐学习顺序">
       <span>1 读教程</span>
-      <span>2 跑脚本 / 敲命令</span>
+      <span>2 做练习 / 写要点</span>
       <span>3 写记录并完成</span>
     </div>
   </div>
@@ -1641,9 +1655,9 @@
       <div class="workspace-panel-head">
         <div>
           <h3 id="inlineReaderTitle">当前教程</h3>
-          <div class="inline-reader-meta" id="inlineReaderMeta">选择任务后会在这里显示资料，不再遮挡终端。</div>
+          <div class="inline-reader-meta" id="inlineReaderMeta">选择任务后会在这里显示资料，不打断当前工作区。</div>
         </div>
-        <button class="task-btn read" type="button" id="inlineReaderPopout" disabled>弹窗阅读</button>
+        <button class="task-btn read" type="button" id="inlineReaderPopout" disabled>弹窗打开</button>
       </div>
       <div class="inline-reader-body" id="inlineReaderBody">
         <div class="inline-reader-empty">点击任务里的“读教程”，资料会显示在这里；右侧终端保持可见。</div>
@@ -1653,7 +1667,7 @@
       <div class="workspace-panel-head">
         <div>
           <h3>练习终端</h3>
-          <div class="card-sub">映射到本机 <code>~/cli-lab</code> 沙盒。任务行点击“终端练习”后会自动切到对应 Round。</div>
+          <div class="card-sub">工程任务可映射到本机 <code>~/cli-lab</code> 沙盒。任务行出现“终端练习”时可直接绑定。</div>
         </div>
       </div>
       <div class="terminal-workspace">
@@ -1662,7 +1676,7 @@
             <div class="terminal-panel-title">当前任务</div>
             <div class="terminal-context" id="terminalContext">
               <div class="terminal-context-title">未绑定任务</div>
-              <div class="terminal-context-meta">从任务行点击“终端练习”，这里会切到对应 Round 的沙盒目录。</div>
+              <div class="terminal-context-meta">工程任务出现“终端练习”按钮时，这里会切到对应 Round 的沙盒目录。</div>
             </div>
           </div>
           <div class="terminal-state-list">
@@ -1824,9 +1838,9 @@
   </div>
 </div>
 
-<script src="progress_data.js?v=20260706b"></script>
-<script src="rounds_data.js?v=20260706b"></script>
-<script src="progress_ui.js?v=20260706b"></script>
+<script src="progress_data.js?v=20260706c"></script>
+<script src="rounds_data.js?v=20260706c"></script>
+<script src="progress_ui.js?v=20260706c"></script>
 <script>
 const ROUNDS = window.ROUNDS_DATA || [];
 
@@ -1978,6 +1992,7 @@ function laneStats(laneKey) {
 // Render
 // ============================================================
 function render() {
+  syncActiveViewToCurrentTask();
   renderContinue();
   renderGlobal();
   renderLanes();
@@ -2041,6 +2056,25 @@ function findNextTask() {
   return findGlobalNextTask();
 }
 
+function syncActiveViewToCurrentTask() {
+  if (routeFocusedRound || workspaceTaskId) return;
+  const current = findGlobalNextTask();
+  if (!current) return;
+  activeLane = current.round.lane || activeLane;
+  activeRound = current.round.id || activeRound;
+}
+
+function taskFlowRows(task) {
+  const secondStep = taskUsesTerminal(task)
+    ? "需要命令时点“终端练习”，右侧会绑定到对应沙盒。"
+    : "本任务不需要终端；读完资料后整理一个最小结论。";
+  return `
+      <div><strong>1</strong><span>先在中间读教程，确认本任务要做出的最小产物。</span></div>
+      <div><strong>2</strong><span>${secondStep}</span></div>
+      <div><strong>3</strong><span>完成后写一条记录，再点击完成。</span></div>
+  `;
+}
+
 function renderContinue() {
   const card = document.getElementById("continueCard");
   if (!card) return;
@@ -2061,9 +2095,7 @@ function renderContinue() {
     <h3>${task.title}</h3>
     <div class="task-focus-meta">${round.title} / ${week.title} / ${round.lane}</div>
     <div class="task-flow-list">
-      <div><strong>1</strong><span>先在中间读教程，确认本任务要做出的最小产物。</span></div>
-      <div><strong>2</strong><span>需要命令时点“终端练习”，右侧会绑定到对应沙盒。</span></div>
-      <div><strong>3</strong><span>完成后写一条记录，再点击完成。</span></div>
+      ${taskFlowRows(task)}
     </div>
     <div class="continue-actions">
       ${canRead ? `<button type="button" class="task-btn read task-open" data-task="${task.id}" data-file="${task.file}" data-title="${task.title}">${fileActionLabel(task.file, task.type)}</button>` : ""}
