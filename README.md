@@ -172,11 +172,19 @@ npm run check:mcp
 ├─ docs/WORKSPACE.md               ← ★ 路径与工作区约定（单一事实源）
 ├─ AGENTS.md                       ← Codex / Cursor / 编程 AI 协作硬规则
 ├─ CONVERSION_PROTOCOL.md          ← Round md 与进度系统协议（v2.0）
-├─ progress.html                   ← 学习工作台（四主线 + 阶段 + 倒计时 + 存档/读档）
+├─ progress.html                   ← Web UI 学习工作区入口（四主线 + 教程 + 终端 + 记录 + 存档/读档）
+├─ progress_ui.js                  ← Web UI 交互逻辑（教程、任务、终端、记录、存档、反馈）
 ├─ progress.json                   ← 进度状态唯一来源（v2 + lanes）
-├─ progress_data.js                ← 进度镜像（mark_done.sh 自动生成）
+├─ progress_data.js                ← 进度镜像（由同步脚本 / CLI / 本地 API 从 progress.json 生成）
+├─ rounds_data.js                  ← Round 与计划任务展示数据（由 scripts/build_rounds_data.py 生成）
 ├─ mark_done.sh                    ← 进度 CLI（简洁状态 / lane 过滤 / 补标记）
 ├─ .gitignore
+│
+├─ scripts/                        ← 本地服务、数据同步、生成与校验脚本
+│  ├─ progress_server.py           ← 本地 Web UI API 服务（默认 8777）
+│  ├─ build_rounds_data.py         ← 生成 rounds_data.js
+│  ├─ sync_progress_data.py        ← 同步 progress_data.js
+│  └─ validate_learning_data.py    ← 校验学习数据结构
 │
 ├─ round_00.md ~ round_21.md       ← 工程实操线 22 份 Round 概览（保留）
 │
@@ -212,6 +220,8 @@ npm run check:mcp
 │  ├─ README.md
 │  ├─ weekly_reviews/              ← 每周复盘（YYYY-WW.md）
 │  ├─ error_notes/                 ← 错题本（按 lane / module 归档）
+│  ├─ action_logs/                 ← Web UI / CLI 动作日志（进度系统产物）
+│  ├─ feedback/                    ← 任务反馈 JSON（进度系统产物）
 │  ├─ saves/                       ← Web UI 学习进度快照
 │  └─ completed_tasks/             ← 完成的练习快照（可选）
 │
@@ -340,7 +350,8 @@ bash mark_done.sh <task-id> --undo  # 取消完成
 - 不缓存任何具体考题 / 考纲条目 / 院校招生数据；涉及考试一律以**最新官方信息**为准。
 - 不删除以下高保护对象（详见 `docs/governance/repo_rules.md`）：
   - `rounds/round_00/`、`round_00.md` ~ `round_21.md`
-  - `progress.json`、`progress_data.js`、`progress.html`、`mark_done.sh`
+  - `progress.json`、`progress_data.js`、`rounds_data.js`、`progress.html`、`progress_ui.js`、`scripts/progress_server.py`、`mark_done.sh`
+  - `records/action_logs/`、`records/feedback/`（除非本轮明确是生成 / 清理进度系统产物）
   - 用户后续明确标注为真实学习记录的 `records/` 内容
   - 各类长期规划与治理文档
 - Codex / Cursor 协作必须遵守 `AGENTS.md` 与 `docs/AUTO_ADVANCE_PROTOCOL.md`。

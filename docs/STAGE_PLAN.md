@@ -42,14 +42,14 @@
 - `docs/PROJECT_PORTFOLIO_TRACK.md`
 - `plans/linux/README.md`、`plans/soft_exam/README.md`、`plans/math2/README.md`、`plans/408/README.md`
 - `records/weekly_reviews/`、`records/error_notes/`、`records/completed_tasks/`
-- progress.json / progress_data.js / mark_done.sh / progress.html 全部升级到四主线
+- 进度系统已升级为四主线 Web UI 学习工作区：`progress.json`、`progress_data.js`、`rounds_data.js`、`progress.html`、`progress_ui.js`、`scripts/progress_server.py`、`mark_done.sh`、动作日志和任务反馈协同工作
 
 ### 退出标准（仓库建设层面已完成）
 
 - [x] 仓库内 `plan_round_XX.txt` 全部删除
 - [x] 所有路线骨架文档存在并可读
 - [x] `bash mark_done.sh` 仍可运行（Round 00 兼容）
-- [x] `progress.html` 能看到四主线总进度
+- [x] `progress.html` 通过本地服务提供学习工作区，可查看四主线任务、内联教程、工程终端、记录并完成、存档和反馈
 - [x] README 入口已对齐新路线和 Web UI 学习工作区
 
 ---
@@ -341,7 +341,7 @@
 - ASR 转写错误分析工具
 - 日中双语文本对齐工具
 - AI 小说生成项目的评测模块
-- Linux 学习进度可视化页面（已部分存在：`progress.html`）
+- 学习工作区增强（当前 `progress.html` / `progress_ui.js` / 本地 API 已可用，后续只做复盘报表、知识图谱或作品集展示等增量，不重复建设只读看板）
 - 软考错题知识图谱
 
 ### 每个项目必须标注
@@ -409,7 +409,7 @@ M8–M12    Stage 3 + Stage 4
 | `records/error_notes/` | Stage 3 + Stage 4 + Stage 5 + Stage 6 |
 | `docs/GRADUATE_SCHOOL_TRACKER.md` | Stage 6 |
 | `docs/PROJECT_PORTFOLIO_TRACK.md` | Stage 7 |
-| `progress.html` 四主线进度 | 全部 Stage（按 lane 展示） |
+| `progress.html` / `progress_ui.js` / `scripts/progress_server.py` Web UI 学习工作区 | 全部 Stage（按 lane 展示任务，支持教程、终端、记录、存档与反馈） |
 
 ---
 
@@ -422,7 +422,7 @@ M8–M12    Stage 3 + Stage 4
   - Stage 2 软考新增内容**不放进 `rounds/round_XX/`**，而是放进 `plans/soft_exam/`
   - Stage 4 数学二同理，放进 `plans/math2/`
 
-> 决策原则：`rounds/round_XX/` 用于"可执行练习目录"；`plans/<scope>/` 用于"知识体系笔记 + 章节学习计划"；`records/<scope>/` 用于"真实发生过的学习记录"。
+> 决策原则：`rounds/round_XX/` 用于"可执行练习目录"；`plans/<scope>/` 用于"知识体系笔记 + 章节学习计划"；`records/<scope>/` 用于"真实发生过的学习记录"。当前仓库尚无用户标注的真实学习记录；`records/action_logs/` 与 `records/feedback/` 属于进度系统产物。
 
 ---
 

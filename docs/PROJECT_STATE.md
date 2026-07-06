@@ -553,3 +553,24 @@ open http://127.0.0.1:8777/progress.html
 
 - 主动扫描已确认受影响清理 / VPS 文档不再残留旧四件套保护口径或分支推送示例。
 - 标准验证与浏览器回检见本轮提交记录。
+
+## 29. 2026-07-06 TASK-RR-78 第二十四轮项目用户视角评测与阶段计划 Web UI 口径对齐
+
+状态：done
+
+本轮评测报告：
+
+- `docs/reports/PROJECT_USER_REVIEW_2026_07_06_ROUND24.md`
+
+本轮发现并修复：
+
+- `docs/STAGE_PLAN.md` Stage 0 产物仍把进度系统写成旧四件套，已改为当前 Web UI / 本地 API / 生成数据 / 动作日志 / 反馈的组合事实。
+- Stage 0 退出标准仍只强调四主线总进度，已改为学习工作区可支持教程、终端、记录、存档和反馈。
+- Stage 7 推荐项目仍把进度页面说成“已部分存在”的 Linux 可视化页，已改为在现有 Web UI 上做复盘报表、知识图谱或作品集展示等增量。
+- Stage 资产对照表仍只列 `progress.html` 四主线进度，已补 `progress_ui.js` 与 `scripts/progress_server.py`。
+- README 的项目结构与维护规则仍遗漏当前进度系统文件和保护边界，已补 `rounds_data.js`、`progress_ui.js`、`scripts/progress_server.py`、动作日志和反馈目录。
+
+验证摘要：
+
+- 主动扫描已确认 Stage Plan / README 不再残留本轮目标旧说法。
+- 标准验证与浏览器回检见本轮提交记录。
