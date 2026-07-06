@@ -279,7 +279,7 @@ cd ~/PycharmProjects/computer_study_plan
 - 错题录入 `records/error_notes/<lane>/<module>/...`。
 - 周末写复盘。
 
-### 6.3 看进度
+### 6.3 打开 Web UI 学习工作区
 
 - **方式一（推荐 · 网页记录）**：
   ```bash
@@ -288,14 +288,14 @@ cd ~/PycharmProjects/computer_study_plan
   # 或：npm run serve
   open http://127.0.0.1:8777/progress.html
   ```
-  看板首屏是「学习工作区」：当前任务和教程阅读优先展示；工程任务会额外显示浏览器终端，并自动绑定到对应 `~/cli-lab/roundN` 沙盒。点击「读教程」会在页面中间打开资料；点击「终端练习」可切换或重新聚焦对应任务终端。完成后点击「记录并完成」，在弹窗里写下本次记录后保存；已完成任务可从任务行撤销。存档 / 读档放在折叠的管理区中，读档前会自动创建恢复点。
+  Web UI 首屏是「学习工作区」：当前任务和教程阅读优先展示；工程任务会额外显示浏览器终端，并自动绑定到对应 `~/cli-lab/roundN` 沙盒。点击「读教程」会在页面中间打开资料；点击「终端练习」可切换或重新聚焦对应任务终端。完成后点击「记录并完成」，在弹窗里写下本次记录后保存；已完成任务可从任务行撤销。存档 / 读档放在折叠的管理区中，读档前会自动创建恢复点。
 - **方式二（只读）**：双击 `progress.html` 或通过 `python3 -m http.server` 打开（无写 API）。
 
-看板包含：
+Web UI 包含：
 
 - 学习工作区（当前任务 + 内联教程 + 工程任务终端）
 - 总进度与四主线进度（engineering / soft_exam / math2 / cs408）
-- 按主线查看任务（工程线为 Round 00–21，考试 / 数学 / 408 为计划任务；进度看板任务集合已与 `progress.json` 对齐）
+- 按主线查看任务（工程线为 Round 00–21，考试 / 数学 / 408 为计划任务；Web UI 任务集合已与 `progress.json` 对齐）
 - 折叠管理区：本周任务、考试倒计时、存档与读档、Stage 0–7、当前关注项
 - 练习脚本运行结果（仅限已登记的 `rounds/round_XX/weekN|final` 白名单脚本）
 
@@ -328,7 +328,7 @@ bash mark_done.sh <task-id> --undo  # 取消完成
 | 看现在该做什么阶段 | `docs/STAGE_PLAN.md` |
 | 看某个知识点属于哪条 lane | `docs/KNOWLEDGE_MAPPING.md` |
 | 设计本周节奏 | `docs/WEEKLY_EXECUTION_TEMPLATE.md` |
-| 看进度系统规则 | `docs/PROGRESS_RULES.md` + `CONVERSION_PROTOCOL.md` |
+| 理解进度系统规则 | `docs/PROGRESS_RULES.md` + `CONVERSION_PROTOCOL.md` |
 | 学错题系统怎么用 | `docs/ERROR_REVIEW_SYSTEM.md` |
 | 填院校信息 | `docs/GRADUATE_SCHOOL_TRACKER.md` |
 | 看作品集追踪 | `docs/PROJECT_PORTFOLIO_TRACK.md` |

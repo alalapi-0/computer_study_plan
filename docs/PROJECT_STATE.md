@@ -596,3 +596,24 @@ open http://127.0.0.1:8777/progress.html
 
 - 主动扫描已确认目标自动推进 / UI runbook 文件不再残留本轮旧说法。
 - 标准验证与浏览器回检见本轮提交记录。
+
+## 31. 2026-07-06 TASK-RR-80 第二十六轮项目用户视角评测与学习工作区入口命名对齐
+
+状态：done
+
+本轮评测报告：
+
+- `docs/reports/PROJECT_USER_REVIEW_2026_07_06_ROUND26.md`
+
+本轮发现并修复：
+
+- README 日常入口仍叫“看进度”，已改为“打开 Web UI 学习工作区”。
+- README 仍使用“看板首屏 / 看板包含 / 进度看板任务集合”等旧说法，已改为 Web UI / 学习工作区口径。
+- `docs/WORKSPACE.md` 路径规范仍写“开看板”，已改为打开 Web UI 学习工作区。
+- `docs/CODEX_LONG_TERM_PLAN.md` 产品边界遗漏动作日志和任务反馈，验证基线也未对齐 `agent_gate.py --verify`，已同步当前事实。
+- `progress.html` 浏览器标题和记录提示仍写“学习进度看板 / 下次打开看板”，已改为“学习工作区 · 四主线”和“下次打开 Web UI”。
+
+验证摘要：
+
+- 主动扫描已确认 README / WORKSPACE / CODEX_LONG_TERM_PLAN / Web UI 标题与提示不再残留本轮目标旧说法。
+- 标准验证与浏览器回检见本轮提交记录。

@@ -26,6 +26,7 @@
 - `progress.html` + `progress_ui.js` 学习工作区。
 - `scripts/progress_server.py` 本地 API。
 - `progress.json` / `progress_data.js` / `rounds_data.js` 数据文件。
+- `records/action_logs/` 动作日志与 `records/feedback/` 任务反馈。
 - `mark_done.sh` CLI 兼容能力。
 - `rounds/round_00` 至 `rounds/round_21` 工程实操任务。
 - `plans/` 下软考、数学二、408、Linux 计划入口。
@@ -53,13 +54,21 @@
 默认验证命令：
 
 ```bash
+python3 scripts/agent_gate.py --verify
+```
+
+`agent_gate.py --verify` 当前覆盖：
+
+```bash
 git diff --check
 node --check progress_ui.js
 python3 scripts/check_protocol_sync.py
 python3 scripts/validate_learning_data.py
 python3 -m json.tool progress.json
-bash mark_done.sh
+bash mark_done.sh --limit 5
 ```
+
+涉及 Round 元数据、前端镜像或反馈生成时，再按需运行 `npm run build:rounds`、`npm run sync:progress` 和 `python3 scripts/generate_task_feedback.py`。
 
 UI 修改还必须启动本地服务并做真实浏览器检查。
 

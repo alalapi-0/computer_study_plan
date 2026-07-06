@@ -62,7 +62,7 @@ Round 00 等终端练习在**用户主目录**下的沙盒进行，**不**放在
 
 | 场景 | 应写 |
 |---|---|
-| 进入本仓库、跑进度脚本、开看板 | `~/PycharmProjects/computer_study_plan` 或「仓库根」 |
+| 进入本仓库、跑进度脚本、打开 Web UI 学习工作区 | `~/PycharmProjects/computer_study_plan` 或「仓库根」 |
 | Round 00 手敲命令练习 | `~/cli-lab/round0`（保持现有 round 文档不变） |
 | VPS 支线 clone 示例 | `~/study/<repo_name>`（见 `rounds/stage_03_vps_remote_ops/`） |
 | 泛指「任意机器上的克隆目录」 | `cd <你的 computer_study_plan 仓库根>`，并注明需含 `progress.json` |
