@@ -1141,6 +1141,9 @@
       border-top: 1px solid var(--border);
       padding: 1rem 1.15rem 0;
     }
+    .secondary-tools:not([open]) > .secondary-tools-body {
+      display: none;
+    }
     .secondary-tools-body .card {
       box-shadow: none;
       margin-bottom: 1rem;
@@ -1617,7 +1620,7 @@
   </nav>
   <div class="rail-note">
     <span class="rail-note-label">使用路径</span>
-    <p>先读当前资料，再按任务做练习或写要点；工程任务再打开终端。</p>
+    <p>先读当前资料，再按任务做练习或写要点；工程任务会自动联动终端。</p>
   </div>
 </aside>
 
@@ -1665,7 +1668,7 @@
         <button class="task-btn read" type="button" id="inlineReaderPopout" disabled>弹窗打开</button>
       </div>
       <div class="inline-reader-body" id="inlineReaderBody">
-        <div class="inline-reader-empty">点击任务里的“读教程”，资料会显示在这里；工程任务可再绑定终端。</div>
+        <div class="inline-reader-empty">点击任务里的“读教程”，资料会显示在这里；工程任务会自动联动终端。</div>
       </div>
     </section>
     <section class="workspace-panel terminal-panel" id="terminal">
@@ -1818,7 +1821,7 @@
 <!-- ── Block 7: 按主线查看任务 ── -->
 <div class="card" id="rounds">
   <h2>按主线查看任务</h2>
-  <div class="card-sub">按主线切换，查看工程 Round 与考试计划任务。点击「阅读」可在页内打开 notes / 计划文档。</div>
+  <div class="card-sub">按主线切换，查看工程 Round 与考试计划任务。点击「读教程」可在页内打开 notes / 计划文档。</div>
   <div class="lane-tabs" id="laneTabs"></div>
   <div class="round-tabs" id="roundTabs"></div>
   <div id="panels"></div>
