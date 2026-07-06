@@ -83,7 +83,7 @@
 11. 运行可用测试（`npm run check:mcp`、`npm run check:cursor-mcp`、相关 Python 校验等）
 12. 保存 **after** screenshot
 13. 更新相关文档（如 `docs/PROJECT_STATE.md`）
-14. commit / push（独立分支，不直接 push main）
+14. commit / push（默认直接推 `main`；如使用独立分支需说明原因）
 
 ---
 

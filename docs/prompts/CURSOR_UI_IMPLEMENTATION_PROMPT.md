@@ -36,7 +36,7 @@
 6. after：截图 + 检查 console + 检查 network + 检查响应式
 7. 运行 npm run check:mcp 与 npm run check:cursor-mcp（及项目既有低成本校验）
 8. 更新必要文档
-9. 在独立分支 commit；remote 存在时 push 分支（不直接 push main）
+9. 默认在 `main` commit；remote 存在时直接 push `main`
 
 【微信页面】
 - 本仓库为普通本地 Web 项目，不使用 wechat-chrome-session

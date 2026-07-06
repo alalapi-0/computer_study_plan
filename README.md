@@ -69,7 +69,7 @@ npm run check:mcp
 4. 修改代码（每轮一个 UI 切片）
 5. 再打开页面 → console / network 检查
 6. 截图（after）→ 运行测试
-7. commit / push（独立分支）
+7. commit / push（默认直接推 `main`）
 
 完整 14 步见 [`docs/cursor_browser_ui_runbook.md`](docs/cursor_browser_ui_runbook.md)。
 
@@ -135,11 +135,11 @@ npm run check:mcp
 > ✏️ **此区块可手动更新**
 
 - 已完成 **Stage 0 · 仓库治理与学习系统准备**：删除 22 份 `plan_round_XX.txt`，建立路线骨架与四主线进度系统。
-- 当前最有效闭环：**Round 00 终端入门**（`engineering` lane）。
+- 当前最有效闭环：**Web UI 学习工作区**。Round 00–21 工程实操任务、软考 / 数学二 / 408 / Linux / VPS 计划入口均已接入页面。
 - 下一步可选：
-  1. 继续推进 Stage 1（Round 02 / Round 06 实操目录展开 / VPS-04 SSH 文档练习）
-  2. 启动 Stage 2 软考软件设计师知识体系拆解（见 `plans/soft_exam/`）
-  3. 启动 Stage 4 数学二保底节奏（见 `plans/math2/`）
+  1. 继续做 Web UI 用户视角评测，降低首屏信息密度并强化教程 / 终端 / 记录联动。
+  2. 扩展 Stage 2 软考软件设计师计划，把模块骨架变成可检查产物清单（仍以最新官方信息为准）。
+  3. 保持 Stage 4 数学二保底节奏，必要时补充更具体的练习记录模板。
 
 ---
 
@@ -187,7 +187,7 @@ npm run check:mcp
 │  ├─ math2/README.md              ← math2 lane
 │  └─ 408/README.md                ← cs408 lane
 │
-├─ records/                        ← 用户真实学习记录（默认禁止删除）
+├─ records/                        ← 学习记录目录（当前无需保护的真实记录；后续由用户标注）
 │  ├─ README.md
 │  ├─ weekly_reviews/              ← 每周复盘（YYYY-WW.md）
 │  ├─ error_notes/                 ← 错题本（按 lane / module 归档）
@@ -313,7 +313,7 @@ bash mark_done.sh <task-id> --undo  # 取消完成
 - 不删除以下高保护对象（详见 `docs/governance/repo_rules.md`）：
   - `rounds/round_00/`、`round_00.md` ~ `round_21.md`
   - `progress.json`、`progress_data.js`、`progress.html`、`mark_done.sh`
-  - `records/` 下任何已写入的真实学习记录
+  - 用户后续明确标注为真实学习记录的 `records/` 内容
   - 各类长期规划与治理文档
 - Codex / Cursor 协作必须遵守 `AGENTS.md` 与 `docs/AUTO_ADVANCE_PROTOCOL.md`。
 - Round md 标准结构与命名见 `CONVERSION_PROTOCOL.md`（v2.0）。

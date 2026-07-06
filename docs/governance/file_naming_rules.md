@@ -12,7 +12,7 @@
 ## 2. 主线轮次（已存在体系，不改）
 
 - 主线 Round 概览文档：`round_XX.md`，XX 为两位数字（已存在 `round_00.md` ~ `round_21.md`）。
-- 主线 Round 实操目录：`rounds/round_XX/`（目前仅 `rounds/round_00/` 已展开）。
+- 主线 Round 实操目录：`rounds/round_XX/`（目前 `rounds/round_00/` 至 `rounds/round_21/` 均已展开）。
 - 已废弃命名：`plan_round_XX.txt`（22 份初版提示词文本于 2026-05-12 由用户授权删除，内容已被对应 `round_XX.md` 完整吸收。后续**不再新增**此类文件，新需求直接写 md）。
 
 > 这些命名是项目的"既成事实"，不主动重命名。新增主线 Round 仍延用相同格式。
@@ -52,8 +52,8 @@
 ## 6. 任务 ID 命名规则（与现有 Round 00 保持兼容）
 
 - Round 00 现有：`w1-read`、`w1-ex1`、`fin-comp` 等保持不变。
-- 后续主线 Round 的任务 ID 由统一 task registry 设计（`docs/NEXT_ACTIONS.md` TASK-002/003 涉及）。
-- 支线 VPS Round 的任务 ID 暂不进入 `progress.json`，直到 task registry 升级完成；当前阶段以 markdown checkbox 自检为主。
+- 主线 Round 任务 ID 已注册到 `progress.json` / `rounds_data.js`，继续沿用现有 `rNN-*` 规则。
+- 支线 VPS 文档已作为阅读入口接入 Web UI；真实远程操作仍需用户授权后再记录。
 
 ## 7. 不允许的文件名模式
 

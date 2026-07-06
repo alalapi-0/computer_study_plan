@@ -24,7 +24,7 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 NEXT_ACTIONS = REPO_ROOT / "docs" / "NEXT_ACTIONS.md"
 CONVERSION_PROTOCOL = REPO_ROOT / "CONVERSION_PROTOCOL.md"
 
-TASK_HEADER_RE = re.compile(r"^## (TASK-[A-Z0-9-]+)：", re.MULTILINE)
+TASK_HEADER_RE = re.compile(r"^## (TASK-[A-Z0-9-]+)：(.+)$", re.MULTILINE)
 STATUS_RE = re.compile(r"- 状态：\*\*(.+?)\*\*")
 USER_NEEDED_RE = re.compile(r"- 是否需要用户介入：\*\*(.+?)\*\*")
 OPTIONAL_ROUND_RE = re.compile(r"Round (\d{2}) 最小骨架")
@@ -76,7 +76,7 @@ def parse_task_blocks(text: str) -> list[GateTask]:
         end = headers[idx + 1].start() if idx + 1 < len(headers) else len(text)
         block = text[start:end]
         task_id = match.group(1)
-        title = match.group(0).split("：", 1)[-1].strip().rstrip("#").strip()
+        title = match.group(2).strip().rstrip("#").strip()
         status_m = STATUS_RE.search(block)
         user_m = USER_NEEDED_RE.search(block)
         status = status_m.group(1) if status_m else "unknown"
@@ -248,7 +248,7 @@ def main() -> int:
         "needs_user": task.needs_user,
         "source": task.source,
         "skipped_task_ids": sorted(SKIP_TASK_IDS),
-        "branch_hint": f"codex/{task.task_id.lower()}",
+        "branch_hint": "main",
         "commit_to_main": True,
         "verify_commands": [
             "python3 scripts/check_protocol_sync.py",

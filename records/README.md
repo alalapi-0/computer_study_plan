@@ -5,11 +5,11 @@
 
 ---
 
-## 1. 重要约束
+## 1. 当前约束
 
-- 本目录下任何**已写入的真实学习记录默认禁止删除**（见 `docs/governance/repo_rules.md`）。
-- 任何 AI / Codex / Cursor 都不允许批量清理本目录。
-- 删除前必须走 `docs/templates/repository_cleanup_confirmation.md`。
+- 截至 2026-07-06，用户已确认本目录下没有需要保护的真实学习记录。
+- 后续如果开始写真实周复盘、错题或完成快照，再由用户明确标注保护范围。
+- 不要在本目录写入账号、证件号、真实报名号、cookies、token 或私钥。
 
 ---
 

@@ -28,7 +28,7 @@
 > - `progress.json`、`progress_data.js`、`progress.html`、`mark_done.sh`
 > - `rounds/round_00/` 下所有文件
 > - 任意 `round_XX.md`
-> - `records/` 下任何已写入的用户真实学习记录
+> - 用户明确标注为真实学习记录的 `records/` 内容
 > - `AGENTS.md`、`README.md`、`CONVERSION_PROTOCOL.md`、`docs/CODEX_LONG_TERM_PLAN.md`、`docs/PROJECT_STATE.md`、`docs/NEXT_ACTIONS.md`、`docs/DECISIONS.md`、`docs/AUTO_ADVANCE_PROTOCOL.md`、`docs/MASTER_STUDY_ROADMAP.md`、`docs/STAGE_PLAN.md`
 
 ## 4. 拟重命名文件
@@ -59,9 +59,9 @@
 
 ## 8. 回滚方式
 
-- 本轮在分支 `codex/<task-id>-short-title` 上执行。
-- 如需回滚：`git reset --hard origin/main` 或在 PR 阶段直接关闭。
-- 是否已 push 到远端？[ ] 否 / [ ] 是（仅推到独立分支，不影响 main）
+- 本轮默认在 `main` 上执行；如使用分支需说明原因。
+- 如需回滚：使用 git 回退本轮 commit；如本轮走 PR，则可关闭 PR。
+- 是否已 push 到远端？[ ] 否 / [ ] 是（origin/main） / [ ] 是（独立分支，说明原因：______）
 
 ## 9. 是否需要用户确认
 
@@ -84,4 +84,4 @@
 - Round 00 验证：[ ] 通过（`bash mark_done.sh` 可正常运行）
 - `progress.json` 校验：[ ] 通过（`python3 -m json.tool progress.json` 通过）
 - commit hash：______
-- push 状态：[ ] 已 push 到独立分支 / [ ] 未 push（原因：______）
+- push 状态：[ ] 已 push 到 origin/main / [ ] 已 push 到独立分支（原因：______） / [ ] 未 push（原因：______）

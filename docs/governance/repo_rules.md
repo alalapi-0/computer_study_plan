@@ -40,7 +40,7 @@
 1. 不破坏 Round 00 的最小可运行闭环：`progress.json` / `progress_data.js` / `progress.html` / `mark_done.sh` / `rounds/round_00/`。
 2. 不一次性大范围重构无关内容。
 3. 每轮聚焦一个明确任务（参见 `AGENTS.md` 与 `docs/AUTO_ADVANCE_PROTOCOL.md`）。
-4. 不直接 push `main`，使用 `codex/<task-id>-short-title` 独立分支。
+4. 默认直接在 `main` 上验证、commit、push；独立分支只用于用户明确要求审查或高风险实验。
 5. 不把"未来规划"写成"已完成事实"。
 
 ## 3. 文件分层（软分层）
@@ -79,10 +79,10 @@
 
 删除前必须：
 
-- 先在 PR / 变更报告中列出拟删除文件清单；
+- 先在变更报告中列出拟删除文件清单；
 - 说明删除理由；
 - 如果有内容残值，先确认已迁移；
-- 如果是 Round 00 相关文件、`progress.json`、`mark_done.sh`、主线 Round md 文档或用户真实学习记录（`records/` 下已写入的内容），**默认禁止删除**，除非用户明确授权（参见 `docs/templates/repository_cleanup_confirmation.md`）。
+- 如果是 Round 00 相关文件、`progress.json`、`mark_done.sh`、主线 Round md 文档或用户明确标注为真实学习记录的内容，默认禁止删除，除非用户明确授权。
 - 已删除的对象（不再保护）：`plan_round_XX.txt`（22 份初版提示词文本，于 2026-05-12 经用户授权统一清理，内容已由 `round_XX.md` 完整吸收）。
 
 ## 5. 合并文件的硬约束
@@ -136,7 +136,7 @@
 
 ## 8. Codex / Cursor / AI 协作的额外约束
 
-- 只能在独立分支工作。
+- 默认在 `main` 直接推进；独立分支只在用户要求审查或高风险实验时使用。
 - 必须先读取 `AGENTS.md`、`docs/CODEX_LONG_TERM_PLAN.md`、`docs/PROJECT_STATE.md`、`docs/NEXT_ACTIONS.md`。
 - 必须遵守 `docs/governance/remote_operation_permissions.md` 定义的权限等级。
 - 任何 Level 2 及以上的远程操作，**必须先取得用户明确授权**，并使用 `docs/templates/remote_operation_confirmation.md` 走完确认流程。

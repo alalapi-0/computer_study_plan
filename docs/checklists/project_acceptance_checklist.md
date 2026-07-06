@@ -47,10 +47,9 @@
 
 ## F. Git 与远程同步验收
 
-- [ ] 本轮在独立分支 `codex/<task-id>-short-title` 上完成。
+- [ ] 本轮在 `main` 上完成；如使用独立分支，已说明原因。
 - [ ] 工作区干净（除 IDE / 系统副产物外）。
 - [ ] commit message 使用 `TASK-XXX:` 或 `VPS-XX:` 等清晰前缀。
-- [ ] 未直接 push `main`。
-- [ ] 已 push 到 origin 同名分支（如 remote 可用）。
+- [ ] 已直接 push 到 origin/main（如 remote 可用）。
 
 > 任何一项未通过，都不算"完成"。可以记录"已部分达成"，但不应直接进入下一轮。

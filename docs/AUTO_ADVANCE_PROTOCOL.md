@@ -23,7 +23,7 @@
 
 1. 从 `docs/NEXT_ACTIONS.md` 选择优先级最高、状态为 `pending`、且不需要用户介入的任务；运行 `python3 scripts/agent_gate.py --json` 时以门禁输出为准。
 2. **永久跳过（用户 2026-05-31）**：`TASK-RR-05` / `06` / `07` / `08` 及同类「不影响仓库推进」的人类介入、决策、联网核验卡点——`agent_gate` 的 `SKIP_TASK_IDS` 会过滤，不得阻塞自动选任务。Playwright 等依赖若轮次需要，在仓库内 `pip install` 即可，勿等待用户本机确认。
-3. 创建或切换到独立分支，默认分支名：`codex/<task-id>-short-title`；用户显式授权时可 **commit/push 到 `main`**（见 `agent_gate` JSON 的 `commit_to_main`）。
+3. 默认在 `main` 上直接推进；只有用户明确要求 PR 审查、需要实验性大改、或 `main` 推送失败时，才创建 `codex/<task-id>-short-title` 独立分支。
 4. 将该任务在 `docs/NEXT_ACTIONS.md` 中标记为 `in_progress`。
 5. 阅读任务涉及的现有文件，确认真实状态。
 6. 做最小必要修改。
@@ -32,8 +32,8 @@
 9. 更新 `docs/PROJECT_STATE.md`。
 10. 必要时更新 `docs/DECISIONS.md`、`README.md`、`AGENTS.md` 或长期规划文档。
 11. commit。
-12. remote 存在时 push（独立分支或 `main`，按用户当轮授权）。
-13. 如 GitHub CLI 可用并已登录，可创建或更新 PR（推 `main` 时通常省略 PR）。
+12. remote 存在时直接 push `main`。
+13. 只有本轮使用独立分支时，才创建或更新 PR。
 
 ## 3. 验证流程
 
@@ -73,20 +73,20 @@ TASK-XXX: short imperative summary
 
 ## 5. Push 规则
 
-- 默认不直接 push `main`；用户显式授权自动连推时，可按 `agent_gate` 的 `commit_to_main` 推送到 `main`。
-- remote 存在时，push 当前工作分支（独立分支或 `main`）。
+- 默认直接 push `main`。
+- remote 存在时，push 当前 `main`；独立分支只用于用户明确要求 PR 审查或高风险实验。
 - push 失败时停止并报告，不继续做下一轮。
 - 不修改 GitHub remote 或认证配置，除非用户明确要求。
 
 ## 6. PR 规则
 
-如果 GitHub CLI 可用并已登录：
+如果本轮使用独立分支且 GitHub CLI 可用并已登录：
 
 - 可以为本轮分支创建 PR。
 - PR 标题应包含 `TASK-XXX` 和任务摘要。
 - PR 描述应说明本轮做了什么、验证了什么、没有做什么。
 
-如果 GitHub CLI 不可用、未登录或 remote 不可访问：
+如果 GitHub CLI 不可用、未登录、remote 不可访问，或本轮直接推 `main`：
 
 - 不强行创建 PR。
 - 在最终汇报中说明原因。
@@ -127,4 +127,4 @@ TASK-XXX: short imperative summary
 ## 下一轮建议
 ```
 
-汇报必须说明当前分支、commit hash、push 是否成功，以及 PR 链接是否已创建。
+汇报必须说明当前分支、commit hash、push 是否成功；仅在创建 PR 时提供 PR 链接。

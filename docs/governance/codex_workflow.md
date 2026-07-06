@@ -28,7 +28,7 @@ docs/templates/*（高风险操作前的确认模板）
 
 1. 读取 `AGENTS.md` 和三份长期文档（`CODEX_LONG_TERM_PLAN.md`、`PROJECT_STATE.md`、`NEXT_ACTIONS.md`）。
 2. 从 `docs/NEXT_ACTIONS.md` 选择优先级最高、状态 `pending`、不需要用户介入的任务。
-3. 创建独立分支 `codex/<task-id>-short-title`。
+3. 默认留在 `main` 直接推进；只有用户要求 PR 审查或高风险实验时才创建独立分支。
 4. 在 `docs/NEXT_ACTIONS.md` 标记任务为 `in_progress`。
 5. 执行**最小必要修改**。
 6. 验证：
@@ -40,8 +40,8 @@ docs/templates/*（高风险操作前的确认模板）
 8. 更新 `docs/PROJECT_STATE.md`。
 9. 必要时更新 `docs/DECISIONS.md`、`README.md`、`AGENTS.md` 或长期规划文档。
 10. commit（一个任务一个 commit）。
-11. push 到 remote 独立分支。
-12. 如 `gh` 可用，创建或更新 PR。
+11. push 到 remote `main`。
+12. 仅在本轮使用独立分支时，创建或更新 PR。
 
 详细见 `docs/AUTO_ADVANCE_PROTOCOL.md`。
 
