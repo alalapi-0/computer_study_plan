@@ -36,11 +36,12 @@
 
 ## Web UI 完成方式
 
-本轮已经接入 `progress.html?round=round_19`：
+本轮已经接入当前本地 Web UI：
 
-- 文档学习：点击每周阅读任务，可直接在 Web UI 阅读 `rounds/round_19/week*/notes.md`。
-- 自动练习：点击每周练习任务的“运行”，会在 `~/cli-lab/round19` 生成 scikit-learn 风格代码、标准库自检脚本和静态报告，并记录对应练习完成。
-- 终端自测：点击自测任务的“终端”，浏览器终端会映射到 `~/cli-lab/round19`，用于手写小脚本。
+- 启动本地服务：`python3 scripts/progress_server.py --host 127.0.0.1 --port 8777`，打开 `http://127.0.0.1:8777/progress.html?round=round_19`。
+- 文档学习：点击每周阅读任务的“读教程”，可直接在 Web UI 阅读 `rounds/round_19/week*/notes.md`。
+- 自动练习：点击每周练习任务的“运行脚本”，会在 `~/cli-lab/round19` 生成 scikit-learn 风格代码、标准库自检脚本和静态报告，并记录对应练习完成。
+- 终端自测：点击自测任务的“终端练习”，浏览器终端会映射到 `~/cli-lab/round19`，用于手写小脚本；完成后点击“记录并完成”保存本次记录。
 - 外部链接：推荐资源中的 scikit-learn 官方文档链接会在新标签页打开。
 
 Web UI 中不执行 `pip install scikit-learn numpy pandas`；自动练习通过标准库和 AST 检查完成页面闭环。若你在本机另有 Python 环境，可以离开 Web UI 后再自行安装依赖运行生成的示例代码。

@@ -21,22 +21,22 @@
 打开：
 
 ```bash
-python3 scripts/progress_server.py --host 127.0.0.1 --port 8787
+python3 scripts/progress_server.py --host 127.0.0.1 --port 8777
 ```
 
 然后访问：
 
 ```text
-http://127.0.0.1:8787/progress.html?round=round_21
+http://127.0.0.1:8777/progress.html?round=round_21
 ```
 
 推荐顺序：
 
 1. 在 Web UI 中展开 Round 21。
-2. 点“阅读”直接阅读每周 notes，外部资料链接会新标签页打开。
-3. 点“运行”生成本周练习产物，所有输出只写入 `~/cli-lab/round21`。
-4. 点“终端”在浏览器映射终端中运行短命令 smoke check。
-5. 完成自测、小抄和验收后，再用“记录 / 完成”写入自己的学习记录。
+2. 点“读教程”直接阅读每周 notes，外部资料链接会新标签页打开。
+3. 点“运行脚本”生成本周练习产物，所有输出只写入 `~/cli-lab/round21`。
+4. 点“终端练习”在浏览器映射终端中运行短命令 smoke check。
+5. 完成自测、小抄和验收后，再用“记录并完成”写入自己的学习记录。
 
 本轮 Web UI 自动练习**不执行** `pip install torch transformers scikit-learn`，也不下载模型。脚本会生成真实 PyTorch / Hugging Face / scikit-learn 风格代码，并用 Python 标准库做可运行 smoke check；以后你想在本机深入运行这些示例时，再自行安装对应依赖。
 

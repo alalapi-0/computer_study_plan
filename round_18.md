@@ -35,12 +35,14 @@
 
 ## Web UI 使用方式
 
-本轮可以只通过 `progress.html?round=round_18` 推进：
+本轮可以通过当前本地 Web UI 推进：
 
-1. 逐周点击“打开”阅读 notes。
-2. 对每周练习点击“运行”，自动在 `~/cli-lab/round18` 生成 NumPy/pandas 代码形状、样例数据和静态检查报告。
-3. 对“自测”“产出”“验收”点击“终端”或“记录”，手动补充命令结果、证据路径和理解备注。
-4. 最终综合练习会生成 `~/cli-lab/round18/final_auto/numeric_data_lab`，用于解释从 raw CSV 到 analysis report 的完整链路。
+1. 启动本地服务：`python3 scripts/progress_server.py --host 127.0.0.1 --port 8777`。
+2. 打开 `http://127.0.0.1:8777/progress.html?round=round_18`。
+3. 逐周点击“读教程”阅读 notes。
+4. 对每周练习点击“运行脚本”，自动在 `~/cli-lab/round18` 生成 NumPy/pandas 代码形状、样例数据和静态检查报告。
+5. 对“自测”“产出”“验收”点击“终端练习”或“记录并完成”，补充命令结果、证据路径和理解备注。
+6. 最终综合练习会生成 `~/cli-lab/round18/final_auto/numeric_data_lab`，用于解释从 raw CSV 到 analysis report 的完整链路。
 
 > Web UI 自动练习不安装 NumPy/pandas，也不执行 `pip install`。它先用标准库静态检查验证代码形状和数据合同；如果之后你本机已安装 NumPy/pandas，可以进入沙盒手动运行生成脚本。
 
