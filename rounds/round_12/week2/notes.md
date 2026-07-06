@@ -33,7 +33,7 @@ printf 'import subprocess\nresult=subprocess.run(["ls","-la","."], capture_outpu
 python3 subprocess_self/subprocess_demo.py
 ```
 
-看到返回码 `0` 后，再手动标记 `r12-w2-self`。
+看到返回码 `0` 后，点击“记录并完成”保存 `r12-w2-self` 的本次记录。
 
 ## 本周自查
 

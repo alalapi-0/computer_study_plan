@@ -38,4 +38,4 @@ echo "综合练习完成，结果如下："
 find . -maxdepth 3 -type f | sort
 echo
 echo "脚本已完成综合练习任务 r01-fin-comp。"
-echo "下一步：在 Web UI 中检查 command_cheatsheet.md，确认小抄和验收后手动标记 r01-fin-sheet 与 r01-fin-acc1。"
+echo "下一步：在 Web UI 中检查 command_cheatsheet.md，确认小抄和验收后点击“记录并完成”保存 r01-fin-sheet 与 r01-fin-acc1。"

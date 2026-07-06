@@ -31,7 +31,7 @@ python3 log_self/log_demo.py
 find log_self/logs -type f | sort
 ```
 
-看到 `app.log` 和可能的轮转文件后，再手动标记 `r12-w3-self`。
+看到 `app.log` 和可能的轮转文件后，点击“记录并完成”保存 `r12-w3-self` 的本次记录。
 
 ## 本周自查
 

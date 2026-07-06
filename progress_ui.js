@@ -36,12 +36,12 @@ async function detectApi() {
   if (!banner) return;
   if (apiReady) {
     banner.className = "banner ok";
-    banner.innerHTML = "<strong>网页打卡已启用</strong> — 在学习工作区可读教程、做练习并记录完成；工程任务支持右侧终端。";
+    banner.innerHTML = "<strong>网页记录已启用</strong> — 在学习工作区可读教程、做练习并记录完成；工程任务支持右侧终端。";
     banner.style.display = "block";
   } else if (window.location.protocol !== "file:") {
     banner.className = "banner warn";
     banner.innerHTML =
-      '<strong>只读模式</strong> — 请用 <code>python3 scripts/progress_server.py</code> 启动以启用网页打卡。';
+      '<strong>只读模式</strong> — 请用 <code>python3 scripts/progress_server.py</code> 启动以启用网页记录。';
     banner.style.display = "block";
   } else {
     banner.className = "banner warn";
@@ -95,7 +95,7 @@ async function postTaskAction(taskId, undo, payload) {
   feedbackMap = data.feedback || feedbackMap;
   await loadFeedbackData();
   await loadEventData();
-  showToast(undo ? "已撤销完成" : "已标记完成", "ok");
+  showToast(undo ? "已撤销完成" : "已保存记录并完成", "ok");
   render();
   return data;
 }
@@ -268,7 +268,7 @@ function renderTerminal() {
 async function loadTerminalState() {
   const input = document.getElementById("terminalInput");
   if (!apiReady) {
-    terminalHistory = [{ kind: "error", prompt: "~ $", command: "", error: "请用 python3 scripts/progress_server.py 启动后使用练习终端。", cwd_display: "~" }];
+    terminalHistory = [{ kind: "error", prompt: "~ $", command: "", error: "请用 python3 scripts/progress_server.py 启动后使用终端练习。", cwd_display: "~" }];
     renderTerminal();
     if (input) input.disabled = true;
     return;
@@ -430,7 +430,7 @@ function taskActionButtons(taskId, done) {
 
 function fileActionLabel(filePath, taskType) {
   const file = String(filePath || "");
-  if (/\.(sh|py)$/i.test(file)) return "看脚本";
+  if (/\.(sh|py)$/i.test(file)) return "查看脚本";
   if (taskType === "reading" || /\.md$/i.test(file)) return "读教程";
   return "打开资料";
 }
@@ -471,7 +471,7 @@ async function postTaskRun(taskId) {
     ? `~/cli-lab/round${Number(roundMatch[1])}`
     : "~/cli-lab";
   const ok = window.confirm(
-    `将在本地沙盒执行白名单练习脚本：\n${file}\n\n工作目录：${sandbox}\n脚本可能写入沙盒、调用打卡脚本并追加动作记录。继续？`
+    `将在本地沙盒执行白名单练习脚本：\n${file}\n\n工作目录：${sandbox}\n脚本可能写入沙盒、调用完成记录脚本并追加动作记录。继续？`
   );
   if (!ok) return null;
 
@@ -652,7 +652,7 @@ function openRecordViewer(taskId, options = {}) {
     const evidencePath = body.querySelector("#recordEvidence")?.value || "";
     const btn = undo ? undoBtn : saveBtn;
     if (!undo && (options.requireNote || !done) && !note) {
-      showToast("请先写一条本次记录，再标记完成", "warn");
+      showToast("请先写一条本次记录，再保存完成", "warn");
       body.querySelector("#recordNote")?.focus();
       return;
     }
@@ -732,7 +732,7 @@ function renderRecordBody(taskId, done, fb, events, options = {}, meta = null) {
 }
 
 function actionLabel(actionType) {
-  if (actionType === "mark_done") return "标记完成";
+  if (actionType === "mark_done") return "记录并完成";
   if (actionType === "undo_done") return "撤销完成";
   if (actionType === "run_exercise") return "运行练习";
   return actionType || "动作";
@@ -771,7 +771,7 @@ function renderExecutionResult(execution) {
       <pre class="run-output"><code>${escapeHtml(stdout || "（无输出）")}</code></pre>
       <h4>错误输出</h4>
       <pre class="run-output"><code>${escapeHtml(stderr || "（无错误输出）")}</code></pre>
-      <p class="run-hint">运行结果已写入动作记录。若脚本只是生成练习产物但未自动打卡，请在同一任务旁点击“记录并完成”补充备注。</p>
+      <p class="run-hint">运行结果已写入动作记录。若脚本只是生成练习产物但未自动保存完成记录，请在同一任务旁点击“记录并完成”补充备注。</p>
     </div>
   `;
 }

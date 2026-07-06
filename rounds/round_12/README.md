@@ -20,7 +20,7 @@
 4. 最终验收：
    - 运行 `final/comprehensive_exercise.py`。
    - 阅读并补全 `final/pipeline_automation_cheatsheet.md`。
-   - 用“记录并完成”点击“记录并完成”保存小抄和口头解释类任务。
+   - 点击“记录并完成”保存小抄和口头解释类任务。
 
 ## 安全边界
 

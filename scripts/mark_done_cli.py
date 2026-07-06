@@ -29,7 +29,7 @@ def print_usage() -> None:
     print("  bash mark_done.sh --lane soft_exam        # 只看某条主线")
     print("  bash mark_done.sh --limit 20              # 调整每条主线显示数量")
     print("  bash mark_done.sh --all                   # 查看全部任务")
-    print("  bash mark_done.sh <task-id>               # 标记完成")
+    print("  bash mark_done.sh <task-id>               # 记录完成")
     print("  bash mark_done.sh <task-id> --undo        # 取消完成")
 
 
@@ -158,7 +158,7 @@ def main(argv: list[str]) -> int:
     elif result["result"] == "noop_already_done":
         print(f"✅ 已是完成状态（{result['done_at']}），无需重复标记")
     else:
-        print(f"✅ 已标记完成：{label}  ({result['done_at']})")
+        print(f"✅ 已记录完成：{label}  ({result['done_at']})")
 
     print(f"📊 总进度：{result['done_count']}/{result['total']}")
     print(f"📝 已记录事件：{result['action_id']}")

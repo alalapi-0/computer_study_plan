@@ -271,7 +271,7 @@ cd ~/PycharmProjects/computer_study_plan
 
 ### 6.3 看进度
 
-- **方式一（推荐 · 网页打卡）**：
+- **方式一（推荐 · 网页记录）**：
   ```bash
   cd ~/PycharmProjects/computer_study_plan
   python3 scripts/progress_server.py
@@ -301,7 +301,7 @@ bash mark_done.sh                # 简洁查看：每条主线前 8 个未完成
 bash mark_done.sh --lane soft_exam  # 只看某条主线
 bash mark_done.sh --limit 20     # 调整每条主线显示数量
 bash mark_done.sh --all          # 查看全部任务
-bash mark_done.sh <task-id>      # 标记完成
+bash mark_done.sh <task-id>      # 记录完成
 bash mark_done.sh <task-id> --undo  # 取消完成
 ```
 

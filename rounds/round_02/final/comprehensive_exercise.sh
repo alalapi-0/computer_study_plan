@@ -6,7 +6,7 @@
 #
 # 本脚本对应 progress.json 中的任务：
 #   r02-fin-comp  → 综合练习执行
-#   r02-fin-sheet → 完成 command_cheatsheet.md（手动确认后打卡）
+#   r02-fin-sheet → 完成 command_cheatsheet.md（点击“记录并完成”保存）
 #   r02-fin-acc1  → 验收1：解释重定向/管道
 #   r02-fin-acc2  → 验收2：完成 3 次提交并查看历史
 # =============================================================
@@ -64,4 +64,4 @@ git log --oneline -n 5
 mark r02-fin-comp
 
 echo "脚本已完成综合练习 r02-fin-comp。"
-echo "下一步：在 Web UI 中检查 command_cheatsheet.md，确认能解释重定向/管道和 3 次 Git 提交后，手动标记 r02-fin-sheet / r02-fin-acc1 / r02-fin-acc2。"
+echo "下一步：在 Web UI 中检查 command_cheatsheet.md，确认能解释重定向/管道和 3 次 Git 提交后，点击“记录并完成”保存 r02-fin-sheet / r02-fin-acc1 / r02-fin-acc2。"

@@ -5,7 +5,7 @@
 # 用法：bash rounds/round_02/week3/exercises.sh
 #
 # 本脚本对应 progress.json 中的任务：
-#   r02-w3-read  → 阅读 week3/notes.md（手动打卡）
+#   r02-w3-read  → 阅读 week3/notes.md（点击“记录并完成”保存）
 #   r02-w3-ex7   → 练习7：初始化与首次提交
 #   r02-w3-ex8   → 练习8：第二次提交
 #   r02-w3-ex9   → 练习9：新增文件再提交

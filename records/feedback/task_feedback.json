@@ -9,23 +9,23 @@
       "task_id": "w1-read",
       "lane": "engineering",
       "done": false,
-      "action_count": 2,
-      "last_action_type": "undo_done",
-      "last_action_at": "2026-06-15T12:55:40",
+      "action_count": 0,
+      "last_action_type": null,
+      "last_action_at": null,
       "feedback_type": "not_started",
-      "message": "最近一次动作是撤销完成，当前任务未完成。",
-      "next_suggestion": "重新阅读资料后，再用网页按钮完成记录。"
+      "message": "尚未开始，建议先做一个 15 分钟启动动作。",
+      "next_suggestion": "先阅读资料，或完成一条最小练习。"
     },
     "w1-ex1": {
       "task_id": "w1-ex1",
       "lane": "engineering",
       "done": false,
-      "action_count": 2,
-      "last_action_type": "undo_done",
-      "last_action_at": "2026-06-15T12:55:52",
+      "action_count": 0,
+      "last_action_type": null,
+      "last_action_at": null,
       "feedback_type": "not_started",
-      "message": "最近一次动作是撤销完成，当前任务未完成。",
-      "next_suggestion": "重新阅读资料后，再用网页按钮完成记录。"
+      "message": "尚未开始，建议先做一个 15 分钟启动动作。",
+      "next_suggestion": "先阅读资料，或完成一条最小练习。"
     },
     "w1-ex2": {
       "task_id": "w1-ex2",
@@ -3089,12 +3089,12 @@
       "task_id": "soft_exam-ds-start",
       "lane": "soft_exam",
       "done": false,
-      "action_count": 3,
-      "last_action_type": "undo_done",
-      "last_action_at": "2026-06-15T12:55:02",
+      "action_count": 0,
+      "last_action_type": null,
+      "last_action_at": null,
       "feedback_type": "not_started",
-      "message": "最近一次动作是撤销完成，当前任务未完成。",
-      "next_suggestion": "重新阅读资料后，再用网页按钮完成记录。"
+      "message": "尚未开始，建议先做一个 15 分钟启动动作。",
+      "next_suggestion": "先阅读资料，或完成一条最小练习。"
     },
     "soft_exam-os-start": {
       "task_id": "soft_exam-os-start",

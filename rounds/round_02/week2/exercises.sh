@@ -5,7 +5,7 @@
 # 用法：bash rounds/round_02/week2/exercises.sh
 #
 # 本脚本对应 progress.json 中的任务：
-#   r02-w2-read  → 阅读 week2/notes.md（手动打卡）
+#   r02-w2-read  → 阅读 week2/notes.md（点击“记录并完成”保存）
 #   r02-w2-ex4   → 练习4：count_errors.sh
 #   r02-w2-ex5   → 练习5：count_labels.sh
 #   r02-w2-ex6   → 练习6：show_args.sh

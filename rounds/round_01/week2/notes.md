@@ -60,4 +60,4 @@ find . -maxdepth 3 -type f | sort
 6. 把 `y.txt` 改名成 `result.txt`
 7. 删除一个自己创建的测试文件
 
-完成后在 Web UI 中手动标记 `自测：独立整理 week2_test`。
+完成后点击“记录并完成”，保存 `自测：独立整理 week2_test` 的本次记录。

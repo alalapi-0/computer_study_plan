@@ -11,7 +11,7 @@
 1. 阅读本文件后，点击 Week 3 的三个“运行脚本”按钮。
 2. 脚本会在 `~/cli-lab/round2/week3/git_lab_auto` 中创建一个可重复生成的本地 Git 仓库。
 3. 自测时打开“终端练习”，在 `~/cli-lab/round2/week3/git_lab_manual` 中手敲最小 Git 闭环。
-4. 能解释 `git status` 和 `git log --oneline` 后，再在 Web UI 中手动标记自测任务。
+4. 能解释 `git status` 和 `git log --oneline` 后，再点击“记录并完成”保存自测记录。
 
 ## 最小闭环命令
 
@@ -69,4 +69,4 @@ git log --oneline
 4. 用 `git status` 确认工作区状态
 5. 用 `git log --oneline` 解释两次提交的历史
 
-完成后在 Web UI 中手动标记 `自测：解释 status 与 log`。
+完成后点击“记录并完成”，保存 `自测：解释 status 与 log` 的本次记录。

@@ -44,7 +44,7 @@ python3 self_scan/scan_demo.py
 find self_scan -maxdepth 2 -type f | sort
 ```
 
-看到输出文件后，再手动标记 `r12-w1-self`。
+看到输出文件后，点击“记录并完成”保存 `r12-w1-self` 的本次记录。
 
 ## 本周自查
 
