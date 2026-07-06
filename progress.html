@@ -1486,11 +1486,21 @@
 
     @media (max-width: 760px) {
       .continue-grid { grid-template-columns: minmax(0, 1fr); gap: 1.1rem; }
-      .workspace-head { flex-direction: column; }
+      .top-bar { display: none; }
+      .side-rail { padding: 0.7rem; }
+      .rail-brand { margin-bottom: 0.7rem; }
+      .rail-mark { width: 34px; height: 34px; }
+      .rail-subtitle { display: none; }
+      .workspace-surface { padding: 0.85rem; margin-bottom: 0.9rem; }
+      .workspace-head { flex-direction: column; gap: 0.55rem; margin-bottom: 0.7rem; }
+      .workspace-head .card-sub { display: none; }
       .workflow-steps { justify-content: flex-start; }
+      .workflow-steps span { padding: 0.2rem 0.42rem; font-size: 0.68rem; }
       .learning-grid { grid-template-columns: minmax(0, 1fr); }
       .inline-reader-panel,
       .terminal-panel { min-height: auto; }
+      .task-flow-list { margin: 0.65rem 0; }
+      .inline-reader-body { max-height: 300px; }
       .continue-note {
         border-left: 0;
         border-top: 1px solid var(--border);
@@ -1814,9 +1824,9 @@
   </div>
 </div>
 
-<script src="progress_data.js?v=20260706a"></script>
-<script src="rounds_data.js?v=20260706a"></script>
-<script src="progress_ui.js?v=20260706a"></script>
+<script src="progress_data.js?v=20260706b"></script>
+<script src="rounds_data.js?v=20260706b"></script>
+<script src="progress_ui.js?v=20260706b"></script>
 <script>
 const ROUNDS = window.ROUNDS_DATA || [];
 

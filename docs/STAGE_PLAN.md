@@ -44,13 +44,13 @@
 - `records/weekly_reviews/`、`records/error_notes/`、`records/completed_tasks/`
 - progress.json / progress_data.js / mark_done.sh / progress.html 全部升级到四主线
 
-### 退出标准
+### 退出标准（仓库建设层面已完成）
 
-- [ ] 仓库内 `plan_round_XX.txt` 全部删除
-- [ ] 所有路线骨架文档存在并可读
-- [ ] `bash mark_done.sh` 仍可运行（Round 00 兼容）
-- [ ] `progress.html` 能看到四主线总进度（哪怕目前都是 0%）
-- [ ] README 入口已对齐新路线
+- [x] 仓库内 `plan_round_XX.txt` 全部删除
+- [x] 所有路线骨架文档存在并可读
+- [x] `bash mark_done.sh` 仍可运行（Round 00 兼容）
+- [x] `progress.html` 能看到四主线总进度
+- [x] README 入口已对齐新路线和 Web UI 学习工作区
 
 ---
 
@@ -58,10 +58,10 @@
 
 | 字段 | 内容 |
 |---|---|
-| 启动条件 | Stage 0 退出后 |
+| 启动条件 | Stage 0 仓库建设完成后；当前已经可从 Web UI 启动 |
 | 所属 lane | `engineering` |
 | 主要时长 | 2–3 个月（按真实节奏） |
-| 现有 Round 映射 | **Round 00–02**（终端 + 文件系统 + Shell + Git）+ **Round 06**（Linux 进阶与自动化）+ **VPS 支线 stage_03_vps_remote_ops** |
+| 现有 Round 映射 | **Round 00–21 均已展开并注册到 Web UI**；Stage 1 学习重点仍优先看 Round 00–02、Round 06 和 VPS 支线 |
 | 与考试关系 | 软考"操作系统 / 网络"广度入门；不直接是考点 |
 
 ### 目标
@@ -72,8 +72,8 @@
 
 ### 产物
 
-- Round 00 完成（已存在闭环）
-- 至少 Round 01 / Round 02 / Round 06 展开为 `rounds/round_XX/` 实操目录（按需做完）
+- Round 00–21 已展开为 `rounds/round_XX/` 实操目录；真实学习完成状态以 `progress.json` / Web UI 为准
+- Stage 1 优先完成 Round 00 / Round 01 / Round 02 / Round 06 的阅读、练习、自测和最终验收
 - VPS 支线至少完成 VPS-04（SSH 文档）+ VPS-05（首次只读检查）
 - `plans/linux/` 下补充"软考视角下的操作系统基础对照笔记"
 
@@ -88,7 +88,7 @@
 
 ### 简化版本（若时间不够）
 
-- 只做 Round 00 + Round 02 + VPS-04，先把 Git 和 SSH 走通
+- 先在 Web UI 中完成 Round 00 + Round 02 + VPS-04 阅读任务，把 Git 和 SSH 的最小路径走通
 
 ### 退出标准
 

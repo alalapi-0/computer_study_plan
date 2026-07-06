@@ -140,7 +140,7 @@ function taskUsesTerminal(task) {
   if (!task) return false;
   const meta = taskMeta(task.id);
   if (meta?.round?.lane !== "engineering") return false;
-  return ["exercise", "test", "output"].includes(task.type);
+  return ["reading", "exercise", "test", "output"].includes(task.type);
 }
 
 function renderTerminalContext() {

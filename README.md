@@ -18,7 +18,28 @@
 
 ---
 
-## Workspace MCP Servers
+## 快速开始
+
+日常学习优先打开 Web UI：
+
+```bash
+cd ~/PycharmProjects/computer_study_plan
+python3 scripts/progress_server.py
+open http://127.0.0.1:8777/progress.html
+```
+
+打开后先看「学习工作区」：
+
+1. 左侧确认当前任务。
+2. 中间读教程。
+3. 右侧用浏览器终端练习。
+4. 写一条记录并点击完成。
+
+需要总览、倒计时、存档或复盘时，再展开「进度、配置、存档与复盘信息」。
+
+---
+
+## Agent / MCP 工具配置（普通学习可跳过）
 
 当前项目需要以下 Workspace MCP Servers：
 
@@ -40,7 +61,7 @@
 
 ---
 
-## Cursor Browser UI Workflow
+## Cursor Browser UI Workflow（开发 Web UI 时使用）
 
 当使用 Cursor Agent 优化本地 Web UI（如 `progress.html`）时：
 
@@ -89,21 +110,21 @@ npm run check:mcp
 
 本仓库**不是**：
 
-- ❌ 一个工具仓库（不放业务代码）
-- ❌ 一个生产项目（不部署服务）
+- ❌ 一个生产业务项目仓库（不放与学习路线无关的业务系统）
+- ❌ 一个公网生产项目（不部署真实线上服务）
 - ❌ 一个题库（不缓存任何具体考题或考点）
 - ❌ 一个院校信息库（不基于经验贴或过期年份填写招生数据）
 
 本仓库**是**：
 
-- ✅ 学习路线的**总控**与**进度看板**
+- ✅ 学习路线的**总控**与本地 Web UI 进度工作台
 - ✅ 章节笔记骨架与错题归档系统
 - ✅ Codex / Cursor / 编程 AI 协作的工作入口
 - ✅ 长期可维护、初学者可读的文档体系
 
 ---
 
-## 2. 当前总目标（v2026-05）
+## 2. 当前总目标（v2026-07）
 
 | 时段 | 目标 |
 |---|---|
@@ -168,7 +189,7 @@ npm run check:mcp
 │  ├─ ERROR_REVIEW_SYSTEM.md       ← ★ 错题与复盘系统
 │  ├─ GRADUATE_SCHOOL_TRACKER.md   ← ★ 院校跟踪模板（不含真实数据）
 │  ├─ PROJECT_PORTFOLIO_TRACK.md   ← ★ 作品集追踪
-│  ├─ CODEX_LONG_TERM_PLAN.md      ← 项目长期目标与阶段路线
+│  ├─ CODEX_LONG_TERM_PLAN.md      ← 当前长期协作规则
 │  ├─ AUTO_ADVANCE_PROTOCOL.md     ← Codex 单轮自动推进协议
 │  ├─ PROJECT_STATE.md             ← 项目当前状态
 │  ├─ NEXT_ACTIONS.md              ← 下一步任务队列
@@ -211,7 +232,7 @@ npm run check:mcp
    ├─ round_09/                    ← 仓库规范化与测试入门（已展开）
    ├─ round_10/                    ← Python 工程化基础（已展开）
    ├─ round_11/                    ← 本地持久化与数据记录（已展开）
-   ├─ round_12/ … round_21/        ← 路线 A/B/C 后续轮次（已展开最小骨架）
+   ├─ round_12/ … round_21/        ← 后续工程 / 数据 / AI 轮次（已展开并接入 Web UI）
    └─ stage_03_vps_remote_ops/     ← VPS 远程实操支线（13 份 Round 文档）
       ├─ README.md
       └─ round_vps_00 ~ round_vps_12.md
@@ -345,5 +366,5 @@ bash mark_done.sh <task-id> --undo  # 取消完成
 - 这条路线长度按年计，节奏需要**长期可持续 > 短期高强度**。
 - 错题本是知识体系最重要的指针，而不是炫学习量的工具。
 - 数学二每周保底一道题，**永不为 0**。
-- 不要把 21 份 Round 概览的"已存在"误以为"已完成"——它们只是大纲。
+- 不要把 22 份 Round 概览和实操目录的"已存在"误以为"已经学完"——完成状态以 Web UI / `progress.json` 为准。
 - 院校信息**不要凭印象填**，必须查官网。
