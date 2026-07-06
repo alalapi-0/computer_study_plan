@@ -403,6 +403,7 @@ function fileActionLabel(filePath, taskType) {
 
 function taskRecordButton(taskId) {
   if (!apiReady) return "";
+  if (!isTaskDone(taskId)) return "";
   const count = eventsFor(taskId).length;
   const label = count ? `记录 ${count}` : "记录";
   return `<button type="button" class="task-btn record task-record-open" data-task="${taskId}">${label}</button>`;
@@ -549,7 +550,8 @@ async function openInlineReader(filePath, title, taskId, options) {
     const text = await res.text();
     body.innerHTML = /\.(sh|py|js|json)$/i.test(filePath)
       ? renderCodeDocument(text, filePath)
-      : renderMarkdown(text);
+      : renderMarkdown(text, filePath);
+    bindReaderDocumentLinks(body);
   } catch (err) {
     body.innerHTML = `<p class='reader-error'>无法加载 ${escapeHtml(filePath)}：${escapeHtml(err.message)}</p>`;
   }
@@ -574,8 +576,9 @@ async function openMarkdownViewer(filePath, title) {
     if (/\.(sh|py|js|json)$/i.test(filePath)) {
       body.innerHTML = renderCodeDocument(text, filePath);
     } else {
-      body.innerHTML = renderMarkdown(text);
+      body.innerHTML = renderMarkdown(text, filePath);
     }
+    bindReaderDocumentLinks(body);
   } catch (err) {
     body.innerHTML = `<p class='reader-error'>无法加载 ${escapeHtml(filePath)}：${escapeHtml(err.message)}</p>`;
   }
@@ -698,7 +701,7 @@ function renderExecutionResult(execution) {
       <pre class="run-output"><code>${escapeHtml(stdout || "（无输出）")}</code></pre>
       <h4>错误输出</h4>
       <pre class="run-output"><code>${escapeHtml(stderr || "（无错误输出）")}</code></pre>
-      <p class="run-hint">运行结果已写入动作记录。若脚本只是生成练习产物但未自动打卡，请在同一任务旁点击“完成”或打开“记录”补充备注。</p>
+      <p class="run-hint">运行结果已写入动作记录。若脚本只是生成练习产物但未自动打卡，请在同一任务旁点击“记录并完成”补充备注。</p>
     </div>
   `;
 }
@@ -710,15 +713,41 @@ function closeMarkdownViewer() {
   modal.setAttribute("aria-hidden", "true");
 }
 
-function inlineMarkdown(text) {
+function resolveReaderLink(href, baseFilePath) {
+  const raw = String(href || "").trim();
+  if (!raw || /^(?:[a-z][a-z0-9+.-]*:|#)/i.test(raw)) return "";
+  const clean = raw.split("#")[0].split("?")[0];
+  const baseDir = String(baseFilePath || "").split("/").slice(0, -1).join("/");
+  const joined = clean.startsWith("/") ? clean.slice(1) : `${baseDir}/${clean}`;
+  const parts = [];
+  for (const part of joined.split("/")) {
+    if (!part || part === ".") continue;
+    if (part === "..") {
+      parts.pop();
+      continue;
+    }
+    parts.push(part);
+  }
+  const normalized = parts.join("/");
+  return READABLE_FILE_RE.test(normalized) ? normalized : "";
+}
+
+function inlineMarkdown(text, baseFilePath = "") {
   return escapeHtml(text)
-    .replace(/\[([^\]]+)\]\((https?:\/\/[^)\s]+)\)/g, '<a href="$2" target="_blank" rel="noreferrer noopener">$1</a>')
+    .replace(/\[([^\]]+)\]\(([^)\s]+)\)/g, (match, label, href) => {
+      if (/^https?:\/\//i.test(href)) {
+        return `<a href="${href}" target="_blank" rel="noreferrer noopener">${label}</a>`;
+      }
+      const file = resolveReaderLink(href, baseFilePath);
+      if (!file) return match;
+      return `<a href="${file}" class="inline-doc-link" data-file="${file}" data-title="${label}">${label}</a>`;
+    })
     .replace(/&lt;(https?:\/\/[^&]+)&gt;/g, '<a href="$1" target="_blank" rel="noreferrer noopener">$1</a>')
     .replace(/`([^`]+)`/g, "<code>$1</code>")
     .replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>");
 }
 
-function renderMarkdown(src) {
+function renderMarkdown(src, baseFilePath = "") {
   const lines = String(src).replace(/\r\n/g, "\n").split("\n");
   const out = [];
   let paragraph = [];
@@ -731,17 +760,17 @@ function renderMarkdown(src) {
 
   const flushParagraph = () => {
     if (!paragraph.length) return;
-    out.push(`<p>${inlineMarkdown(paragraph.join(" "))}</p>`);
+    out.push(`<p>${inlineMarkdown(paragraph.join(" "), baseFilePath)}</p>`);
     paragraph = [];
   };
   const flushList = () => {
     if (!list.length) return;
-    out.push(`<ul>${list.map((item) => `<li>${inlineMarkdown(item)}</li>`).join("")}</ul>`);
+    out.push(`<ul>${list.map((item) => `<li>${inlineMarkdown(item, baseFilePath)}</li>`).join("")}</ul>`);
     list = [];
   };
   const flushOrderedList = () => {
     if (!orderedList.length) return;
-    out.push(`<ol>${orderedList.map((item) => `<li>${inlineMarkdown(item)}</li>`).join("")}</ol>`);
+    out.push(`<ol>${orderedList.map((item) => `<li>${inlineMarkdown(item, baseFilePath)}</li>`).join("")}</ol>`);
     orderedList = [];
   };
   const flushTable = () => {
@@ -752,7 +781,7 @@ function renderMarkdown(src) {
     if (rows.length) {
       const head = rows[0];
       const body = rows.slice(1);
-      out.push(`<div class="table-scroll"><table><thead><tr>${head.map((cell) => `<th>${inlineMarkdown(cell)}</th>`).join("")}</tr></thead><tbody>${body.map((row) => `<tr>${row.map((cell) => `<td>${inlineMarkdown(cell)}</td>`).join("")}</tr>`).join("")}</tbody></table></div>`);
+      out.push(`<div class="table-scroll"><table><thead><tr>${head.map((cell) => `<th>${inlineMarkdown(cell, baseFilePath)}</th>`).join("")}</tr></thead><tbody>${body.map((row) => `<tr>${row.map((cell) => `<td>${inlineMarkdown(cell, baseFilePath)}</td>`).join("")}</tr>`).join("")}</tbody></table></div>`);
     }
     table = [];
   };
@@ -800,7 +829,7 @@ function renderMarkdown(src) {
       flushOrderedList();
       flushList();
       const level = heading[1].length;
-      out.push(`<h${level}>${inlineMarkdown(heading[2])}</h${level}>`);
+      out.push(`<h${level}>${inlineMarkdown(heading[2], baseFilePath)}</h${level}>`);
       continue;
     }
     if (/^---+$/.test(line.trim())) {
@@ -810,7 +839,7 @@ function renderMarkdown(src) {
     }
     if (line.startsWith("> ")) {
       flushBlocks();
-      out.push(`<blockquote>${inlineMarkdown(line.slice(2))}</blockquote>`);
+      out.push(`<blockquote>${inlineMarkdown(line.slice(2), baseFilePath)}</blockquote>`);
       continue;
     }
     const bullet = line.match(/^[-*]\s+(.+)$/);
@@ -841,6 +870,19 @@ function renderMarkdown(src) {
 function renderCodeDocument(src, filePath) {
   const ext = filePath.split(".").pop() || "";
   return `<div class="md-body code-doc"><p class="code-doc-note">这是练习脚本内容，可先在这里阅读步骤，再按任务要求练习。</p><pre><code class="language-${escapeHtml(ext)}">${escapeHtml(src)}</code></pre></div>`;
+}
+
+function bindReaderDocumentLinks(container) {
+  if (!container) return;
+  container.querySelectorAll(".inline-doc-link").forEach((link) => {
+    link.addEventListener("click", (e) => {
+      e.preventDefault();
+      const file = link.getAttribute("data-file") || "";
+      if (!file) return;
+      openInlineReader(file, link.getAttribute("data-title") || file, "", { silent: true });
+      closeMarkdownViewer();
+    });
+  });
 }
 
 document.addEventListener("DOMContentLoaded", () => {

@@ -285,7 +285,7 @@ cd ~/PycharmProjects/computer_study_plan
 
 - 学习工作区（当前任务 + 内联教程 + 工程任务练习终端）
 - 总进度与四主线进度（engineering / soft_exam / math2 / cs408）
-- 按 lane / Round 浏览（实操目录已展开 Round 00–21；进度看板任务集合已与 `progress.json` 对齐）
+- 按主线查看任务（工程线为 Round 00–21，考试 / 数学 / 408 为计划任务；进度看板任务集合已与 `progress.json` 对齐）
 - 折叠管理区：本周任务、考试倒计时、存档与读档、Stage 0–7、当前薄弱项
 - 练习脚本运行结果（仅限已登记的 `rounds/round_XX/weekN|final` 白名单脚本）
 
