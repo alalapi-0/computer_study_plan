@@ -30,7 +30,7 @@ git rev-parse --show-toplevel
 
 - **工作区根目录**必须打开上表中的文件夹（不是父级 `PycharmProjects`，也不是子目录 `rounds/`）。
 - Cursor 窗口**左下角显示的路径**即工作区根；正常应为 `…/PycharmProjects/computer_study_plan`。
-- 所有 `bash mark_done.sh`、`python3 scripts/progress_server.py`、阅读 `progress.html` 的操作，默认都在该根目录下执行。静态打开页面只用于只读检查。
+- 所有 `bash mark_done.sh`、`python3 scripts/progress_server.py`、阅读 `progress.html` 的操作，默认都在该根目录下执行。静态打开页面只用于只读布局 / 进度检查，不具备写 API、练习脚本、动作日志或浏览器终端能力。
 
 ### 1.3 不再使用的路径（避免混淆）
 

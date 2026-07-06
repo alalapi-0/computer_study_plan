@@ -1,6 +1,6 @@
-# Round 文档与进度系统协议 v2.0
+# Round 文档与进度系统协议 v2.1
 
-> **用途**：本文件规定仓库内"Round 概览文档（`round_XX.md`）"与"Round 实操目录（`rounds/round_XX/`）"的标准结构，以及进度系统（`progress.json` / `progress_data.js` / `mark_done.sh` / `progress.html`）的维护规则。
+> **用途**：本文件规定仓库内"Round 概览文档（`round_XX.md`）"与"Round 实操目录（`rounds/round_XX/`）"的标准结构，以及当前进度系统（`progress.json` / `progress_data.js` / `rounds_data.js` / `progress.html` / `progress_ui.js` / `scripts/progress_server.py` / `mark_done.sh` / 动作日志 / 任务反馈）的维护规则。
 > 每次新增或修改 Round 时，需严格遵守本协议，并同步更新 `README.md`。
 
 ---
@@ -9,7 +9,7 @@
 
 | 字段 | 值 |
 |------|----|
-| **当前版本** | v2.0 |
+| **当前版本** | v2.1 |
 | **生效日期** | 2026-05-12 |
 | **覆盖范围** | 主线 Round 00–21 + 阶段性支线（VPS / 软考 / 408 / 数学二 / 0854 等） |
 | **重大变更** | v2.0 移除"txt → md 转换"流程；`plan_round_XX.txt` 已于 2026-05-12 全部删除；本协议改为只面向 md |
@@ -266,7 +266,7 @@
 
 | 轮次 | 主题 | MD 状态 | 实操目录 | 所属主线 | 备注 |
 |------|------|---------|---------|---------|------|
-| Round 00 | Terminal 初见 | ✅ 完整 | ✅ 已展开 | engineering | 已完成最小闭环 |
+| Round 00 | Terminal 初见 | ✅ 完整 | ✅ 已展开 | engineering | 已展开并接入 Web UI；真实学习完成状态以 `progress.json` 为准 |
 | Round 01 | 文件系统与基础命令 | ✅ 概览 | ✅ 已展开 | engineering | 2026-05-28 完成 Round 01 最小目录骨架 |
 | Round 02 | Shell、管道、Git | ✅ 概览 | ✅ 已展开 | engineering | 2026-05-28 完成 Round 02 目录骨架 |
 | Round 03 | Python 基础 + 复杂度 | ✅ 概览 | ✅ 已展开 | engineering | 2026-05-28 完成 Round 03 最小目录骨架 |
