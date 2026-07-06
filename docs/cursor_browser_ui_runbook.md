@@ -71,7 +71,7 @@
 固定 14 步，每轮只推进一个主要 UI 切片：
 
 1. 读取 `README.md`、`AGENTS.md`、`docs/MASTER_STUDY_ROADMAP.md` 及 `docs/design/`（若存在）
-2. 启动项目（如 `python3 -m http.server 8000` 打开 `progress.html`）
+2. 启动项目：`python3 scripts/progress_server.py`，打开 `http://127.0.0.1:8777/progress.html`
 3. 用 browser / chrome-devtools / playwright 打开目标页面
 4. 保存 **before** screenshot
 5. 读取 Stitch 设计文档或调用 Stitch MCP 获取设计输入

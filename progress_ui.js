@@ -206,6 +206,7 @@ function renderTerminal() {
   const current = currentWorkspaceTask();
   const idleForCurrentTask = !activeTerminalTaskId && current && !taskUsesTerminal(current.task);
   document.getElementById("terminal")?.classList.toggle("terminal-idle", !!idleForCurrentTask);
+  document.getElementById("learnWorkspace")?.classList.toggle("no-terminal-task", !!idleForCurrentTask);
   prompt.textContent = terminalPrompt(terminalCwdDisplay || "~");
   renderTerminalContext();
   if (!terminalHistory.length) {
@@ -390,7 +391,7 @@ function taskActionButtons(taskId, done) {
   if (done) {
     return `<button type="button" class="task-btn undo" data-task="${taskId}" data-action="undo">撤销</button>`;
   }
-  return `<button type="button" class="task-btn done" data-task="${taskId}" data-action="done">完成</button>`;
+  return `<button type="button" class="task-btn done task-complete-open" data-task="${taskId}">记录并完成</button>`;
 }
 
 function fileActionLabel(filePath, taskType) {
@@ -479,6 +480,12 @@ function bindTaskActions(container) {
     btn.addEventListener("click", (e) => {
       e.stopPropagation();
       openRecordViewer(btn.getAttribute("data-task"));
+    });
+  });
+  container.querySelectorAll(".task-complete-open").forEach((btn) => {
+    btn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      openRecordViewer(btn.getAttribute("data-task"), { requireNote: true });
     });
   });
   container.querySelectorAll(".task-run").forEach((btn) => {
@@ -584,7 +591,7 @@ function taskMeta(taskId) {
   return null;
 }
 
-function openRecordViewer(taskId) {
+function openRecordViewer(taskId, options = {}) {
   const modal = document.getElementById("readerModal");
   const body = document.getElementById("readerBody");
   const heading = document.getElementById("readerTitle");
@@ -597,16 +604,21 @@ function openRecordViewer(taskId) {
   const events = eventsFor(taskId).slice().reverse();
 
   heading.textContent = `学习记录 · ${title}`;
-  body.innerHTML = renderRecordBody(taskId, done, fb, events);
+  body.innerHTML = renderRecordBody(taskId, done, fb, events, options);
   modal.classList.add("open");
   modal.setAttribute("aria-hidden", "false");
 
   const saveBtn = body.querySelector("#recordSaveDone");
   const undoBtn = body.querySelector("#recordUndoDone");
   const action = async (undo) => {
-    const note = body.querySelector("#recordNote")?.value || "";
+    const note = body.querySelector("#recordNote")?.value.trim() || "";
     const evidencePath = body.querySelector("#recordEvidence")?.value || "";
     const btn = undo ? undoBtn : saveBtn;
+    if (!undo && (options.requireNote || !done) && !note) {
+      showToast("请先写一条本次记录，再标记完成", "warn");
+      body.querySelector("#recordNote")?.focus();
+      return;
+    }
     if (btn) btn.disabled = true;
     await postTaskAction(taskId, undo, { note, evidence_path: evidencePath });
     closeMarkdownViewer();
@@ -615,7 +627,7 @@ function openRecordViewer(taskId) {
   if (undoBtn) undoBtn.addEventListener("click", () => action(true));
 }
 
-function renderRecordBody(taskId, done, fb, events) {
+function renderRecordBody(taskId, done, fb, events, options = {}) {
   const eventRows = events.length
     ? events.slice(0, 12).map((event) => `
         <li>
@@ -632,12 +644,12 @@ function renderRecordBody(taskId, done, fb, events) {
       <div class="record-status ${done ? "done" : "open"}">${done ? "当前状态：已完成" : "当前状态：未完成"}</div>
       <p>${escapeHtml(fb?.message || "暂无反馈。")}</p>
       <p class="record-suggestion">${escapeHtml(fb?.next_suggestion || "")}</p>
-      <label class="record-label">本次备注（可选）</label>
-      <textarea id="recordNote" class="record-input" placeholder="例如：读完第 1 小节，命令还需要复习。"></textarea>
+      <label class="record-label">本次记录${done && !options.requireNote ? "（建议填写）" : "（必填）"}</label>
+      <textarea id="recordNote" class="record-input" placeholder="例如：读完软考总览，下一步先补 OS / DS / DB 三个启动模块。"></textarea>
       <label class="record-label">证据路径（可选）</label>
       <input id="recordEvidence" class="record-input" placeholder="例如：~/cli-lab/round0/week1" />
       <div class="record-actions">
-        <button type="button" class="task-btn done" id="recordSaveDone">${done ? "保存备注并保持完成" : "保存并标记完成"}</button>
+        <button type="button" class="task-btn done" id="recordSaveDone">${done ? "保存记录并保持完成" : "记录并标记完成"}</button>
         ${done ? '<button type="button" class="task-btn undo" id="recordUndoDone">撤销完成</button>' : ""}
       </div>
       <h4>最近记录</h4>
@@ -839,6 +851,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const terminalClear = document.getElementById("terminalClear");
   const terminalReset = document.getElementById("terminalReset");
   const inlinePopout = document.getElementById("inlineReaderPopout");
+  const settingsLink = document.querySelector('a[href="#secondaryTools"]');
+  const secondaryTools = document.getElementById("secondaryTools");
   if (closeBtn) closeBtn.addEventListener("click", closeMarkdownViewer);
   if (modal) {
     modal.addEventListener("click", (e) => {
@@ -866,6 +880,13 @@ document.addEventListener("DOMContentLoaded", () => {
       const file = inlinePopout.dataset.file || inlineReaderFile;
       const title = inlinePopout.dataset.title || document.getElementById("inlineReaderTitle")?.textContent || "阅读";
       if (file) openMarkdownViewer(file, title);
+    });
+  }
+  if (settingsLink && secondaryTools) {
+    settingsLink.addEventListener("click", (e) => {
+      e.preventDefault();
+      secondaryTools.open = true;
+      secondaryTools.scrollIntoView({ behavior: "smooth", block: "start" });
     });
   }
 });

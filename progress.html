@@ -1101,18 +1101,10 @@
       margin-bottom: 0.7rem;
       font-size: 0.78rem;
     }
-    .terminal-panel.terminal-idle {
-      min-height: auto;
+    .workspace-surface.no-terminal-task .learning-grid {
+      grid-template-columns: minmax(240px, 0.72fr) minmax(0, 1.28fr);
     }
-    .terminal-panel.terminal-idle .terminal-workspace {
-      grid-template-columns: minmax(0, 1fr);
-    }
-    .terminal-panel.terminal-idle .terminal-side-panel {
-      max-height: none;
-    }
-    .terminal-panel.terminal-idle .terminal-state-list,
-    .terminal-panel.terminal-idle .terminal-side-panel > div:last-child,
-    .terminal-panel.terminal-idle .terminal-workspace > div:not(.terminal-side-panel) {
+    .workspace-surface.no-terminal-task .terminal-panel {
       display: none;
     }
     .secondary-tools {
@@ -1511,6 +1503,7 @@
       .workflow-steps { justify-content: flex-start; }
       .workflow-steps span { padding: 0.2rem 0.42rem; font-size: 0.68rem; }
       .learning-grid { grid-template-columns: minmax(0, 1fr); }
+      .workspace-surface.no-terminal-task .learning-grid { grid-template-columns: minmax(0, 1fr); }
       .inline-reader-panel,
       .terminal-panel { min-height: auto; }
       .task-flow-list { margin: 0.65rem 0; }
@@ -1612,7 +1605,7 @@
   </nav>
   <div class="rail-note">
     <span class="rail-note-label">使用路径</span>
-    <p>左侧读教程，右侧敲命令；完成一个小动作后再记录。</p>
+    <p>先读当前资料，再按任务做练习或写要点；工程任务再打开终端。</p>
   </div>
 </aside>
 
@@ -1639,7 +1632,7 @@
   <div class="workspace-head">
     <div>
       <h2>学习工作区</h2>
-      <div class="card-sub">把教程、任务操作和浏览器终端放在同一屏。先读，再练，最后记录。</div>
+      <div class="card-sub">把当前任务、教程和记录入口放在同一屏；工程任务会额外联动终端。</div>
     </div>
     <div class="workflow-steps" aria-label="推荐学习顺序">
       <span>1 读教程</span>
@@ -1660,7 +1653,7 @@
         <button class="task-btn read" type="button" id="inlineReaderPopout" disabled>弹窗打开</button>
       </div>
       <div class="inline-reader-body" id="inlineReaderBody">
-        <div class="inline-reader-empty">点击任务里的“读教程”，资料会显示在这里；右侧终端保持可见。</div>
+        <div class="inline-reader-empty">点击任务里的“读教程”，资料会显示在这里；工程任务可再绑定终端。</div>
       </div>
     </section>
     <section class="workspace-panel terminal-panel" id="terminal">
@@ -1838,9 +1831,9 @@
   </div>
 </div>
 
-<script src="progress_data.js?v=20260706c"></script>
-<script src="rounds_data.js?v=20260706c"></script>
-<script src="progress_ui.js?v=20260706c"></script>
+<script src="progress_data.js?v=20260706d"></script>
+<script src="rounds_data.js?v=20260706d"></script>
+<script src="progress_ui.js?v=20260706d"></script>
 <script>
 const ROUNDS = window.ROUNDS_DATA || [];
 
@@ -2071,7 +2064,7 @@ function taskFlowRows(task) {
   return `
       <div><strong>1</strong><span>先在中间读教程，确认本任务要做出的最小产物。</span></div>
       <div><strong>2</strong><span>${secondStep}</span></div>
-      <div><strong>3</strong><span>完成后写一条记录，再点击完成。</span></div>
+      <div><strong>3</strong><span>完成后写一条记录，再点击“记录并完成”。</span></div>
   `;
 }
 

@@ -28,7 +28,7 @@
 - 不大范围重构无关文件
 
 【标准流程】
-1. 启动本地服务（如 python3 -m http.server 8000）并打开目标页面
+1. 启动本地服务（`python3 scripts/progress_server.py`）并打开 `http://127.0.0.1:8777/progress.html`
 2. before：截图 + 检查 console + 检查 network
 3. 参考 Stitch 设计输入（若 STITCH_API_KEY 可用）或现有设计文档
 4. 修改 UI 代码
