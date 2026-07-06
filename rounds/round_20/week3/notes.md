@@ -47,7 +47,7 @@ model.eval()
 先点击本周“运行脚本”按钮生成自动产物，再在 Web UI 终端中依次运行：
 
 ```bash
-cd ~/round20/week3_auto/checkpoint_eval
+cd ~/cli-lab/round20/week3_auto/checkpoint_eval
 python3 stdlib_checkpoint_demo.py
 cat checkpoint_summary.json
 ```

@@ -56,7 +56,7 @@ texts
 在本周练习运行成功后，点击“终端练习”，逐行输入：
 
 ```bash
-cd ~/round21/week2_auto/embedding_classifier
+cd ~/cli-lab/round21/week2_auto/embedding_classifier
 python3 stdlib_embedding_smoke.py
 cat embedding_summary.json
 ```

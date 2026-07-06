@@ -50,7 +50,7 @@ text -> tokens -> counts / TF-IDF vector -> linear classifier
 在本周练习运行成功后，点击“终端练习”，逐行输入：
 
 ```bash
-cd ~/round21/week3_auto/text_features
+cd ~/cli-lab/round21/week3_auto/text_features
 python3 stdlib_text_features_smoke.py
 cat text_features_summary.json
 ```

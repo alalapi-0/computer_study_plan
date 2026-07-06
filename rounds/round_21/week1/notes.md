@@ -2,7 +2,7 @@
 
 ## Web UI 学习路径
 
-1. 在 `progress.html?round=round_21` 展开 Round 21。
+1. 打开 `http://127.0.0.1:8777/progress.html?round=round_21`，展开 Round 21。
 2. 点本任务的“读教程”，先把 tokenization、vocab、encode/decode 的流程看完。
 3. 点“练习：生成手写 tokenizer 与词表编号示例”，生成本周产物。
 4. 点“终端练习”，运行本页下方短命令，看 `tokenizer_summary.json`。
@@ -56,7 +56,7 @@ text -> tokens -> token ids -> padded ids -> tensor
 在本周练习运行成功后，点击“终端练习”，逐行输入：
 
 ```bash
-cd ~/round21/week1_auto/tokenizer_vocab
+cd ~/cli-lab/round21/week1_auto/tokenizer_vocab
 python3 stdlib_tokenizer_smoke.py
 cat tokenizer_summary.json
 ```

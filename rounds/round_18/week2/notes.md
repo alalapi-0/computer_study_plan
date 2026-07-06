@@ -47,4 +47,4 @@ python3 count_labels.py
 
 - 自动练习任务已运行成功。
 - 你能解释 `read_csv`、选列、筛行、`groupby`、`isna().sum()` 分别解决什么问题。
-- 自测命令在 Web UI 终端里跑过，并把 `~/round18` 或具体文件路径写入记录。
+- 自测命令在 Web UI 终端里跑过，并把 `~/cli-lab/round18` 或具体文件路径写入记录。

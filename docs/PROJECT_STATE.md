@@ -423,3 +423,24 @@ open http://127.0.0.1:8777/progress.html
 
 - 当前 `progress.json` 跟踪 317 个任务；cs408 lane 为 5 个任务。
 - 标准验证与浏览器回检见本轮提交记录。
+
+## 23. 2026-07-06 TASK-RR-72 第十八轮项目用户视角评测与工程沙盒路径统一
+
+状态：done
+
+本轮评测报告：
+
+- `docs/reports/PROJECT_USER_REVIEW_2026_07_06_ROUND18.md`
+
+本轮发现并修复：
+
+- Round 12 Week 1 notes 仍写旧的 `~/round12` 自测目录，已改为 `~/cli-lab/round12`。
+- Round 18 Week 1 notes 仍写旧的 `~/round18` 自测目录，已改为 `~/cli-lab/round18`。
+- Round 18 Week 2 完成证据提示仍写旧路径，已改为 `~/cli-lab/round18`。
+- Round 20 Week 1-3 自测命令仍使用 `~/round20/...`，已改为 `~/cli-lab/round20/...`。
+- Round 21 Week 1-3 自测命令仍使用 `~/round21/...`，已改为 `~/cli-lab/round21/...`；Week 1 入口也改为当前 8777 Web UI URL。
+
+验证摘要：
+
+- 主动扫描已确认受影响 Round notes 中不再残留旧本地沙盒路径。
+- 标准验证与浏览器回检见本轮提交记录。

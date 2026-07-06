@@ -54,7 +54,7 @@ class SimpleClassifier(nn.Module):
 先点击本周“运行脚本”按钮生成自动产物，再在 Web UI 终端中依次运行：
 
 ```bash
-cd ~/round20/week2_auto/training_loop
+cd ~/cli-lab/round20/week2_auto/training_loop
 python3 stdlib_gradient_demo.py
 cat training_summary.json
 ```
