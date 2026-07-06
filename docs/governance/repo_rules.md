@@ -11,7 +11,7 @@
 
 - 长期学习路线（Round 00–21 工程/服务/AI 主线）
 - VPS 实操训练支线（stage_03_vps_remote_ops 等）
-- 学习进度数据（`progress.json`）与最小展示（`progress.html`）
+- 学习进度数据、Web UI 学习工作区与本地 API（`progress.json`、`rounds_data.js`、`progress.html`、`progress_ui.js`、`scripts/progress_server.py`）
 - 用于 Codex / Cursor / 本地编程 AI 协作的总控文档
 
 它**不承担**：
@@ -37,7 +37,7 @@
 
 每次修改都必须满足：
 
-1. 不破坏 Round 00 的最小可运行闭环：`progress.json` / `progress_data.js` / `progress.html` / `mark_done.sh` / `rounds/round_00/`。
+1. 不破坏 Round 00 和 Web UI 的最小可运行闭环：`progress.json` / `progress_data.js` / `rounds_data.js` / `progress.html` / `progress_ui.js` / `scripts/progress_server.py` / `mark_done.sh` / `rounds/round_00/`。
 2. 不一次性大范围重构无关内容。
 3. 每轮聚焦一个明确任务（参见 `AGENTS.md` 与 `docs/AUTO_ADVANCE_PROTOCOL.md`）。
 4. 默认直接在 `main` 上验证、commit、push；独立分支只用于用户明确要求审查或高风险实验。
@@ -61,7 +61,7 @@
 | 学习计划专题 | `plans/<scope>/` | 软考 / 数学二 / 408 / Linux 等独立学习计划目录 |
 | 学习记录 | `records/<scope>/` | 周复盘 / 错题 / 完成任务等用户真实学习记录 |
 | Round 实操（支线） | `rounds/stage_*/round_*.md` | 阶段性支线（如 VPS 远程实操） |
-| 进度系统 | `progress.json`、`progress_data.js`、`progress.html`、`mark_done.sh` | 任务状态与展示 |
+| 进度系统 | `progress.json`、`progress_data.js`、`rounds_data.js`、`progress.html`、`progress_ui.js`、`scripts/progress_server.py`、`mark_done.sh`、`records/action_logs/`、`records/feedback/` | 任务状态、展示、Web UI 写入、动作记录与任务反馈 |
 | IDE/系统副产物 | `.idea/`、`.DS_Store` | 不属本仓库内容范围，不主动改 |
 
 > 主线 Round（`round_XX.md`）和阶段性支线 Round（`rounds/stage_*/round_vps_XX.md`）**不混用编号空间**，互相之间不会冲突。

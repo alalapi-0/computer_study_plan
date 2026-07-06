@@ -46,8 +46,11 @@
 
 - `progress.json`：单一事实源，不允许改名。
 - `progress_data.js`：自动生成，不手动编辑。
-- `progress.html`：静态看板，命名固定。
-- `mark_done.sh`：CLI 工具，命名固定。
+- `rounds_data.js`：Round / 计划分组展示数据，自动生成，不手动编辑。
+- `progress.html`：Web UI 学习工作区入口，命名固定。
+- `progress_ui.js`：Web UI 交互逻辑，命名固定。
+- `scripts/progress_server.py`：本地学习服务，命名固定。
+- `mark_done.sh`：CLI 兼容工具，命名固定。
 
 ## 6. 任务 ID 命名规则（与现有 Round 00 保持兼容）
 

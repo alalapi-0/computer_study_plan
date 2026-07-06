@@ -508,3 +508,24 @@ open http://127.0.0.1:8777/progress.html
 
 - 主动扫描已确认 Round 16–21 根总览不再残留本轮目标旧入口、旧端口和旧按钮名。
 - 标准验证与浏览器回检见本轮提交记录。
+
+## 27. 2026-07-06 TASK-RR-76 第二十二轮项目用户视角评测与治理口径更新
+
+状态：done
+
+本轮评测报告：
+
+- `docs/reports/PROJECT_USER_REVIEW_2026_07_06_ROUND22.md`
+
+本轮发现并修复：
+
+- `docs/governance/file_naming_rules.md` 仍把 `progress.html` 描述成静态看板，已改为 Web UI 学习工作区入口。
+- 文件命名规则未列 `rounds_data.js`、`progress_ui.js` 和 `scripts/progress_server.py`，已补为进度系统固定命名。
+- `docs/governance/repo_rules.md` 仍把仓库承载内容写成 `progress.json` 与最小展示，已改为当前 Web UI / 本地 API 进度系统事实。
+- 治理分层表遗漏生成 Round 数据、Web UI、动作日志与任务反馈，已补齐。
+- `docs/PROGRESS_RULES.md` 仍偏向“展示规则”和旧 `ROUNDS` 说法，已改为学习工作区、工程终端、脚本运行、`rounds_data.js`、动作日志和任务反馈口径。
+
+验证摘要：
+
+- 主动扫描已确认治理 / 进度规则不再把 `progress.html` 描述为静态看板或最小展示。
+- 标准验证与浏览器回检见本轮提交记录。

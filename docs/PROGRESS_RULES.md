@@ -94,15 +94,19 @@
 
 ---
 
-## 6. progress.html 展示规则
+## 6. progress.html / Web UI 展示规则
 
 当前 `progress.html` 必须展示：
 
-1. **四主线总进度条**（按 lane 聚合）
-2. **每条 lane 内的任务分组进度**（工程 Round 与计划入口共用 `ROUNDS` 展示结构）
-3. **本周任务配置**（不依赖后端，纯前端从用户输入并保存到 localStorage）
-4. **考试日期 / 倒计时配置**（软考考试日 + 考研日，可由用户在前端编辑后写入 localStorage，不写入 progress.json）
-5. **当前关注项板块**（从 progress.json 中识别刚启动的小主线和已开始但完成率 < 30% 的薄弱 lane，**非强制**）
+1. **学习工作区**（当前任务、内联教程、任务动作、记录并完成入口）
+2. **工程任务终端**（仅工程任务显示，自动映射到对应 `~/cli-lab/roundN`）
+3. **练习脚本运行入口**（仅允许白名单脚本，通过本地 API 执行）
+4. **四主线总进度条**（按 lane 聚合）
+5. **每条 lane 内的任务分组进度**（工程 Round 与计划入口共用 `rounds_data.js` 展示结构）
+6. **本周任务配置**（不依赖后端，纯前端从用户输入并保存到 localStorage）
+7. **考试日期 / 倒计时配置**（软考考试日 + 考研日，可由用户在前端编辑后写入 localStorage，不写入 progress.json）
+8. **当前关注项板块**（从 progress.json 中识别刚启动的小主线和已开始但完成率 < 30% 的薄弱 lane，**非强制**）
+9. **动作日志与任务反馈**（读取 `records/action_logs/events.jsonl` 与 `records/feedback/task_feedback.json` 的本地镜像）
 
 > 倒计时与关注项**不写入 progress.json**，避免污染状态层。
 
@@ -117,6 +121,7 @@
 - `lane` 必须是 `lanes` 中已注册的 key。
 - 同一 `task_id` 只允许出现一次。
 - 不允许手动编辑 `progress_data.js`。
+- 不允许手动编辑 `rounds_data.js` 和 `records/feedback/task_feedback.json`，应通过生成脚本更新。
 
 ---
 
