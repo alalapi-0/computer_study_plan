@@ -97,7 +97,7 @@ read
 mark fin-acc3
 
 echo ""
-echo "🎉🎉 Round 00 全部完成！"
+echo "🎉🎉 Round 00 综合验收脚本已完成！"
 echo "   打开 Web UI 查看你的进度（需要先启动本地学习服务）"
 echo "   启动命令：cd '$REPO_ROOT' && python3 scripts/progress_server.py"
 echo "   然后在浏览器打开：http://127.0.0.1:8777/progress.html?round=round_00"

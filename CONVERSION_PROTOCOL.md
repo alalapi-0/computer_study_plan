@@ -353,12 +353,12 @@ rounds/round_XX/
 | `rounds_data.js` | Round / 计划分组与任务展示元数据，由 `scripts/build_rounds_data.py` 生成 |
 | `scripts/progress_server.py` | 本地学习服务，提供 Web UI 写入、练习脚本运行、存档、动作日志等 API |
 | `progress.html` / `progress_ui.js` | 学习工作区：内联教程、工程任务终端、任务清单、记录并完成、存档与复盘 |
-| `mark_done.sh` | CLI 兼容工具，用于快速查看、补标记或撤销任务状态 |
+| `mark_done.sh` | CLI 兼容工具，用于快速查看、补录完成或撤销任务状态 |
 | `records/action_logs/events.jsonl` | Web UI / CLI 动作日志，用于回看与任务反馈 |
 | `records/feedback/task_feedback.json` | 任务反馈镜像，由 `scripts/generate_task_feedback.py` 生成 |
 
 > `progress_data.js`、`rounds_data.js` 和 `records/feedback/task_feedback.json` 由工具自动维护，**不可手动编辑**。
-> 状态变更优先通过 Web UI 的 `记录并完成` / `撤销完成`，CLI 作为快速查看、补标记和撤销工具保留。
+> 状态变更优先通过 Web UI 的 `记录并完成` / `撤销完成`，CLI 作为快速查看、补录完成和撤销工具保留。
 
 ### 8.1 progress.json 结构（v2 起）
 
@@ -397,7 +397,7 @@ bash mark_done.sh --lane engineering --limit 8
 # 查看完整任务
 bash mark_done.sh --all
 
-# 标记完成（CLI 补录）
+# 记录完成（CLI 补录）
 bash mark_done.sh <task-id>
 
 # 取消完成

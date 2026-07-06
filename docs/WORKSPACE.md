@@ -77,7 +77,7 @@ Round 00 等终端练习在**用户主目录**下的沙盒进行，**不**放在
 |---|---|
 | `mark_done.sh` | 必须在含 `progress.json` 的目录执行（即 §1 仓库根） |
 | `rounds/round_00/**/exercises.sh` | `REPO_ROOT="$(cd …/../../.. && pwd)"` 动态解析，不硬编码用户名 |
-| `progress.html` | 日常学习应通过 §1 仓库根启动 `python3 scripts/progress_server.py` 后访问 `http://127.0.0.1:8777/progress.html`；直接打开文件仅用于只读检查 |
+| `progress.html` | 日常学习应通过 §1 仓库根启动 `python3 scripts/progress_server.py` 后访问 `http://127.0.0.1:8777/progress.html`；直接打开文件仅用于只读布局 / 进度检查，没有写 API、练习脚本、动作日志或浏览器终端能力 |
 
 ---
 

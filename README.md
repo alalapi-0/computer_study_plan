@@ -177,7 +177,7 @@ npm run check:mcp
 ├─ progress.json                   ← 进度状态唯一来源（v2 + lanes）
 ├─ progress_data.js                ← 进度镜像（由同步脚本 / CLI / 本地 API 从 progress.json 生成）
 ├─ rounds_data.js                  ← Round 与计划任务展示数据（由 scripts/build_rounds_data.py 生成）
-├─ mark_done.sh                    ← 进度 CLI（简洁状态 / lane 过滤 / 补标记）
+├─ mark_done.sh                    ← 进度 CLI（简洁状态 / lane 过滤 / 补录完成）
 ├─ .gitignore
 │
 ├─ scripts/                        ← 本地服务、数据同步、生成与校验脚本
@@ -289,7 +289,7 @@ cd ~/PycharmProjects/computer_study_plan
   open http://127.0.0.1:8777/progress.html
   ```
   Web UI 首屏是「学习工作区」：当前任务和教程阅读优先展示；工程任务会额外显示浏览器终端，并自动绑定到对应 `~/cli-lab/roundN` 沙盒。点击「读教程」会在页面中间打开资料；点击「终端练习」可切换或重新聚焦对应任务终端。完成后点击「记录并完成」，在弹窗里写下本次记录后保存；已完成任务可从任务行撤销。存档 / 读档放在折叠的管理区中，读档前会自动创建恢复点。
-- **方式二（只读）**：双击 `progress.html` 或通过 `python3 -m http.server` 打开（无写 API）。
+- **方式二（只读检查）**：双击 `progress.html` 或通过 `python3 -m http.server` 打开，只适合看布局和只读进度；没有写 API、练习脚本运行、动作日志或浏览器终端能力，不作为日常学习入口。
 
 Web UI 包含：
 
@@ -301,7 +301,7 @@ Web UI 包含：
 
 ### 6.4 进度系统 CLI
 
-CLI 适合快速查看 / 补标记 / 撤销任务；正式学习仍优先用 Web UI，因为网页会把当前任务、教程、记录弹窗和工程终端放在同一条流程里。
+CLI 适合快速查看 / 补录完成 / 撤销任务；正式学习仍优先用 Web UI，因为网页会把当前任务、教程、记录弹窗和工程终端放在同一条流程里。
 
 在仓库根目录执行：
 
