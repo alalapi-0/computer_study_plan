@@ -60,8 +60,8 @@
 |---|---|---|
 | Round 00 旧任务 | 保留简写（不改） | `w1-read`、`w1-ex1`、`fin-comp` |
 | Round 01+ 新任务 | `rXX-wN-taskShort` | `r01-w1-read` |
-| 阶段性支线 | `<scope>-XX-taskShort` | `vps-05-readonly`、`soft-os-ch01` |
-| 软考章节自定任务 | `soft-<module>-<short>` | `soft-os-pv-1` |
+| 阶段性支线 | `<scope>-XX-taskShort` 或 `<scope>-<module>-start` | `vps-05-first-readonly-check`、`soft_exam-os-start` |
+| 软考章节自定任务 | `soft_exam-<module>-<short>` | `soft_exam-os-pv-1` |
 | 数学二章节自定任务 | `math2-<module>-<short>` | `math2-calc-limit-1` |
 | 408 章节自定任务 | `cs408-<module>-<short>` | `cs408-ds-tree-1` |
 
@@ -143,7 +143,7 @@
 ```bash
 bash mark_done.sh w1-read                       # 记录 Round 00 阅读完成（lane=engineering）
 bash mark_done.sh r04-w1-ex1                    # 记录 Round 04 第 1 周练习 1 完成（如已注册）
-bash mark_done.sh soft-os-ch01                  # 记录软考 OS 模块章节 1 完成（如已注册）
+bash mark_done.sh soft_exam-os-start            # 记录软考 OS 模块启动阅读完成
 bash mark_done.sh w1-read --undo                # 撤销
 bash mark_done.sh                               # 查看所有任务（按 lane 分组）
 ```

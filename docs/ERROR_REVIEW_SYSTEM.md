@@ -133,7 +133,7 @@ records/error_notes/<lane>/<module>/YYYY-MM-DD-shortid.md
 
 ## 4. 错题分类规则（按模块归位）
 
-### 4.1 软考分类（11 + 英语）
+### 4.1 软考分类（12 个模块）
 
 | 模块代码 | 内容 |
 |---|---|

@@ -380,3 +380,25 @@ open http://127.0.0.1:8777/progress.html
 
 - 当前 `progress.json` 跟踪 313 个任务；soft_exam lane 为 13 个任务。
 - 标准验证与浏览器回检见本轮提交记录。
+
+## 21. 2026-07-06 TASK-RR-70 第十六轮项目用户视角评测与软考模块口径对齐
+
+状态：done
+
+本轮评测报告：
+
+- `docs/reports/PROJECT_USER_REVIEW_2026_07_06_ROUND16.md`
+
+本轮发现并修复：
+
+- `docs/STAGE_PLAN.md` Stage 2 仍列 11 个软考模块，已补入英语阅读理解作为第 12 个模块。
+- Stage 2 退出标准仍沿用旧模块数量，已同步为 12 个模块。
+- `docs/MASTER_STUDY_ROADMAP.md` 软考主线未列英语阅读，已补入技术英文表达、题干阅读与选项辨析。
+- `docs/ERROR_REVIEW_SYSTEM.md` 仍把英语作为额外分类描述，已改为“12 个模块”。
+- `docs/KNOWLEDGE_MAPPING.md` 未映射软考英语阅读且总行数说明偏旧，已补第 24 行；`docs/PROGRESS_RULES.md` 的旧软考 OS 示例已替换为真实已注册任务 ID。
+- 验证时发现 `CONVERSION_PROTOCOL.md` 的模板 URL 占位会被 Markdown 链接检查当成坏链，已改成普通占位文本。
+
+验证摘要：
+
+- 主动扫描已确认活跃文档中不再出现本轮目标旧说法。
+- 标准验证与浏览器回检见本轮提交记录。
