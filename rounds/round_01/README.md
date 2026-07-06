@@ -1,6 +1,6 @@
 # Round 01 · 文件系统与基础命令
 
-这个目录是 Round 01（文件系统与基础命令）的 Web UI 可练习版本。用户可以在 `progress.html` 中阅读任务、运行练习脚本、使用“终端练习”敲命令，并在完成阅读 / 自测 / 产出后通过页面按钮记录进度。
+这个目录是 Round 01（文件系统与基础命令）的 Web UI 可练习版本。用户可以在 `http://127.0.0.1:8777/progress.html?round=round_01` 中阅读任务、运行练习脚本、使用“终端练习”敲命令，并在完成阅读 / 自测 / 产出后通过页面按钮记录进度。
 
 > **仓库根**（进度、`mark_done.sh`）：`~/PycharmProjects/computer_study_plan`  
 > **练习沙盒**（手敲命令）：`~/cli-lab/round1`  

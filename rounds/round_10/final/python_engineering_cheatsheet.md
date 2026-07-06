@@ -2,7 +2,7 @@
 
 ## Web UI 完成路径
 
-1. 打开 `progress.html?round=round_10`。
+1. 打开 `http://127.0.0.1:8777/progress.html?round=round_10`。
 2. 依次阅读 Week 1–3 notes。
 3. 点击三个练习任务的“运行脚本”，生成自动练习产物。
 4. 点击三个自测任务的“终端练习”，自己写最小脚本并运行。

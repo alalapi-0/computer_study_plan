@@ -1,6 +1,6 @@
 # Round 16 · API 与数据层结合
 
-这个目录是 Round 16 的 Web UI 可完成版：用户可以在 `progress.html?round=round_16` 中阅读资料、运行练习脚本、打开浏览器终端做自测，并记录完成状态。
+这个目录是 Round 16 的 Web UI 可完成版：用户可以在 `http://127.0.0.1:8777/progress.html?round=round_16` 中阅读资料、运行练习脚本、打开浏览器终端做自测，并记录完成状态。
 
 > 仓库根：`~/PycharmProjects/computer_study_plan`
 > 练习沙盒：`~/cli-lab/round16`

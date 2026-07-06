@@ -444,3 +444,24 @@ open http://127.0.0.1:8777/progress.html
 
 - 主动扫描已确认受影响 Round notes 中不再残留旧本地沙盒路径。
 - 标准验证与浏览器回检见本轮提交记录。
+
+## 24. 2026-07-06 TASK-RR-73 第十九轮项目用户视角评测与 Round 入口 URL 统一
+
+状态：done
+
+本轮评测报告：
+
+- `docs/reports/PROJECT_USER_REVIEW_2026_07_06_ROUND19.md`
+
+本轮发现并修复：
+
+- Round 01 README 仍用裸 `progress.html` 描述学习入口，已改为当前 8777 本地服务 URL。
+- Round 02 README 仍用裸 `progress.html` 描述学习入口，已改为当前 8777 本地服务 URL。
+- Round 10 最终速查仍用相对 `progress.html?round=round_10`，已改为完整本地服务 URL。
+- Round 11 最终速查仍用相对 `progress.html?round=round_11`，已改为完整本地服务 URL。
+- Round 16 / 17 README 开头说明仍先给相对 `progress.html?round=...`，已与后文 Web UI 路径统一为完整本地服务 URL。
+
+验证摘要：
+
+- 主动扫描已确认受影响 Round 文件不再残留相对 Round Web UI 入口。
+- 标准验证与浏览器回检见本轮提交记录。

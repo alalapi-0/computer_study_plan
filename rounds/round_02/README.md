@@ -1,6 +1,6 @@
 # Round 02 · 学习目录
 
-这个目录是 Round 02（Shell、管道、Git 最小工作流）的 Web UI 可练习版本。用户可以在 `progress.html` 中阅读任务、运行受控练习脚本、使用“终端练习”完成管道 / 脚本 / Git 本地练习，并在自测后通过页面按钮记录进度。
+这个目录是 Round 02（Shell、管道、Git 最小工作流）的 Web UI 可练习版本。用户可以在 `http://127.0.0.1:8777/progress.html?round=round_02` 中阅读任务、运行受控练习脚本、使用“终端练习”完成管道 / 脚本 / Git 本地练习，并在自测后通过页面按钮记录进度。
 
 > **仓库根**（进度、`mark_done.sh`）：`~/PycharmProjects/computer_study_plan`  
 > **练习沙盒**（手敲命令）：`~/cli-lab/round2`  
