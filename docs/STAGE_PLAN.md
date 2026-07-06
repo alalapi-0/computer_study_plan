@@ -178,7 +178,7 @@
 
 - `records/error_notes/soft_exam/<module>/YYYY-MM-DD-shortid.md`：每道错题一份
 - `records/weekly_reviews/YYYY-WW.md`：每周复盘
-- `plans/soft_exam/mock_exams.md`：模考记录与回看
+- `records/weekly_reviews/mock_exams/`：模考记录与回看（按需建立）
 
 ### 简化版本
 

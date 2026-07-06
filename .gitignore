@@ -58,3 +58,7 @@ build/
 # Local user notes (个人即兴笔记，不进 Git)
 scratch/
 *.scratch.md
+
+# Generated local learning snapshots / terminal history
+records/saves/*.json
+records/terminal/commands.jsonl

@@ -19,7 +19,7 @@
 
 | 模块代码 | 模块名 | 笔记骨架文件（按需建） |
 |---|---|---|
-| `limits` | 函数 / 极限 / 连续 | `limits.md` |
+| `limits` | 函数 / 极限 / 连续 | [limits.md](limits.md) |
 | `derivatives` | 一元函数微分 | `derivatives.md` |
 | `integrals` | 一元函数积分 | `integrals.md` |
 | `multi_var` | 多元函数微分（按当年大纲） | `multi_var.md` |
@@ -31,13 +31,13 @@
 
 | 模块代码 | 模块名 | 笔记骨架文件（按需建） |
 |---|---|---|
-| `la_matrix` | 矩阵与行列式 | `la_matrix.md` |
+| `la_matrix` | 矩阵与行列式 | [la_matrix.md](la_matrix.md) |
 | `la_vector` | 向量 | `la_vector.md` |
 | `la_linear_systems` | 线性方程组 | `la_linear_systems.md` |
 | `la_eigen` | 特征值与特征向量 | `la_eigen.md` |
 | `la_quadratic_forms` | 二次型 | `la_quadratic_forms.md` |
 
-> 上表笔记文件**都不预先创建**，按真实学习节奏需要时再建。
+> 当前已维护 [limits.md](limits.md) 与 [la_matrix.md](la_matrix.md) 两个启动骨架；其他笔记文件按真实学习节奏需要时再建。
 
 ---
 

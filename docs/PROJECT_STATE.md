@@ -251,3 +251,25 @@ open http://127.0.0.1:8777/progress.html
 - CLI 默认状态输出为紧凑视图，`--all`、`--lane soft_exam`、`--limit 20` 可用。
 - 默认 Web UI 的阶段卡片显示“阶段参考”和“近似参考”，不再把 lane 百分比伪装成验收进度。
 - `round=round_00` 工程任务仍会自动绑定到 `~/cli-lab/round0`，快捷命令不再包含缺失文件。
+
+## 15. 2026-07-06 TASK-RR-64 第十轮项目用户视角评测与计划/本地记录清理
+
+状态：done
+
+本轮评测报告：
+
+- `docs/reports/PROJECT_USER_REVIEW_2026_07_06_ROUND10.md`
+
+本轮发现并修复：
+
+- `plans/soft_exam/README.md` 出现两个 `## 6` 标题，已把配套文件改为第 7 节。
+- `plans/math2/README.md` 说所有笔记都不预先创建，但 `limits.md`、`la_matrix.md` 已存在，已改为链接这两个启动骨架，并只把其他文件标为按需创建。
+- `docs/STAGE_PLAN.md` Stage 3 仍指向不存在的 `plans/soft_exam/mock_exams.md`，已改为 `records/weekly_reviews/mock_exams/`。
+- Web UI 存档快照 `records/saves/*.json` 会污染 Git 状态，已加入 `.gitignore` 并在目录 README 说明本地快照不提交。
+- 浏览器终端历史 `records/terminal/commands.jsonl` 会污染 Git 状态，已加入 `.gitignore` 并在 README 说明长期结论应写入学习记录或周复盘。
+
+验证摘要：
+
+- 默认 Web UI 记录弹窗空记录校验正常，未写入完成状态。
+- `lane=math2` 页面显示已有 `limits.md`、`la_matrix.md` 启动骨架，不再与文档事实冲突。
+- 生成类存档和终端历史已从 Git 跟踪候选中排除，目录说明仍保留。
