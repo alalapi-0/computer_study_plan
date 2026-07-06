@@ -38,7 +38,7 @@ open http://127.0.0.1:8777/progress.html
 ## 3. 当前实现事实
 
 - `rounds/round_00` 至 `rounds/round_21` 均已展开为可读 notes、可运行练习脚本和最终验收材料。
-- `rounds_data.js` 提供 28 个 Round / 计划分组；`progress.json` 跟踪 313 个任务，其中 101 个 exercise 任务可通过本地 API 运行。
+- `rounds_data.js` 提供 28 个 Round / 计划分组；`progress.json` 跟踪 317 个任务，其中 101 个 exercise 任务可通过本地 API 运行。
 - 计划入口已接入 Web UI：学习计划总览、软考、数学二、408、Linux、VPS 支线。
 - Web UI 已支持：
   - 当前任务聚焦。
@@ -401,4 +401,25 @@ open http://127.0.0.1:8777/progress.html
 验证摘要：
 
 - 主动扫描已确认活跃文档中不再出现本轮目标旧说法。
+- 标准验证与浏览器回检见本轮提交记录。
+
+## 22. 2026-07-06 TASK-RR-71 第十七轮项目用户视角评测与 408 任务补齐
+
+状态：done
+
+本轮评测报告：
+
+- `docs/reports/PROJECT_USER_REVIEW_2026_07_06_ROUND17.md`
+
+本轮发现并修复：
+
+- `docs/MASTER_STUDY_ROADMAP.md` 仍把知识映射称为旧模块数量，已改为 24 个学习模块。
+- `docs/KNOWLEDGE_MAPPING.md` 数学二行指向不存在的旧高数 / 线代文件名，已改为真实启动骨架。
+- `plans/408/README.md` 模块表头仍暗示骨架按需创建，已改为当前已有骨架文件。
+- Web UI 的 `cs408` lane 只有 1 个任务，已扩展为总览 + 4 个模块骨架任务。
+- `cs408-ds-start` 原本打开 408 总览，已改为打开 `plans/408/ds.md`；总览任务使用 `cs408-overview-start`。
+
+验证摘要：
+
+- 当前 `progress.json` 跟踪 317 个任务；cs408 lane 为 5 个任务。
 - 标准验证与浏览器回检见本轮提交记录。

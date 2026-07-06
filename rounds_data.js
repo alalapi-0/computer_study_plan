@@ -2565,10 +2565,34 @@ window.ROUNDS_DATA = [
         "title": "计划文档阅读",
         "tasks": [
           {
-            "id": "cs408-ds-start",
+            "id": "cs408-overview-start",
             "type": "reading",
             "title": "阅读 408 / 0854 主线总览",
             "file": "plans/408/README.md"
+          },
+          {
+            "id": "cs408-ds-start",
+            "type": "reading",
+            "title": "阅读 408 数据结构骨架",
+            "file": "plans/408/ds.md"
+          },
+          {
+            "id": "cs408-composition-start",
+            "type": "reading",
+            "title": "阅读 408 计算机组成骨架",
+            "file": "plans/408/composition.md"
+          },
+          {
+            "id": "cs408-os-start",
+            "type": "reading",
+            "title": "阅读 408 操作系统骨架",
+            "file": "plans/408/os.md"
+          },
+          {
+            "id": "cs408-network-start",
+            "type": "reading",
+            "title": "阅读 408 计算机网络骨架",
+            "file": "plans/408/network.md"
           }
         ]
       }

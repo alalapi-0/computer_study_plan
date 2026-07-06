@@ -3447,6 +3447,50 @@
       "feedback_type": "not_started",
       "message": "尚未开始，建议先做一个 15 分钟启动动作。",
       "next_suggestion": "先阅读资料，或完成一条最小练习。"
+    },
+    "cs408-overview-start": {
+      "task_id": "cs408-overview-start",
+      "lane": "cs408",
+      "done": false,
+      "action_count": 0,
+      "last_action_type": null,
+      "last_action_at": null,
+      "feedback_type": "not_started",
+      "message": "尚未开始，建议先做一个 15 分钟启动动作。",
+      "next_suggestion": "先阅读资料，或完成一条最小练习。"
+    },
+    "cs408-composition-start": {
+      "task_id": "cs408-composition-start",
+      "lane": "cs408",
+      "done": false,
+      "action_count": 0,
+      "last_action_type": null,
+      "last_action_at": null,
+      "feedback_type": "not_started",
+      "message": "尚未开始，建议先做一个 15 分钟启动动作。",
+      "next_suggestion": "先阅读资料，或完成一条最小练习。"
+    },
+    "cs408-os-start": {
+      "task_id": "cs408-os-start",
+      "lane": "cs408",
+      "done": false,
+      "action_count": 0,
+      "last_action_type": null,
+      "last_action_at": null,
+      "feedback_type": "not_started",
+      "message": "尚未开始，建议先做一个 15 分钟启动动作。",
+      "next_suggestion": "先阅读资料，或完成一条最小练习。"
+    },
+    "cs408-network-start": {
+      "task_id": "cs408-network-start",
+      "lane": "cs408",
+      "done": false,
+      "action_count": 0,
+      "last_action_type": null,
+      "last_action_at": null,
+      "feedback_type": "not_started",
+      "message": "尚未开始，建议先做一个 15 分钟启动动作。",
+      "next_suggestion": "先阅读资料，或完成一条最小练习。"
     }
   }
 }

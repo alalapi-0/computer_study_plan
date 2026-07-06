@@ -1585,6 +1585,26 @@ window.PROGRESS_DATA = {
       "done": false,
       "done_at": null,
       "lane": "soft_exam"
+    },
+    "cs408-overview-start": {
+      "done": false,
+      "done_at": null,
+      "lane": "cs408"
+    },
+    "cs408-composition-start": {
+      "done": false,
+      "done_at": null,
+      "lane": "cs408"
+    },
+    "cs408-os-start": {
+      "done": false,
+      "done_at": null,
+      "lane": "cs408"
+    },
+    "cs408-network-start": {
+      "done": false,
+      "done_at": null,
+      "lane": "cs408"
     }
   }
 };
