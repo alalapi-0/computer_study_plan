@@ -243,7 +243,8 @@ cd ~/PycharmProjects/computer_study_plan
 ### 6.2 日常使用
 
 - 每周选择一种强度（保底 / 标准 / 冲刺），在 `records/weekly_reviews/YYYY-WW.md` 写本周清单。
-- 工作日完成任务后：优先打开 Web UI 阅读资料、运行白名单练习脚本、点击「完成」或在「记录」里写备注；重要节点可在「存档与读档」创建快照；也可用 `bash mark_done.sh <task-id>`。
+- 工作日优先打开 Web UI 的「学习工作区」：左侧确认当前任务，中间读教程，右侧用浏览器终端练习；完成一个最小动作后，在同一任务旁写「记录」并点击「完成」。
+- 需要回看整体进度、配置本周任务、存档或读档时，再展开「进度、配置、存档与复盘信息」。
 - 错题录入 `records/error_notes/<lane>/<module>/...`。
 - 周末写复盘。
 
@@ -256,21 +257,16 @@ cd ~/PycharmProjects/computer_study_plan
   # 或：npm run serve
   open http://127.0.0.1:8777/progress.html
   ```
-  看板内可直接「完成 / 撤销」任务、打开「记录」写备注和证据路径、页内阅读 notes 与练习脚本、在 `~/cli-lab/roundN` 沙盒运行白名单练习脚本，也可以使用“练习终端”在浏览器里操作 `~/cli-lab` 沙盒，并通过「存档与读档」保存或恢复学习进度快照。读档前会自动创建恢复点。
+  看板首屏是「学习工作区」：当前任务、教程阅读和浏览器终端并排展示。点击任务里的「读教程」会在页面中间打开资料，不遮挡右侧终端；点击「终端练习」会把终端绑定到对应 `~/cli-lab/roundN` 沙盒。完成后可直接「记录」备注和证据路径，并「完成 / 撤销」任务。存档 / 读档放在折叠的管理区中，读档前会自动创建恢复点。
 - **方式二（只读）**：双击 `progress.html` 或通过 `python3 -m http.server` 打开（无写 API）。
 
 看板包含：
 
-- 总进度
-- 四主线进度（engineering / soft_exam / math2 / cs408）
-- 本周任务（localStorage）
-- 考试倒计时（localStorage）
-- 存档与读档（进度、动作记录、反馈、终端历史、本周任务、倒计时）
-- 练习脚本运行结果（仅限已登记的 `rounds/round_XX/weekN|final` 白名单脚本）
-- 练习终端（浏览器内操作 `~/cli-lab` 沙盒，命令历史写入 `records/terminal/commands.jsonl`）
-- 阶段进度（Stage 0–7）
-- 当前薄弱项（自动识别完成率 < 30% 且任务数 ≥ 5 的 lane）
+- 学习工作区（当前任务 + 内联教程 + 练习终端）
+- 总进度与四主线进度（engineering / soft_exam / math2 / cs408）
 - 按 lane / Round 浏览（实操目录已展开 Round 00–21；进度看板任务集合已与 `progress.json` 对齐）
+- 折叠管理区：本周任务、考试倒计时、存档与读档、Stage 0–7、当前薄弱项
+- 练习脚本运行结果（仅限已登记的 `rounds/round_XX/weekN|final` 白名单脚本）
 
 ### 6.4 进度系统 CLI
 
