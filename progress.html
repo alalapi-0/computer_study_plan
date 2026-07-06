@@ -613,6 +613,7 @@
       padding: 0.08rem 0.28rem;
       color: var(--text);
       font-size: 0.78rem;
+      overflow-wrap: anywhere;
     }
     .record-label { font-size: 0.78rem; color: var(--text-muted); }
     .record-input {
@@ -1750,7 +1751,7 @@
         </div>
         <div class="workspace-panel-actions">
           <a class="task-btn terminal workspace-link-btn" href="#terminal">去终端</a>
-          <button class="task-btn read" type="button" id="inlineReaderPopout" disabled>单独打开教程</button>
+          <button class="task-btn read" type="button" id="inlineReaderPopout" disabled>弹窗查看</button>
         </div>
       </div>
       <div class="inline-reader-body" id="inlineReaderBody">
@@ -1935,9 +1936,9 @@
   </div>
 </div>
 
-<script src="progress_data.js?v=20260706k"></script>
-<script src="rounds_data.js?v=20260706k"></script>
-<script src="progress_ui.js?v=20260706k"></script>
+<script src="progress_data.js?v=20260706l"></script>
+<script src="rounds_data.js?v=20260706l"></script>
+<script src="progress_ui.js?v=20260706l"></script>
 <script>
 const ROUNDS = window.ROUNDS_DATA || [];
 

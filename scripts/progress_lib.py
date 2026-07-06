@@ -717,6 +717,15 @@ def build_feedback_payload(progress: dict[str, Any], events: list[dict[str, Any]
     tasks = progress.get("tasks", {})
     grouped = events_by_task(events)
 
+    def not_started_suggestion(lane: str) -> str:
+        if lane == "soft_exam":
+            return "先读资料，整理 3 个易混点，或补一张概念地图。"
+        if lane == "math2":
+            return "先读资料，完成 1 道例题整理，或记录一个易错点。"
+        if lane == "cs408":
+            return "先读资料，写下 1 个推导点，或记录与软考层级的差异。"
+        return "先阅读资料，或完成一条最小终端练习。"
+
     feedback_items: dict[str, dict[str, Any]] = {}
     for task_id, info in tasks.items():
         task_events = grouped.get(task_id, [])
@@ -732,7 +741,7 @@ def build_feedback_payload(progress: dict[str, Any], events: list[dict[str, Any]
         elif action_count == 0:
             feedback_type = "not_started"
             message = "尚未开始，建议先做一个 15 分钟启动动作。"
-            next_suggestion = "先阅读资料，或完成一条最小练习。"
+            next_suggestion = not_started_suggestion(lane)
         elif last_event.get("action_type") == "undo_done":
             feedback_type = "not_started"
             message = "最近一次动作是撤销完成，当前任务未完成。"

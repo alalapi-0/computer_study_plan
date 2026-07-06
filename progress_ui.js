@@ -724,8 +724,13 @@ function recordPlaceholders(meta, taskId) {
   };
 }
 
+function exampleText(text) {
+  return String(text || "").replace(/^例如：/, "");
+}
+
 function renderRecordBody(taskId, done, fb, events, options = {}, meta = null) {
   const placeholders = recordPlaceholders(meta, taskId);
+  const suggestion = fb?.next_suggestion || "";
   const eventRows = events.length
     ? events.slice(0, 12).map((event) => `
         <li>
@@ -741,11 +746,11 @@ function renderRecordBody(taskId, done, fb, events, options = {}, meta = null) {
     <div class="record-panel">
       <div class="record-status ${done ? "done" : "open"}">${done ? "当前状态：已完成" : "当前状态：未完成"}</div>
       <p>${escapeHtml(fb?.message || "暂无反馈。")}</p>
-      <p class="record-suggestion">${escapeHtml(fb?.next_suggestion || "")}</p>
+      ${suggestion ? `<p class="record-suggestion">${escapeHtml(suggestion)}</p>` : ""}
       <div class="record-template">
         <strong>记录参考</strong>
-        <p>${escapeHtml(placeholders.note)}</p>
-        <p>证据示例：<code>${escapeHtml(placeholders.evidence)}</code></p>
+        <p>${escapeHtml(exampleText(placeholders.note))}</p>
+        <p>证据示例：<code>${escapeHtml(exampleText(placeholders.evidence))}</code></p>
       </div>
       <label class="record-label">本次记录${done && !options.requireNote ? "（建议填写）" : "（必填）"}</label>
       <textarea id="recordNote" class="record-input" placeholder="${escapeHtml(placeholders.note)}"></textarea>
