@@ -19,8 +19,8 @@
 |---|---|---|
 | Round 00 完整闭环 | `rounds/round_00/` | 入门：终端 + pwd/ls/cd/mkdir/cat/man |
 | Round 01 概览 | `round_01.md` | 文件系统与基本命令 |
-| Round 02 概览 | `round_02.md` | Shell + 管道 + Git |
-| Round 06 概览 | `round_06.md` | Linux 进阶与自动化 |
+| Round 02 Web UI 实操目录 | [`rounds/round_02/`](../../rounds/round_02/README.md) | Shell + 管道 + Git |
+| Round 06 Web UI 实操目录 | [`rounds/round_06/`](../../rounds/round_06/README.md) | Linux 进阶与自动化 |
 | VPS 远程实操支线 | `rounds/stage_03_vps_remote_ops/` | 远程操作 13 篇 Round 文档 |
 
 ---
@@ -28,8 +28,8 @@
 ## 3. 推进顺序建议
 
 1. **Round 00**（如未完成）→ `rounds/round_00/week1/`
-2. Round 02 Git / Shell 基础（按 `round_02.md` 展开实操）
-3. Round 06 Linux 进阶（按 `round_06.md` 展开实操）
+2. **Round 02 Git / Shell 基础** → [`rounds/round_02/`](../../rounds/round_02/README.md)，Web UI 入口：`http://127.0.0.1:8777/progress.html?round=round_02`
+3. **Round 06 Linux 进阶** → [`rounds/round_06/`](../../rounds/round_06/README.md)，Web UI 入口：`http://127.0.0.1:8777/progress.html?round=round_06`
 4. VPS 支线：先 VPS-04（SSH 文档）→ VPS-05（首次只读）→ 按需推进
 
 ---
@@ -40,7 +40,7 @@
 |---|---|---|
 | 文件系统、权限 | 操作系统模块（概念广度） | `plans/soft_exam/os.md` |
 | 进程管理（ps/kill/jobs） | 操作系统模块（进程） | `plans/soft_exam/os.md` |
-| 网络命令（ping/curl/ss） | 计算机网络模块 | `plans/soft_exam/network.md` |
+| 网络命令（ping/curl/ss） | 计算机网络模块 | [`plans/soft_exam/network.md`](../soft_exam/network.md) |
 
 ---
 

@@ -2,7 +2,7 @@
 
 > ⚠ 注意：最新考试大纲、题型与范围以官方发布为准：<https://www.ruankao.org.cn/>
 > lane：`soft_exam`
-> 关联 408：`plans/408/ds.md`（按需创建/维护）
+> 关联 408：[plans/408/ds.md](../408/ds.md)
 
 ---
 

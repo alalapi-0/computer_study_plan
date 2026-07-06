@@ -32,14 +32,14 @@
 | 1 | Linux 基础 | Round 00 完整闭环 + Round 01/06 概览 + VPS 支线 | 操作系统模块的"使用层"广度 | 操作系统模块需独立加深 | 高（部署 / 调试） | P0 | 保持现状；补"软考视角的对照笔记" |
 | 2 | Shell 脚本 | Round 02 概览 + Round 06 概览 | 程序设计语言/基础工具广度 | 不直接考；但自动化训练有用 | 高（自动化） | P1 | 在 Stage 1 展开 Round 02 实操目录 |
 | 3 | Git / GitHub | Round 02 概览 | 项目管理与版本控制广度 | 不直接考 | 极高（协作 + 作品集） | P1 | 在 Stage 1 展开 Round 02 实操目录 |
-| 4 | 网络基础（TCP/IP、HTTP） | VPS 支线 VPS-09（网络检查）+ Round 14 概览 | **核心考点**：计算机网络 | **核心考点**：计算机网络 | 高（API / 部署） | P0 | 在 `plans/soft_exam/network.md` 和 `plans/408/network.md` 独立展开 |
+| 4 | 网络基础（TCP/IP、HTTP） | VPS 支线 VPS-09（网络检查）+ Round 14 概览 | **核心考点**：计算机网络 | **核心考点**：计算机网络 | 高（API / 部署） | P0 | 已建 `plans/soft_exam/network.md` 和 `plans/408/network.md` 启动骨架 |
 | 5 | HTTP/HTTPS | Round 14 概览 | 网络模块的应用层 | 网络模块的应用层 | 高（API） | P1 | 软考 / 408 共用笔记，区分深度 |
-| 6 | 数据结构 | Round 04 概览 + Round 05 算法概览 | **核心考点** | **核心考点**（408 第一大题来源） | 中（算法面试） | **P0** | `plans/soft_exam/ds.md` + `plans/408/ds.md` 同时建 |
+| 6 | 数据结构 | Round 04 概览 + Round 05 算法概览 | **核心考点** | **核心考点**（408 第一大题来源） | 中（算法面试） | **P0** | 已建 `plans/soft_exam/ds.md` + `plans/408/ds.md` 启动骨架 |
 | 7 | 算法基础 | Round 05 概览 | 算法分析与设计 | 数据结构与算法 | 中（算法面试） | P0 | 与数据结构共建笔记 |
-| 8 | 操作系统 | Round 01/06 偏命令行 | **核心考点** | **核心考点**（408 第二大题来源） | 中（理解性能 / 调度） | **P0** | `plans/soft_exam/os.md` + `plans/408/os.md` 同时建 |
-| 9 | 计算机组成原理 | 无 | **核心考点** | **核心考点**（408 第三大题来源） | 低 | **P0** | `plans/soft_exam/composition.md` + `plans/408/composition.md` 同时建 |
+| 8 | 操作系统 | Round 01/06 偏命令行 | **核心考点** | **核心考点**（408 第二大题来源） | 中（理解性能 / 调度） | **P0** | 已建 `plans/soft_exam/os.md` + `plans/408/os.md` 启动骨架 |
+| 9 | 计算机组成原理 | 无 | **核心考点** | **核心考点**（408 第三大题来源） | 低 | **P0** | 已建 `plans/soft_exam/composition.md` + `plans/408/composition.md` 启动骨架 |
 | 10 | 数据库 / SQL | Round 11 (SQLite) 概览 | **核心考点** | 408 不直接考；0854 复试可能涉及 | 中（项目存储） | **P0** | `plans/soft_exam/db.md`；408 章节按目标院校决定 |
-| 11 | 软件工程 | Round 07/09 概览 | **核心考点** | 408 不考；复试可能涉及 | 中（工程化） | **P0** | `plans/soft_exam/se.md` |
+| 11 | 软件工程 | Round 07/09 概览 | **核心考点** | 408 不考；复试可能涉及 | 中（工程化） | **P0** | 已建 `plans/soft_exam/se.md` 启动骨架 |
 | 12 | UML / 设计模式 | 无 | **核心考点**（软考独有） | 不考 | 中（项目设计） | P0 | `plans/soft_exam/uml.md` |
 | 13 | C 语言基础 | 无 | **核心考点**（软考下午题主语言之一） | 408 数据结构通常用 C 表达 | 中（系统编程 / 408） | **P0** | `plans/soft_exam/c_lang.md`；与 408 数据结构共用 |
 | 14 | Python | Round 03 / Round 18–21 概览 | 软考可选语言之一 | 408 不考 Python | 极高（AI 工程 / 项目） | P1 | 保持现有 Round 概览；按需补章节 |

@@ -232,7 +232,7 @@ npm run check:mcp
    ├─ round_09/                    ← 仓库规范化与测试入门（已展开）
    ├─ round_10/                    ← Python 工程化基础（已展开）
    ├─ round_11/                    ← 本地持久化与数据记录（已展开）
-   ├─ round_12/ … round_21/        ← 后续工程 / 数据 / AI 轮次（已展开并接入 Web UI）
+   ├─ round_12/ … round_21/        ← 工程 / 数据 / AI 轮次（已展开并接入 Web UI）
    └─ stage_03_vps_remote_ops/     ← VPS 远程实操支线（13 份 Round 文档）
       ├─ README.md
       └─ round_vps_00 ~ round_vps_12.md

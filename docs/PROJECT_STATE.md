@@ -338,3 +338,24 @@ open http://127.0.0.1:8777/progress.html
 
 - `records/feedback/task_feedback.json` 已从空动作日志重新生成，Round 00 初始任务不再显示历史撤销动作。
 - 标准验证与浏览器回检见本轮提交记录。
+
+## 19. 2026-07-06 TASK-RR-68 第十四轮项目用户视角评测与计划入口补骨架
+
+状态：done
+
+本轮评测报告：
+
+- `docs/reports/PROJECT_USER_REVIEW_2026_07_06_ROUND14.md`
+
+本轮发现并修复：
+
+- `docs/PROGRESS_RULES.md` 仍按 `mark_done.sh` 单一路径和占位配置描述进度系统，已同步 Web UI 本地 API、动作日志、任务反馈、本周任务与倒计时 localStorage 的当前事实。
+- README 目录树把 Round 12–21 写成“后续轮次”，已改为当前已展开的工程 / 数据 / AI 轮次。
+- `plans/linux/README.md` 仍把 Round 02 / Round 06 学习路径指向根目录概览，已改为展开后的 `rounds/round_02/`、`rounds/round_06/` 和当前 8777 Web UI 入口。
+- 软考 P0 模块 `composition.md`、`network.md`、`se.md` 缺少启动骨架，已新增并从软考 README 链接。
+- 408 README、知识映射和软考模块引用了尚不存在的 408 模块骨架，已新增 `plans/408/ds.md`、`os.md`、`network.md`、`composition.md` 并同步链接。
+
+验证摘要：
+
+- 默认、soft_exam、math2、cs408、Round 12、Round 21 与 390px 移动端页面均无旧文案、无横向溢出、无 console 错误。
+- 标准验证与浏览器回检见本轮提交记录。

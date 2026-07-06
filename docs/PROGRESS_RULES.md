@@ -1,7 +1,8 @@
 # Progress Rules · 进度规则（v1.0）
 
 > 本文档规定本仓库进度系统在**四条主线（lanes）下的统一操作规则**。
-> 进度数据由 `progress.json` 单一事实源持有，`mark_done.sh` 写入，`progress_data.js` 镜像，`progress.html` 展示。
+> 进度完成状态由 `progress.json` 单一事实源持有，`mark_done.sh` 与 Web UI 本地 API 写入，`progress_data.js` 镜像，`progress.html` 展示。
+> Web UI 的动作记录写入 `records/action_logs/events.jsonl`，任务反馈由 `records/feedback/task_feedback.json` 生成。
 > 详细数据结构与脚本规范见 `CONVERSION_PROTOCOL.md` Section 8。
 
 ---
@@ -41,12 +42,13 @@
 | `last_action_at` | 最近一次动作时间 |
 | `notes` | 备注 |
 
-### 2.3 标记规则（当前阶段）
+### 2.3 完成记录规则（当前阶段）
 
 | 行为 | 表现 |
 |---|---|
-| **完成** | `bash mark_done.sh <task-id>` → `done=true`、`done_at=now`，写回 `progress.json` 与 `progress_data.js` |
-| **撤销** | `bash mark_done.sh <task-id> --undo` → `done=false`、`done_at=null` |
+| **Web UI 记录并完成** | 点击 `记录并完成` → 填写本次记录 → `done=true`、`done_at=now`，写回 `progress.json` / `progress_data.js`，并追加动作日志 |
+| **CLI 记录完成** | `bash mark_done.sh <task-id>` → `done=true`、`done_at=now`，写回 `progress.json` / `progress_data.js`，并追加动作日志 |
+| **撤销** | Web UI 撤销或 `bash mark_done.sh <task-id> --undo` → `done=false`、`done_at=null`，并追加动作日志 |
 | **复习中** | （当前阶段）暂无字段；用 `records/weekly_reviews/` 与 `records/error_notes/` 表达 |
 | **薄弱项** | （当前阶段）暂无字段；写在周复盘的"高频错题模块"段 |
 
@@ -94,12 +96,12 @@
 
 ## 6. progress.html 展示规则
 
-升级后的 `progress.html` 必须展示：
+当前 `progress.html` 必须展示：
 
 1. **四主线总进度条**（按 lane 聚合）
-2. **每条 lane 内的轮次进度**（继续沿用 ROUNDS 数组）
-3. **本周任务占位**（不依赖后端，纯前端从用户输入）
-4. **倒计时占位**（软考考试日 + 考研日，可由用户在前端编辑后写入 localStorage，不写入 progress.json）
+2. **每条 lane 内的任务分组进度**（工程 Round 与计划入口共用 `ROUNDS` 展示结构）
+3. **本周任务配置**（不依赖后端，纯前端从用户输入并保存到 localStorage）
+4. **考试日期 / 倒计时配置**（软考考试日 + 考研日，可由用户在前端编辑后写入 localStorage，不写入 progress.json）
 5. **当前关注项板块**（从 progress.json 中识别刚启动的小主线和已开始但完成率 < 30% 的薄弱 lane，**非强制**）
 
 > 倒计时与关注项**不写入 progress.json**，避免污染状态层。
@@ -139,9 +141,9 @@
 ## 10. 标记示例
 
 ```bash
-bash mark_done.sh w1-read                       # 标记 Round 00 阅读完成（lane=engineering）
-bash mark_done.sh r04-w1-ex1                    # 标记 Round 04 第 1 周练习 1 完成（如已注册）
-bash mark_done.sh soft-os-ch01                  # 标记软考 OS 模块章节 1 完成（如已注册）
+bash mark_done.sh w1-read                       # 记录 Round 00 阅读完成（lane=engineering）
+bash mark_done.sh r04-w1-ex1                    # 记录 Round 04 第 1 周练习 1 完成（如已注册）
+bash mark_done.sh soft-os-ch01                  # 记录软考 OS 模块章节 1 完成（如已注册）
 bash mark_done.sh w1-read --undo                # 撤销
 bash mark_done.sh                               # 查看所有任务（按 lane 分组）
 ```

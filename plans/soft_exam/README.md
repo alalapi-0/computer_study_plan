@@ -21,9 +21,9 @@
 | `os` | 操作系统 | 软考广，408 计算题深 | P0 | [os.md](os.md) | 已有启动骨架 |
 | `ds` | 数据结构 | 软考广，408 综合题深 | P0 | [ds.md](ds.md) | 已有启动骨架 |
 | `db` | 数据库 | 仅软考考 | P0 | [db.md](db.md) | 已有启动骨架 |
-| `composition` | 计算机组成基础 | 软考浅，408 深 | P0 | `composition.md` | 待建 |
-| `network` | 计算机网络 | 软考广，408 计算题深 | P0 | `network.md` | 待建 |
-| `se` | 软件工程 | 仅软考考 | P0 | `se.md` | 待建 |
+| `composition` | 计算机组成基础 | 软考浅，408 深 | P0 | [composition.md](composition.md) | 已有启动骨架 |
+| `network` | 计算机网络 | 软考广，408 计算题深 | P0 | [network.md](network.md) | 已有启动骨架 |
+| `se` | 软件工程 | 仅软考考 | P0 | [se.md](se.md) | 已有启动骨架 |
 | `uml` | UML / 设计模式 | 仅软考考 | P0 | `uml.md` | 待建 |
 | `oo` | 面向对象 | 仅软考考 | P0 | `oo.md` | 待建 |
 | `security` | 信息安全 | 仅软考考 | P0 | `security.md` | 待建 |
@@ -31,7 +31,7 @@
 | `standards` | 标准化与知识产权 | 仅软考考 | P1 | `standards.md` | 待建 |
 | `english` | 英语阅读理解 | 仅软考考 | P1 | `english.md` | 待建 |
 
-> 当前先维护 [os.md](os.md)、[ds.md](ds.md)、[db.md](db.md) 三个启动骨架。后续按真实学习节奏补 `composition.md`、`network.md`、`se.md` 等，不为了凑文件数提前写空壳。
+> 当前先维护 [os.md](os.md)、[ds.md](ds.md)、[db.md](db.md)、[composition.md](composition.md)、[network.md](network.md)、[se.md](se.md) 六个启动骨架。其他模块后续按真实学习节奏补，不为了凑文件数提前写空壳。
 
 ---
 
@@ -61,10 +61,10 @@
 
 | 模块 | 软考侧位置 | 408 侧位置 | 共享原则 |
 |---|---|---|---|
-| 数据结构 | [plans/soft_exam/ds.md](ds.md) | `plans/408/ds.md` | 概念笔记可互相引用；错题分两份归档 |
-| 操作系统 | [plans/soft_exam/os.md](os.md) | `plans/408/os.md` | 同上 |
-| 计算机网络 | `plans/soft_exam/network.md` | `plans/408/network.md` | 同上 |
-| 计算机组成 | `plans/soft_exam/composition.md` | `plans/408/composition.md` | 同上 |
+| 数据结构 | [plans/soft_exam/ds.md](ds.md) | [plans/408/ds.md](../408/ds.md) | 概念笔记可互相引用；错题分两份归档 |
+| 操作系统 | [plans/soft_exam/os.md](os.md) | [plans/408/os.md](../408/os.md) | 同上 |
+| 计算机网络 | [plans/soft_exam/network.md](network.md) | [plans/408/network.md](../408/network.md) | 同上 |
+| 计算机组成 | [plans/soft_exam/composition.md](composition.md) | [plans/408/composition.md](../408/composition.md) | 同上 |
 | C 语言 | `plans/soft_exam/c_lang.md` | `plans/408/...`（按需） | 软考主笔记，408 引用 |
 
 ---
