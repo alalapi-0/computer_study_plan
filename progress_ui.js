@@ -36,8 +36,8 @@ async function detectApi() {
   if (!banner) return;
   if (apiReady) {
     banner.className = "banner ok";
-    banner.innerHTML = "<strong>网页记录已启用</strong> — 在学习工作区可读教程、做练习并记录完成；工程任务支持右侧终端。";
-    banner.style.display = "block";
+    banner.innerHTML = "";
+    banner.style.display = "none";
   } else if (window.location.protocol !== "file:") {
     banner.className = "banner warn";
     banner.innerHTML =
@@ -148,11 +148,25 @@ function taskUsesTerminal(task) {
 
 function terminalQuickCommands() {
   const meta = terminalTaskContext();
-  const commands = [...TERMINAL_QUICK_COMMANDS];
+  const commands = ["pwd", "ls", "ls -la"];
+  const weekMatch = String(meta?.week?.id || "").match(/week(\d+)/);
+  if (weekMatch) {
+    const weekDir = `week${Number(weekMatch[1])}`;
+    commands.push(`mkdir -p ${weekDir}/self_check`, `cd ${weekDir}/self_check`);
+  }
   if (meta?.round?.id === "round_00" && meta?.week?.id?.includes("week1")) {
     commands.push("cd notes", "pwd", "cd ..");
   }
+  commands.push("find . -maxdepth 2 -type f");
   return [...new Set(commands)];
+}
+
+function scrollWorkspacePanel(panelId) {
+  const panel = document.getElementById(panelId);
+  const workspace = document.getElementById("learnWorkspace");
+  const mobile = window.matchMedia?.("(max-width: 760px)")?.matches;
+  const target = mobile && panel ? panel : workspace;
+  target?.scrollIntoView({ behavior: "smooth", block: "start" });
 }
 
 async function autoBindTerminalForTask(taskId) {
@@ -326,7 +340,7 @@ async function openTaskTerminal(taskId) {
       await openInlineReader(meta.task.file, meta.task.title, taskId, { silent: true });
     }
     renderContinue();
-    document.getElementById("learnWorkspace")?.scrollIntoView({ behavior: "auto", block: "start" });
+    scrollWorkspacePanel("terminal");
     setTimeout(() => document.getElementById("terminalInput")?.focus({ preventScroll: true }), 220);
   } catch (err) {
     showToast(err.message || "终端切换失败", "error");
@@ -393,7 +407,18 @@ async function runTerminalCommand(command) {
 async function resetTerminal() {
   activeTerminalTaskId = "";
   terminalCwd = "";
-  await runTerminalCommand("cd ~");
+  try {
+    const state = await setTerminalCwd("~/cli-lab");
+    terminalHistory.push({
+      kind: "system",
+      message: `已回到 ${state?.cwd_display || "~/cli-lab"} 根目录`,
+      cwd_display: state?.cwd_display || "~/cli-lab",
+    });
+    renderTerminal();
+    document.getElementById("terminalInput")?.focus({ preventScroll: true });
+  } catch (err) {
+    showToast(err.message || "终端重置失败", "warn");
+  }
 }
 
 function feedbackFor(taskId) {
@@ -574,7 +599,7 @@ async function openInlineReader(filePath, title, taskId, options) {
   }
   body.innerHTML = "<p class='reader-loading'>加载中…</p>";
   if (!options?.silent) {
-    document.getElementById("learnWorkspace")?.scrollIntoView({ behavior: "smooth", block: "start" });
+    scrollWorkspacePanel("inlineReaderPanel");
   }
   try {
     const resourcePath = "/" + filePath.replace(/^\//, "");

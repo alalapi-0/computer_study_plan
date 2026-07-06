@@ -949,6 +949,38 @@
       color: var(--text-muted);
       white-space: nowrap;
     }
+    .workspace-jumpbar {
+      display: none;
+      gap: 0.35rem;
+      flex-wrap: wrap;
+      margin-top: 0.65rem;
+    }
+    .workspace-link-btn,
+    .workspace-jumpbar a {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 2rem;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 0.32rem 0.65rem;
+      background: var(--card);
+      color: var(--accent2);
+      font-size: 0.72rem;
+      font-weight: 800;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+    .workspace-link-btn:hover,
+    .workspace-jumpbar a:hover {
+      border-color: var(--accent2);
+      background: #ecfdf7;
+    }
+    #continueCard,
+    #inlineReaderPanel,
+    #terminal {
+      scroll-margin-top: 0.8rem;
+    }
     .learning-grid {
       display: grid;
       grid-template-columns: minmax(230px, 0.72fr) minmax(320px, 1fr) minmax(360px, 0.95fr);
@@ -1026,6 +1058,13 @@
       font-size: 0.95rem;
       line-height: 1.35;
       color: var(--ink);
+    }
+    .workspace-panel-actions {
+      display: flex;
+      gap: 0.4rem;
+      align-items: center;
+      flex-wrap: wrap;
+      justify-content: flex-end;
     }
     .inline-reader-meta {
       color: var(--text-muted);
@@ -1517,6 +1556,18 @@
       .workspace-head .card-sub { display: none; }
       .workflow-steps { justify-content: flex-start; }
       .workflow-steps span { padding: 0.2rem 0.42rem; font-size: 0.68rem; }
+      .workspace-jumpbar {
+        display: flex;
+        position: sticky;
+        top: 0.35rem;
+        z-index: 8;
+        padding: 0.3rem;
+        border: 1px solid var(--border);
+        border-radius: 999px;
+        background: rgba(255,255,255,0.96);
+        box-shadow: 0 6px 18px rgba(15,23,42,0.08);
+      }
+      .workspace-jumpbar a { flex: 1 1 5.4rem; }
       .learning-grid { grid-template-columns: minmax(0, 1fr); }
       .workspace-surface.no-terminal-task .learning-grid { grid-template-columns: minmax(0, 1fr); }
       .inline-reader-panel,
@@ -1655,17 +1706,25 @@
       <span>3 记录并完成</span>
     </div>
   </div>
+  <div class="workspace-jumpbar" aria-label="工作区快速切换">
+    <a href="#continueCard">当前任务</a>
+    <a href="#inlineReaderPanel">教程</a>
+    <a href="#terminal">终端</a>
+  </div>
   <div class="learning-grid">
     <section class="workspace-panel task-focus-panel" id="continueCard">
       <div class="empty-state">正在寻找下一条任务…</div>
     </section>
-    <section class="workspace-panel inline-reader-panel" aria-label="当前教程">
+    <section class="workspace-panel inline-reader-panel" id="inlineReaderPanel" aria-label="当前教程">
       <div class="workspace-panel-head">
         <div>
           <h3 id="inlineReaderTitle">当前教程</h3>
           <div class="inline-reader-meta" id="inlineReaderMeta">选择任务后会在这里显示资料，不打断当前工作区。</div>
         </div>
-        <button class="task-btn read" type="button" id="inlineReaderPopout" disabled>单独打开教程</button>
+        <div class="workspace-panel-actions">
+          <a class="task-btn terminal workspace-link-btn" href="#terminal">去终端</a>
+          <button class="task-btn read" type="button" id="inlineReaderPopout" disabled>单独打开教程</button>
+        </div>
       </div>
       <div class="inline-reader-body" id="inlineReaderBody">
         <div class="inline-reader-empty">点击任务里的“读教程”，资料会显示在这里；工程任务会自动联动终端。</div>
@@ -1676,6 +1735,9 @@
         <div>
           <h3>终端练习</h3>
           <div class="card-sub">工程任务会自动映射到本机 <code>~/cli-lab</code> 沙盒；点击“终端练习”可切换或重新聚焦。</div>
+        </div>
+        <div class="workspace-panel-actions">
+          <a class="task-btn read workspace-link-btn" href="#inlineReaderPanel">回到教程</a>
         </div>
       </div>
       <div class="terminal-workspace">
@@ -1698,7 +1760,7 @@
             </div>
           </div>
           <div>
-            <div class="terminal-panel-title">快捷命令</div>
+            <div class="terminal-panel-title">任务快捷命令</div>
             <div class="terminal-quick" id="terminalQuickCommands"></div>
           </div>
         </div>
@@ -1846,9 +1908,9 @@
   </div>
 </div>
 
-<script src="progress_data.js?v=20260706i"></script>
-<script src="rounds_data.js?v=20260706i"></script>
-<script src="progress_ui.js?v=20260706i"></script>
+<script src="progress_data.js?v=20260706j"></script>
+<script src="rounds_data.js?v=20260706j"></script>
+<script src="progress_ui.js?v=20260706j"></script>
 <script>
 const ROUNDS = window.ROUNDS_DATA || [];
 
