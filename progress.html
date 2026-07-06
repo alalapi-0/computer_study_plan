@@ -143,7 +143,9 @@
     .lane-item.math2       .bar-fill { background: linear-gradient(90deg, var(--green), #14b8a6); }
     .lane-item.cs408       .bar-fill { background: linear-gradient(90deg, var(--pink), #a855f7); }
     .lane-item.weak { border-color: var(--red); }
-    .lane-item.weak .lane-meta { color: var(--red); }
+    .lane-item.weak .lane-meta.attention { color: var(--red); }
+    .lane-item.starting { border-color: rgba(245, 158, 11, 0.55); }
+    .lane-item.starting .lane-meta.attention { color: #b45309; }
 
     /* ── Global bar ── */
     .global-progress { display: flex; align-items: center; gap: 1rem; }
@@ -523,6 +525,7 @@
       display: flex; justify-content: space-between; align-items: center;
     }
     .weak-list .weak-item.alert { border-color: var(--red); color: #fca5a5; }
+    .weak-list .weak-item.starting { border-color: rgba(245, 158, 11, 0.55); color: #fbbf24; }
     .weak-list .weak-item .lane-name { font-weight: 600; color: var(--text); }
     .weak-empty { color: var(--text-muted); font-size: 0.8rem; }
 
@@ -1219,6 +1222,10 @@
       border-color: rgba(190,18,60,0.4);
       background: #fff8fa;
     }
+    .lane-item.starting {
+      border-color: rgba(245,158,11,0.5);
+      background: #fffaf0;
+    }
 
     .config-grid { gap: 0.85rem; }
     .config-card { padding: 1rem; }
@@ -1255,6 +1262,11 @@
       color: var(--ink);
       border-color: rgba(190,18,60,0.35);
       background: #fff8fa;
+    }
+    .weak-list .weak-item.starting {
+      color: var(--ink);
+      border-color: rgba(245,158,11,0.45);
+      background: #fffaf0;
     }
     .weak-empty {
       padding: 0.85rem 1rem;
@@ -1721,7 +1733,7 @@
 <!-- ── Block 2: 四主线进度 ── -->
 <div class="card" id="lanes">
   <h2>四主线进度</h2>
-  <div class="card-sub">每条主线（lane）的任务完成率。已开始学习且完成率 &lt; 30%（任务数 ≥ 5）时会标为薄弱项。</div>
+  <div class="card-sub">每条主线（lane）的任务完成率。刚启动的小主线显示为“启动中”，已开始但完成率低于 30% 时显示为“薄弱项”。</div>
   <div class="lane-grid" id="laneGrid"></div>
 </div>
 
@@ -1789,14 +1801,14 @@
 <!-- ── Block 5: 阶段进度（Stage 0–7） ── -->
 <div class="card" id="stages">
   <h2>阶段进度（Stage 0–7）</h2>
-  <div class="card-sub">详见 <code style="background:rgba(255,255,255,0.08);padding:0.05em 0.35em;border-radius:4px;font-family:monospace">docs/STAGE_PLAN.md</code>。Stage 进度按"该 Stage 关联 lane 的完成率"近似计算。</div>
+  <div class="card-sub">详见 <code style="background:rgba(255,255,255,0.08);padding:0.05em 0.35em;border-radius:4px;font-family:monospace">docs/STAGE_PLAN.md</code>。Stage 0 是治理状态；其他 Stage 按关联 lane 完成率近似计算。</div>
   <div class="stage-list" id="stageList"></div>
 </div>
 
-<!-- ── Block 6: 当前薄弱项 ── -->
+<!-- ── Block 6: 当前关注项 ── -->
 <div class="card">
-  <h2>当前薄弱项</h2>
-  <div class="card-sub">按 lane 完成率自动识别（已开始学习且 &lt; 30%，任务数 ≥ 5）。</div>
+  <h2>当前关注项</h2>
+  <div class="card-sub">按 lane 完成率自动识别：刚启动的小主线提示“启动中”，已开始但低于 30% 才提示“薄弱项”。</div>
   <div class="weak-list" id="weakList"></div>
 </div>
 
@@ -1831,9 +1843,9 @@
   </div>
 </div>
 
-<script src="progress_data.js?v=20260706f"></script>
-<script src="rounds_data.js?v=20260706f"></script>
-<script src="progress_ui.js?v=20260706f"></script>
+<script src="progress_data.js?v=20260706h"></script>
+<script src="rounds_data.js?v=20260706h"></script>
+<script src="progress_ui.js?v=20260706h"></script>
 <script>
 const ROUNDS = window.ROUNDS_DATA || [];
 
@@ -1844,7 +1856,7 @@ const ROUNDS = window.ROUNDS_DATA || [];
 // 这是当前阶段的最小实现；后续若有 stage→具体 task 列表，可替换。
 // ============================================================
 const STAGES = [
-  { id: "stage_0", name: "Stage 0 · 治理准备",   lane: null,           note: "治理任务，不进度统计" },
+  { id: "stage_0", name: "Stage 0 · 治理准备",   lane: null, pct: 100,  status: "已完成", note: "仓库治理准备已完成，不计入学习进度" },
   { id: "stage_1", name: "Stage 1 · Linux/Git/Shell", lane: "engineering" },
   { id: "stage_2", name: "Stage 2 · 软考基础核心",   lane: "soft_exam" },
   { id: "stage_3", name: "Stage 3 · 软考真题强化",   lane: "soft_exam" },
@@ -2059,7 +2071,7 @@ function syncActiveViewToCurrentTask() {
 
 function taskFlowRows(task) {
   const secondStep = taskUsesTerminal(task)
-    ? "需要命令时点“终端练习”，右侧会绑定到对应沙盒。"
+    ? "右侧终端会自动绑定到对应沙盒；需要切换任务时可点“终端练习”。"
     : "本任务不需要终端；读完资料后整理一个最小结论。";
   return `
       <div><strong>1</strong><span>先在中间读教程，确认本任务要做出的最小产物。</span></div>
@@ -2100,6 +2112,9 @@ function renderContinue() {
     <p class="task-focus-note">${escapeHtml(fb?.next_suggestion || "先完成一个最小动作，不需要一次看完整个页面。")}</p>
   `;
   bindTaskActions(card);
+  if (taskUsesTerminal(task)) {
+    void autoBindTerminalForTask(task.id);
+  }
   if (canRead && inlineReaderTaskId !== task.id) {
     void openInlineReader(task.file, task.title, task.id, { silent: true });
   }
@@ -2113,14 +2128,28 @@ function renderGlobal() {
   document.getElementById("globalPct").textContent = pct + "%";
 }
 
+function laneAttention(key, stats) {
+  if (!stats.total || stats.pct >= 30) return null;
+  if (stats.done > 0) {
+    return { kind: "weak", label: "薄弱项", action: "建议本周主推该 lane" };
+  }
+  if (stats.total < 5) {
+    return { kind: "starting", label: "启动中", action: "先完成一个最小启动任务" };
+  }
+  if (key === activeLane) {
+    return { kind: "starting", label: "待启动", action: "先完成当前任务" };
+  }
+  return null;
+}
+
 function renderLanes() {
   const el = document.getElementById("laneGrid");
   el.innerHTML = "";
   Object.entries(lanesData).forEach(([key, meta]) => {
     const s = laneStats(key);
-    const weak = s.total >= 5 && s.pct < 30 && s.done > 0;
+    const attention = laneAttention(key, s);
     const item = document.createElement("div");
-    item.className = `lane-item ${key}${weak ? " weak" : ""}`;
+    item.className = `lane-item ${key}${attention ? " " + attention.kind : ""}`;
     item.innerHTML = `
       <div class="lane-title">${meta.title || key}</div>
       <div class="lane-meta">${meta.description || ""}</div>
@@ -2128,7 +2157,7 @@ function renderLanes() {
         <div class="bar-wrap" style="flex:1"><div class="bar-fill" style="width:${s.pct}%"></div></div>
         <span class="lane-pct">${s.done}/${s.total}</span>
       </div>
-      <div class="lane-meta" style="margin-top:0.35rem;">${s.pct}%${weak ? " · 薄弱项" : ""}</div>
+      <div class="lane-meta attention" style="margin-top:0.35rem;">${s.pct}%${attention ? " · " + attention.label : ""}</div>
     `;
     el.appendChild(item);
   });
@@ -2138,18 +2167,21 @@ function renderStages() {
   const el = document.getElementById("stageList");
   el.innerHTML = "";
   STAGES.forEach(stage => {
-    let pct = 0, note = stage.note || "";
+    let pct = stage.pct || 0;
+    const note = stage.note || "";
+    let label = stage.status || "";
     if (stage.lane) {
       const s = laneStats(stage.lane);
       pct = s.pct;
+      label = pct + "%";
     }
     const item = document.createElement("div");
     item.className = "stage-item";
     item.innerHTML = `
       <div class="stage-name">${stage.name}</div>
-      <div class="stage-lane">${stage.lane ? "lane: " + stage.lane : note}</div>
+      <div class="stage-lane">${stage.lane ? "lane: " + stage.lane + (note ? " · " + note : "") : note}</div>
       <div class="bar-wrap"><div class="bar-fill" style="width:${pct}%"></div></div>
-      <div class="stage-pct">${stage.lane ? pct + "%" : "—"}</div>
+      <div class="stage-pct">${label || "不计入"}</div>
     `;
     el.appendChild(item);
   });
@@ -2160,21 +2192,25 @@ function renderWeak() {
   el.innerHTML = "";
   const weaks = Object.entries(lanesData).map(([key, meta]) => {
     const s = laneStats(key);
-    return { key, meta, s };
-  }).filter(x => x.s.total >= 5 && x.s.pct < 30 && x.s.done > 0);
+    return { key, meta, s, attention: laneAttention(key, s) };
+  }).filter(x => x.attention).sort((a, b) => {
+    const ai = LANE_PRIORITY.indexOf(a.key);
+    const bi = LANE_PRIORITY.indexOf(b.key);
+    return (ai === -1 ? 99 : ai) - (bi === -1 ? 99 : bi);
+  });
   if (!weaks.length) {
     const item = document.createElement("div");
     item.className = "weak-empty";
-    item.textContent = "当前没有「已开始但完成率低于 30%」的主线。";
+    item.textContent = "当前没有需要额外提示的主线。";
     el.appendChild(item);
     return;
   }
-  weaks.forEach(({key, meta, s}) => {
+  weaks.forEach(({key, meta, s, attention}) => {
     const item = document.createElement("div");
-    item.className = "weak-item alert";
+    item.className = `weak-item ${attention.kind === "weak" ? "alert" : "starting"}`;
     item.innerHTML = `
-      <span><span class="lane-name">${meta.title || key}</span> · ${s.done}/${s.total} 完成（${s.pct}%）</span>
-      <span style="font-size:0.72rem;">建议本周主推该 lane</span>
+      <span><span class="lane-name">${meta.title || key}</span> · ${s.done}/${s.total} 完成（${s.pct}%）· ${attention.label}</span>
+      <span style="font-size:0.72rem;">${attention.action}</span>
     `;
     el.appendChild(item);
   });

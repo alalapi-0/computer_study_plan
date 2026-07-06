@@ -213,6 +213,22 @@ def task_metadata(task_id: str, root: Path | None = None) -> dict[str, Any] | No
     return None
 
 
+def task_metadata_map(root: Path | None = None) -> dict[str, dict[str, Any]]:
+    items: dict[str, dict[str, Any]] = {}
+    for round_item in load_rounds_metadata(root):
+        for week in round_item.get("weeks", []):
+            for task in week.get("tasks", []):
+                task_id = task.get("id")
+                if not task_id:
+                    continue
+                items[str(task_id)] = {
+                    "round": round_item,
+                    "week": week,
+                    "task": task,
+                }
+    return items
+
+
 RUNNABLE_SCRIPT_RE = re.compile(
     r"^rounds/round_(\d{2})/(week[1-3]|final)/(exercises|comprehensive_exercise)\.(sh|py)$"
 )

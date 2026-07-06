@@ -286,19 +286,23 @@ cd ~/PycharmProjects/computer_study_plan
 - 学习工作区（当前任务 + 内联教程 + 工程任务练习终端）
 - 总进度与四主线进度（engineering / soft_exam / math2 / cs408）
 - 按主线查看任务（工程线为 Round 00–21，考试 / 数学 / 408 为计划任务；进度看板任务集合已与 `progress.json` 对齐）
-- 折叠管理区：本周任务、考试倒计时、存档与读档、Stage 0–7、当前薄弱项
+- 折叠管理区：本周任务、考试倒计时、存档与读档、Stage 0–7、当前关注项
 - 练习脚本运行结果（仅限已登记的 `rounds/round_XX/weekN|final` 白名单脚本）
 
 ### 6.4 进度系统 CLI
+
+CLI 适合快速查看 / 补标记 / 撤销任务；正式学习仍优先用 Web UI，因为网页会把当前任务、教程、记录弹窗和工程终端放在同一条流程里。
 
 在仓库根目录执行：
 
 ```bash
 cd ~/PycharmProjects/computer_study_plan
-bash mark_done.sh                # 查看所有任务（按 lane 分组）
+bash mark_done.sh                # 查看所有任务（按 lane 分组，显示任务标题）
 bash mark_done.sh <task-id>      # 标记完成
 bash mark_done.sh <task-id> --undo  # 取消完成
 ```
+
+无参数运行时会显示 `task-id — 任务标题 / 所属分组`。如果只是想知道现在该做什么，先打开 Web UI；如果已经明确知道任务 id，再用 CLI 快速操作。
 
 ---
 

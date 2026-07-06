@@ -12,6 +12,7 @@ let workspaceTaskId = "";
 let inlineReaderTaskId = "";
 let inlineReaderFile = "";
 let routeFocusedRound = false;
+let autoBindingTerminalTaskId = "";
 
 const TERMINAL_QUICK_COMMANDS = [
   "pwd",
@@ -147,6 +148,31 @@ function taskUsesTerminal(task) {
   return ["reading", "exercise", "test", "output"].includes(task.type);
 }
 
+async function autoBindTerminalForTask(taskId) {
+  if (!apiReady || !taskId || activeTerminalTaskId || autoBindingTerminalTaskId === taskId) return;
+  const meta = taskMeta(taskId);
+  if (!meta || !taskUsesTerminal(meta.task)) return;
+  autoBindingTerminalTaskId = taskId;
+  activeTerminalTaskId = taskId;
+  try {
+    const target = terminalTaskTarget(taskId);
+    const state = await setTerminalCwd(target);
+    if (!terminalHistory.length) {
+      terminalHistory.push({
+        kind: "system",
+        message: `已自动绑定当前任务：${meta.task.title}；工作目录 ${state?.cwd_display || target}`,
+        cwd_display: state?.cwd_display || "~",
+      });
+    }
+    renderTerminal();
+  } catch (err) {
+    activeTerminalTaskId = "";
+    showToast(err.message || "终端自动绑定失败", "warn");
+  } finally {
+    autoBindingTerminalTaskId = "";
+  }
+}
+
 function renderTerminalContext() {
   const contextEl = document.getElementById("terminalContext");
   const quickEl = document.getElementById("terminalQuickCommands");
@@ -242,7 +268,8 @@ async function loadTerminalState() {
   }
   if (input) input.disabled = false;
   try {
-    const res = await fetch(`/api/terminal?cwd=${encodeURIComponent(terminalCwd || "")}&_=${Date.now()}`);
+    const requestedCwd = terminalCwd || (activeTerminalTaskId ? terminalTaskTarget(activeTerminalTaskId) : "");
+    const res = await fetch(`/api/terminal?cwd=${encodeURIComponent(requestedCwd)}&_=${Date.now()}`);
     const data = await res.json();
     if (!res.ok) throw new Error(data.error || "terminal_state_failed");
     terminalStateInfo = data.terminal || null;
