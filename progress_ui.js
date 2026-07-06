@@ -131,7 +131,7 @@ function currentWorkspaceTask() {
 function terminalCwdForRound(round) {
   const match = String(round?.id || "").match(/round_(\d{2})/);
   if (!match) return "~";
-  return `~/round${Number(match[1])}`;
+  return `~/cli-lab/round${Number(match[1])}`;
 }
 
 function terminalTaskTarget(taskId) {
@@ -607,7 +607,7 @@ function openRecordViewer(taskId, options = {}) {
   const events = eventsFor(taskId).slice().reverse();
 
   heading.textContent = `学习记录 · ${title}`;
-  body.innerHTML = renderRecordBody(taskId, done, fb, events, options);
+  body.innerHTML = renderRecordBody(taskId, done, fb, events, options, meta);
   modal.classList.add("open");
   modal.setAttribute("aria-hidden", "false");
 
@@ -630,7 +630,43 @@ function openRecordViewer(taskId, options = {}) {
   if (undoBtn) undoBtn.addEventListener("click", () => action(true));
 }
 
-function renderRecordBody(taskId, done, fb, events, options = {}) {
+function recordPlaceholders(meta, taskId) {
+  const lane = meta?.round?.lane || taskLane(taskId);
+  const file = meta?.task?.file || "";
+  if (lane === "engineering") {
+    const match = String(meta?.round?.id || "").match(/round_(\d{2})/);
+    const roundPath = match ? `~/cli-lab/round${Number(match[1])}` : "~/cli-lab";
+    return {
+      note: "例如：读完本节笔记，并在终端完成 1 个最小验证；下一步继续做本周练习。",
+      evidence: `例如：${roundPath}/week1_auto`,
+    };
+  }
+  if (lane === "soft_exam") {
+    return {
+      note: "例如：读完本模块骨架，整理 3 个易混点；下一步补一张概念地图。",
+      evidence: file ? `例如：${file}` : "例如：records/error_notes/soft_exam/os/",
+    };
+  }
+  if (lane === "math2") {
+    return {
+      note: "例如：读完启动骨架，完成 1 道例题整理；下一步补错题和关键定义。",
+      evidence: file ? `例如：${file}` : "例如：records/error_notes/math2/limits/",
+    };
+  }
+  if (lane === "cs408") {
+    return {
+      note: "例如：读完 408 启动总览，写下与软考的 3 个差异；下一步选定数据结构入口。",
+      evidence: file ? `例如：${file}` : "例如：records/error_notes/cs408/ds/",
+    };
+  }
+  return {
+    note: "例如：读完当前资料，整理一个最小结论，并写清下一步。",
+    evidence: file ? `例如：${file}` : "例如：records/weekly_reviews/YYYY-WW.md",
+  };
+}
+
+function renderRecordBody(taskId, done, fb, events, options = {}, meta = null) {
+  const placeholders = recordPlaceholders(meta, taskId);
   const eventRows = events.length
     ? events.slice(0, 12).map((event) => `
         <li>
@@ -648,11 +684,11 @@ function renderRecordBody(taskId, done, fb, events, options = {}) {
       <p>${escapeHtml(fb?.message || "暂无反馈。")}</p>
       <p class="record-suggestion">${escapeHtml(fb?.next_suggestion || "")}</p>
       <label class="record-label">本次记录${done && !options.requireNote ? "（建议填写）" : "（必填）"}</label>
-      <textarea id="recordNote" class="record-input" placeholder="例如：读完软考总览，下一步先补 OS / DS / DB 三个启动模块。"></textarea>
+      <textarea id="recordNote" class="record-input" placeholder="${escapeHtml(placeholders.note)}"></textarea>
       <label class="record-label">证据路径（可选）</label>
-      <input id="recordEvidence" class="record-input" placeholder="例如：~/cli-lab/round0/week1" />
+      <input id="recordEvidence" class="record-input" placeholder="${escapeHtml(placeholders.evidence)}" />
       <div class="record-actions">
-        <button type="button" class="task-btn done" id="recordSaveDone">${done ? "保存记录并保持完成" : "记录并标记完成"}</button>
+        <button type="button" class="task-btn done" id="recordSaveDone">${done ? "保存记录并保持完成" : "记录并完成"}</button>
         ${done ? '<button type="button" class="task-btn undo" id="recordUndoDone">撤销完成</button>' : ""}
       </div>
       <h4>最近记录</h4>

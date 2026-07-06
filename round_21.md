@@ -113,7 +113,7 @@ Web UI 运行练习会生成：
 浏览器终端短命令：
 
 ```bash
-cd ~/round21/week1_auto/tokenizer_vocab
+cd ~/cli-lab/round21/week1_auto/tokenizer_vocab
 python3 stdlib_tokenizer_smoke.py
 cat tokenizer_summary.json
 ```
@@ -141,7 +141,7 @@ Web UI 运行练习会生成：
 浏览器终端短命令：
 
 ```bash
-cd ~/round21/week2_auto/embedding_classifier
+cd ~/cli-lab/round21/week2_auto/embedding_classifier
 python3 stdlib_embedding_smoke.py
 cat embedding_summary.json
 ```
@@ -170,7 +170,7 @@ Web UI 运行练习会生成：
 浏览器终端短命令：
 
 ```bash
-cd ~/round21/week3_auto/text_features
+cd ~/cli-lab/round21/week3_auto/text_features
 python3 stdlib_text_features_smoke.py
 cat text_features_summary.json
 ```

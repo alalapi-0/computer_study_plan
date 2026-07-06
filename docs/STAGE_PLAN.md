@@ -130,7 +130,7 @@
 
 ### 产物
 
-- `plans/soft_exam/README.md`：模块清单 + 章节进度表（在 Stage 0 已建空）
+- `plans/soft_exam/README.md`：模块清单 + 启动模块链接；`os.md`、`ds.md`、`db.md` 已有启动骨架与最小产物清单
 - `plans/soft_exam/<module>.md`：每个模块的章节笔记骨架（按需扩展）
 - 每个模块至少 1 份"概念地图"笔记
 - 错题本进入运转（详见 §Stage 3）

@@ -562,7 +562,7 @@ def write_terminal_commands(commands: list[dict[str, Any]], root: Path | None = 
 def terminal_state(cwd: str | None = None) -> dict[str, Any]:
     root = terminal_root()
     current = clamp_terminal_cwd(cwd)
-    cwd_display = "~" if current == root else "~/" + str(current.relative_to(root))
+    cwd_display = "~/cli-lab" if current == root else "~/cli-lab/" + str(current.relative_to(root))
     return {
         "root": str(root),
         "cwd": str(current),
