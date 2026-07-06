@@ -1,7 +1,7 @@
-# Progress Rules · 进度规则（v1.0）
+# Progress Rules · 进度规则（v1.1）
 
 > 本文档规定本仓库进度系统在**四条主线（lanes）下的统一操作规则**。
-> 进度完成状态由 `progress.json` 单一事实源持有，`mark_done.sh` 与 Web UI 本地 API 写入，`progress_data.js` 镜像，`progress.html` 展示。
+> 进度完成状态由 `progress.json` 单一事实源持有；`mark_done.sh` 与 Web UI 本地 API 写入；`progress_data.js` 是前端镜像；`rounds_data.js` 提供任务展示元数据；`progress.html` + `progress_ui.js` + `scripts/progress_server.py` 组成本地 Web UI 学习工作区。
 > Web UI 的动作记录写入 `records/action_logs/events.jsonl`，任务反馈由 `records/feedback/task_feedback.json` 生成。
 > 详细数据结构与脚本规范见 `CONVERSION_PROTOCOL.md` Section 8。
 
@@ -23,6 +23,8 @@
 ## 2. 状态模型
 
 ### 2.1 当前阶段使用的最小状态集
+
+`progress.json` 顶层包含 `version`、`lanes` 和 `tasks`；下表描述 `tasks[task_id]` 的最小字段。
 
 | 字段 | 含义 | 取值 |
 |---|---|---|
