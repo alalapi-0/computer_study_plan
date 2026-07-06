@@ -82,8 +82,7 @@ Cursor 执行 UI 优化（如 `progress.html`）时必须遵守：
 8. **filesystem 用作文件真值检查**——仅限当前项目目录。
 9. **context7 用作文档查询**——前端库与框架文档。
 10. **github 用作提交和远程状态**——token 仅通过环境变量。
-11. **微信已登录页面只允许 wechat-chrome-session**——本仓库非微信项目，普通 Web UI 不得使用该 server。
-12. **当前线程缺工具时必须 BLOCKED**——输出 `BLOCKED: MISSING_FROM_THREAD_TOOL_REGISTRY`，不要继续假装执行。
+11. **当前线程缺工具时必须 BLOCKED**——输出 `BLOCKED: MISSING_FROM_THREAD_TOOL_REGISTRY`，不要继续假装执行。
 
 详细 runbook：`docs/cursor_browser_ui_runbook.md`  
 工具注册排查：`docs/cursor_tool_registry_check.md`  

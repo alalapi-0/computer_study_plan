@@ -48,10 +48,6 @@ SERVERS=(
   github
 )
 
-if [[ -f "${MCP_JSON}" ]] && grep -q '"wechat-chrome-session"' "${MCP_JSON}"; then
-  SERVERS+=(wechat-chrome-session wechat_chrome_session)
-fi
-
 for server in "${SERVERS[@]}"; do
   echo "--- cursor-agent mcp list-tools ${server} ---"
   if cursor-agent mcp list-tools "${server}" 2>&1 | sed -E 's/(ghp_[A-Za-z0-9]{20,}|github_pat_[A-Za-z0-9_]{20,}|sk-[A-Za-z0-9]{20,}|AIza[A-Za-z0-9_-]{20,})/[REDACTED]/g'; then

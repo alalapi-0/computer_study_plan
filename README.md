@@ -71,15 +71,7 @@ npm run check:mcp
 6. 截图（after）→ 运行测试
 7. commit / push（独立分支）
 
-完整 14 步见 [`docs/cursor_browser_ui_runbook.md`](docs/cursor_browser_ui_runbook.md)。
-
-### 4. 微信页面特殊说明
-
-本仓库**不是**微信相关项目。若在其他场景操作微信公众号已登录页面：
-
-- 必须使用 **wechat-chrome-session**
-- 不允许用 Playwright 新开页面替代
-- 遇到扫码 / 风控时停止，等待用户手动处理
+完整流程见 [`docs/cursor_browser_ui_runbook.md`](docs/cursor_browser_ui_runbook.md)。
 
 下一轮 UI 推进 Prompt：[`docs/prompts/CURSOR_UI_IMPLEMENTATION_PROMPT.md`](docs/prompts/CURSOR_UI_IMPLEMENTATION_PROMPT.md)
 

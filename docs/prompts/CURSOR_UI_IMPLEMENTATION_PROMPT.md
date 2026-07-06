@@ -38,10 +38,6 @@
 8. 更新必要文档
 9. 在独立分支 commit；remote 存在时 push 分支（不直接 push main）
 
-【微信页面】
-- 本仓库为普通本地 Web 项目，不使用 wechat-chrome-session
-- 若误涉及微信已登录页面，停止并说明需切换工具
-
 请开始：先报告当前线程可用 MCP 工具，再执行 before 检查。
 ```
 

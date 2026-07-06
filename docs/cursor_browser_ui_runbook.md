@@ -21,9 +21,7 @@
 
 ## 2. 工具选择规则
 
-### 普通本地 Web 项目 UI 优化
-
-本仓库（如 `progress.html`、本地静态页）属于此类。优先使用：
+本仓库（如 `progress.html`、本地静态页）UI 优化优先使用：
 
 | 工具 | 用途 |
 |---|---|
@@ -33,21 +31,6 @@
 | **filesystem** | 检查代码与产物（仅限当前项目目录） |
 | **context7** | 查询前端库 / 框架文档 |
 | **github** | commit / push / issue / PR |
-
-### 微信公众号已登录页面操作
-
-> **本仓库不是微信相关项目**，通常不需要 `wechat-chrome-session`。若你在其他仓库操作微信已登录页面，遵守以下规则：
-
-**只使用：**
-
-- `wechat-chrome-session`
-
-**禁止使用：**
-
-- ordinary chrome-devtools
-- playwright
-- `browser_tabs` / `new_page` / `navigate_page`
-- 任何会新开**未登录**浏览器实例的工具
 
 ### 真实页面 UI 优化（必做检查项）
 
