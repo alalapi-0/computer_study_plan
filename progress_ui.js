@@ -8,6 +8,10 @@ let terminalCwd = "";
 let terminalCwdDisplay = "~";
 let terminalStateInfo = null;
 let activeTerminalTaskId = "";
+let workspaceTaskId = "";
+let inlineReaderTaskId = "";
+let inlineReaderFile = "";
+let routeFocusedRound = false;
 
 const TERMINAL_QUICK_COMMANDS = [
   "pwd",
@@ -33,7 +37,7 @@ async function detectApi() {
   if (!banner) return;
   if (apiReady) {
     banner.className = "banner ok";
-    banner.innerHTML = "<strong>网页打卡已启用</strong> — 可直接在任务旁点击完成 / 撤销，无需切换终端。";
+    banner.innerHTML = "<strong>网页打卡已启用</strong> — 在学习工作区可左侧读教程、右侧敲命令，并直接记录完成。";
     banner.style.display = "block";
   } else if (window.location.protocol !== "file:") {
     banner.className = "banner warn";
@@ -164,7 +168,7 @@ function renderTerminalContext() {
   if (!meta) {
     contextEl.innerHTML = `
       <div class="terminal-context-title">未绑定任务</div>
-      <div class="terminal-context-meta">从任务行点击“终端”，这里会切到对应 Round 的沙盒目录。</div>
+      <div class="terminal-context-meta">从任务行点击“终端练习”，这里会切到对应 Round 的沙盒目录。</div>
     `;
     return;
   }
@@ -175,7 +179,7 @@ function renderTerminalContext() {
     <div class="terminal-context-meta">${escapeHtml(meta.round.title)} / ${escapeHtml(meta.week.title)}</div>
     <div class="terminal-context-path">${escapeHtml(meta.task.file || "手动练习")}</div>
     <div class="terminal-context-actions">
-      ${canRead ? `<button type="button" class="task-btn read task-open" data-file="${escapeHtml(meta.task.file)}" data-title="${escapeHtml(meta.task.title)}">打开资料</button>` : ""}
+      ${canRead ? `<button type="button" class="task-btn read task-open" data-task="${escapeHtml(meta.task.id)}" data-file="${escapeHtml(meta.task.file)}" data-title="${escapeHtml(meta.task.title)}">${fileActionLabel(meta.task.file, meta.task.type)}</button>` : ""}
       ${taskRecordButton(meta.task.id)}
       ${taskActionButtons(meta.task.id, done)}
     </div>
@@ -190,7 +194,7 @@ function renderTerminal() {
   prompt.textContent = terminalPrompt(terminalCwdDisplay || "~");
   renderTerminalContext();
   if (!terminalHistory.length) {
-    output.innerHTML = `<div class="terminal-line muted">终端已映射到 <code>~/cli-lab</code> 沙盒。任务行的“终端”会把这里切到对应 Round 目录。</div>`;
+    output.innerHTML = `<div class="terminal-line muted">终端已映射到 <code>~/cli-lab</code> 沙盒。任务行的“终端练习”会把这里切到对应 Round 目录。</div>`;
     return;
   }
   output.innerHTML = terminalHistory.map((entry) => {
@@ -253,6 +257,7 @@ async function openTaskTerminal(taskId) {
   }
   const meta = taskMeta(taskId);
   if (!meta) return;
+  workspaceTaskId = taskId;
   activeTerminalTaskId = taskId;
   try {
     const target = terminalTaskTarget(taskId);
@@ -263,8 +268,12 @@ async function openTaskTerminal(taskId) {
       cwd_display: state?.cwd_display || "~",
     });
     renderTerminal();
-    document.getElementById("terminal")?.scrollIntoView({ behavior: "smooth", block: "start" });
-    setTimeout(() => document.getElementById("terminalInput")?.focus(), 220);
+    if (canOpenFile(meta.task.file)) {
+      await openInlineReader(meta.task.file, meta.task.title, taskId, { silent: true });
+    }
+    renderContinue();
+    document.getElementById("learnWorkspace")?.scrollIntoView({ behavior: "auto", block: "start" });
+    setTimeout(() => document.getElementById("terminalInput")?.focus({ preventScroll: true }), 220);
   } catch (err) {
     showToast(err.message || "终端切换失败", "error");
   }
@@ -365,6 +374,13 @@ function taskActionButtons(taskId, done) {
   return `<button type="button" class="task-btn done" data-task="${taskId}" data-action="done">完成</button>`;
 }
 
+function fileActionLabel(filePath, taskType) {
+  const file = String(filePath || "");
+  if (/\.(sh|py)$/i.test(file)) return "看脚本";
+  if (taskType === "reading" || /\.md$/i.test(file)) return "读教程";
+  return "打开资料";
+}
+
 function taskRecordButton(taskId) {
   if (!apiReady) return "";
   const count = eventsFor(taskId).length;
@@ -378,12 +394,12 @@ function isRunnableTask(task) {
 
 function taskRunButton(task) {
   if (!apiReady || !isRunnableTask(task)) return "";
-  return `<button type="button" class="task-btn run task-run" data-task="${task.id}">运行</button>`;
+  return `<button type="button" class="task-btn run task-run" data-task="${task.id}">运行脚本</button>`;
 }
 
 function taskTerminalButton(task) {
   if (!apiReady || !taskUsesTerminal(task)) return "";
-  return `<button type="button" class="task-btn terminal task-terminal" data-task="${task.id}">终端</button>`;
+  return `<button type="button" class="task-btn terminal task-terminal" data-task="${task.id}">终端练习</button>`;
 }
 
 async function postTaskRun(taskId) {
@@ -466,9 +482,51 @@ function bindTaskActions(container) {
   container.querySelectorAll(".task-open").forEach((btn) => {
     btn.addEventListener("click", (e) => {
       e.stopPropagation();
-      openMarkdownViewer(btn.getAttribute("data-file"), btn.getAttribute("data-title") || "阅读");
+      openInlineReader(
+        btn.getAttribute("data-file"),
+        btn.getAttribute("data-title") || "阅读",
+        btn.getAttribute("data-task") || "",
+      );
     });
   });
+}
+
+async function openInlineReader(filePath, title, taskId, options) {
+  if (!filePath) return;
+  const body = document.getElementById("inlineReaderBody");
+  const heading = document.getElementById("inlineReaderTitle");
+  const metaEl = document.getElementById("inlineReaderMeta");
+  const popout = document.getElementById("inlineReaderPopout");
+  if (!body || !heading) {
+    openMarkdownViewer(filePath, title);
+    return;
+  }
+  if (taskId) workspaceTaskId = taskId;
+  inlineReaderTaskId = taskId || inlineReaderTaskId;
+  inlineReaderFile = filePath;
+  heading.textContent = title || filePath;
+  if (metaEl) metaEl.textContent = filePath;
+  if (popout) {
+    popout.disabled = false;
+    popout.dataset.file = filePath;
+    popout.dataset.title = title || filePath;
+  }
+  body.innerHTML = "<p class='reader-loading'>加载中…</p>";
+  if (!options?.silent) {
+    document.getElementById("learnWorkspace")?.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+  try {
+    const resourcePath = "/" + filePath.replace(/^\//, "");
+    const separator = resourcePath.includes("?") ? "&" : "?";
+    const res = await fetch(`${resourcePath}${separator}_=${Date.now()}`, { cache: "no-store" });
+    if (!res.ok) throw new Error("HTTP " + res.status);
+    const text = await res.text();
+    body.innerHTML = /\.(sh|py|js|json)$/i.test(filePath)
+      ? renderCodeDocument(text, filePath)
+      : renderMarkdown(text);
+  } catch (err) {
+    body.innerHTML = `<p class='reader-error'>无法加载 ${escapeHtml(filePath)}：${escapeHtml(err.message)}</p>`;
+  }
 }
 
 async function openMarkdownViewer(filePath, title) {
@@ -761,6 +819,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const terminalRun = document.getElementById("terminalRun");
   const terminalClear = document.getElementById("terminalClear");
   const terminalReset = document.getElementById("terminalReset");
+  const inlinePopout = document.getElementById("inlineReaderPopout");
   if (closeBtn) closeBtn.addEventListener("click", closeMarkdownViewer);
   if (modal) {
     modal.addEventListener("click", (e) => {
@@ -783,4 +842,11 @@ document.addEventListener("DOMContentLoaded", () => {
   if (terminalRun && terminalInput) terminalRun.addEventListener("click", () => runTerminalCommand(terminalInput.value));
   if (terminalClear) terminalClear.addEventListener("click", () => runTerminalCommand("clear"));
   if (terminalReset) terminalReset.addEventListener("click", resetTerminal);
+  if (inlinePopout) {
+    inlinePopout.addEventListener("click", () => {
+      const file = inlinePopout.dataset.file || inlineReaderFile;
+      const title = inlinePopout.dataset.title || document.getElementById("inlineReaderTitle")?.textContent || "阅读";
+      if (file) openMarkdownViewer(file, title);
+    });
+  }
 });

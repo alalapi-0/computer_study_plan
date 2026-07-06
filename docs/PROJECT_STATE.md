@@ -1824,3 +1824,63 @@
 - 未引入大型新依赖；使用 Codex 桌面运行时自带 Node 包和系统 Chrome 做浏览器回归。
 - 软考 / 数学二 / 408 的具体题目、考点、院校招生数据和最新大纲仍必须以后续官方源为准。
 - VPS Level 2 及以上真实远程操作仍需用户授权，Web UI 当前只提供阅读、记录与准备入口。
+
+## 66. 2026-07-06 TASK-RR-54 Web UI 用户视角评测与学习工作区改版
+
+### 66.1 本轮评测结论
+
+- 用户明确反馈：UI 过乱，几乎所有内容堆在一个页面；网页终端与教程没有形成顺手联动；必须关闭教程才能操作；指引不够明确。
+- 本轮继续用真实页面补齐到 5 个问题后停止评测，并新增 `docs/reports/WEB_UI_USER_REVIEW_2026_07_06.md`。
+- 5 个问题为：首屏信息过载、教程与终端割裂、指引不明确、Round 深链与首屏任务不一致、任务行动入口重复。
+
+### 66.2 本轮修改
+
+- `progress.html`：新增首屏“学习工作区”，把当前任务、内联教程和浏览器终端放在同一工作区；终端输入区上移，适合边看边敲。
+- `progress.html`：总进度 / 四主线保留在主路径下；本周配置、考试倒计时、存档读档、Stage、薄弱项默认折叠到“进度、配置、存档与复盘信息”。
+- `progress_ui.js`：点击“读教程”默认写入内联阅读器，不再弹出遮挡终端的阅读器；弹窗阅读保留为可选。
+- `progress_ui.js`：`?round=round_XX` 与用户点击 Round 后，首屏当前任务会切到对应 Round 的第一条未完成任务。
+- `progress_ui.js`：任务行阅读入口统一为“读教程”；命令类任务入口统一为“终端练习”，避免“学习资料”和“打开”重复。
+- `README.md`：日常使用说明改为“左侧确认任务 / 中间读教程 / 右侧终端练习 / 最后记录完成”。
+
+### 66.3 验证
+
+- 静态验证：`node --check progress_ui.js`、`python3 scripts/check_protocol_sync.py`、`python3 scripts/validate_learning_data.py`、`python3 -m json.tool progress.json` 均通过。
+- 真实浏览器桌面验证：打开 `progress.html?round=round_02` 后，首屏任务为“阅读：重定向、追加、管道”，内联教程显示 `rounds/round_02/week1/notes.md`，终端同屏可见，页面 `scrollWidth == clientWidth`。
+- 终端联动验证：点击 `r02-w1-self` 的“终端练习”后，当前任务变为“自测：独立写日志统计链”，终端工作目录为 `~/round2`，未打开遮挡教程的弹窗。
+- 移动端验证：390px 视口无横向溢出，学习工作区纵向堆叠，管理区默认收起。
+- 控制台验证：新页面当前 URL 无 console error；早期缓存旧脚本导致的 `workspaceTaskId is not defined` 已通过资源版本号更新修复。
+
+### 66.4 风险边界核对
+
+- 未修改 `records/` 下真实学习记录。
+- 未引入大型新依赖；未切换数据库、前端框架或后端架构。
+- 未放宽浏览器终端安全白名单；真实远程、网络、安装类命令边界不变。
+
+## 67. 2026-07-06 TASK-RR-55 Web UI 第二轮用户评测与首屏细节收紧
+
+### 67.1 本轮评测结论
+
+- 第一轮学习工作区改版后继续评测，新增 `docs/reports/WEB_UI_USER_REVIEW_2026_07_06_ROUND2.md`。
+- 第二轮累计 5 个新问题：顶部说明仍偏高、API 状态横幅过重、移动端导航末项被裁切、脚本任务按钮语义不准、终端绑定滚动位置不稳定。
+
+### 67.2 本轮修改
+
+- `progress.html`：压缩顶部 `今日学习` 区域的文字和高度，降低进入学习工作区前的视觉负担。
+- `progress.html`：降低 API 成功横幅视觉权重，让当前任务成为首要焦点。
+- `progress.html`：移动端导航改为自然换行，避免 390px 宽度下 `进度设置` 入口被裁切。
+- `progress_ui.js` / `progress.html`：新增 `fileActionLabel()`，Markdown 学习资料显示“读教程”，Shell / Python 脚本显示“看脚本”，其他文件显示“打开资料”。
+- `progress_ui.js`：终端绑定后使用确定性滚动，并继续使用 `focus({ preventScroll: true })` 避免输入框聚焦额外滚动。
+
+### 67.3 验证
+
+- 静态验证：`node --check progress_ui.js`、`python3 scripts/check_protocol_sync.py`、`python3 scripts/validate_learning_data.py`、`python3 -m json.tool progress.json` 均通过。
+- 真实浏览器桌面验证：`progress.html?round=round_02` 下当前任务、内联教程、终端输出和终端输入框同屏可见；页面无横向溢出。
+- 任务按钮验证：`r02-w1-ex1` 等练习脚本任务显示“看脚本”，阅读任务显示“读教程”。
+- 终端绑定验证：点击 `r02-w1-self` 的“终端练习”后当前任务、脚本预览和 `~/round2` 终端保持在同一学习工作区。
+- 移动端验证：390px 视口无横向溢出，顶部导航换行显示完整入口。
+
+### 67.4 风险边界核对
+
+- 未修改 `records/` 下真实学习记录。
+- 未引入大型新依赖；未切换数据库、前端框架或后端架构。
+- 未放宽浏览器终端安全白名单。

@@ -909,6 +909,255 @@
     }
     .continue-actions { gap: 0.55rem; }
 
+    .workspace-surface {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.15rem;
+      margin-bottom: 1.2rem;
+      box-shadow: var(--shadow);
+    }
+    .workspace-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      align-items: flex-start;
+      margin-bottom: 1rem;
+    }
+    .workspace-head h2 {
+      font-size: 1.05rem;
+      margin-bottom: 0.25rem;
+      color: var(--ink);
+    }
+    .workspace-head .card-sub { margin: 0; }
+    .workflow-steps {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.35rem;
+      justify-content: flex-end;
+    }
+    .workflow-steps span {
+      border: 1px solid var(--border);
+      background: var(--card-hover);
+      border-radius: 999px;
+      padding: 0.28rem 0.55rem;
+      font-size: 0.72rem;
+      font-weight: 800;
+      color: var(--text-muted);
+      white-space: nowrap;
+    }
+    .learning-grid {
+      display: grid;
+      grid-template-columns: minmax(230px, 0.72fr) minmax(320px, 1fr) minmax(360px, 0.95fr);
+      gap: 0.9rem;
+      align-items: stretch;
+    }
+    .workspace-panel {
+      min-width: 0;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: #fff;
+      padding: 0.95rem;
+    }
+    .task-focus-panel {
+      border-left: 4px solid var(--accent2);
+      background: #fbfdfc;
+    }
+    .task-kicker {
+      color: var(--accent2);
+      font-size: 0.72rem;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0;
+      margin-bottom: 0.45rem;
+    }
+    .task-focus-panel h3 {
+      font-size: 1.12rem;
+      line-height: 1.35;
+      margin-bottom: 0.45rem;
+      color: var(--ink);
+    }
+    .task-focus-meta,
+    .task-focus-note {
+      color: var(--text-muted);
+      font-size: 0.82rem;
+      line-height: 1.55;
+    }
+    .task-flow-list {
+      display: grid;
+      gap: 0.45rem;
+      margin: 0.85rem 0;
+      color: var(--ink);
+      font-size: 0.82rem;
+    }
+    .task-flow-list div {
+      display: grid;
+      grid-template-columns: 1.6rem minmax(0, 1fr);
+      gap: 0.45rem;
+      align-items: start;
+    }
+    .task-flow-list strong {
+      display: inline-grid;
+      place-items: center;
+      width: 1.35rem;
+      height: 1.35rem;
+      border-radius: 999px;
+      background: #dff3ee;
+      color: var(--accent2);
+      font-size: 0.72rem;
+    }
+    .inline-reader-panel,
+    .terminal-panel {
+      display: flex;
+      flex-direction: column;
+      min-height: 440px;
+    }
+    .workspace-panel-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 0.75rem;
+      margin-bottom: 0.7rem;
+    }
+    .workspace-panel-head h3 {
+      font-size: 0.95rem;
+      line-height: 1.35;
+      color: var(--ink);
+    }
+    .inline-reader-meta {
+      color: var(--text-muted);
+      font-size: 0.72rem;
+      margin-top: 0.2rem;
+      word-break: break-word;
+    }
+    .inline-reader-body {
+      flex: 1;
+      overflow: auto;
+      max-height: 360px;
+      border: 1px solid #edf2f1;
+      border-radius: 8px;
+      background: var(--card-hover);
+      padding: 0.9rem;
+      font-size: 0.88rem;
+      line-height: 1.62;
+    }
+    .inline-reader-body .md-body h1 { font-size: 1.18rem; margin: 0.25rem 0 0.65rem; }
+    .inline-reader-body .md-body h2 { font-size: 1rem; margin: 0.85rem 0 0.4rem; color: var(--accent2); }
+    .inline-reader-body .md-body h3 { font-size: 0.92rem; margin: 0.7rem 0 0.3rem; }
+    .inline-reader-body .md-body p { margin: 0.45rem 0; }
+    .inline-reader-body .md-body ul,
+    .inline-reader-body .md-body ol { margin: 0.45rem 0 0.65rem 1.15rem; }
+    .inline-reader-body .md-body code { background: #e8f0ff; }
+    .inline-reader-body .md-body pre {
+      background: #0f172a;
+      color: #e5e7eb;
+      border-radius: 8px;
+      padding: 0.85rem;
+      overflow-x: auto;
+    }
+    .inline-reader-body .table-scroll { overflow-x: auto; }
+    .inline-reader-body table { border-collapse: collapse; width: 100%; min-width: 480px; background: #fff; }
+    .inline-reader-body th,
+    .inline-reader-body td { border: 1px solid var(--border); padding: 0.45rem 0.55rem; text-align: left; vertical-align: top; }
+    .inline-reader-empty {
+      color: var(--text-muted);
+      border: 1px dashed var(--border-strong);
+      border-radius: 8px;
+      padding: 1rem;
+      background: #fff;
+    }
+    .terminal-panel .terminal-workspace {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 0.55rem;
+      flex: 1;
+    }
+    .terminal-panel .terminal-side-panel {
+      order: 2;
+      padding: 0.7rem;
+      gap: 0.55rem;
+      max-height: 185px;
+      overflow: auto;
+    }
+    .terminal-panel .terminal-workspace > div:not(.terminal-side-panel) { order: 1; }
+    .terminal-panel .terminal-state-list {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 0.4rem;
+    }
+    .terminal-panel .terminal-state-item:nth-child(2) { display: none; }
+    .terminal-panel .terminal-quick {
+      display: flex;
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      padding-bottom: 0.1rem;
+      max-height: 2.5rem;
+    }
+    .terminal-panel .terminal-chip { white-space: nowrap; }
+    .terminal-panel .terminal-box { min-height: 215px; }
+    .terminal-panel .terminal-output {
+      min-height: 145px;
+      max-height: 170px;
+    }
+    .terminal-panel .card-sub {
+      margin-bottom: 0.7rem;
+      font-size: 0.78rem;
+    }
+    .secondary-tools {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      margin-bottom: 1.2rem;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+    .secondary-tools > summary {
+      cursor: pointer;
+      list-style: none;
+      padding: 1rem 1.15rem;
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      align-items: center;
+      font-weight: 800;
+      color: var(--ink);
+    }
+    .secondary-tools > summary::-webkit-details-marker { display: none; }
+    .secondary-tools > summary::after {
+      content: "展开";
+      color: var(--text-muted);
+      font-size: 0.75rem;
+      font-weight: 800;
+    }
+    .secondary-tools[open] > summary::after { content: "收起"; }
+    .secondary-tools-body {
+      border-top: 1px solid var(--border);
+      padding: 1rem 1.15rem 0;
+    }
+    .secondary-tools-body .card {
+      box-shadow: none;
+      margin-bottom: 1rem;
+    }
+    .workspace .top-bar {
+      padding: 0.85rem 1rem;
+    }
+    .workspace .top-bar header {
+      margin-bottom: 0.4rem;
+    }
+    .workspace .top-bar header h1 {
+      font-size: 1.35rem;
+    }
+    .workspace .top-bar header p {
+      max-width: 52rem;
+      margin-top: 0.2rem;
+      font-size: 0.88rem;
+    }
+    .workspace .banner.ok {
+      padding: 0.58rem 0.8rem;
+      margin-bottom: 0.8rem;
+      font-size: 0.78rem;
+      border-color: rgba(15,118,110,0.35);
+      background: #edf8f5;
+    }
+
     .global-progress {
       display: grid;
       grid-template-columns: max-content minmax(100px, 1fr) max-content;
@@ -1212,10 +1461,11 @@
       .rail-brand { margin-bottom: 1rem; }
       .side-nav {
         display: flex;
+        flex-wrap: wrap;
         gap: 0.5rem;
         max-width: 100%;
         min-width: 0;
-        overflow-x: auto;
+        overflow-x: visible;
         margin-bottom: 0;
         padding-bottom: 0.05rem;
       }
@@ -1236,6 +1486,11 @@
 
     @media (max-width: 760px) {
       .continue-grid { grid-template-columns: minmax(0, 1fr); gap: 1.1rem; }
+      .workspace-head { flex-direction: column; }
+      .workflow-steps { justify-content: flex-start; }
+      .learning-grid { grid-template-columns: minmax(0, 1fr); }
+      .inline-reader-panel,
+      .terminal-panel { min-height: auto; }
       .continue-note {
         border-left: 0;
         border-top: 1px solid var(--border);
@@ -1327,15 +1582,13 @@
   </div>
   <nav class="side-nav">
     <a class="nav-item active" href="#today">今日学习</a>
-    <a class="nav-item" href="#lanes">主线进度</a>
-    <a class="nav-item" href="#config">本周配置</a>
-    <a class="nav-item" href="#terminal">练习终端</a>
-    <a class="nav-item" href="#saves">存档读档</a>
+    <a class="nav-item" href="#learnWorkspace">学习工作区</a>
     <a class="nav-item" href="#rounds">Round 清单</a>
+    <a class="nav-item" href="#secondaryTools">进度设置</a>
   </nav>
   <div class="rail-note">
     <span class="rail-note-label">使用路径</span>
-    <p>先完成下一条任务，再记录证据；每周复盘主线和 Round。</p>
+    <p>左侧读教程，右侧敲命令；完成一个小动作后再记录。</p>
   </div>
 </aside>
 
@@ -1345,7 +1598,7 @@
 <header>
   <div class="eyebrow">四主线学习系统</div>
   <h1>今日学习</h1>
-  <p>阅读资料、写入记录、完成打卡都在这里闭环。先推进下一条任务，再回看主线进度与 Round 清单。</p>
+  <p>先在学习工作区完成一个小动作；需要总览、存档或配置时再展开管理信息。</p>
 </header>
 <div class="last-updated" style="margin-top:0.75rem;margin-bottom:0">
   <span id="lastUpdated">正在加载…</span>
@@ -1357,10 +1610,85 @@
 <div class="banner" id="apiBanner" style="display:none"></div>
 <div class="banner error" id="errorBanner"></div>
 
-<!-- ── Block 0: 继续学习 ── -->
-<div class="card focus-card" id="continueCard">
-  <h2>继续学习</h2>
-  <div class="empty-state">正在寻找下一条任务…</div>
+<!-- ── Block 0: 学习工作区 ── -->
+<div class="workspace-surface" id="learnWorkspace">
+  <div class="workspace-head">
+    <div>
+      <h2>学习工作区</h2>
+      <div class="card-sub">把教程、任务操作和浏览器终端放在同一屏。先读，再练，最后记录。</div>
+    </div>
+    <div class="workflow-steps" aria-label="推荐学习顺序">
+      <span>1 读教程</span>
+      <span>2 跑脚本 / 敲命令</span>
+      <span>3 写记录并完成</span>
+    </div>
+  </div>
+  <div class="learning-grid">
+    <section class="workspace-panel task-focus-panel" id="continueCard">
+      <div class="empty-state">正在寻找下一条任务…</div>
+    </section>
+    <section class="workspace-panel inline-reader-panel" aria-label="当前教程">
+      <div class="workspace-panel-head">
+        <div>
+          <h3 id="inlineReaderTitle">当前教程</h3>
+          <div class="inline-reader-meta" id="inlineReaderMeta">选择任务后会在这里显示资料，不再遮挡终端。</div>
+        </div>
+        <button class="task-btn read" type="button" id="inlineReaderPopout" disabled>弹窗阅读</button>
+      </div>
+      <div class="inline-reader-body" id="inlineReaderBody">
+        <div class="inline-reader-empty">点击任务里的“读教程”，资料会显示在这里；右侧终端保持可见。</div>
+      </div>
+    </section>
+    <section class="workspace-panel terminal-panel" id="terminal">
+      <div class="workspace-panel-head">
+        <div>
+          <h3>练习终端</h3>
+          <div class="card-sub">映射到本机 <code>~/cli-lab</code> 沙盒。任务行点击“终端练习”后会自动切到对应 Round。</div>
+        </div>
+      </div>
+      <div class="terminal-workspace">
+        <div class="terminal-side-panel">
+          <div>
+            <div class="terminal-panel-title">当前任务</div>
+            <div class="terminal-context" id="terminalContext">
+              <div class="terminal-context-title">未绑定任务</div>
+              <div class="terminal-context-meta">从任务行点击“终端练习”，这里会切到对应 Round 的沙盒目录。</div>
+            </div>
+          </div>
+          <div class="terminal-state-list">
+            <div class="terminal-state-item">
+              <span>工作目录</span>
+              <code id="terminalCwd">~</code>
+            </div>
+            <div class="terminal-state-item">
+              <span>允许命令</span>
+              <code id="terminalAllowed">等待连接</code>
+            </div>
+          </div>
+          <div>
+            <div class="terminal-panel-title">快捷命令</div>
+            <div class="terminal-quick" id="terminalQuickCommands"></div>
+          </div>
+        </div>
+        <div>
+          <div class="terminal-box">
+            <div class="terminal-output" id="terminalOutput">
+              <div class="terminal-line muted">正在连接练习终端…</div>
+            </div>
+            <div class="terminal-input-row">
+              <span class="terminal-prompt" id="terminalPrompt">~ $</span>
+              <input id="terminalInput" class="terminal-input" spellcheck="false" autocomplete="off" placeholder="输入命令后按 Enter，例如：pwd" />
+              <button class="task-btn run" type="button" id="terminalRun">执行</button>
+            </div>
+          </div>
+          <div class="terminal-tools">
+            <button class="btn" type="button" id="terminalReset">回到 ~/cli-lab</button>
+            <button class="btn" type="button" id="terminalClear">清屏</button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
 </div>
 
 <!-- ── Block 1: 总进度 ── -->
@@ -1379,6 +1707,13 @@
   <div class="card-sub">每条主线（lane）的任务完成率。已开始学习且完成率 &lt; 30%（任务数 ≥ 5）时会标为薄弱项。</div>
   <div class="lane-grid" id="laneGrid"></div>
 </div>
+
+<details class="secondary-tools" id="secondaryTools">
+  <summary>
+    <span>进度、配置、存档与复盘信息</span>
+    <span class="card-sub">默认收起，避免干扰当前学习。</span>
+  </summary>
+  <div class="secondary-tools-body">
 
 <!-- ── Block 3: 个人配置（本周任务 + 倒计时） ── -->
 <div class="card" id="config">
@@ -1420,53 +1755,6 @@
   </div>
 </div>
 
-<!-- ── Block 4: 练习终端 ── -->
-<div class="card" id="terminal">
-  <h2>练习终端</h2>
-  <div class="card-sub">浏览器映射到本机 <code>~/cli-lab</code> 沙盒。适合练习 `pwd`、`ls`、`cd`、`mkdir`、`touch`、`cat`、管道、重定向和 Git 最小流程；危险命令、远程命令和仓库外路径会被拦截。</div>
-  <div class="terminal-workspace">
-    <div class="terminal-side-panel">
-      <div>
-        <div class="terminal-panel-title">当前任务</div>
-        <div class="terminal-context" id="terminalContext">
-          <div class="terminal-context-title">未绑定任务</div>
-          <div class="terminal-context-meta">从任务行点击“终端”，这里会切到对应 Round 的沙盒目录。</div>
-        </div>
-      </div>
-      <div class="terminal-state-list">
-        <div class="terminal-state-item">
-          <span>工作目录</span>
-          <code id="terminalCwd">~</code>
-        </div>
-        <div class="terminal-state-item">
-          <span>允许命令</span>
-          <code id="terminalAllowed">等待连接</code>
-        </div>
-      </div>
-      <div>
-        <div class="terminal-panel-title">快捷命令</div>
-        <div class="terminal-quick" id="terminalQuickCommands"></div>
-      </div>
-    </div>
-    <div>
-      <div class="terminal-box">
-        <div class="terminal-output" id="terminalOutput">
-          <div class="terminal-line muted">正在连接练习终端…</div>
-        </div>
-        <div class="terminal-input-row">
-          <span class="terminal-prompt" id="terminalPrompt">~ $</span>
-          <input id="terminalInput" class="terminal-input" spellcheck="false" autocomplete="off" placeholder="输入命令后按 Enter，例如：pwd" />
-          <button class="task-btn run" type="button" id="terminalRun">执行</button>
-        </div>
-      </div>
-      <div class="terminal-tools">
-        <button class="btn" type="button" id="terminalReset">回到 ~/cli-lab</button>
-        <button class="btn" type="button" id="terminalClear">清屏</button>
-      </div>
-    </div>
-  </div>
-</div>
-
 <!-- ── Block 5: 存档与读档 ── -->
 <div class="card" id="saves">
   <h2>存档与读档</h2>
@@ -1494,6 +1782,9 @@
   <div class="card-sub">按 lane 完成率自动识别（已开始学习且 &lt; 30%，任务数 ≥ 5）。</div>
   <div class="weak-list" id="weakList"></div>
 </div>
+
+  </div>
+</details>
 
 <!-- ── Block 7: 按 lane / Round 浏览 ── -->
 <div class="card" id="rounds">
@@ -1523,9 +1814,9 @@
   </div>
 </div>
 
-<script src="progress_data.js?v=20260704g"></script>
-<script src="rounds_data.js?v=20260704g"></script>
-<script src="progress_ui.js?v=20260704g"></script>
+<script src="progress_data.js?v=20260706a"></script>
+<script src="rounds_data.js?v=20260706a"></script>
+<script src="progress_ui.js?v=20260706a"></script>
 <script>
 const ROUNDS = window.ROUNDS_DATA || [];
 
@@ -1594,6 +1885,7 @@ function applyInitialRoute() {
   if (requestedRound) {
     activeLane = requestedRound.lane || activeLane;
     activeRound = requestedRound.id;
+    routeFocusedRound = true;
     return;
   }
   const lane = params.get("lane");
@@ -1601,6 +1893,7 @@ function applyInitialRoute() {
     activeLane = lane;
     const firstRound = ROUNDS.find(r => r.lane === lane);
     activeRound = firstRound ? firstRound.id : activeRound;
+    routeFocusedRound = true;
   }
 }
 
@@ -1697,7 +1990,20 @@ function fileLabel(file, type) {
   return `查看文件：${name}`;
 }
 
-function findNextTask() {
+function firstTaskInRound(roundId, preferOpen = true) {
+  const round = ROUNDS.find(r => r.id === roundId);
+  if (!round) return null;
+  let first = null;
+  for (const week of round.weeks || []) {
+    for (const task of week.tasks || []) {
+      if (!first) first = { round, week, task };
+      if (preferOpen && !isTaskDone(task.id)) return { round, week, task };
+    }
+  }
+  return first;
+}
+
+function findGlobalNextTask() {
   const orderedRounds = [...ROUNDS].sort((a, b) => {
     const ai = LANE_PRIORITY.indexOf(a.lane);
     const bi = LANE_PRIORITY.indexOf(b.lane);
@@ -1713,13 +2019,25 @@ function findNextTask() {
   return null;
 }
 
+function findNextTask() {
+  if (workspaceTaskId) {
+    const focused = taskMeta(workspaceTaskId);
+    if (focused) return focused;
+  }
+  if (routeFocusedRound && activeRound) {
+    const roundTask = firstTaskInRound(activeRound, true);
+    if (roundTask) return roundTask;
+  }
+  return findGlobalNextTask();
+}
+
 function renderContinue() {
   const card = document.getElementById("continueCard");
   if (!card) return;
   const next = findNextTask();
   if (!next) {
     card.innerHTML = `
-      <h2>下一步任务</h2>
+      <div class="task-kicker">当前任务</div>
       <div class="empty-state">所有已注册任务都完成了。可以进入复盘，或运行 <code>python3 scripts/build_rounds_data.py</code> 同步新任务。</div>
     `;
     return;
@@ -1727,26 +2045,29 @@ function renderContinue() {
   const { round, week, task } = next;
   const fb = feedbackFor(task.id);
   const canRead = canOpenFile(task.file);
+  const done = isTaskDone(task.id);
   card.innerHTML = `
-    <h2>下一步任务</h2>
-    <div class="continue-grid">
-      <div>
-        <div class="continue-title">${task.title}</div>
-        <div class="continue-meta">${round.title} / ${week.title} / ${round.lane}</div>
-        <div class="continue-actions">
-          ${canRead ? `<button type="button" class="task-btn read task-open" data-file="${task.file}" data-title="${task.title}">${fileLabel(task.file, task.type)}</button>` : ""}
-          ${taskRunButton(task)}
-          ${taskTerminalButton(task)}
-          ${taskRecordButton(task.id)}
-          ${taskActionButtons(task.id, false)}
-        </div>
-      </div>
-      <div class="continue-note">
-        <span>${escapeHtml(fb?.next_suggestion || "先打开学习资料，完成一个最小动作后再记录。")}</span>
-      </div>
+    <div class="task-kicker">当前任务</div>
+    <h3>${task.title}</h3>
+    <div class="task-focus-meta">${round.title} / ${week.title} / ${round.lane}</div>
+    <div class="task-flow-list">
+      <div><strong>1</strong><span>先在中间读教程，确认本任务要做出的最小产物。</span></div>
+      <div><strong>2</strong><span>需要命令时点“终端练习”，右侧会绑定到对应沙盒。</span></div>
+      <div><strong>3</strong><span>完成后写一条记录，再点击完成。</span></div>
     </div>
+    <div class="continue-actions">
+      ${canRead ? `<button type="button" class="task-btn read task-open" data-task="${task.id}" data-file="${task.file}" data-title="${task.title}">${fileActionLabel(task.file, task.type)}</button>` : ""}
+      ${taskRunButton(task)}
+      ${taskTerminalButton(task)}
+      ${taskRecordButton(task.id)}
+      ${taskActionButtons(task.id, done)}
+    </div>
+    <p class="task-focus-note">${escapeHtml(fb?.next_suggestion || "先完成一个最小动作，不需要一次看完整个页面。")}</p>
   `;
   bindTaskActions(card);
+  if (canRead && inlineReaderTaskId !== task.id) {
+    void openInlineReader(task.file, task.title, task.id, { silent: true });
+  }
 }
 
 function renderGlobal() {
@@ -1837,6 +2158,8 @@ function renderLaneTabs() {
       // 默认选中该 lane 的第一个 Round
       const firstRound = ROUNDS.find(r => r.lane === key);
       activeRound = firstRound ? firstRound.id : null;
+      workspaceTaskId = "";
+      routeFocusedRound = true;
       render();
     });
     el.appendChild(btn);
@@ -1866,7 +2189,13 @@ function renderRoundsForLane(laneKey) {
     const tab = document.createElement("button");
     tab.className = "tab-btn" + (allDone ? " done" : "") + (round.id === activeRound ? " active" : "");
     tab.textContent = round.title;
-    tab.addEventListener("click", () => { activeRound = round.id; render(); });
+    tab.addEventListener("click", () => {
+      activeRound = round.id;
+      workspaceTaskId = "";
+      routeFocusedRound = true;
+      render();
+      document.getElementById("learnWorkspace")?.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
     tabsEl.appendChild(tab);
 
     const panel = document.createElement("div");
@@ -1924,9 +2253,7 @@ function renderRoundsForLane(laneKey) {
         item.className = "task-item" + (done ? " done" : "");
         item.dataset.taskId = task.id;
         const typeLabel = { reading:"阅读", exercise:"练习", test:"自测", output:"产出" }[task.type];
-        const fileHtml = canRead
-          ? `<button type="button" class="task-file-link task-open" data-file="${task.file}" data-title="${task.title}" title="${task.file}">${fileLabel(task.file, task.type)}</button>`
-          : `<span class="task-file">${task.file || ""}</span>`;
+        const fileHtml = `<span class="task-file">${canRead ? fileLabel(task.file, task.type) : (task.file || "")}</span>`;
 
         item.innerHTML = `
           <span class="task-status-icon" aria-hidden="true"></span>
@@ -1939,7 +2266,7 @@ function renderRoundsForLane(laneKey) {
             ${renderFeedbackHint(task.id)}
           </div>
           <div class="task-actions">
-            ${canRead ? `<button type="button" class="task-btn read task-open" data-file="${task.file}" data-title="${task.title}">打开</button>` : ""}
+            ${canRead ? `<button type="button" class="task-btn read task-open" data-task="${task.id}" data-file="${task.file}" data-title="${task.title}">${fileActionLabel(task.file, task.type)}</button>` : ""}
             ${taskRunButton(task)}
             ${taskTerminalButton(task)}
             ${taskRecordButton(task.id)}
