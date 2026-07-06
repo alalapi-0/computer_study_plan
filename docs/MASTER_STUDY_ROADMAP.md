@@ -292,7 +292,7 @@
 | 用途 | 文档 |
 |---|---|
 | 阶段计划（Stage 0–7） | `docs/STAGE_PLAN.md` |
-| 知识模块映射表（20 模块） | `docs/KNOWLEDGE_MAPPING.md` |
+| 知识模块映射表（24 模块） | `docs/KNOWLEDGE_MAPPING.md` |
 | 周计划与时间预算（三种强度） | `docs/WEEKLY_EXECUTION_TEMPLATE.md` |
 | 进度规则（四主线进度） | `docs/PROGRESS_RULES.md` |
 | 错题与复盘系统 | `docs/ERROR_REVIEW_SYSTEM.md` |

@@ -46,7 +46,7 @@ async function detectApi() {
   } else {
     banner.className = "banner warn";
     banner.innerHTML =
-      '<strong>本地文件模式</strong> — 建议运行 <code>python3 scripts/progress_server.py</code> 后访问看板。';
+      '<strong>本地文件模式</strong> — 建议运行 <code>python3 scripts/progress_server.py</code> 后访问 Web UI 学习工作区。';
     banner.style.display = "block";
   }
 }

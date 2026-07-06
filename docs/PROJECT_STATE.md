@@ -617,3 +617,24 @@ open http://127.0.0.1:8777/progress.html
 
 - 主动扫描已确认 README / WORKSPACE / CODEX_LONG_TERM_PLAN / Web UI 标题与提示不再残留本轮目标旧说法。
 - 标准验证与浏览器回检见本轮提交记录。
+
+## 32. 2026-07-06 TASK-RR-81 第二十七轮项目用户视角评测与 Web UI 残留旧口径清理
+
+状态：done
+
+本轮评测报告：
+
+- `docs/reports/PROJECT_USER_REVIEW_2026_07_06_ROUND27.md`
+
+本轮发现并修复：
+
+- Web UI 左侧品牌标题仍显示“学习进度工作台”，已改为“学习工作区”。
+- `progress_ui.js` 本地文件模式提示仍说“访问看板”，已改为访问 Web UI 学习工作区。
+- Round 00 进度追踪入口仍写“打开看板”，已改为打开 Web UI 学习工作区。
+- `CONVERSION_PROTOCOL.md` 打开方式章节和变更记录仍使用“进度看板 / 看板打开方式”，已改为 Web UI 学习工作区口径。
+- `MASTER_STUDY_ROADMAP` 仍把知识映射表写成 20 模块，`KNOWLEDGE_MAPPING` 仍把 lane 展示叫进度看板，已分别改为 24 模块和 Web UI lane 视图。
+
+验证摘要：
+
+- 主动扫描已确认本轮目标旧说法不再残留。
+- 标准验证与浏览器回检见本轮提交记录。

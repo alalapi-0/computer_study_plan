@@ -443,7 +443,7 @@ Round / 计划任务展示元数据不写在 `progress.html` 内。工程 Round 
 | `test`     | 自测 | Web UI `终端练习` 中完成后，由用户 `记录并完成` |
 | `output`   | 产出 | 用户完成小抄、验收或项目产物后 `记录并完成` |
 
-### 8.5 打开进度看板
+### 8.5 打开 Web UI 学习工作区
 
 **方式一（推荐 · 可写 Web UI）**：
 
@@ -519,4 +519,4 @@ npm run serve
 | v1.1 | 2026-04-11 | 新增 `rounds/` 展开目录规范、进度系统维护规范、完整新增流程 |
 | v1.3 | 2026-04-11 | 新增 `progress_data.js` 作为 JS 镜像，支持 file:// 双击打开 |
 | v2.0 | 2026-05-12 | **重大变更**：移除"txt → md 转换"全部流程；删除 22 份 `plan_round_XX.txt`；progress 数据结构升级到 v2（新增 `lanes` 与 `tasks[].lane`）；新增多主线（engineering / soft_exam / math2 / cs408） |
-| v2.1 | 2026-07-06 | 将新增 Round 流程、进度系统职责和看板打开方式同步为当前 `progress_server.py` + Web UI + 生成脚本模型 |
+| v2.1 | 2026-07-06 | 将新增 Round 流程、进度系统职责和 Web UI 打开方式同步为当前 `progress_server.py` + Web UI + 生成脚本模型 |

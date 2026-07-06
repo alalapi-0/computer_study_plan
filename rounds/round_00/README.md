@@ -34,7 +34,7 @@ round_00/
 
 ## 进度追踪
 
-在仓库根目录启动本地服务并打开看板：
+在仓库根目录启动本地服务并打开 Web UI 学习工作区：
 
 ```bash
 cd ~/PycharmProjects/computer_study_plan
