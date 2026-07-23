@@ -3,1608 +3,412 @@
 window.PROGRESS_DATA = {
   "version": 2,
   "lanes": {
-    "engineering": {
-      "title": "工程实操线",
-      "description": "Linux/Shell/Git/Python/工程化/服务化/AI 工程/VPS"
-    },
-    "soft_exam": {
-      "title": "软考中级线",
-      "description": "默认软件设计师，高分/满分导向"
-    },
-    "math2": {
-      "title": "数学二线",
-      "description": "高等数学 + 线性代数（长期低强度）"
-    },
-    "cs408": {
-      "title": "408/0854 线",
-      "description": "数据结构 + 计组 + 操作系统 + 计算机网络"
+    "linux-foundations": {
+      "title": "Linux 基础与工程实践",
+      "description": "当前唯一正式课程：终端、文件系统、Shell、自动化与远程实操",
+      "course_id": "linux-foundations"
     }
   },
   "tasks": {
     "w1-read": {
       "done": false,
       "done_at": null,
-      "lane": "engineering"
+      "lane": "linux-foundations"
     },
     "w1-ex1": {
       "done": false,
       "done_at": null,
-      "lane": "engineering"
+      "lane": "linux-foundations"
     },
     "w1-ex2": {
       "done": false,
       "done_at": null,
-      "lane": "engineering"
+      "lane": "linux-foundations"
     },
     "w1-ex3": {
       "done": false,
       "done_at": null,
-      "lane": "engineering"
+      "lane": "linux-foundations"
     },
     "w1-self": {
       "done": false,
       "done_at": null,
-      "lane": "engineering"
+      "lane": "linux-foundations"
     },
     "w2-read": {
       "done": false,
       "done_at": null,
-      "lane": "engineering"
+      "lane": "linux-foundations"
     },
     "w2-ex4": {
       "done": false,
       "done_at": null,
-      "lane": "engineering"
+      "lane": "linux-foundations"
     },
     "w2-ex5": {
       "done": false,
       "done_at": null,
-      "lane": "engineering"
+      "lane": "linux-foundations"
     },
     "w2-ex6": {
       "done": false,
       "done_at": null,
-      "lane": "engineering"
+      "lane": "linux-foundations"
     },
     "w2-ex7": {
       "done": false,
       "done_at": null,
-      "lane": "engineering"
+      "lane": "linux-foundations"
     },
     "w2-self": {
       "done": false,
       "done_at": null,
-      "lane": "engineering"
+      "lane": "linux-foundations"
     },
     "w3-read": {
       "done": false,
       "done_at": null,
-      "lane": "engineering"
+      "lane": "linux-foundations"
     },
     "w3-ex8": {
       "done": false,
       "done_at": null,
-      "lane": "engineering"
+      "lane": "linux-foundations"
     },
     "w3-ex9": {
       "done": false,
       "done_at": null,
-      "lane": "engineering"
+      "lane": "linux-foundations"
     },
     "w3-ex10": {
       "done": false,
       "done_at": null,
-      "lane": "engineering"
+      "lane": "linux-foundations"
     },
     "w3-self": {
       "done": false,
       "done_at": null,
-      "lane": "engineering"
+      "lane": "linux-foundations"
     },
     "fin-comp": {
       "done": false,
       "done_at": null,
-      "lane": "engineering"
+      "lane": "linux-foundations"
     },
     "fin-sheet": {
       "done": false,
       "done_at": null,
-      "lane": "engineering"
+      "lane": "linux-foundations"
     },
     "fin-acc1": {
       "done": false,
       "done_at": null,
-      "lane": "engineering"
+      "lane": "linux-foundations"
     },
     "fin-acc2": {
       "done": false,
       "done_at": null,
-      "lane": "engineering"
+      "lane": "linux-foundations"
     },
     "fin-acc3": {
       "done": false,
       "done_at": null,
-      "lane": "engineering"
+      "lane": "linux-foundations"
     },
     "r01-w1-read": {
       "done": false,
       "done_at": null,
-      "lane": "engineering"
+      "lane": "linux-foundations"
     },
     "r01-w1-ex1": {
       "done": false,
       "done_at": null,
-      "lane": "engineering"
+      "lane": "linux-foundations"
     },
     "r01-w1-self": {
       "done": false,
       "done_at": null,
-      "lane": "engineering"
+      "lane": "linux-foundations"
     },
     "r01-w2-read": {
       "done": false,
       "done_at": null,
-      "lane": "engineering"
+      "lane": "linux-foundations"
     },
     "r01-w2-ex2": {
       "done": false,
       "done_at": null,
-      "lane": "engineering"
+      "lane": "linux-foundations"
     },
     "r01-w2-self": {
       "done": false,
       "done_at": null,
-      "lane": "engineering"
+      "lane": "linux-foundations"
     },
     "r01-w3-read": {
       "done": false,
       "done_at": null,
-      "lane": "engineering"
+      "lane": "linux-foundations"
     },
     "r01-w3-ex3": {
       "done": false,
       "done_at": null,
-      "lane": "engineering"
+      "lane": "linux-foundations"
     },
     "r01-w3-self": {
       "done": false,
       "done_at": null,
-      "lane": "engineering"
+      "lane": "linux-foundations"
     },
     "r01-fin-comp": {
       "done": false,
       "done_at": null,
-      "lane": "engineering"
+      "lane": "linux-foundations"
     },
     "r01-fin-sheet": {
       "done": false,
       "done_at": null,
-      "lane": "engineering"
+      "lane": "linux-foundations"
     },
     "r01-fin-acc1": {
       "done": false,
       "done_at": null,
-      "lane": "engineering"
-    },
-    "r03-w1-read": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r03-w1-ex1": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r03-w1-self": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r03-w2-read": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r03-w2-ex2": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r03-w2-self": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r03-w3-read": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r03-w3-ex3": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r03-w3-self": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r03-fin-comp": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r03-fin-sheet": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r03-fin-acc1": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r04-w1-read": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r04-w1-ex1": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r04-w1-self": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r04-w2-read": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r04-w2-ex2": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r04-w2-self": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r04-w3-read": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r04-w3-ex3": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r04-w3-self": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r04-fin-comp": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r04-fin-sheet": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r04-fin-acc1": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
+      "lane": "linux-foundations"
     },
     "r02-w1-read": {
       "done": false,
       "done_at": null,
-      "lane": "engineering"
+      "lane": "linux-foundations"
     },
     "r02-w1-ex1": {
       "done": false,
       "done_at": null,
-      "lane": "engineering"
+      "lane": "linux-foundations"
     },
     "r02-w1-ex2": {
       "done": false,
       "done_at": null,
-      "lane": "engineering"
+      "lane": "linux-foundations"
     },
     "r02-w1-ex3": {
       "done": false,
       "done_at": null,
-      "lane": "engineering"
+      "lane": "linux-foundations"
     },
     "r02-w1-self": {
       "done": false,
       "done_at": null,
-      "lane": "engineering"
+      "lane": "linux-foundations"
     },
     "r02-w2-read": {
       "done": false,
       "done_at": null,
-      "lane": "engineering"
+      "lane": "linux-foundations"
     },
     "r02-w2-ex4": {
       "done": false,
       "done_at": null,
-      "lane": "engineering"
+      "lane": "linux-foundations"
     },
     "r02-w2-ex5": {
       "done": false,
       "done_at": null,
-      "lane": "engineering"
+      "lane": "linux-foundations"
     },
     "r02-w2-ex6": {
       "done": false,
       "done_at": null,
-      "lane": "engineering"
+      "lane": "linux-foundations"
     },
     "r02-w2-self": {
       "done": false,
       "done_at": null,
-      "lane": "engineering"
+      "lane": "linux-foundations"
     },
     "r02-w3-read": {
       "done": false,
       "done_at": null,
-      "lane": "engineering"
+      "lane": "linux-foundations"
     },
     "r02-w3-ex7": {
       "done": false,
       "done_at": null,
-      "lane": "engineering"
+      "lane": "linux-foundations"
     },
     "r02-w3-ex8": {
       "done": false,
       "done_at": null,
-      "lane": "engineering"
+      "lane": "linux-foundations"
     },
     "r02-w3-ex9": {
       "done": false,
       "done_at": null,
-      "lane": "engineering"
+      "lane": "linux-foundations"
     },
     "r02-w3-self": {
       "done": false,
       "done_at": null,
-      "lane": "engineering"
+      "lane": "linux-foundations"
     },
     "r02-fin-comp": {
       "done": false,
       "done_at": null,
-      "lane": "engineering"
+      "lane": "linux-foundations"
     },
     "r02-fin-sheet": {
       "done": false,
       "done_at": null,
-      "lane": "engineering"
+      "lane": "linux-foundations"
     },
     "r02-fin-acc1": {
       "done": false,
       "done_at": null,
-      "lane": "engineering"
+      "lane": "linux-foundations"
     },
     "r02-fin-acc2": {
       "done": false,
       "done_at": null,
-      "lane": "engineering"
-    },
-    "r05-w1-read": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r05-w1-ex1": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r05-w1-self": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r05-w2-read": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r05-w2-ex2": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r05-w2-self": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r05-w3-read": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r05-w3-ex3": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r05-w3-self": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r05-fin-comp": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r05-fin-sheet": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r05-fin-acc1": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
+      "lane": "linux-foundations"
     },
     "r06-w1-read": {
       "done": false,
       "done_at": null,
-      "lane": "engineering"
+      "lane": "linux-foundations"
     },
     "r06-w1-ex1": {
       "done": false,
       "done_at": null,
-      "lane": "engineering"
+      "lane": "linux-foundations"
     },
     "r06-w1-self": {
       "done": false,
       "done_at": null,
-      "lane": "engineering"
+      "lane": "linux-foundations"
     },
     "r06-w2-read": {
       "done": false,
       "done_at": null,
-      "lane": "engineering"
+      "lane": "linux-foundations"
     },
     "r06-w2-ex2": {
       "done": false,
       "done_at": null,
-      "lane": "engineering"
+      "lane": "linux-foundations"
     },
     "r06-w2-self": {
       "done": false,
       "done_at": null,
-      "lane": "engineering"
+      "lane": "linux-foundations"
     },
     "r06-w3-read": {
       "done": false,
       "done_at": null,
-      "lane": "engineering"
+      "lane": "linux-foundations"
     },
     "r06-w3-ex3": {
       "done": false,
       "done_at": null,
-      "lane": "engineering"
+      "lane": "linux-foundations"
     },
     "r06-w3-self": {
       "done": false,
       "done_at": null,
-      "lane": "engineering"
+      "lane": "linux-foundations"
     },
     "r06-fin-comp": {
       "done": false,
       "done_at": null,
-      "lane": "engineering"
+      "lane": "linux-foundations"
     },
     "r06-fin-sheet": {
       "done": false,
       "done_at": null,
-      "lane": "engineering"
+      "lane": "linux-foundations"
     },
     "r06-fin-acc1": {
       "done": false,
       "done_at": null,
-      "lane": "engineering"
-    },
-    "r07-w1-read": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r07-w1-ex1": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r07-w1-self": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r07-w2-read": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r07-w2-ex2": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r07-w2-self": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r07-w3-read": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r07-w3-ex3": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r07-w3-self": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r07-fin-comp": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r07-fin-sheet": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r07-fin-acc1": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r08-w1-read": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r08-w1-ex1": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r08-w1-self": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r08-w2-read": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r08-w2-ex2": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r08-w2-self": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r08-w3-read": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r08-w3-ex3": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r08-w3-self": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r08-fin-comp": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r08-fin-sheet": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r08-fin-acc1": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r09-w1-read": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r09-w1-ex1": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r09-w1-self": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r09-w2-read": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r09-w2-ex2": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r09-w2-self": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r09-w3-read": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r09-w3-ex3": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r09-w3-self": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r09-fin-comp": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r09-fin-sheet": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r09-fin-acc1": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r10-w1-read": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r10-w1-ex1": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r10-w1-self": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r10-w2-read": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r10-w2-ex2": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r10-w2-self": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r10-w3-read": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r10-w3-ex3": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r10-w3-self": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r10-fin-comp": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r10-fin-sheet": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r10-fin-acc1": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r11-w1-read": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r11-w1-ex1": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r11-w1-self": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r11-w2-read": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r11-w2-ex2": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r11-w2-self": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r11-w3-read": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r11-w3-ex3": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r11-w3-self": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r11-fin-comp": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r11-fin-sheet": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r11-fin-acc1": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r12-w1-read": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r12-w1-ex1": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r12-w1-self": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r12-w2-read": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r12-w2-ex2": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r12-w2-self": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r12-w3-read": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r12-w3-ex3": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r12-w3-self": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r12-fin-comp": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r12-fin-sheet": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r12-fin-acc1": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r13-w1-read": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r13-w1-ex1": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r13-w1-self": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r13-w2-read": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r13-w2-ex2": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r13-w2-self": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r13-w3-read": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r13-w3-ex3": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r13-w3-self": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r13-fin-comp": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r13-fin-sheet": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r13-fin-acc1": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r14-w1-read": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r14-w1-ex1": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r14-w1-self": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r14-w2-read": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r14-w2-ex2": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r14-w2-self": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r14-w3-read": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r14-w3-ex3": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r14-w3-self": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r14-fin-comp": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r14-fin-sheet": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r14-fin-acc1": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r15-w1-read": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r15-w1-ex1": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r15-w1-self": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r15-w2-read": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r15-w2-ex2": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r15-w2-self": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r15-w3-read": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r15-w3-ex3": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r15-w3-self": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r15-fin-comp": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r15-fin-sheet": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r15-fin-acc1": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r16-w1-read": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r16-w1-ex1": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r16-w1-self": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r16-w2-read": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r16-w2-ex2": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r16-w2-self": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r16-w3-read": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r16-w3-ex3": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r16-w3-self": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r16-fin-comp": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r16-fin-sheet": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r16-fin-acc1": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r17-w1-read": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r17-w1-ex1": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r17-w1-self": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r17-w2-read": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r17-w2-ex2": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r17-w2-self": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r17-w3-read": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r17-w3-ex3": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r17-w3-self": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r17-fin-comp": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r17-fin-sheet": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r17-fin-acc1": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r18-w1-read": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r18-w1-ex1": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r18-w1-self": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r18-w2-read": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r18-w2-ex2": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r18-w2-self": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r18-w3-read": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r18-w3-ex3": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r18-w3-self": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r18-fin-comp": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r18-fin-sheet": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r18-fin-acc1": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r19-w1-read": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r19-w1-ex1": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r19-w1-self": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r19-w2-read": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r19-w2-ex2": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r19-w2-self": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r19-w3-read": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r19-w3-ex3": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r19-w3-self": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r19-fin-comp": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r19-fin-sheet": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r19-fin-acc1": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r20-w1-read": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r20-w1-ex1": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r20-w1-self": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r20-w2-read": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r20-w2-ex2": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r20-w2-self": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r20-w3-read": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r20-w3-ex3": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r20-w3-self": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r20-fin-comp": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r20-fin-sheet": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r20-fin-acc1": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r21-w1-read": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r21-w1-ex1": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r21-w1-self": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r21-w2-read": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r21-w2-ex2": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r21-w2-self": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r21-w3-read": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r21-w3-ex3": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r21-w3-self": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r21-fin-comp": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r21-fin-sheet": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "r21-fin-acc1": {
-      "done": false,
-      "done_at": null,
-      "lane": "engineering"
-    },
-    "soft_exam-ds-start": {
-      "done": false,
-      "done_at": null,
-      "lane": "soft_exam"
-    },
-    "soft_exam-os-start": {
-      "done": false,
-      "done_at": null,
-      "lane": "soft_exam"
-    },
-    "soft_exam-db-start": {
-      "done": false,
-      "done_at": null,
-      "lane": "soft_exam"
-    },
-    "math2-limits-start": {
-      "done": false,
-      "done_at": null,
-      "lane": "math2"
-    },
-    "math2-la-start": {
-      "done": false,
-      "done_at": null,
-      "lane": "math2"
-    },
-    "cs408-ds-start": {
-      "done": false,
-      "done_at": null,
-      "lane": "cs408"
+      "lane": "linux-foundations"
     },
     "linux-plan-start": {
       "done": false,
       "done_at": null,
-      "lane": "engineering"
+      "lane": "linux-foundations"
     },
     "vps-stage-start": {
       "done": false,
       "done_at": null,
-      "lane": "engineering"
+      "lane": "linux-foundations"
     },
     "vps-00-repo-scan": {
       "done": false,
       "done_at": null,
-      "lane": "engineering"
+      "lane": "linux-foundations"
     },
     "vps-01-repo-cleanup": {
       "done": false,
       "done_at": null,
-      "lane": "engineering"
+      "lane": "linux-foundations"
     },
     "vps-02-module-anchor": {
       "done": false,
       "done_at": null,
-      "lane": "engineering"
+      "lane": "linux-foundations"
     },
     "vps-03-permission-levels": {
       "done": false,
       "done_at": null,
-      "lane": "engineering"
+      "lane": "linux-foundations"
     },
     "vps-04-ssh-basics": {
       "done": false,
       "done_at": null,
-      "lane": "engineering"
+      "lane": "linux-foundations"
     },
     "vps-05-first-readonly-check": {
       "done": false,
       "done_at": null,
-      "lane": "engineering"
+      "lane": "linux-foundations"
     },
     "vps-06-remote-dirs": {
       "done": false,
       "done_at": null,
-      "lane": "engineering"
+      "lane": "linux-foundations"
     },
     "vps-07-github-sync": {
       "done": false,
       "done_at": null,
-      "lane": "engineering"
+      "lane": "linux-foundations"
     },
     "vps-08-tmux-training": {
       "done": false,
       "done_at": null,
-      "lane": "engineering"
+      "lane": "linux-foundations"
     },
     "vps-09-network-check": {
       "done": false,
       "done_at": null,
-      "lane": "engineering"
+      "lane": "linux-foundations"
     },
     "vps-10-remote-api-minimal": {
       "done": false,
       "done_at": null,
-      "lane": "engineering"
+      "lane": "linux-foundations"
     },
     "vps-11-minimal-service": {
       "done": false,
       "done_at": null,
-      "lane": "engineering"
+      "lane": "linux-foundations"
     },
     "vps-12-sop-and-vultragent": {
       "done": false,
       "done_at": null,
-      "lane": "engineering"
+      "lane": "linux-foundations"
     },
-    "plans-overview-start": {
+    "linux-course-start": {
       "done": false,
       "done_at": null,
-      "lane": "engineering"
-    },
-    "soft_exam-overview-start": {
-      "done": false,
-      "done_at": null,
-      "lane": "soft_exam"
-    },
-    "math2-overview-start": {
-      "done": false,
-      "done_at": null,
-      "lane": "math2"
-    },
-    "soft_exam-composition-start": {
-      "done": false,
-      "done_at": null,
-      "lane": "soft_exam"
-    },
-    "soft_exam-network-start": {
-      "done": false,
-      "done_at": null,
-      "lane": "soft_exam"
-    },
-    "soft_exam-se-start": {
-      "done": false,
-      "done_at": null,
-      "lane": "soft_exam"
-    },
-    "soft_exam-uml-start": {
-      "done": false,
-      "done_at": null,
-      "lane": "soft_exam"
-    },
-    "soft_exam-oo-start": {
-      "done": false,
-      "done_at": null,
-      "lane": "soft_exam"
-    },
-    "soft_exam-security-start": {
-      "done": false,
-      "done_at": null,
-      "lane": "soft_exam"
-    },
-    "soft_exam-c-lang-start": {
-      "done": false,
-      "done_at": null,
-      "lane": "soft_exam"
-    },
-    "soft_exam-standards-start": {
-      "done": false,
-      "done_at": null,
-      "lane": "soft_exam"
-    },
-    "soft_exam-english-start": {
-      "done": false,
-      "done_at": null,
-      "lane": "soft_exam"
-    },
-    "cs408-overview-start": {
-      "done": false,
-      "done_at": null,
-      "lane": "cs408"
-    },
-    "cs408-composition-start": {
-      "done": false,
-      "done_at": null,
-      "lane": "cs408"
-    },
-    "cs408-os-start": {
-      "done": false,
-      "done_at": null,
-      "lane": "cs408"
-    },
-    "cs408-network-start": {
-      "done": false,
-      "done_at": null,
-      "lane": "cs408"
+      "lane": "linux-foundations"
     }
   }
 };

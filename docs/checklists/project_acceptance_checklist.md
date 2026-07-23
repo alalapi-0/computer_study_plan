@@ -24,8 +24,9 @@
 
 - [ ] 本轮新增 / 修改 / 删除文件清单已写入 commit 与变更报告。
 - [ ] 删除文件已先经 `docs/templates/repository_cleanup_confirmation.md` 走完确认流程。
-- [ ] 主线 Round 概览（`round_00.md` ~ `round_21.md`）未被破坏。
-- [ ] Round 00 最小可运行闭环未被破坏：`bash mark_done.sh` 可正常运行。
+- [ ] Linux 正式课程 Round 概览（`round_00.md` / `01` / `02` / `06`）未被破坏。
+- [ ] Round 00 最小可运行闭环未被破坏：`bash mark_done.sh --lane linux-foundations` 可正常运行。
+- [ ] 未重新引入非 Linux 正式课程目录（如 `plans/soft_exam`、`rounds/round_21`）。
 - [ ] 进度系统核心文件未被意外覆盖：`progress.json`、`progress_data.js`、`rounds_data.js`、`progress.html`、`progress_ui.js`、`scripts/progress_server.py`、`mark_done.sh`。
 - [ ] 涉及进度系统时，`python3 scripts/validate_learning_data.py` 通过；如修改 Round 元数据，已运行 `npm run build:rounds`。
 - [ ] `README.md` 的"项目结构"在必要时已同步。

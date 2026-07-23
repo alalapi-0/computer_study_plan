@@ -7,7 +7,7 @@
 - `action_id`: 事件唯一 ID（UUID）
 - `task_id`: 任务 ID（如 `w1-read`、`r02-w1-ex1`）
 - `round_id`: 轮次 ID（如 `round_00`、`round_02`）
-- `lane`: 主线（`engineering` / `soft_exam` / `math2` / `cs408`）
+- `lane`: 课程 lane（当前仅 `linux-foundations`）
 - `action_type`: 动作类型（当前支持 `mark_done`、`undo_done`、`run_exercise`）
 - `timestamp`: 事件时间（ISO 8601）
 - `result`: 动作结果（`ok` / `noop_already_done` / `failed` / `timeout`）

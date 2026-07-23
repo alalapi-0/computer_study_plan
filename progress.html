@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>学习工作区 · 四主线</title>
+  <title>学习工作区 · Linux</title>
   <link rel="icon" href="data:," />
   <style>
     :root {
@@ -122,7 +122,7 @@
       font-size: 0.85rem;
     }
 
-    /* ── Lane grid (四主线进度) ── */
+    /* ── Lane grid (课程进度) ── */
     .lane-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
@@ -139,6 +139,7 @@
     .lane-item .lane-row   { display: flex; align-items: center; gap: 0.6rem; }
     .lane-item .lane-pct   { font-size: 0.78rem; min-width: 2.5rem; text-align: right; color: var(--accent2); }
     .lane-item.engineering .bar-fill { background: linear-gradient(90deg, var(--accent), var(--accent2)); }
+    .lane-item.linux-foundations .bar-fill { background: linear-gradient(90deg, var(--accent), #38bdf8); }
     .lane-item.soft_exam   .bar-fill { background: linear-gradient(90deg, var(--yellow), #f97316); }
     .lane-item.math2       .bar-fill { background: linear-gradient(90deg, var(--green), #14b8a6); }
     .lane-item.cs408       .bar-fill { background: linear-gradient(90deg, var(--pink), #a855f7); }
@@ -1276,6 +1277,7 @@
       background: var(--accent2);
     }
     .lane-item.engineering::before { background: var(--accent); }
+    .lane-item.linux-foundations::before { background: var(--accent); }
     .lane-item.soft_exam::before { background: var(--yellow); }
     .lane-item.math2::before { background: var(--green); }
     .lane-item.cs408::before { background: var(--pink); }
@@ -1688,7 +1690,7 @@
     <div class="rail-mark">CSP</div>
     <div>
       <div class="rail-title">学习工作区</div>
-      <div class="rail-subtitle">四主线 · Web UI</div>
+      <div class="rail-subtitle">Linux 单课程 · Web UI</div>
     </div>
   </div>
   <nav class="side-nav">
@@ -1699,7 +1701,7 @@
   </nav>
   <div class="rail-note">
     <span class="rail-note-label">使用路径</span>
-    <p>先读当前资料，再按任务做练习或写要点；工程任务会自动联动终端。</p>
+    <p>先读当前资料，再按任务做练习或写要点；Linux 任务会自动联动终端。</p>
   </div>
 </aside>
 
@@ -1707,7 +1709,7 @@
 
 <div class="top-bar" id="today">
 <header>
-  <div class="eyebrow">四主线学习系统</div>
+  <div class="eyebrow">Linux 单课程学习系统</div>
   <h1>今日学习</h1>
   <p>先在学习工作区完成一个小动作；需要总览、存档或配置时再展开管理信息。</p>
 </header>
@@ -1726,7 +1728,7 @@
   <div class="workspace-head">
     <div>
       <h2>学习工作区</h2>
-      <div class="card-sub">把当前任务、教程和记录入口放在同一屏；工程任务会额外联动终端。</div>
+      <div class="card-sub">把当前任务、教程和记录入口放在同一屏；Linux 任务会额外联动终端。</div>
     </div>
     <div class="workflow-steps" aria-label="推荐学习顺序">
       <span>1 读教程</span>
@@ -1755,14 +1757,14 @@
         </div>
       </div>
       <div class="inline-reader-body" id="inlineReaderBody">
-        <div class="inline-reader-empty">点击任务里的“读教程”，资料会显示在这里；工程任务会自动联动终端。</div>
+        <div class="inline-reader-empty">点击任务里的“读教程”，资料会显示在这里；Linux 任务会自动联动终端。</div>
       </div>
     </section>
     <section class="workspace-panel terminal-panel" id="terminal">
       <div class="workspace-panel-head">
         <div>
           <h3>终端练习</h3>
-          <div class="card-sub">工程任务会自动映射到本机 <code>~/cli-lab</code> 沙盒；点击“终端练习”可切换或重新聚焦。</div>
+          <div class="card-sub">Linux 任务会自动映射到本机 <code>~/cli-lab</code> 沙盒；点击“终端练习”可切换或重新聚焦。</div>
         </div>
         <div class="workspace-panel-actions">
           <a class="task-btn read workspace-link-btn" href="#inlineReaderPanel">回到教程</a>
@@ -1774,7 +1776,7 @@
             <div class="terminal-panel-title">当前任务</div>
             <div class="terminal-context" id="terminalContext">
               <div class="terminal-context-title">未绑定任务</div>
-              <div class="terminal-context-meta">切到工程实操任务后，这里会自动进入对应 Round 的沙盒目录。</div>
+              <div class="terminal-context-meta">切到 Linux 课程任务后，这里会自动进入对应 Round 的沙盒目录。</div>
             </div>
           </div>
           <div class="terminal-state-list">
@@ -1823,10 +1825,10 @@
   </div>
 </div>
 
-<!-- ── Block 2: 四主线进度 ── -->
+<!-- ── Block 2: 课程进度 ── -->
 <div class="card" id="lanes">
-  <h2>四主线进度</h2>
-  <div class="card-sub">每条主线（lane）的任务完成率。刚启动的小主线显示为“启动中”，已开始但完成率低于 30% 时显示为“薄弱项”。</div>
+  <h2>课程进度</h2>
+  <div class="card-sub">当前正式课程 linux-foundations 的任务完成率。刚启动显示为“待启动”，已开始但完成率低于 30% 时显示为“薄弱项”。</div>
   <div class="lane-grid" id="laneGrid"></div>
 </div>
 
@@ -1840,37 +1842,37 @@
 <!-- ── Block 3: 个人配置（本周任务 + 倒计时） ── -->
 <div class="card" id="config">
   <h2>本周与倒计时（本地保存）</h2>
-  <div class="card-sub">本周任务与考试日期保存在浏览器 localStorage，不写入 progress.json。</div>
+  <div class="card-sub">本周任务与目标日期保存在浏览器 localStorage，不写入 progress.json。</div>
   <div class="config-grid">
     <div class="config-card">
       <h3>本周任务</h3>
       <textarea id="weekTasks" placeholder="一行一条；例如：
-- 软考 OS 第 2 章
-- 数学二极限 3 题
-- VPS-04 文档阅读
+- Round 00 week1 终端练习
+- Round 01 路径感复盘
+- VPS-04 SSH 文档阅读
 "></textarea>
       <div class="hint">写完点保存。下次打开 Web UI 会自动加载。</div>
       <button class="save-btn" onclick="saveWeekTasks()">保存本周任务</button>
       <span id="weekSavedHint" style="margin-left:0.6rem;font-size:0.72rem;color:var(--green);display:none;">已保存 ✓</span>
     </div>
     <div class="config-card">
-      <h3>考试倒计时</h3>
+      <h3>目标倒计时</h3>
       <div class="countdown-row">
-        <label>软考</label>
+        <label>Module 02</label>
         <input type="date" id="softExamDate" />
         <span class="days" id="softExamDays">—</span>
       </div>
       <div class="countdown-row">
-        <label>数学二</label>
+        <label>Module 03</label>
         <input type="date" id="math2Date" />
         <span class="days" id="math2Days">—</span>
       </div>
       <div class="countdown-row">
-        <label>408</label>
+        <label>VPS 支线</label>
         <input type="date" id="cs408Date" />
         <span class="days" id="cs408Days">—</span>
       </div>
-      <div class="hint">具体考试日期以官方公告为准。本字段仅用于个人参考。</div>
+      <div class="hint">个人学习目标日期，仅本地参考；当前正式课程只有 Linux。</div>
       <button class="save-btn" onclick="saveExamDates()">保存日期</button>
       <span id="dateSavedHint" style="margin-left:0.6rem;font-size:0.72rem;color:var(--green);display:none;">已保存 ✓</span>
     </div>
@@ -1882,7 +1884,7 @@
   <h2>存档与读档</h2>
   <div class="card-sub">存档会保存进度、动作记录、任务反馈、终端历史、本周任务和倒计时。读档前会自动创建恢复点，防止误操作。</div>
   <div class="save-toolbar">
-    <input class="save-label-input" id="saveLabel" placeholder="存档备注，例如：软考第一轮启动前" />
+    <input class="save-label-input" id="saveLabel" placeholder="存档备注，例如：Round 00 通关前" />
     <button class="btn" type="button" onclick="createSave()">创建存档</button>
     <button class="btn" type="button" onclick="loadSaves()">刷新列表</button>
   </div>
@@ -1891,27 +1893,27 @@
   </div>
 </div>
 
-<!-- ── Block 5: 阶段参考（Stage 0–7） ── -->
+<!-- ── Block 5: 阶段参考（Stage 0–5） ── -->
 <div class="card" id="stages">
-  <h2>阶段参考（Stage 0–7）</h2>
-  <div class="card-sub">这里是导航参考：Stage 0 是治理状态；其他 Stage 仅按关联 lane 近似，不代表阶段验收已完成。详见 <code style="background:rgba(255,255,255,0.08);padding:0.05em 0.35em;border-radius:4px;font-family:monospace">docs/STAGE_PLAN.md</code>。</div>
+  <h2>阶段参考（Stage 0–5）</h2>
+  <div class="card-sub">这里是导航参考：Stage 0 是单课程基线治理；其他 Stage 按 linux-foundations 进度近似，不代表阶段验收已完成。详见 <code style="background:rgba(255,255,255,0.08);padding:0.05em 0.35em;border-radius:4px;font-family:monospace">docs/STAGE_PLAN.md</code>。</div>
   <div class="stage-list" id="stageList"></div>
 </div>
 
 <!-- ── Block 6: 当前关注项 ── -->
 <div class="card">
   <h2>当前关注项</h2>
-  <div class="card-sub">按 lane 完成率自动识别：刚启动的小主线提示“启动中”，已开始但低于 30% 才提示“薄弱项”。</div>
+  <div class="card-sub">按课程完成率自动识别：刚启动提示“启动中”，已开始但低于 30% 才提示“薄弱项”。</div>
   <div class="weak-list" id="weakList"></div>
 </div>
 
   </div>
 </details>
 
-<!-- ── Block 7: 按主线查看任务 ── -->
+<!-- ── Block 7: 按课程查看任务 ── -->
 <div class="card" id="rounds">
-  <h2>按主线查看任务</h2>
-  <div class="card-sub">按主线切换，查看工程 Round 与考试计划任务。点击「读教程」可在页内打开 notes / 计划文档。</div>
+  <h2>按课程查看任务</h2>
+  <div class="card-sub">按 Linux 课程模块查看 Round 与 VPS 支线任务。点击「读教程」可在页内打开 notes / 计划文档。</div>
   <div class="lane-tabs" id="laneTabs"></div>
   <div class="round-tabs" id="roundTabs"></div>
   <div id="panels"></div>
@@ -1949,14 +1951,12 @@ const ROUNDS = window.ROUNDS_DATA || [];
 // 这是当前阶段的最小实现；后续若有 stage→具体 task 列表，可替换。
 // ============================================================
 const STAGES = [
-  { id: "stage_0", name: "Stage 0 · 治理准备",   lane: null, pct: 100,  status: "已完成", note: "仓库治理准备已完成，不计入学习进度" },
-  { id: "stage_1", name: "Stage 1 · Linux/Git/Shell", lane: "engineering" },
-  { id: "stage_2", name: "Stage 2 · 软考基础核心",   lane: "soft_exam" },
-  { id: "stage_3", name: "Stage 3 · 软考真题强化",   lane: "soft_exam" },
-  { id: "stage_4", name: "Stage 4 · 数学二长期",     lane: "math2" },
-  { id: "stage_5", name: "Stage 5 · 408 兼容基础",   lane: "cs408" },
-  { id: "stage_6", name: "Stage 6 · 院校筛选",       lane: "cs408",     note: "信息收集类，进度仅参考" },
-  { id: "stage_7", name: "Stage 7 · 项目作品集",     lane: "engineering" },
+  { id: "stage_0", name: "Stage 0 · 单课程基线", lane: null, pct: 90, status: "候选待验收", note: "Linux 单课程化清理与重新定位；待 VERIFY→Judge→APPROVE→DELIVER" },
+  { id: "stage_1", name: "Stage 1 · Terminal / 文件系统", lane: "linux-foundations" },
+  { id: "stage_2", name: "Stage 2 · Shell / 管道 / Git", lane: "linux-foundations" },
+  { id: "stage_3", name: "Stage 3 · Linux 进阶与自动化", lane: "linux-foundations" },
+  { id: "stage_4", name: "Stage 4 · 远程 VPS 实操", lane: "linux-foundations" },
+  { id: "stage_5", name: "Stage 5 · 游戏化反馈验证", lane: "linux-foundations", note: "后续阶段；当前未实现 XP/通关引擎" },
 ];
 
 // ============================================================
@@ -1969,11 +1969,11 @@ const COL_KEY   = "progress_ui_collapsed";
 function getCollapsed() { try { return JSON.parse(sessionStorage.getItem(COL_KEY)) || {}; } catch(e) { return {}; } }
 function setCollapsed(o) { sessionStorage.setItem(COL_KEY, JSON.stringify(o)); }
 
-let activeLane  = "engineering";
+let activeLane  = "linux-foundations";
 let activeRound = "round_00";
 let progressData = {};
 let lanesData    = {};
-const LANE_PRIORITY = ["soft_exam", "math2", "cs408", "engineering"];
+const LANE_PRIORITY = ["linux-foundations"];
 const READABLE_FILE_RE = /\.(md|txt|sh|py)$/i;
 let initialRouteApplied = false;
 
@@ -2054,13 +2054,10 @@ async function loadProgress() {
     }
   }
 
-  // 兜底 lanes（即使 progress.json v1 也能展示）
+  // 兜底 lanes（单课程阶段）
   if (!Object.keys(lanesData).length) {
     lanesData = {
-      engineering: { title: "工程实操线" },
-      soft_exam:   { title: "软考中级线" },
-      math2:       { title: "数学二线" },
-      cs408:       { title: "408/0854 线" },
+      "linux-foundations": { title: "Linux 基础与工程实践", course_id: "linux-foundations" },
     };
   }
 
@@ -2076,10 +2073,10 @@ async function loadProgress() {
 // ============================================================
 function isTaskDone(taskId) { return !!(progressData[taskId] && progressData[taskId].done); }
 function taskDoneAt(taskId) { return progressData[taskId]?.done_at || null; }
-function taskLane(taskId)   { return progressData[taskId]?.lane || "engineering"; }
+function taskLane(taskId)   { return progressData[taskId]?.lane || "linux-foundations"; }
 
 function laneStats(laneKey) {
-  const items = Object.entries(progressData).filter(([id, v]) => (v.lane || "engineering") === laneKey);
+  const items = Object.entries(progressData).filter(([id, v]) => (v.lane || "linux-foundations") === laneKey);
   const total = items.length;
   const done  = items.filter(([id, v]) => v.done).length;
   const pct   = total ? Math.round(done / total * 100) : 0;

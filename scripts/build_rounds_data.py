@@ -1,38 +1,27 @@
 #!/usr/bin/env python3
-"""Build rounds_data.js and merge engineering round tasks into progress.json."""
+"""Build rounds_data.js and merge linux-foundations tasks into progress.json."""
 
 from __future__ import annotations
 
 import json
-import re
 import sys
 from pathlib import Path
 
-from progress_lib import load_progress, repo_root, save_progress, sync_progress_data_js
+from progress_lib import (
+    ACTIVE_COURSE_ID,
+    load_progress,
+    repo_root,
+    save_progress,
+    sync_progress_data_js,
+)
+
+LINUX_LANE = ACTIVE_COURSE_ID
 
 DIFFICULTY_BY_ROUND = {
     0: "⭐☆☆☆☆",
     1: "⭐☆☆☆☆",
     2: "⭐⭐☆☆☆",
-    3: "⭐⭐☆☆☆",
-    4: "⭐⭐⭐☆☆",
-    5: "⭐⭐⭐☆☆",
     6: "⭐⭐⭐☆☆",
-    7: "⭐⭐⭐☆☆",
-    8: "⭐⭐⭐☆☆",
-    9: "⭐⭐⭐☆☆",
-    10: "⭐⭐⭐☆☆",
-    11: "⭐⭐⭐☆☆",
-    12: "⭐⭐⭐☆☆",
-    13: "⭐⭐⭐☆☆",
-    14: "⭐⭐⭐☆☆",
-    15: "⭐⭐⭐☆☆",
-    16: "⭐⭐⭐⭐☆",
-    17: "⭐⭐⭐⭐☆",
-    18: "⭐⭐⭐☆☆",
-    19: "⭐⭐⭐☆☆",
-    20: "⭐⭐⭐⭐☆",
-    21: "⭐⭐⭐⭐☆",
 }
 
 
@@ -71,11 +60,12 @@ def final_comprehensive(round_dir: Path) -> str:
     return ""
 
 
+
 def build_round_00(root: Path) -> dict:
     return {
         "id": "round_00",
         "title": round_title(root, 0),
-        "lane": "engineering",
+        "lane": LINUX_LANE,
         "difficulty": "⭐☆☆☆☆",
         "duration": "3 周",
         "weeks": [
@@ -128,7 +118,8 @@ def build_round_00(root: Path) -> dict:
     }
 
 
-def build_standard_round(root: Path, num: int) -> dict | None:
+
+def build_linux_round(root: Path, num: int) -> dict | None:
     round_dir = root / f"rounds/round_{num:02d}"
     if not round_dir.exists():
         return None
@@ -143,23 +134,12 @@ def build_standard_round(root: Path, num: int) -> dict | None:
     sheet = final_cheatsheet(round_dir)
     comp = final_comprehensive(round_dir)
 
-    week_titles = {
-        1: {1: "路径感", 2: "重定向与管道", 3: "Python 基础语法", 4: "列表与顺序存储"},
-    }
-    w1_theme = week_titles.get(num, {}).get(1, "基础练习")
-    w2_theme = week_titles.get(num, {}).get(2, "进阶练习")
-    w3_theme = week_titles.get(num, {}).get(3, "综合练习")
-
     if num == 1:
         w1_theme, w2_theme, w3_theme = "路径感", "文件操作", "查看文本与帮助"
     elif num == 2:
         w1_theme, w2_theme, w3_theme = "重定向与管道", "最小 shell 脚本", "Git 最小工作流"
-    elif num == 3:
-        w1_theme, w2_theme, w3_theme = "Python 基础语法", "list/dict 与函数拆分", "复杂度观察"
-    elif num == 4:
-        w1_theme, w2_theme, w3_theme = "列表与顺序存储", "栈与队列", "哈希与去重"
-    elif num == 5:
-        w1_theme, w2_theme, w3_theme = "双指针 / 滑动窗口 / 二分", "分治 / DFS / BFS / 回溯", "贪心 / DP 入门"
+    else:
+        w1_theme, w2_theme, w3_theme = "基础练习", "进阶练习", "综合练习"
 
     final_tasks = []
     if comp:
@@ -224,7 +204,7 @@ def build_standard_round(root: Path, num: int) -> dict | None:
         return {
             "id": "round_01",
             "title": round_title(root, num),
-            "lane": "engineering",
+            "lane": LINUX_LANE,
             "difficulty": DIFFICULTY_BY_ROUND.get(num, "⭐☆☆☆☆"),
             "duration": "3 周",
             "weeks": [
@@ -263,7 +243,7 @@ def build_standard_round(root: Path, num: int) -> dict | None:
         return {
             "id": "round_02",
             "title": round_title(root, num),
-            "lane": "engineering",
+            "lane": LINUX_LANE,
             "difficulty": DIFFICULTY_BY_ROUND.get(num, "⭐⭐☆☆☆"),
             "duration": "3 周",
             "weeks": [
@@ -304,249 +284,6 @@ def build_standard_round(root: Path, num: int) -> dict | None:
             ],
         }
 
-    if num == 3:
-        final_tasks = []
-        if comp:
-            final_tasks.append(
-                {
-                    "id": "r03-fin-comp",
-                    "type": "exercise",
-                    "title": "综合练习：标签统计器 + 复杂度估算",
-                    "file": comp,
-                }
-            )
-        if sheet:
-            final_tasks.append(
-                {
-                    "id": "r03-fin-sheet",
-                    "type": "output",
-                    "title": "产出：完成 Round 03 Python 与复杂度小抄",
-                    "file": sheet,
-                }
-            )
-        final_tasks.append(
-            {
-                "id": "r03-fin-acc1",
-                "type": "test",
-                "title": "验收：解释函数、dict 计数与复杂度",
-                "file": "round_03.md",
-            }
-        )
-        return {
-            "id": "round_03",
-            "title": round_title(root, num),
-            "lane": "engineering",
-            "difficulty": DIFFICULTY_BY_ROUND.get(num, "⭐⭐☆☆☆"),
-            "duration": "3 周",
-            "weeks": [
-                {
-                    "id": "round03-week1",
-                    "title": "第 1 周：Python 基础语法",
-                    "tasks": [
-                        {
-                            "id": "r03-w1-read",
-                            "type": "reading",
-                            "title": "阅读：Python 脚本、变量、条件、循环、函数",
-                            "file": "rounds/round_03/week1/notes.md",
-                        },
-                        {"id": "r03-w1-ex1", "type": "exercise", "title": "练习：运行第一个 Python 小程序", "file": ex1},
-                        {"id": "r03-w1-self", "type": "test", "title": "自测：自己写 square.py", "file": ex1},
-                    ],
-                },
-                {
-                    "id": "round03-week2",
-                    "title": "第 2 周：list/dict 与函数拆分",
-                    "tasks": [
-                        {
-                            "id": "r03-w2-read",
-                            "type": "reading",
-                            "title": "阅读：list/dict 与函数拆分",
-                            "file": "rounds/round_03/week2/notes.md",
-                        },
-                        {"id": "r03-w2-ex2", "type": "exercise", "title": "练习：统计标签出现次数", "file": ex2},
-                        {"id": "r03-w2-self", "type": "test", "title": "自测：自己写 count_words.py", "file": ex2},
-                    ],
-                },
-                {
-                    "id": "round03-week3",
-                    "title": "第 3 周：复杂度观察",
-                    "tasks": [
-                        {
-                            "id": "r03-w3-read",
-                            "type": "reading",
-                            "title": "阅读：复杂度直觉",
-                            "file": "rounds/round_03/week3/notes.md",
-                        },
-                        {"id": "r03-w3-ex3", "type": "exercise", "title": "练习：观察线性与平方级增长", "file": ex3},
-                        {"id": "r03-w3-self", "type": "test", "title": "自测：解释 O(n) 与 O(n^2)", "file": ex3},
-                    ],
-                },
-                {"id": "round03-final", "title": "最终验收", "tasks": final_tasks},
-            ],
-        }
-
-    if num == 4:
-        final_tasks = []
-        if comp:
-            final_tasks.append(
-                {
-                    "id": "r04-fin-comp",
-                    "type": "exercise",
-                    "title": "综合练习：数据结构工具箱",
-                    "file": comp,
-                }
-            )
-        if sheet:
-            final_tasks.append(
-                {
-                    "id": "r04-fin-sheet",
-                    "type": "output",
-                    "title": "产出：完成 Round 04 数据结构小抄",
-                    "file": sheet,
-                }
-            )
-        final_tasks.append(
-            {
-                "id": "r04-fin-acc1",
-                "type": "test",
-                "title": "验收：解释 list、dict、set、deque 适用场景",
-                "file": "round_04.md",
-            }
-        )
-        return {
-            "id": "round_04",
-            "title": round_title(root, num),
-            "lane": "engineering",
-            "difficulty": DIFFICULTY_BY_ROUND.get(num, "⭐⭐⭐☆☆"),
-            "duration": "3 周",
-            "weeks": [
-                {
-                    "id": "round04-week1",
-                    "title": "第 1 周：列表与顺序存储",
-                    "tasks": [
-                        {
-                            "id": "r04-w1-read",
-                            "type": "reading",
-                            "title": "阅读：list 顺序存储与遍历",
-                            "file": "rounds/round_04/week1/notes.md",
-                        },
-                        {"id": "r04-w1-ex1", "type": "exercise", "title": "练习：list 遍历、过滤与统计", "file": ex1},
-                        {"id": "r04-w1-self", "type": "test", "title": "自测：自己写 scores.py", "file": ex1},
-                    ],
-                },
-                {
-                    "id": "round04-week2",
-                    "title": "第 2 周：栈与队列",
-                    "tasks": [
-                        {
-                            "id": "r04-w2-read",
-                            "type": "reading",
-                            "title": "阅读：stack 后进先出与 queue 先进先出",
-                            "file": "rounds/round_04/week2/notes.md",
-                        },
-                        {"id": "r04-w2-ex2", "type": "exercise", "title": "练习：stack 与 queue 出入顺序", "file": ex2},
-                        {"id": "r04-w2-self", "type": "test", "title": "自测：自己写 browser_history.py", "file": ex2},
-                    ],
-                },
-                {
-                    "id": "round04-week3",
-                    "title": "第 3 周：哈希与去重",
-                    "tasks": [
-                        {
-                            "id": "r04-w3-read",
-                            "type": "reading",
-                            "title": "阅读：dict 计数与 set 去重",
-                            "file": "rounds/round_04/week3/notes.md",
-                        },
-                        {"id": "r04-w3-ex3", "type": "exercise", "title": "练习：dict 计数与 set 去重", "file": ex3},
-                        {"id": "r04-w3-self", "type": "test", "title": "自测：自己写 tag_report.py", "file": ex3},
-                    ],
-                },
-                {"id": "round04-final", "title": "最终验收", "tasks": final_tasks},
-            ],
-        }
-
-    if num == 5:
-        final_tasks = []
-        if comp:
-            final_tasks.append(
-                {
-                    "id": "r05-fin-comp",
-                    "type": "exercise",
-                    "title": "综合练习：算法模式选择器",
-                    "file": comp,
-                }
-            )
-        if sheet:
-            final_tasks.append(
-                {
-                    "id": "r05-fin-sheet",
-                    "type": "output",
-                    "title": "产出：完成 Round 05 算法模式小抄",
-                    "file": sheet,
-                }
-            )
-        final_tasks.append(
-            {
-                "id": "r05-fin-acc1",
-                "type": "test",
-                "title": "验收：解释七类算法模式适用场景",
-                "file": "round_05.md",
-            }
-        )
-        return {
-            "id": "round_05",
-            "title": round_title(root, num),
-            "lane": "engineering",
-            "difficulty": DIFFICULTY_BY_ROUND.get(num, "⭐⭐⭐☆☆"),
-            "duration": "3 周",
-            "weeks": [
-                {
-                    "id": "round05-week1",
-                    "title": "第 1 周：双指针 / 滑动窗口 / 二分",
-                    "tasks": [
-                        {
-                            "id": "r05-w1-read",
-                            "type": "reading",
-                            "title": "阅读：双指针、滑动窗口、二分触发条件",
-                            "file": "rounds/round_05/week1/notes.md",
-                        },
-                        {"id": "r05-w1-ex1", "type": "exercise", "title": "练习：二分查找与滑动窗口", "file": ex1},
-                        {"id": "r05-w1-self", "type": "test", "title": "自测：自己写 two_sum_sorted.py", "file": ex1},
-                    ],
-                },
-                {
-                    "id": "round05-week2",
-                    "title": "第 2 周：分治 / DFS / BFS / 回溯",
-                    "tasks": [
-                        {
-                            "id": "r05-w2-read",
-                            "type": "reading",
-                            "title": "阅读：分治、DFS、BFS、回溯",
-                            "file": "rounds/round_05/week2/notes.md",
-                        },
-                        {"id": "r05-w2-ex2", "type": "exercise", "title": "练习：DFS、BFS 与回溯最小例子", "file": ex2},
-                        {"id": "r05-w2-self", "type": "test", "title": "自测：自己写 bfs_levels.py", "file": ex2},
-                    ],
-                },
-                {
-                    "id": "round05-week3",
-                    "title": "第 3 周：贪心 / DP 入门",
-                    "tasks": [
-                        {
-                            "id": "r05-w3-read",
-                            "type": "reading",
-                            "title": "阅读：贪心选择与 DP 状态转移",
-                            "file": "rounds/round_05/week3/notes.md",
-                        },
-                        {"id": "r05-w3-ex3", "type": "exercise", "title": "练习：贪心选择与 DP 爬楼梯", "file": ex3},
-                        {"id": "r05-w3-self", "type": "test", "title": "自测：自己写 coin_change_dp.py", "file": ex3},
-                    ],
-                },
-                {"id": "round05-final", "title": "最终验收", "tasks": final_tasks},
-            ],
-        }
-
     if num == 6:
         final_tasks = []
         if comp:
@@ -578,7 +315,7 @@ def build_standard_round(root: Path, num: int) -> dict | None:
         return {
             "id": "round_06",
             "title": round_title(root, num),
-            "lane": "engineering",
+            "lane": LINUX_LANE,
             "difficulty": DIFFICULTY_BY_ROUND.get(num, "⭐⭐⭐☆☆"),
             "duration": "3 周",
             "weeks": [
@@ -628,1318 +365,45 @@ def build_standard_round(root: Path, num: int) -> dict | None:
             ],
         }
 
-    if num == 13:
-        final_tasks = []
-        if comp:
-            final_tasks.append(
-                {
-                    "id": "r13-fin-comp",
-                    "type": "exercise",
-                    "title": "综合练习：生成可交付发布包",
-                    "file": comp,
-                }
-            )
-        if sheet:
-            final_tasks.append(
-                {
-                    "id": "r13-fin-sheet",
-                    "type": "output",
-                    "title": "产出：完成 Round 13 环境复现小抄",
-                    "file": sheet,
-                }
-            )
-        final_tasks.append(
-            {
-                "id": "r13-fin-acc1",
-                "type": "test",
-                "title": "验收：解释 venv、requirements、pyproject 与 Dockerfile",
-                "file": "round_13.md",
-            }
-        )
-        return {
-            "id": "round_13",
-            "title": round_title(root, num),
-            "lane": "engineering",
-            "difficulty": DIFFICULTY_BY_ROUND.get(num, "⭐⭐⭐☆☆"),
-            "duration": "3 周",
-            "weeks": [
-                {
-                    "id": "round13-week1",
-                    "title": "第 1 周：venv 与 requirements",
-                    "tasks": [
-                        {
-                            "id": "r13-w1-read",
-                            "type": "reading",
-                            "title": "阅读：venv 结构与依赖清单",
-                            "file": "rounds/round_13/week1/notes.md",
-                        },
-                        {"id": "r13-w1-ex1", "type": "exercise", "title": "练习：生成 venv 结构与 requirements", "file": ex1},
-                        {"id": "r13-w1-self", "type": "test", "title": "自测：自己创建 .venv_self", "file": ex1},
-                    ],
-                },
-                {
-                    "id": "round13-week2",
-                    "title": "第 2 周：pyproject 与配置样例",
-                    "tasks": [
-                        {
-                            "id": "r13-w2-read",
-                            "type": "reading",
-                            "title": "阅读：pyproject.toml、.env.example 与配置职责",
-                            "file": "rounds/round_13/week2/notes.md",
-                        },
-                        {"id": "r13-w2-ex2", "type": "exercise", "title": "练习：生成 pyproject 与配置样例", "file": ex2},
-                        {"id": "r13-w2-self", "type": "test", "title": "自测：自己检查 TOML 与 env 示例", "file": ex2},
-                    ],
-                },
-                {
-                    "id": "round13-week3",
-                    "title": "第 3 周：Dockerfile 与发布前自检",
-                    "tasks": [
-                        {
-                            "id": "r13-w3-read",
-                            "type": "reading",
-                            "title": "阅读：Dockerfile、.dockerignore 与发布边界",
-                            "file": "rounds/round_13/week3/notes.md",
-                        },
-                        {"id": "r13-w3-ex3", "type": "exercise", "title": "练习：生成 Dockerfile 与发布检查", "file": ex3},
-                        {"id": "r13-w3-self", "type": "test", "title": "自测：自己写最小 Dockerfile", "file": ex3},
-                    ],
-                },
-                {"id": "round13-final", "title": "最终验收", "tasks": final_tasks},
-            ],
-        }
 
-    if num == 14:
-        final_tasks = []
-        if comp:
-            final_tasks.append(
-                {
-                    "id": "r14-fin-comp",
-                    "type": "exercise",
-                    "title": "综合练习：生成 HTTP API 设计包",
-                    "file": comp,
-                }
-            )
-        if sheet:
-            final_tasks.append(
-                {
-                    "id": "r14-fin-sheet",
-                    "type": "output",
-                    "title": "产出：完成 Round 14 HTTP/API 小抄",
-                    "file": sheet,
-                }
-            )
-        final_tasks.append(
-            {
-                "id": "r14-fin-acc1",
-                "type": "test",
-                "title": "验收：解释 HTTP 方法、状态码、JSON 合同和 REST 路由",
-                "file": "round_14.md",
-            }
-        )
-        return {
-            "id": "round_14",
-            "title": round_title(root, num),
-            "lane": "engineering",
-            "difficulty": DIFFICULTY_BY_ROUND.get(num, "⭐⭐⭐☆☆"),
-            "duration": "3 周",
-            "weeks": [
-                {
-                    "id": "round14-week1",
-                    "title": "第 1 周：HTTP 方法与状态码",
-                    "tasks": [
-                        {
-                            "id": "r14-w1-read",
-                            "type": "reading",
-                            "title": "阅读：HTTP 方法、状态码与请求响应直觉",
-                            "file": "rounds/round_14/week1/notes.md",
-                        },
-                        {"id": "r14-w1-ex1", "type": "exercise", "title": "练习：生成 HTTP 方法与状态码矩阵", "file": ex1},
-                        {"id": "r14-w1-self", "type": "test", "title": "自测：自己写 method_quiz.txt", "file": ex1},
-                    ],
-                },
-                {
-                    "id": "round14-week2",
-                    "title": "第 2 周：JSON 请求/响应合同",
-                    "tasks": [
-                        {
-                            "id": "r14-w2-read",
-                            "type": "reading",
-                            "title": "阅读：请求体、响应体与错误 JSON",
-                            "file": "rounds/round_14/week2/notes.md",
-                        },
-                        {"id": "r14-w2-ex2", "type": "exercise", "title": "练习：生成 JSON API 合同", "file": ex2},
-                        {"id": "r14-w2-self", "type": "test", "title": "自测：自己写 request.json 并校验", "file": ex2},
-                    ],
-                },
-                {
-                    "id": "round14-week3",
-                    "title": "第 3 周：REST 路由草图",
-                    "tasks": [
-                        {
-                            "id": "r14-w3-read",
-                            "type": "reading",
-                            "title": "阅读：方法 + 路径 + JSON 的路由设计",
-                            "file": "rounds/round_14/week3/notes.md",
-                        },
-                        {"id": "r14-w3-ex3", "type": "exercise", "title": "练习：生成 REST 路由草图与 mock API", "file": ex3},
-                        {"id": "r14-w3-self", "type": "test", "title": "自测：自己写 mini_router.py", "file": ex3},
-                    ],
-                },
-                {"id": "round14-final", "title": "最终验收", "tasks": final_tasks},
-            ],
-        }
-
-    if num == 15:
-        final_tasks = []
-        if comp:
-            final_tasks.append(
-                {
-                    "id": "r15-fin-comp",
-                    "type": "exercise",
-                    "title": "综合练习：生成 FastAPI 项目骨架",
-                    "file": comp,
-                }
-            )
-        if sheet:
-            final_tasks.append(
-                {
-                    "id": "r15-fin-sheet",
-                    "type": "output",
-                    "title": "产出：完成 Round 15 FastAPI 小抄",
-                    "file": sheet,
-                }
-            )
-        final_tasks.append(
-            {
-                "id": "r15-fin-acc1",
-                "type": "test",
-                "title": "验收：解释路径参数、查询参数、请求体和 Pydantic 模型",
-                "file": "round_15.md",
-            }
-        )
-        return {
-            "id": "round_15",
-            "title": round_title(root, num),
-            "lane": "engineering",
-            "difficulty": DIFFICULTY_BY_ROUND.get(num, "⭐⭐⭐☆☆"),
-            "duration": "3 周",
-            "weeks": [
-                {
-                    "id": "round15-week1",
-                    "title": "第 1 周：FastAPI 应用入口与读接口",
-                    "tasks": [
-                        {
-                            "id": "r15-w1-read",
-                            "type": "reading",
-                            "title": "阅读：应用入口、health 与路径/查询参数",
-                            "file": "rounds/round_15/week1/notes.md",
-                        },
-                        {"id": "r15-w1-ex1", "type": "exercise", "title": "练习：生成 FastAPI 读接口骨架", "file": ex1},
-                        {"id": "r15-w1-self", "type": "test", "title": "自测：自己写 mini_api_routes.py", "file": ex1},
-                    ],
-                },
-                {
-                    "id": "round15-week2",
-                    "title": "第 2 周：请求体与 Pydantic 模型",
-                    "tasks": [
-                        {
-                            "id": "r15-w2-read",
-                            "type": "reading",
-                            "title": "阅读：请求体、响应体与 Pydantic 模型",
-                            "file": "rounds/round_15/week2/notes.md",
-                        },
-                        {"id": "r15-w2-ex2", "type": "exercise", "title": "练习：生成请求体和响应模型骨架", "file": ex2},
-                        {"id": "r15-w2-self", "type": "test", "title": "自测：自己写 request_run.json", "file": ex2},
-                    ],
-                },
-                {
-                    "id": "round15-week3",
-                    "title": "第 3 周：示例数据与 /docs 说明",
-                    "tasks": [
-                        {
-                            "id": "r15-w3-read",
-                            "type": "reading",
-                            "title": "阅读：示例数据、summary、tags 与 /docs",
-                            "file": "rounds/round_15/week3/notes.md",
-                        },
-                        {"id": "r15-w3-ex3", "type": "exercise", "title": "练习：生成文档示例与 OpenAPI 预览", "file": ex3},
-                        {"id": "r15-w3-self", "type": "test", "title": "自测：自己写 docs_example.json", "file": ex3},
-                    ],
-                },
-                {"id": "round15-final", "title": "最终验收", "tasks": final_tasks},
-            ],
-        }
-
-    if num == 16:
-        final_tasks = []
-        if comp:
-            final_tasks.append(
-                {
-                    "id": "r16-fin-comp",
-                    "type": "exercise",
-                    "title": "综合练习：完整 API/Data Layer 项目骨架",
-                    "file": comp,
-                }
-            )
-        if sheet:
-            final_tasks.append(
-                {
-                    "id": "r16-fin-sheet",
-                    "type": "output",
-                    "title": "产出：完成 Round 16 API 与数据层小抄",
-                    "file": sheet,
-                }
-            )
-        final_tasks.append(
-            {
-                "id": "r16-fin-acc1",
-                "type": "test",
-                "title": "验收：解释 API 层、核心逻辑层、SQLite 数据层和错误合同",
-                "file": "round_16.md",
-            }
-        )
-        return {
-            "id": "round_16",
-            "title": round_title(root, num),
-            "lane": "engineering",
-            "difficulty": DIFFICULTY_BY_ROUND.get(num, "⭐⭐⭐⭐☆"),
-            "duration": "3 周",
-            "weeks": [
-                {
-                    "id": "round16-week1",
-                    "title": "第 1 周：POST /run 接真实逻辑",
-                    "tasks": [
-                        {
-                            "id": "r16-w1-read",
-                            "type": "reading",
-                            "title": "阅读：API 主链与 SQLite 写入",
-                            "file": "rounds/round_16/week1/notes.md",
-                        },
-                        {"id": "r16-w1-ex1", "type": "exercise", "title": "练习：生成 POST /run + SQLite 写入链路", "file": ex1},
-                        {"id": "r16-w1-self", "type": "test", "title": "自测：自己写最小 SQLite 写入脚本", "file": ex1},
-                    ],
-                },
-                {
-                    "id": "round16-week2",
-                    "title": "第 2 周：读接口与上传入口",
-                    "tasks": [
-                        {
-                            "id": "r16-w2-read",
-                            "type": "reading",
-                            "title": "阅读：GET /runs、详情查询与 UploadFile",
-                            "file": "rounds/round_16/week2/notes.md",
-                        },
-                        {"id": "r16-w2-ex2", "type": "exercise", "title": "练习：生成 GET /runs 与上传接口", "file": ex2},
-                        {"id": "r16-w2-self", "type": "test", "title": "自测：自己写列表/详情查询", "file": ex2},
-                    ],
-                },
-                {
-                    "id": "round16-week3",
-                    "title": "第 3 周：错误响应与 API 测试",
-                    "tasks": [
-                        {
-                            "id": "r16-w3-read",
-                            "type": "reading",
-                            "title": "阅读：HTTPException、错误合同与 TestClient",
-                            "file": "rounds/round_16/week3/notes.md",
-                        },
-                        {"id": "r16-w3-ex3", "type": "exercise", "title": "练习：生成错误合同与 TestClient 示例", "file": ex3},
-                        {"id": "r16-w3-self", "type": "test", "title": "自测：自己写错误状态码映射", "file": ex3},
-                    ],
-                },
-                {"id": "round16-final", "title": "最终验收", "tasks": final_tasks},
-            ],
-        }
-
-    if num == 17:
-        final_tasks = []
-        if comp:
-            final_tasks.append(
-                {
-                    "id": "r17-fin-comp",
-                    "type": "exercise",
-                    "title": "综合练习：完整服务化收口项目包",
-                    "file": comp,
-                }
-            )
-        if sheet:
-            final_tasks.append(
-                {
-                    "id": "r17-fin-sheet",
-                    "type": "output",
-                    "title": "产出：完成 Round 17 服务化收口小抄",
-                    "file": sheet,
-                }
-            )
-        final_tasks.append(
-            {
-                "id": "r17-fin-acc1",
-                "type": "test",
-                "title": "验收：解释路由拆分、配置、日志、认证、CORS 与 Docker 边界",
-                "file": "round_17.md",
-            }
-        )
-        return {
-            "id": "round_17",
-            "title": round_title(root, num),
-            "lane": "engineering",
-            "difficulty": DIFFICULTY_BY_ROUND.get(num, "⭐⭐⭐⭐☆"),
-            "duration": "3 周",
-            "weeks": [
-                {
-                    "id": "round17-week1",
-                    "title": "第 1 周：APIRouter 服务拆分",
-                    "tasks": [
-                        {
-                            "id": "r17-w1-read",
-                            "type": "reading",
-                            "title": "阅读：APIRouter、main.py 与路由职责",
-                            "file": "rounds/round_17/week1/notes.md",
-                        },
-                        {"id": "r17-w1-ex1", "type": "exercise", "title": "练习：生成 APIRouter 多文件服务结构", "file": ex1},
-                        {"id": "r17-w1-self", "type": "test", "title": "自测：自己写 route_inventory.json", "file": ex1},
-                    ],
-                },
-                {
-                    "id": "round17-week2",
-                    "title": "第 2 周：配置、元数据与日志",
-                    "tasks": [
-                        {
-                            "id": "r17-w2-read",
-                            "type": "reading",
-                            "title": "阅读：Settings、API 元数据与 logging",
-                            "file": "rounds/round_17/week2/notes.md",
-                        },
-                        {"id": "r17-w2-ex2", "type": "exercise", "title": "练习：生成配置、元数据与日志入口", "file": ex2},
-                        {"id": "r17-w2-self", "type": "test", "title": "自测：自己写 .env.example 与日志 demo", "file": ex2},
-                    ],
-                },
-                {
-                    "id": "round17-week3",
-                    "title": "第 3 周：认证、CORS 与部署检查",
-                    "tasks": [
-                        {
-                            "id": "r17-w3-read",
-                            "type": "reading",
-                            "title": "阅读：Bearer token、CORS、Dockerfile 与 preflight",
-                            "file": "rounds/round_17/week3/notes.md",
-                        },
-                        {"id": "r17-w3-ex3", "type": "exercise", "title": "练习：生成认证、CORS 与部署检查", "file": ex3},
-                        {"id": "r17-w3-self", "type": "test", "title": "自测：自己写部署前检查清单", "file": ex3},
-                    ],
-                },
-                {"id": "round17-final", "title": "最终验收", "tasks": final_tasks},
-            ],
-        }
-
-    if num == 18:
-        final_tasks = []
-        if comp:
-            final_tasks.append(
-                {
-                    "id": "r18-fin-comp",
-                    "type": "exercise",
-                    "title": "综合练习：完整数值数据分析项目包",
-                    "file": comp,
-                }
-            )
-        if sheet:
-            final_tasks.append(
-                {
-                    "id": "r18-fin-sheet",
-                    "type": "output",
-                    "title": "产出：完成 Round 18 数值计算与数据分析小抄",
-                    "file": sheet,
-                }
-            )
-        final_tasks.append(
-            {
-                "id": "r18-fin-acc1",
-                "type": "test",
-                "title": "验收：解释数组、DataFrame、清洗、groupby 与分析报告链路",
-                "file": "round_18.md",
-            }
-        )
-        return {
-            "id": "round_18",
-            "title": round_title(root, num),
-            "lane": "engineering",
-            "difficulty": DIFFICULTY_BY_ROUND.get(num, "⭐⭐⭐☆☆"),
-            "duration": "3 周",
-            "weeks": [
-                {
-                    "id": "round18-week1",
-                    "title": "第 1 周：NumPy 数组与 axis",
-                    "tasks": [
-                        {
-                            "id": "r18-w1-read",
-                            "type": "reading",
-                            "title": "阅读：NumPy 数组、shape、axis 与广播",
-                            "file": "rounds/round_18/week1/notes.md",
-                        },
-                        {"id": "r18-w1-ex1", "type": "exercise", "title": "练习：生成 NumPy 数组、axis 与广播示例", "file": ex1},
-                        {"id": "r18-w1-self", "type": "test", "title": "自测：自己写 axis_demo.py", "file": ex1},
-                    ],
-                },
-                {
-                    "id": "round18-week2",
-                    "title": "第 2 周：pandas CSV 与筛选统计",
-                    "tasks": [
-                        {
-                            "id": "r18-w2-read",
-                            "type": "reading",
-                            "title": "阅读：CSV、DataFrame、选列筛行与 groupby",
-                            "file": "rounds/round_18/week2/notes.md",
-                        },
-                        {"id": "r18-w2-ex2", "type": "exercise", "title": "练习：生成 CSV 读取、筛选与 groupby 示例", "file": ex2},
-                        {"id": "r18-w2-self", "type": "test", "title": "自测：自己写 count_labels.py", "file": ex2},
-                    ],
-                },
-                {
-                    "id": "round18-week3",
-                    "title": "第 3 周：数据清洗与分析报告",
-                    "tasks": [
-                        {
-                            "id": "r18-w3-read",
-                            "type": "reading",
-                            "title": "阅读：load、explore、clean、analyze、export",
-                            "file": "rounds/round_18/week3/notes.md",
-                        },
-                        {"id": "r18-w3-ex3", "type": "exercise", "title": "练习：生成读、清洗、统计、导出分析流程", "file": ex3},
-                        {"id": "r18-w3-self", "type": "test", "title": "自测：自己写 clean_demo.py", "file": ex3},
-                    ],
-                },
-                {"id": "round18-final", "title": "最终验收", "tasks": final_tasks},
-            ],
-        }
-
-    if num == 19:
-        final_tasks = []
-        if comp:
-            final_tasks.append(
-                {
-                    "id": "r19-fin-comp",
-                    "type": "exercise",
-                    "title": "综合练习：完整机器学习最小闭环项目包",
-                    "file": comp,
-                }
-            )
-        if sheet:
-            final_tasks.append(
-                {
-                    "id": "r19-fin-sheet",
-                    "type": "output",
-                    "title": "产出：完成 Round 19 机器学习最小闭环小抄",
-                    "file": sheet,
-                }
-            )
-        final_tasks.append(
-            {
-                "id": "r19-fin-acc1",
-                "type": "test",
-                "title": "验收：解释 X/y、切分、指标、过拟合与 Pipeline 防泄漏",
-                "file": "round_19.md",
-            }
-        )
-        return {
-            "id": "round_19",
-            "title": round_title(root, num),
-            "lane": "engineering",
-            "difficulty": DIFFICULTY_BY_ROUND.get(num, "⭐⭐⭐☆☆"),
-            "duration": "3 周",
-            "weeks": [
-                {
-                    "id": "round19-week1",
-                    "title": "第 1 周：X/y 与 train/test split",
-                    "tasks": [
-                        {
-                            "id": "r19-w1-read",
-                            "type": "reading",
-                            "title": "阅读：X/y、训练集、测试集与 fit/predict",
-                            "file": "rounds/round_19/week1/notes.md",
-                        },
-                        {"id": "r19-w1-ex1", "type": "exercise", "title": "练习：生成 X/y 切分与最小分类闭环", "file": ex1},
-                        {"id": "r19-w1-self", "type": "test", "title": "自测：自己写 train_test_split_demo.py", "file": ex1},
-                    ],
-                },
-                {
-                    "id": "round19-week2",
-                    "title": "第 2 周：分类指标与过拟合",
-                    "tasks": [
-                        {
-                            "id": "r19-w2-read",
-                            "type": "reading",
-                            "title": "阅读：accuracy、precision、recall、F1 与过拟合",
-                            "file": "rounds/round_19/week2/notes.md",
-                        },
-                        {"id": "r19-w2-ex2", "type": "exercise", "title": "练习：生成分类指标与过拟合观察示例", "file": ex2},
-                        {"id": "r19-w2-self", "type": "test", "title": "自测：自己写 metrics_from_counts.py", "file": ex2},
-                    ],
-                },
-                {
-                    "id": "round19-week3",
-                    "title": "第 3 周：预处理、Pipeline 与泄漏",
-                    "tasks": [
-                        {
-                            "id": "r19-w3-read",
-                            "type": "reading",
-                            "title": "阅读：fit/transform、Pipeline 与数据泄漏",
-                            "file": "rounds/round_19/week3/notes.md",
-                        },
-                        {"id": "r19-w3-ex3", "type": "exercise", "title": "练习：生成预处理、Pipeline 与泄漏检查示例", "file": ex3},
-                        {"id": "r19-w3-self", "type": "test", "title": "自测：自己写 scaler_rule_demo.py", "file": ex3},
-                    ],
-                },
-                {"id": "round19-final", "title": "最终验收", "tasks": final_tasks},
-            ],
-        }
-
-    if num == 20:
-        final_tasks = []
-        if comp:
-            final_tasks.append(
-                {
-                    "id": "r20-fin-comp",
-                    "type": "exercise",
-                    "title": "综合练习：完整 PyTorch 入门项目包",
-                    "file": comp,
-                }
-            )
-        if sheet:
-            final_tasks.append(
-                {
-                    "id": "r20-fin-sheet",
-                    "type": "output",
-                    "title": "产出：完成 Round 20 PyTorch 入门小抄",
-                    "file": sheet,
-                }
-            )
-        final_tasks.append(
-            {
-                "id": "r20-fin-acc1",
-                "type": "test",
-                "title": "验收：解释 Tensor、DataLoader、训练循环、eval 与 checkpoint",
-                "file": "round_20.md",
-            }
-        )
-        return {
-            "id": "round_20",
-            "title": round_title(root, num),
-            "lane": "engineering",
-            "difficulty": DIFFICULTY_BY_ROUND.get(num, "⭐⭐⭐⭐☆"),
-            "duration": "3 周",
-            "weeks": [
-                {
-                    "id": "round20-week1",
-                    "title": "第 1 周：Tensor、Dataset 与 DataLoader",
-                    "tasks": [
-                        {
-                            "id": "r20-w1-read",
-                            "type": "reading",
-                            "title": "阅读：Tensor 形状、Dataset 与 batch",
-                            "file": "rounds/round_20/week1/notes.md",
-                        },
-                        {"id": "r20-w1-ex1", "type": "exercise", "title": "练习：生成 tensor、Dataset 与 batch 示例", "file": ex1},
-                        {"id": "r20-w1-self", "type": "test", "title": "自测：终端运行 batch smoke check", "file": ex1},
-                    ],
-                },
-                {
-                    "id": "round20-week2",
-                    "title": "第 2 周：nn.Module 与训练循环",
-                    "tasks": [
-                        {
-                            "id": "r20-w2-read",
-                            "type": "reading",
-                            "title": "阅读：nn.Module、loss、backward 与 optimizer",
-                            "file": "rounds/round_20/week2/notes.md",
-                        },
-                        {"id": "r20-w2-ex2", "type": "exercise", "title": "练习：生成 nn.Module 与训练循环示例", "file": ex2},
-                        {"id": "r20-w2-self", "type": "test", "title": "自测：终端运行 loss 下降 smoke check", "file": ex2},
-                    ],
-                },
-                {
-                    "id": "round20-week3",
-                    "title": "第 3 周：eval、no_grad 与 checkpoint",
-                    "tasks": [
-                        {
-                            "id": "r20-w3-read",
-                            "type": "reading",
-                            "title": "阅读：eval/no_grad、state_dict 与保存加载",
-                            "file": "rounds/round_20/week3/notes.md",
-                        },
-                        {"id": "r20-w3-ex3", "type": "exercise", "title": "练习：生成 eval/no_grad 与 checkpoint 示例", "file": ex3},
-                        {"id": "r20-w3-self", "type": "test", "title": "自测：终端运行 checkpoint smoke check", "file": ex3},
-                    ],
-                },
-                {"id": "round20-final", "title": "最终验收", "tasks": final_tasks},
-            ],
-        }
-
-    if num == 21:
-        final_tasks = []
-        if comp:
-            final_tasks.append(
-                {
-                    "id": "r21-fin-comp",
-                    "type": "exercise",
-                    "title": "综合练习：完整 NLP 前置基础项目包",
-                    "file": comp,
-                }
-            )
-        if sheet:
-            final_tasks.append(
-                {
-                    "id": "r21-fin-sheet",
-                    "type": "output",
-                    "title": "产出：完成 Round 21 NLP 前置基础小抄",
-                    "file": sheet,
-                }
-            )
-        final_tasks.append(
-            {
-                "id": "r21-fin-acc1",
-                "type": "test",
-                "title": "验收：解释 tokenization、词表、embedding 与文本分类路径",
-                "file": "round_21.md",
-            }
-        )
-        return {
-            "id": "round_21",
-            "title": round_title(root, num),
-            "lane": "engineering",
-            "difficulty": DIFFICULTY_BY_ROUND.get(num, "⭐⭐⭐⭐☆"),
-            "duration": "3 周",
-            "weeks": [
-                {
-                    "id": "round21-week1",
-                    "title": "第 1 周：Tokenization、词表与编号",
-                    "tasks": [
-                        {
-                            "id": "r21-w1-read",
-                            "type": "reading",
-                            "title": "阅读：文本预处理、tokenization 与词表编号",
-                            "file": "rounds/round_21/week1/notes.md",
-                        },
-                        {"id": "r21-w1-ex1", "type": "exercise", "title": "练习：生成手写 tokenizer 与词表编号示例", "file": ex1},
-                        {"id": "r21-w1-self", "type": "test", "title": "自测：终端运行 tokenizer smoke check", "file": ex1},
-                    ],
-                },
-                {
-                    "id": "round21-week2",
-                    "title": "第 2 周：Embedding 与最小文本分类",
-                    "tasks": [
-                        {
-                            "id": "r21-w2-read",
-                            "type": "reading",
-                            "title": "阅读：nn.Embedding、padding 与均值池化",
-                            "file": "rounds/round_21/week2/notes.md",
-                        },
-                        {"id": "r21-w2-ex2", "type": "exercise", "title": "练习：生成 embedding 与文本分类示例", "file": ex2},
-                        {"id": "r21-w2-self", "type": "test", "title": "自测：终端运行 embedding smoke check", "file": ex2},
-                    ],
-                },
-                {
-                    "id": "round21-week3",
-                    "title": "第 3 周：传统文本特征与子词策略",
-                    "tasks": [
-                        {
-                            "id": "r21-w3-read",
-                            "type": "reading",
-                            "title": "阅读：Bag-of-words、TF-IDF、BPE 与 WordPiece",
-                            "file": "rounds/round_21/week3/notes.md",
-                        },
-                        {"id": "r21-w3-ex3", "type": "exercise", "title": "练习：生成传统文本特征与子词对照示例", "file": ex3},
-                        {"id": "r21-w3-self", "type": "test", "title": "自测：终端运行 text feature smoke check", "file": ex3},
-                    ],
-                },
-                {"id": "round21-final", "title": "最终验收", "tasks": final_tasks},
-            ],
-        }
-
-    if num == 7:
-        final_tasks = []
-        if comp:
-            final_tasks.append(
-                {
-                    "id": "r07-fin-comp",
-                    "type": "exercise",
-                    "title": "综合练习：AI 数据预处理工具",
-                    "file": comp,
-                }
-            )
-        if sheet:
-            final_tasks.append(
-                {
-                    "id": "r07-fin-sheet",
-                    "type": "output",
-                    "title": "产出：完成 Round 07 ai_prep_tool 小抄",
-                    "file": sheet,
-                }
-            )
-        final_tasks.append(
-            {
-                "id": "r07-fin-acc1",
-                "type": "test",
-                "title": "验收：解释读取、参数、日志和去重流程",
-                "file": "round_07.md",
-            }
-        )
-        return {
-            "id": "round_07",
-            "title": round_title(root, num),
-            "lane": "engineering",
-            "difficulty": DIFFICULTY_BY_ROUND.get(num, "⭐⭐⭐☆☆"),
-            "duration": "3 周",
-            "weeks": [
-                {
-                    "id": "round07-week1",
-                    "title": "第 1 周：pathlib 与多格式读写",
-                    "tasks": [
-                        {
-                            "id": "r07-w1-read",
-                            "type": "reading",
-                            "title": "阅读：pathlib 与 txt/csv/json/jsonl 读写",
-                            "file": "rounds/round_07/week1/notes.md",
-                        },
-                        {"id": "r07-w1-ex1", "type": "exercise", "title": "练习：读取四种小数据格式", "file": ex1},
-                        {"id": "r07-w1-self", "type": "test", "title": "自测：自己写 read_formats.py", "file": ex1},
-                    ],
-                },
-                {
-                    "id": "round07-week2",
-                    "title": "第 2 周：argparse 与 logging",
-                    "tasks": [
-                        {
-                            "id": "r07-w2-read",
-                            "type": "reading",
-                            "title": "阅读：argparse 参数与 logging 日志",
-                            "file": "rounds/round_07/week2/notes.md",
-                        },
-                        {"id": "r07-w2-ex2", "type": "exercise", "title": "练习：命令行参数与日志输出", "file": ex2},
-                        {"id": "r07-w2-self", "type": "test", "title": "自测：自己写 cli_logger.py", "file": ex2},
-                    ],
-                },
-                {
-                    "id": "round07-week3",
-                    "title": "第 3 周：整合 ai_prep_tool",
-                    "tasks": [
-                        {
-                            "id": "r07-w3-read",
-                            "type": "reading",
-                            "title": "阅读：数据去重、统计与工具整合",
-                            "file": "rounds/round_07/week3/notes.md",
-                        },
-                        {"id": "r07-w3-ex3", "type": "exercise", "title": "练习：整合 mini ai_prep_tool", "file": ex3},
-                        {"id": "r07-w3-self", "type": "test", "title": "自测：自己写 mini_prep_tool.py", "file": ex3},
-                    ],
-                },
-                {"id": "round07-final", "title": "最终验收", "tasks": final_tasks},
-            ],
-        }
-
-    if num == 8:
-        final_tasks = []
-        if comp:
-            final_tasks.append(
-                {
-                    "id": "r08-fin-comp",
-                    "type": "exercise",
-                    "title": "综合练习：Round 00-08 收口检查",
-                    "file": comp,
-                }
-            )
-        if sheet:
-            final_tasks.append(
-                {
-                    "id": "r08-fin-sheet",
-                    "type": "output",
-                    "title": "产出：完成 Round 08 升级路线小抄",
-                    "file": sheet,
-                }
-            )
-        final_tasks.append(
-            {
-                "id": "r08-fin-acc1",
-                "type": "test",
-                "title": "验收：解释测试、持久化和服务化边界",
-                "file": "round_08.md",
-            }
-        )
-        return {
-            "id": "round_08",
-            "title": round_title(root, num),
-            "lane": "engineering",
-            "difficulty": DIFFICULTY_BY_ROUND.get(num, "⭐⭐⭐☆☆"),
-            "duration": "3 周",
-            "weeks": [
-                {
-                    "id": "round08-week1",
-                    "title": "第 1 周：项目收口与最小测试",
-                    "tasks": [
-                        {
-                            "id": "r08-w1-read",
-                            "type": "reading",
-                            "title": "阅读：项目结构、测试与 Git 分支收口",
-                            "file": "rounds/round_08/week1/notes.md",
-                        },
-                        {"id": "r08-w1-ex1", "type": "exercise", "title": "练习：整理 ai_prep_tool 并运行最小测试", "file": ex1},
-                        {"id": "r08-w1-self", "type": "test", "title": "自测：自己写 test_basic.py", "file": ex1},
-                    ],
-                },
-                {
-                    "id": "round08-week2",
-                    "title": "第 2 周：sqlite3 运行历史持久化",
-                    "tasks": [
-                        {
-                            "id": "r08-w2-read",
-                            "type": "reading",
-                            "title": "阅读：sqlite3 runs 表与参数化 SQL",
-                            "file": "rounds/round_08/week2/notes.md",
-                        },
-                        {"id": "r08-w2-ex2", "type": "exercise", "title": "练习：创建 runs 表并写入运行历史", "file": ex2},
-                        {"id": "r08-w2-self", "type": "test", "title": "自测：自己写 runs_db.py", "file": ex2},
-                    ],
-                },
-                {
-                    "id": "round08-week3",
-                    "title": "第 3 周：服务化接口形状排练",
-                    "tasks": [
-                        {
-                            "id": "r08-w3-read",
-                            "type": "reading",
-                            "title": "阅读：health/run/runs 接口形状",
-                            "file": "rounds/round_08/week3/notes.md",
-                        },
-                        {"id": "r08-w3-ex3", "type": "exercise", "title": "练习：设计 health/run/runs 响应", "file": ex3},
-                        {"id": "r08-w3-self", "type": "test", "title": "自测：自己写 api_contract.py", "file": ex3},
-                    ],
-                },
-                {"id": "round08-final", "title": "最终验收", "tasks": final_tasks},
-            ],
-        }
-
-    if num == 9:
-        final_tasks = []
-        if comp:
-            final_tasks.append(
-                {
-                    "id": "r09-fin-comp",
-                    "type": "exercise",
-                    "title": "综合练习：仓库规范化与测试收口",
-                    "file": comp,
-                }
-            )
-        if sheet:
-            final_tasks.append(
-                {
-                    "id": "r09-fin-sheet",
-                    "type": "output",
-                    "title": "产出：完成 Round 09 仓库与测试小抄",
-                    "file": sheet,
-                }
-            )
-        final_tasks.append(
-            {
-                "id": "r09-fin-acc1",
-                "type": "test",
-                "title": "验收：解释 README、分支、纯函数和测试",
-                "file": "round_09.md",
-            }
-        )
-        return {
-            "id": "round_09",
-            "title": round_title(root, num),
-            "lane": "engineering",
-            "difficulty": DIFFICULTY_BY_ROUND.get(num, "⭐⭐⭐☆☆"),
-            "duration": "3 周",
-            "weeks": [
-                {
-                    "id": "round09-week1",
-                    "title": "第 1 周：仓库结构与 README/.gitignore",
-                    "tasks": [
-                        {
-                            "id": "r09-w1-read",
-                            "type": "reading",
-                            "title": "阅读：README、.gitignore 与项目结构",
-                            "file": "rounds/round_09/week1/notes.md",
-                        },
-                        {"id": "r09-w1-ex1", "type": "exercise", "title": "练习：整理项目结构与基础文档", "file": ex1},
-                        {"id": "r09-w1-self", "type": "test", "title": "自测：自己写 README 和 .gitignore", "file": ex1},
-                    ],
-                },
-                {
-                    "id": "round09-week2",
-                    "title": "第 2 周：本地 Git 分支工作流",
-                    "tasks": [
-                        {
-                            "id": "r09-w2-read",
-                            "type": "reading",
-                            "title": "阅读：feature/hotfix 分支与合并",
-                            "file": "rounds/round_09/week2/notes.md",
-                        },
-                        {"id": "r09-w2-ex2", "type": "exercise", "title": "练习：本地 Git 分支提交与合并", "file": ex2},
-                        {"id": "r09-w2-self", "type": "test", "title": "自测：自己走一遍 feature 分支", "file": ex2},
-                    ],
-                },
-                {
-                    "id": "round09-week3",
-                    "title": "第 3 周：纯函数与 pytest 风格测试",
-                    "tasks": [
-                        {
-                            "id": "r09-w3-read",
-                            "type": "reading",
-                            "title": "阅读：纯函数、断言与测试样例",
-                            "file": "rounds/round_09/week3/notes.md",
-                        },
-                        {"id": "r09-w3-ex3", "type": "exercise", "title": "练习：拆出纯函数并运行测试", "file": ex3},
-                        {"id": "r09-w3-self", "type": "test", "title": "自测：自己写 test_dedup.py", "file": ex3},
-                    ],
-                },
-                {"id": "round09-final", "title": "最终验收", "tasks": final_tasks},
-            ],
-        }
-
-    if num == 10:
-        final_tasks = []
-        if comp:
-            final_tasks.append(
-                {
-                    "id": "r10-fin-comp",
-                    "type": "exercise",
-                    "title": "综合练习：工程化项目收口检查",
-                    "file": comp,
-                }
-            )
-        if sheet:
-            final_tasks.append(
-                {
-                    "id": "r10-fin-sheet",
-                    "type": "output",
-                    "title": "产出：完成 Round 10 Python 工程化小抄",
-                    "file": sheet,
-                }
-            )
-        final_tasks.append(
-            {
-                "id": "r10-fin-acc1",
-                "type": "test",
-                "title": "验收：解释模块拆分、配置、日志和错误处理",
-                "file": "round_10.md",
-            }
-        )
-        return {
-            "id": "round_10",
-            "title": round_title(root, num),
-            "lane": "engineering",
-            "difficulty": DIFFICULTY_BY_ROUND.get(num, "⭐⭐⭐☆☆"),
-            "duration": "3 周",
-            "weeks": [
-                {
-                    "id": "round10-week1",
-                    "title": "第 1 周：CLI、核心逻辑与 IO 拆分",
-                    "tasks": [
-                        {
-                            "id": "r10-w1-read",
-                            "type": "reading",
-                            "title": "阅读：入口、核心逻辑和文件读写边界",
-                            "file": "rounds/round_10/week1/notes.md",
-                        },
-                        {"id": "r10-w1-ex1", "type": "exercise", "title": "练习：拆出 cli.py / core.py / io_utils.py", "file": ex1},
-                        {"id": "r10-w1-self", "type": "test", "title": "自测：自己写一个薄 CLI", "file": ex1},
-                    ],
-                },
-                {
-                    "id": "round10-week2",
-                    "title": "第 2 周：配置文件与日志",
-                    "tasks": [
-                        {
-                            "id": "r10-w2-read",
-                            "type": "reading",
-                            "title": "阅读：config.ini、fallback 与 logging",
-                            "file": "rounds/round_10/week2/notes.md",
-                        },
-                        {"id": "r10-w2-ex2", "type": "exercise", "title": "练习：读取配置并写入日志", "file": ex2},
-                        {"id": "r10-w2-self", "type": "test", "title": "自测：自己读 config.ini", "file": ex2},
-                    ],
-                },
-                {
-                    "id": "round10-week3",
-                    "title": "第 3 周：错误处理与入口规范",
-                    "tasks": [
-                        {
-                            "id": "r10-w3-read",
-                            "type": "reading",
-                            "title": "阅读：可控错误、返回码与 __main__",
-                            "file": "rounds/round_10/week3/notes.md",
-                        },
-                        {"id": "r10-w3-ex3", "type": "exercise", "title": "练习：处理缺失输入并规范入口", "file": ex3},
-                        {"id": "r10-w3-self", "type": "test", "title": "自测：自己写可控错误入口", "file": ex3},
-                    ],
-                },
-                {"id": "round10-final", "title": "最终验收", "tasks": final_tasks},
-            ],
-        }
-
-    if num == 11:
-        final_tasks = []
-        if comp:
-            final_tasks.append(
-                {
-                    "id": "r11-fin-comp",
-                    "type": "exercise",
-                    "title": "综合练习：SQLite 运行历史收口检查",
-                    "file": comp,
-                }
-            )
-        if sheet:
-            final_tasks.append(
-                {
-                    "id": "r11-fin-sheet",
-                    "type": "output",
-                    "title": "产出：完成 Round 11 SQLite 持久化小抄",
-                    "file": sheet,
-                }
-            )
-        final_tasks.append(
-            {
-                "id": "r11-fin-acc1",
-                "type": "test",
-                "title": "验收：解释 runs 表、参数化 SQL 和运行历史",
-                "file": "round_11.md",
-            }
-        )
-        return {
-            "id": "round_11",
-            "title": round_title(root, num),
-            "lane": "engineering",
-            "difficulty": DIFFICULTY_BY_ROUND.get(num, "⭐⭐⭐☆☆"),
-            "duration": "3 周",
-            "weeks": [
-                {
-                    "id": "round11-week1",
-                    "title": "第 1 周：SQLite 建表与参数化插入",
-                    "tasks": [
-                        {
-                            "id": "r11-w1-read",
-                            "type": "reading",
-                            "title": "阅读：runs 表、sqlite3 与参数化 SQL",
-                            "file": "rounds/round_11/week1/notes.md",
-                        },
-                        {"id": "r11-w1-ex1", "type": "exercise", "title": "练习：创建 runs.db 与 runs 表", "file": ex1},
-                        {"id": "r11-w1-self", "type": "test", "title": "自测：自己写建表和插入脚本", "file": ex1},
-                    ],
-                },
-                {
-                    "id": "round11-week2",
-                    "title": "第 2 周：插入、查询与 db.py 封装",
-                    "tasks": [
-                        {
-                            "id": "r11-w2-read",
-                            "type": "reading",
-                            "title": "阅读：insert_run、get_all_runs 与条件查询",
-                            "file": "rounds/round_11/week2/notes.md",
-                        },
-                        {"id": "r11-w2-ex2", "type": "exercise", "title": "练习：封装 db.py 并查询历史", "file": ex2},
-                        {"id": "r11-w2-self", "type": "test", "title": "自测：自己封装 insert_run", "file": ex2},
-                    ],
-                },
-                {
-                    "id": "round11-week3",
-                    "title": "第 3 周：接入主工具并记录历史",
-                    "tasks": [
-                        {
-                            "id": "r11-w3-read",
-                            "type": "reading",
-                            "title": "阅读：每次运行写入 runs.db",
-                            "file": "rounds/round_11/week3/notes.md",
-                        },
-                        {"id": "r11-w3-ex3", "type": "exercise", "title": "练习：ai_prep_tool 自动写运行历史", "file": ex3},
-                        {"id": "r11-w3-self", "type": "test", "title": "自测：自己接入 insert_run", "file": ex3},
-                    ],
-                },
-                {"id": "round11-final", "title": "最终验收", "tasks": final_tasks},
-            ],
-        }
-
-    if num == 12:
-        final_tasks = []
-        if comp:
-            final_tasks.append(
-                {
-                    "id": "r12-fin-comp",
-                    "type": "exercise",
-                    "title": "综合练习：自动化流水线收口检查",
-                    "file": comp,
-                }
-            )
-        if sheet:
-            final_tasks.append(
-                {
-                    "id": "r12-fin-sheet",
-                    "type": "output",
-                    "title": "产出：完成 Round 12 自动化流水线小抄",
-                    "file": sheet,
-                }
-            )
-        final_tasks.append(
-            {
-                "id": "r12-fin-acc1",
-                "type": "test",
-                "title": "验收：解释批处理、归档、日志轮转和定时入口",
-                "file": "round_12.md",
-            }
-        )
-        return {
-            "id": "round_12",
-            "title": round_title(root, num),
-            "lane": "engineering",
-            "difficulty": DIFFICULTY_BY_ROUND.get(num, "⭐⭐⭐☆☆"),
-            "duration": "3 周",
-            "weeks": [
-                {
-                    "id": "round12-week1",
-                    "title": "第 1 周：批量遍历、输出命名与失败记录",
-                    "tasks": [
-                        {
-                            "id": "r12-w1-read",
-                            "type": "reading",
-                            "title": "阅读：input/output、失败日志与批处理报告",
-                            "file": "rounds/round_12/week1/notes.md",
-                        },
-                        {"id": "r12-w1-ex1", "type": "exercise", "title": "练习：批量扫描并记录失败项", "file": ex1},
-                        {"id": "r12-w1-self", "type": "test", "title": "自测：自己写 scan_demo.py", "file": ex1},
-                    ],
-                },
-                {
-                    "id": "round12-week2",
-                    "title": "第 2 周：subprocess 包装与 shutil 归档",
-                    "tasks": [
-                        {
-                            "id": "r12-w2-read",
-                            "type": "reading",
-                            "title": "阅读：returncode、stdout/stderr 与 zip 归档",
-                            "file": "rounds/round_12/week2/notes.md",
-                        },
-                        {"id": "r12-w2-ex2", "type": "exercise", "title": "练习：运行 worker 并归档输出", "file": ex2},
-                        {"id": "r12-w2-self", "type": "test", "title": "自测：自己写 subprocess_demo.py", "file": ex2},
-                    ],
-                },
-                {
-                    "id": "round12-week3",
-                    "title": "第 3 周：日志轮转与定时入口排练",
-                    "tasks": [
-                        {
-                            "id": "r12-w3-read",
-                            "type": "reading",
-                            "title": "阅读：RotatingFileHandler、cron、nohup 与 tmux",
-                            "file": "rounds/round_12/week3/notes.md",
-                        },
-                        {"id": "r12-w3-ex3", "type": "exercise", "title": "练习：生成 run_batch.sh 与轮转日志", "file": ex3},
-                        {"id": "r12-w3-self", "type": "test", "title": "自测：自己写 log_demo.py", "file": ex3},
-                    ],
-                },
-                {"id": "round12-final", "title": "最终验收", "tasks": final_tasks},
-            ],
-        }
-
-    return {
-        "id": f"round_{num:02d}",
-        "title": round_title(root, num),
-        "lane": "engineering",
-        "difficulty": DIFFICULTY_BY_ROUND.get(num, "⭐⭐⭐☆☆" if num >= 7 else "⭐⭐☆☆☆"),
-        "duration": "3 周",
-        "weeks": [
-            {
-                "id": f"round{num:02d}-week1",
-                "title": f"第 1 周：{w1_theme}",
-                "tasks": [
-                    {"id": f"{prefix}-w1-read", "type": "reading", "title": "阅读 week1/notes.md", "file": f"rounds/round_{num:02d}/week1/notes.md"},
-                    {"id": f"{prefix}-w1-ex1", "type": "exercise", "title": "练习1", "file": ex1},
-                    {"id": f"{prefix}-w1-self", "type": "test", "title": "第1周自测", "file": ex1},
-                ],
-            },
-            {
-                "id": f"round{num:02d}-week2",
-                "title": f"第 2 周：{w2_theme}",
-                "tasks": [
-                    {"id": f"{prefix}-w2-read", "type": "reading", "title": "阅读 week2/notes.md", "file": f"rounds/round_{num:02d}/week2/notes.md"},
-                    {"id": f"{prefix}-w2-ex2", "type": "exercise", "title": "练习2", "file": ex2},
-                    {"id": f"{prefix}-w2-self", "type": "test", "title": "第2周自测", "file": ex2},
-                ],
-            },
-            {
-                "id": f"round{num:02d}-week3",
-                "title": f"第 3 周：{w3_theme}",
-                "tasks": [
-                    {"id": f"{prefix}-w3-read", "type": "reading", "title": "阅读 week3/notes.md", "file": f"rounds/round_{num:02d}/week3/notes.md"},
-                    {"id": f"{prefix}-w3-ex3", "type": "exercise", "title": "练习3", "file": ex3},
-                    {"id": f"{prefix}-w3-self", "type": "test", "title": "第3周自测", "file": ex3},
-                ],
-            },
-            {"id": f"round{num:02d}-final", "title": "最终验收", "tasks": final_tasks},
-        ],
-    }
+    return None
 
 
 LANE_PLAN_TASKS = [
-    ("plans-overview-start", "overview", "engineering", "阅读学习计划专题总览", "plans/README.md"),
-    ("soft_exam-overview-start", "soft_exam", "soft_exam", "阅读软考中级主线总览", "plans/soft_exam/README.md"),
-    ("soft_exam-ds-start", "soft_exam", "soft_exam", "阅读软考数据结构骨架", "plans/soft_exam/ds.md"),
-    ("soft_exam-os-start", "soft_exam", "soft_exam", "阅读软考操作系统骨架", "plans/soft_exam/os.md"),
-    ("soft_exam-db-start", "soft_exam", "soft_exam", "阅读软考数据库骨架", "plans/soft_exam/db.md"),
-    ("soft_exam-composition-start", "soft_exam", "soft_exam", "阅读软考计算机组成骨架", "plans/soft_exam/composition.md"),
-    ("soft_exam-network-start", "soft_exam", "soft_exam", "阅读软考计算机网络骨架", "plans/soft_exam/network.md"),
-    ("soft_exam-se-start", "soft_exam", "soft_exam", "阅读软考软件工程骨架", "plans/soft_exam/se.md"),
-    ("soft_exam-uml-start", "soft_exam", "soft_exam", "阅读软考 UML / 设计模式骨架", "plans/soft_exam/uml.md"),
-    ("soft_exam-oo-start", "soft_exam", "soft_exam", "阅读软考面向对象骨架", "plans/soft_exam/oo.md"),
-    ("soft_exam-security-start", "soft_exam", "soft_exam", "阅读软考信息安全骨架", "plans/soft_exam/security.md"),
-    ("soft_exam-c-lang-start", "soft_exam", "soft_exam", "阅读软考 C 语言骨架", "plans/soft_exam/c_lang.md"),
-    ("soft_exam-standards-start", "soft_exam", "soft_exam", "阅读软考标准化与知识产权骨架", "plans/soft_exam/standards.md"),
-    ("soft_exam-english-start", "soft_exam", "soft_exam", "阅读软考英语阅读骨架", "plans/soft_exam/english.md"),
-    ("math2-overview-start", "math2", "math2", "阅读数学二主线总览", "plans/math2/README.md"),
-    ("math2-limits-start", "math2", "math2", "阅读数学二极限启动骨架", "plans/math2/limits.md"),
-    ("math2-la-start", "math2", "math2", "阅读数学二线性代数启动骨架", "plans/math2/la_matrix.md"),
-    ("cs408-overview-start", "cs408", "cs408", "阅读 408 / 0854 主线总览", "plans/408/README.md"),
-    ("cs408-ds-start", "cs408", "cs408", "阅读 408 数据结构骨架", "plans/408/ds.md"),
-    ("cs408-composition-start", "cs408", "cs408", "阅读 408 计算机组成骨架", "plans/408/composition.md"),
-    ("cs408-os-start", "cs408", "cs408", "阅读 408 操作系统骨架", "plans/408/os.md"),
-    ("cs408-network-start", "cs408", "cs408", "阅读 408 计算机网络骨架", "plans/408/network.md"),
-    ("linux-plan-start", "linux", "engineering", "阅读 Linux 工程专项路线", "plans/linux/README.md"),
-    ("vps-stage-start", "vps", "engineering", "阅读 VPS 支线总纲", "rounds/stage_03_vps_remote_ops/README.md"),
-    ("vps-00-repo-scan", "vps", "engineering", "阅读 VPS-00：扫描仓库与生成治理报告", "rounds/stage_03_vps_remote_ops/round_vps_00_repo_scan.md"),
-    ("vps-01-repo-cleanup", "vps", "engineering", "阅读 VPS-01：执行仓库治理与文档合并", "rounds/stage_03_vps_remote_ops/round_vps_01_repo_cleanup.md"),
-    ("vps-02-module-anchor", "vps", "engineering", "阅读 VPS-02：建立 VPS 模块总纲", "rounds/stage_03_vps_remote_ops/round_vps_02_module_anchor.md"),
-    ("vps-03-permission-levels", "vps", "engineering", "阅读 VPS-03：远程操作权限等级与安全规则", "rounds/stage_03_vps_remote_ops/round_vps_03_permission_levels.md"),
-    ("vps-04-ssh-basics", "vps", "engineering", "阅读 VPS-04：SSH 与远程 Linux 基础", "rounds/stage_03_vps_remote_ops/round_vps_04_ssh_basics.md"),
-    ("vps-05-first-readonly-check", "vps", "engineering", "阅读 VPS-05：首次远程只读检查", "rounds/stage_03_vps_remote_ops/round_vps_05_first_readonly_check.md"),
-    ("vps-06-remote-dirs", "vps", "engineering", "阅读 VPS-06：远程学习目录与测试文件", "rounds/stage_03_vps_remote_ops/round_vps_06_remote_dirs.md"),
-    ("vps-07-github-sync", "vps", "engineering", "阅读 VPS-07：GitHub 同步与远程运行", "rounds/stage_03_vps_remote_ops/round_vps_07_github_sync.md"),
-    ("vps-08-tmux-training", "vps", "engineering", "阅读 VPS-08：tmux 后台任务训练", "rounds/stage_03_vps_remote_ops/round_vps_08_tmux_training.md"),
-    ("vps-09-network-check", "vps", "engineering", "阅读 VPS-09：网络连通性与端口检查", "rounds/stage_03_vps_remote_ops/round_vps_09_network_check.md"),
-    ("vps-10-remote-api-minimal", "vps", "engineering", "阅读 VPS-10：远程 API 调用最小实验", "rounds/stage_03_vps_remote_ops/round_vps_10_remote_api_minimal.md"),
-    ("vps-11-minimal-service", "vps", "engineering", "阅读 VPS-11：最小 Web/API 服务部署", "rounds/stage_03_vps_remote_ops/round_vps_11_minimal_service.md"),
-    ("vps-12-sop-and-vultragent", "vps", "engineering", "阅读 VPS-12：SOP 与 VULTRagent 需求草案", "rounds/stage_03_vps_remote_ops/round_vps_12_sop_and_vultragent.md"),
+    ("linux-course-start", "linux", LINUX_LANE, "阅读 Linux 课程总览", "content/courses/linux-foundations/README.md"),
+    ("linux-plan-start", "linux", LINUX_LANE, "阅读 Linux 课程学习路径", "plans/linux/README.md"),
+    ("vps-stage-start", "vps", LINUX_LANE, "阅读 VPS 支线总纲", "rounds/stage_03_vps_remote_ops/README.md"),
+    ("vps-00-repo-scan", "vps", LINUX_LANE, "阅读 VPS-00：扫描仓库与生成治理报告", "rounds/stage_03_vps_remote_ops/round_vps_00_repo_scan.md"),
+    ("vps-01-repo-cleanup", "vps", LINUX_LANE, "阅读 VPS-01：执行仓库治理与文档合并", "rounds/stage_03_vps_remote_ops/round_vps_01_repo_cleanup.md"),
+    ("vps-02-module-anchor", "vps", LINUX_LANE, "阅读 VPS-02：建立 VPS 模块总纲", "rounds/stage_03_vps_remote_ops/round_vps_02_module_anchor.md"),
+    ("vps-03-permission-levels", "vps", LINUX_LANE, "阅读 VPS-03：远程操作权限等级与安全规则", "rounds/stage_03_vps_remote_ops/round_vps_03_permission_levels.md"),
+    ("vps-04-ssh-basics", "vps", LINUX_LANE, "阅读 VPS-04：SSH 与远程 Linux 基础", "rounds/stage_03_vps_remote_ops/round_vps_04_ssh_basics.md"),
+    ("vps-05-first-readonly-check", "vps", LINUX_LANE, "阅读 VPS-05：首次远程只读检查", "rounds/stage_03_vps_remote_ops/round_vps_05_first_readonly_check.md"),
+    ("vps-06-remote-dirs", "vps", LINUX_LANE, "阅读 VPS-06：远程学习目录与测试文件", "rounds/stage_03_vps_remote_ops/round_vps_06_remote_dirs.md"),
+    ("vps-07-github-sync", "vps", LINUX_LANE, "阅读 VPS-07：GitHub 同步与远程运行", "rounds/stage_03_vps_remote_ops/round_vps_07_github_sync.md"),
+    ("vps-08-tmux-training", "vps", LINUX_LANE, "阅读 VPS-08：tmux 后台任务训练", "rounds/stage_03_vps_remote_ops/round_vps_08_tmux_training.md"),
+    ("vps-09-network-check", "vps", LINUX_LANE, "阅读 VPS-09：网络连通性与端口检查", "rounds/stage_03_vps_remote_ops/round_vps_09_network_check.md"),
+    ("vps-10-remote-api-minimal", "vps", LINUX_LANE, "阅读 VPS-10：远程 API 调用最小实验", "rounds/stage_03_vps_remote_ops/round_vps_10_remote_api_minimal.md"),
+    ("vps-11-minimal-service", "vps", LINUX_LANE, "阅读 VPS-11：最小 Web/API 服务部署", "rounds/stage_03_vps_remote_ops/round_vps_11_minimal_service.md"),
+    ("vps-12-sop-and-vultragent", "vps", LINUX_LANE, "阅读 VPS-12：SOP 与 VULTRagent 需求草案", "rounds/stage_03_vps_remote_ops/round_vps_12_sop_and_vultragent.md"),
 ]
 
 LANE_PLAN_ROUNDS = [
-    ("overview", "学习计划 · 总览", "engineering"),
-    ("soft_exam", "软考 · 启动模块", "soft_exam"),
-    ("math2", "数学二 · 启动模块", "math2"),
-    ("cs408", "408 · 启动模块", "cs408"),
-    ("linux", "Linux · 工程专项", "engineering"),
-    ("vps", "VPS · 远程实操支线", "engineering"),
+    ("linux", "Linux · 课程路径", LINUX_LANE),
+    ("vps", "VPS · 远程实操支线", LINUX_LANE),
 ]
 
 
 def build_plan_rounds(root: Path) -> list[dict]:
     rounds = []
     for plan_key, title, lane in LANE_PLAN_ROUNDS:
-        tasks = [
-            {"id": tid, "type": "reading", "title": ttitle, "file": file}
-            for tid, tplan_key, _tlane, ttitle, file in LANE_PLAN_TASKS
-            if tplan_key == plan_key and (root / file).exists()
-        ]
+        tasks = []
+        for tid, tplan_key, _tlane, ttitle, file in LANE_PLAN_TASKS:
+            if tplan_key != plan_key:
+                continue
+            if not (root / file).exists():
+                continue
+            tasks.append({"id": tid, "type": "reading", "title": ttitle, "file": file})
         if not tasks:
             continue
         rounds.append(
@@ -1952,7 +416,7 @@ def build_plan_rounds(root: Path) -> list[dict]:
                 "weeks": [
                     {
                         "id": f"plan_{plan_key}_week",
-                        "title": "计划文档阅读",
+                        "title": "课程文档阅读",
                         "tasks": tasks,
                     }
                 ],
@@ -1961,23 +425,47 @@ def build_plan_rounds(root: Path) -> list[dict]:
     return rounds
 
 
-def merge_tasks(data: dict, rounds: list[dict]) -> int:
+def collect_task_ids(rounds: list[dict]) -> set[str]:
+    ids: set[str] = set()
+    for rnd in rounds:
+        for week in rnd.get("weeks", []):
+            for task in week.get("tasks", []):
+                ids.add(task["id"])
+    for tid, *_rest in LANE_PLAN_TASKS:
+        ids.add(tid)
+    return ids
+
+
+def merge_and_prune_tasks(data: dict, rounds: list[dict]) -> tuple[int, int]:
     tasks = data.setdefault("tasks", {})
+    keep_ids = collect_task_ids(rounds)
     added = 0
     for rnd in rounds:
         for week in rnd.get("weeks", []):
             for task in week.get("tasks", []):
                 tid = task["id"]
-                if tid in tasks:
-                    continue
-                tasks[tid] = {"done": False, "done_at": None, "lane": rnd.get("lane", "engineering")}
-                added += 1
-    for tid, _plan_key, lane, _title, _file in LANE_PLAN_TASKS:
-        if tid in tasks:
-            continue
-        tasks[tid] = {"done": False, "done_at": None, "lane": lane}
-        added += 1
-    return added
+                if tid not in tasks:
+                    tasks[tid] = {"done": False, "done_at": None, "lane": LINUX_LANE}
+                    added += 1
+                else:
+                    info = tasks[tid]
+                    info["lane"] = LINUX_LANE
+                    info.setdefault("done", False)
+                    info.setdefault("done_at", None)
+    removed = 0
+    for tid in list(tasks.keys()):
+        if tid not in keep_ids:
+            del tasks[tid]
+            removed += 1
+    data["lanes"] = {
+        LINUX_LANE: {
+            "title": "Linux 基础与工程实践",
+            "description": "当前唯一正式课程 linux-foundations：终端、文件系统、Shell、自动化与远程实操",
+            "course_id": LINUX_LANE,
+        }
+    }
+    data["active_course_id"] = LINUX_LANE
+    return added, removed
 
 
 def write_rounds_js(root: Path, rounds: list[dict]) -> None:
@@ -1992,19 +480,19 @@ def write_rounds_js(root: Path, rounds: list[dict]) -> None:
 def main() -> int:
     root = repo_root()
     rounds = [build_round_00(root)]
-    for num in range(1, 22):
-        item = build_standard_round(root, num)
+    for num in (1, 2, 6):
+        item = build_linux_round(root, num)
         if item:
             rounds.append(item)
     rounds.extend(build_plan_rounds(root))
 
     write_rounds_js(root, rounds)
     data = load_progress(root)
-    added = merge_tasks(data, rounds)
+    added, removed = merge_and_prune_tasks(data, rounds)
     save_progress(data, root)
     sync_progress_data_js(data, root)
     print(f"Built rounds_data.js ({len(rounds)} rounds)")
-    print(f"Merged {added} new tasks into progress.json (total {len(data['tasks'])})")
+    print(f"Merged {added} new tasks; pruned {removed} obsolete tasks (total {len(data['tasks'])})")
     return 0
 
 

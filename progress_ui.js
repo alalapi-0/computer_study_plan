@@ -142,7 +142,7 @@ function terminalTaskTarget(taskId) {
 function taskUsesTerminal(task) {
   if (!task) return false;
   const meta = taskMeta(task.id);
-  if (meta?.round?.lane !== "engineering") return false;
+  if (meta?.round?.lane !== "linux-foundations") return false;
   return ["reading", "exercise", "test", "output"].includes(task.type);
 }
 
@@ -692,34 +692,16 @@ function openRecordViewer(taskId, options = {}) {
 function recordPlaceholders(meta, taskId) {
   const lane = meta?.round?.lane || taskLane(taskId);
   const file = meta?.task?.file || "";
-  if (lane === "engineering") {
+  if (lane === "linux-foundations") {
     const match = String(meta?.round?.id || "").match(/round_(\d{2})/);
     const roundPath = match ? `~/cli-lab/round${Number(match[1])}` : "~/cli-lab";
     return {
-      note: "例如：读完本节笔记，并在终端完成 1 个最小验证；下一步继续做本周练习。",
+      note: "例如：读完本节 Linux 笔记，并在终端完成 1 个最小验证；下一步继续做本周练习。",
       evidence: `例如：${roundPath}/week1_auto`,
     };
   }
-  if (lane === "soft_exam") {
-    return {
-      note: "例如：读完本模块骨架，整理 3 个易混点；下一步补一张概念地图。",
-      evidence: file ? `例如：${file}` : "例如：records/error_notes/soft_exam/os/",
-    };
-  }
-  if (lane === "math2") {
-    return {
-      note: "例如：读完启动骨架，完成 1 道例题整理；下一步补错题和关键定义。",
-      evidence: file ? `例如：${file}` : "例如：records/error_notes/math2/limits/",
-    };
-  }
-  if (lane === "cs408") {
-    return {
-      note: "例如：读完 408 启动总览，写下与软考的 3 个差异；下一步选定数据结构入口。",
-      evidence: file ? `例如：${file}` : "例如：records/error_notes/cs408/ds/",
-    };
-  }
   return {
-    note: "例如：读完当前资料，整理一个最小结论，并写清下一步。",
+    note: "例如：读完当前 Linux 资料，整理一个最小结论，并写清下一步。",
     evidence: file ? `例如：${file}` : "例如：records/weekly_reviews/YYYY-WW.md",
   };
 }

@@ -9,30 +9,24 @@
 - 不使用中文文件名（中文允许出现在文档内容里）。
 - 不在文件名里写日期，除非该文件就是按日期归档的运行记录。
 
-## 2. 主线轮次（已存在体系，不改）
+## 2. Linux 课程兼容 Round（当前正式范围）
 
-- 主线 Round 概览文档：`round_XX.md`，XX 为两位数字（已存在 `round_00.md` ~ `round_21.md`）。
-- 主线 Round 实操目录：`rounds/round_XX/`（目前 `rounds/round_00/` 至 `rounds/round_21/` 均已展开）。
-- 已废弃命名：`plan_round_XX.txt`（22 份初版提示词文本于 2026-05-12 由用户授权删除，内容已被对应 `round_XX.md` 完整吸收。后续**不再新增**此类文件，新需求直接写 md）。
+- 课程注册：`content/courses/linux-foundations/`
+- 兼容 Round 概览：`round_00.md`、`round_01.md`、`round_02.md`、`round_06.md`
+- 兼容实操目录：`rounds/round_00/`、`rounds/round_01/`、`rounds/round_02/`、`rounds/round_06/`
+- 已废弃：`plan_round_XX.txt`；非 Linux 正式 Round 03–05、07–21 已移出工作树（见 `docs/REMOVAL_MANIFEST.md`）
 
-> 这些命名是项目的"既成事实"，不主动重命名。新增主线 Round 仍延用相同格式。
+> Phase 0/1 仍保留 `round_XX` 命名以兼容现有 Web UI / 进度系统；新增 Linux 模块优先登记到 `course.json`。
 
-## 3. 阶段性支线轮次（本次新增）
+## 3. 阶段性支线轮次
 
 - 阶段目录：`rounds/stage_<NN>_<scope>/`，例如 `rounds/stage_03_vps_remote_ops/`。
-- 支线 Round 文档：`round_<scope>_<XX>_<short_title>.md`，例如：
-  - `round_vps_00_repo_scan.md`
-  - `round_vps_05_first_readonly_check.md`
-- 支线 Round 编号空间与主线**互不冲突**：主线用 `round_00` ~ `round_21`，支线用 `round_vps_00` ~ `round_vps_12` 等。
-
-阶段编号建议（**当前仅作为命名参考，未真实迁移主线**）：
+- 支线 Round 文档：`round_<scope>_<XX>_<short_title>.md`
+- 支线编号空间与主线互不冲突：当前正式主线 Round 为 `00/01/02/06`，支线为 `round_vps_00` ~ `round_vps_12`
 
 | 阶段编号 | 主题 | 当前是否存在目录 |
 |---|---|---|
-| stage_01_foundation | 终端 / Shell / Git 基础 | 否（主线 Round 00–02 已覆盖） |
-| stage_02_linux_network | Linux 进阶与网络 | 否（主线 Round 06 部分覆盖） |
-| stage_03_vps_remote_ops | VPS 远程实操训练 | 是（本次新增） |
-| stage_04_project_deployment | 个人项目部署 | 否（未来扩展） |
+| stage_03_vps_remote_ops | VPS 远程实操训练（linux-foundations Module 04） | 是 |
 
 ## 4. docs 目录命名规则
 

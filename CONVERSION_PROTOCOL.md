@@ -9,12 +9,12 @@
 
 | 字段 | 值 |
 |------|----|
-| **当前版本** | v2.1 |
-| **生效日期** | 2026-07-06（v2.1；v2.0 生效日期为 2026-05-12） |
-| **覆盖范围** | 主线 Round 00–21 + 阶段性支线（VPS / 软考 / 408 / 数学二 / 0854 等） |
-| **重大变更** | v2.0 移除"txt → md 转换"流程；v2.1 同步当前 Web UI、本地 API、生成数据、动作日志和任务反馈维护边界 |
+| **当前版本** | v2.2 |
+| **生效日期** | 2026-07-18（v2.2；v2.1 为 2026-07-06；v2.0 为 2026-05-12） |
+| **覆盖范围** | Linux 正式课程兼容 Round：`round_00` / `01` / `02` / `06` + VPS 支线；课程注册见 `content/courses/linux-foundations/` |
+| **重大变更** | v2.2 收敛为 `linux-foundations` 单课程；删除非 Linux 正式 Round 与考试计划入口；进度 lane 仅保留 `linux-foundations` |
 
-> **历史说明**：v1.0 ~ v1.3 时仓库中存在 `plan_round_00.txt` ~ `plan_round_21.txt`（22 份初版提示词文本），用于通过本协议批量生成 `round_XX.md`。这些 txt 在路线重定向时由用户授权统一删除（理由：md 已独立完整、txt 属于历史副本，无独立维护价值）。
+> **历史说明**：旧版曾覆盖 Round 00–21 与软考/数学二/408 多主线；相关内容已按 `docs/REMOVAL_MANIFEST.md` 移出工作树，可从备份标签恢复。
 
 ---
 
@@ -53,7 +53,7 @@
 | **周期** | 3 周，每周约 8 小时 |
 | **前置** | [前置轮次，如：Round XX] |
 | **下一轮** | [下一轮编号和名称] |
-| **所属主线** | engineering / soft_exam / math2 / cs408（多选用 `+` 分隔） |
+| **所属主线** | `linux-foundations`（当前唯一正式课程 lane） |
 ```
 
 **难度评级标准：**
@@ -222,40 +222,37 @@
 
 适用于：有多个对比概念的轮次。
 
-### 4.4 考试映射
+### 4.4 课程模块映射
 
-适用于：与软考 / 408 / 数学二相关的轮次。表格列：本轮内容 / 软考考点 / 408 考点 / 数学二章节。
+适用于：需要标明所属 Linux 模块的轮次。表格列：本轮内容 / Module ID / 关键技能 / 通关验收。
+
+当前正式课程只有 `linux-foundations`；不再维护考试映射表。
 
 ---
 
 ## 5. 新增 Round 的完整流程
 
 ```
-1. 直接编写 round_XX.md（按本协议 Section 3 结构）
+1. 确认该 Round 属于 linux-foundations，并更新 content/courses/linux-foundations/course.json
    ↓
-2. 创建 rounds/round_XX/ 目录及所有文件（按 Section 7 规范）
+2. 直接编写 round_XX.md（按本协议 Section 3 结构）
    ↓
-3. 注册任务与显示元数据
-   - 工程 Round 优先更新 `scripts/build_rounds_data.py` 的生成规则，然后运行 `npm run build:rounds`
-   - 计划类任务同样通过当前生成脚本或明确的数据维护点注册，不直接改 `progress.html`
-   - `progress.json` 中新增任务默认 done: false，必填 lane 字段（engineering / soft_exam / math2 / cs408 之一）
+3. 创建 rounds/round_XX/ 目录及所有文件（按 Section 7 规范）
    ↓
-4. 同步衍生数据
-   - 运行 `npm run build:rounds` 生成 `rounds_data.js` 并合并工程 Round 任务
-   - 必要时运行 `npm run sync:progress` 只同步 `progress_data.js`
-   - 任务反馈需要更新时运行 `python3 scripts/generate_task_feedback.py`
+4. 注册任务与显示元数据
+   - 更新 `scripts/build_rounds_data.py` 的生成规则，然后运行 `npm run build:rounds`
+   - `progress.json` 中新增任务默认 done: false，lane 必须为 `linux-foundations`
    ↓
-5. 验证 Web UI 与 CLI
-   - `bash mark_done.sh --lane engineering --limit 8`
+5. 同步衍生数据
+   - `npm run build:rounds`
+   - 必要时 `npm run sync:progress`
+   - 需要时 `python3 scripts/generate_task_feedback.py`
+   ↓
+6. 验证 Web UI 与 CLI
+   - `bash mark_done.sh --lane linux-foundations --limit 8`
    - `python3 scripts/progress_server.py` 后打开 `http://127.0.0.1:8777/progress.html?round=round_XX`
    ↓
-6. 更新本文件（CONVERSION_PROTOCOL.md）：
-   - Section 6 当前轮次状态表新增一行
-   ↓
-7. 更新 README.md：
-   - "项目结构"新增 round_XX.md 和 rounds/round_XX/ 目录树
-   - "全局路线图"（如有新分支）
-   - "核心项目线索表"（如该轮推进了 ai_prep_tool）
+7. 更新本文件 Section 6 状态表，并同步 README / PROJECT_STATE
 ```
 
 ---
@@ -264,32 +261,16 @@
 
 > 每次新增或修改轮次时更新此表
 
-| 轮次 | 主题 | MD 状态 | 实操目录 | 所属主线 | 备注 |
+| 轮次 | 主题 | MD 状态 | 实操目录 | 所属课程 | 备注 |
 |------|------|---------|---------|---------|------|
-| Round 00 | Terminal 初见 | ✅ 完整 | ✅ 已展开 | engineering | 已展开并接入 Web UI；真实学习完成状态以 `progress.json` 为准 |
-| Round 01 | 文件系统与基础命令 | ✅ 概览 | ✅ 已展开 | engineering | 2026-05-28 完成 Round 01 最小目录骨架 |
-| Round 02 | Shell、管道、Git | ✅ 概览 | ✅ 已展开 | engineering | 2026-05-28 完成 Round 02 目录骨架 |
-| Round 03 | Python 基础 + 复杂度 | ✅ 概览 | ✅ 已展开 | engineering | 2026-05-28 完成 Round 03 最小目录骨架 |
-| Round 04 | 核心数据结构 | ✅ 概览 | ✅ 已展开 | engineering + soft_exam + cs408 | 2026-05-28 完成 Round 04 最小目录骨架 |
-| Round 05 | 高频算法模式 | ✅ 概览 | ✅ 已展开 | engineering + soft_exam + cs408 | 2026-05-28 完成 Round 05 最小目录骨架 |
-| Round 06 | Linux 进阶与自动化 | ✅ 概览 | ✅ 已展开 | engineering | 2026-05-28 完成 Round 06 最小目录骨架 |
-| Round 07 | 面向 AI 项目综合练习 | ✅ 概览 | ✅ 已展开 | engineering | 2026-05-29 完成 Round 07 最小目录骨架 |
-| Round 08 | 总复盘与升级路线 | ✅ 概览 | ✅ 已展开 | engineering | 2026-05-29 完成 Round 08 最小目录骨架 |
-| Round 09 | 仓库规范化与测试（路线 A） | ✅ 概览 | ✅ 已展开 | engineering | 2026-05-29 完成 Round 09 最小目录骨架 |
-| Round 10 | Python 工程化基础（路线 A） | ✅ 概览 | ✅ 已展开 | engineering | 2026-05-31 完成 Round 10 最小目录骨架 |
-| Round 11 | 本地持久化（路线 A） | ✅ 概览 | ✅ 已展开 | engineering + soft_exam | 2026-05-31 完成 Round 11 最小目录骨架 |
-| Round 12 | 自动化流水线（路线 A） | ✅ 概览 | ✅ 已展开 | engineering | 2026-05-31 完成 Round 12 最小目录骨架 |
-| Round 13 | 环境复现与发布（路线 A） | ✅ 概览 | ✅ 已展开 | engineering | 2026-05-31 完成 Round 13 最小目录骨架 |
-| Round 14 | HTTP 与 API 设计（路线 B） | ✅ 概览 | ✅ 已展开 | engineering + soft_exam + cs408 | 2026-05-31 完成 Round 14 最小目录骨架 |
-| Round 15 | FastAPI 基础（路线 B） | ✅ 概览 | ✅ 已展开 | engineering | 2026-05-31 完成 Round 15 最小目录骨架 |
-| Round 16 | API 与数据层结合（路线 B） | ✅ 概览 | ✅ 已展开 | engineering | 2026-05-31 完成 Round 16 最小目录骨架 |
-| Round 17 | 服务化收口（路线 B） | ✅ 概览 | ✅ 已展开 | engineering | 2026-05-31 完成 Round 17 最小目录骨架 |
-| Round 18 | 数值计算与数据分析（路线 C） | ✅ 概览 | ✅ 已展开 | engineering | 2026-05-31 完成 Round 18 最小目录骨架 |
-| Round 19 | 机器学习最小闭环（路线 C） | ✅ 概览 | ✅ 已展开 | engineering | 2026-05-31 完成 Round 19 最小目录骨架 |
-| Round 20 | PyTorch 入门（路线 C） | ✅ 概览 | ✅ 已展开 | engineering | 2026-05-31 完成 Round 20 最小目录骨架 |
-| Round 21 | NLP 前置基础（路线 C） | ✅ 概览 | ✅ 已展开 | engineering | 2026-05-31 完成 Round 21 最小目录骨架 |
+| Round 00 | Terminal 初见 | ✅ 完整 | ✅ 已展开 | linux-foundations | Module 00；真实完成状态以 `progress.json` 为准 |
+| Round 01 | 文件系统与基础命令 | ✅ 完整 | ✅ 已展开 | linux-foundations | Module 01 |
+| Round 02 | Shell、管道、Git | ✅ 完整 | ✅ 已展开 | linux-foundations | Module 02；Git 为邻接实践 |
+| Round 06 | Linux 进阶与自动化 | ✅ 完整 | ✅ 已展开 | linux-foundations | Module 03 |
+| VPS 支线 | 远程实操（只读优先） | ✅ 文档 | ✅ 已展开 | linux-foundations | Module 04；`rounds/stage_03_vps_remote_ops/` |
 
-> "所属主线"是 v2.0 新增字段，用于把现有工程实操内容映射到新增的多目标体系（详见 `docs/KNOWLEDGE_MAPPING.md`）。
+> Round 03–05、07–21 已从工作树移除，见 `docs/REMOVAL_MANIFEST.md`。
+> “所属课程”在单课程阶段固定为 `linux-foundations`（详见 `docs/KNOWLEDGE_MAPPING.md`）。
 
 ---
 
@@ -365,22 +346,24 @@ rounds/round_XX/
 ```json
 {
   "version": 2,
+  "active_course_id": "linux-foundations",
   "lanes": {
-    "engineering": { "title": "工程实操线", "description": "Linux/Shell/Git/Python/工程化/服务化/AI 工程" },
-    "soft_exam":   { "title": "软考中级线", "description": "默认软件设计师，高分/满分导向" },
-    "math2":       { "title": "数学二线", "description": "高等数学 + 线性代数" },
-    "cs408":       { "title": "408/0854 线", "description": "数据结构 + 计组 + 操作系统 + 计算机网络" }
+    "linux-foundations": {
+      "title": "Linux 基础与工程实践",
+      "description": "当前唯一正式课程",
+      "course_id": "linux-foundations"
+    }
   },
   "tasks": {
-    "w1-read": { "done": false, "done_at": null, "lane": "engineering" }
+    "w1-read": { "done": false, "done_at": null, "lane": "linux-foundations" }
   }
 }
 ```
 
 规则：
 
-- 每次新增 Round，优先通过 `scripts/build_rounds_data.py` 生成或合并任务；只有计划类特殊任务才手动维护 `progress.json`
-- `lane` 必填，必须是 `lanes` 中已注册的 key
+- 每次新增 Round，优先通过 `scripts/build_rounds_data.py` 生成或合并任务
+- `lane` 必填，当前只能是 `linux-foundations`
 - `task-id` 全局唯一，建议格式：`rXX-wN-taskShort`（如 `r01-w1-read`）；Round 00 沿用简写（`w1-read` 等）
 - `done_at` 由 Web UI 本地 API 或 `mark_done.sh` 自动写入，格式 `YYYY-MM-DD HH:MM`
 - 学习备注、证据路径和撤销动作进入 `records/action_logs/events.jsonl`
@@ -392,7 +375,7 @@ rounds/round_XX/
 bash mark_done.sh
 
 # 按主线查看前 N 个未完成任务
-bash mark_done.sh --lane engineering --limit 8
+bash mark_done.sh --lane linux-foundations --limit 8
 
 # 查看完整任务
 bash mark_done.sh --all
@@ -406,7 +389,7 @@ bash mark_done.sh <task-id> --undo
 
 ### 8.3 `rounds_data.js` 展示元数据
 
-Round / 计划任务展示元数据不写在 `progress.html` 内。工程 Round 由 `scripts/build_rounds_data.py` 生成到 `rounds_data.js`；必要时修改生成脚本，而不是手动编辑生成文件。
+Round / 计划任务展示元数据不写在 `progress.html` 内。Linux 课程 Round 由 `scripts/build_rounds_data.py` 生成到 `rounds_data.js`；必要时修改生成脚本，而不是手动编辑生成文件。
 
 每个 Round 对象格式：
 
@@ -414,7 +397,7 @@ Round / 计划任务展示元数据不写在 `progress.html` 内。工程 Round 
 {
   id: "round_XX",
   title: "Round XX · 主题",
-  lane: "engineering",
+  lane: "linux-foundations",
   difficulty: "⭐⭐☆☆☆",
   duration: "3 周",
   weeks: [
@@ -476,7 +459,7 @@ npm run serve
 | 综合练习 | `rounds/round_XX/final/comprehensive_exercise.sh` 或 `.py` | — |
 | 命令/知识小抄 | `rounds/round_XX/final/command_cheatsheet.md` 或类似 | — |
 | 轮次目录说明 | `rounds/round_XX/README.md` | — |
-| 学习计划专题目录 | `plans/<scope>/...` | `plans/soft_exam/`、`plans/math2/`、`plans/408/` |
+| 学习计划专题目录 | `plans/<scope>/...` | 当前仅 `plans/linux/` |
 | 学习记录目录 | `records/<scope>/...` | `records/weekly_reviews/`、`records/error_notes/` |
 
 详细规则见 `docs/governance/file_naming_rules.md`。
@@ -485,29 +468,19 @@ npm run serve
 
 ## 10. 路线与轮次关系
 
-仓库目前并行维护以下学习线：
+当前只维护一门正式课程：
 
 ```
-工程实操线（engineering）
-├─ 主线 Round 00–08：终端 / Python / 数据结构 / 算法 / Linux / 综合
-└─ 主线 Round 09–21：工程化 / 服务化 / AI/ML（路线 A / B / C）
-
-软考中级线（soft_exam）
-├─ plans/soft_exam/：默认软件设计师
-└─ Stage 2 + Stage 3（详见 docs/STAGE_PLAN.md）
-
-数学二线（math2）
-└─ plans/math2/：高等数学 + 线性代数（长期低强度推进）
-
-408 / 0854 线（cs408）
-├─ plans/408/：数据结构 + 计组 + 操作系统 + 网络
-└─ docs/GRADUATE_SCHOOL_TRACKER.md：院校跟踪
-
-支线
-└─ rounds/stage_03_vps_remote_ops/：VPS 远程实操（Level 0–5 权限）
+linux-foundations
+├─ Module 00 ← Round 00
+├─ Module 01 ← Round 01
+├─ Module 02 ← Round 02
+├─ Module 03 ← Round 06
+└─ Module 04 ← rounds/stage_03_vps_remote_ops/
 ```
 
-详细总目标与耦合关系见 `docs/MASTER_STUDY_ROADMAP.md`。
+课程注册：`content/courses/linux-foundations/course.json`
+详细目标见 `docs/MASTER_STUDY_ROADMAP.md` 与 `docs/ROADMAP.md`。
 
 ---
 
@@ -520,3 +493,4 @@ npm run serve
 | v1.3 | 2026-04-11 | 新增 `progress_data.js` 作为 JS 镜像，支持 file:// 双击打开 |
 | v2.0 | 2026-05-12 | **重大变更**：移除"txt → md 转换"全部流程；删除 22 份 `plan_round_XX.txt`；progress 数据结构升级到 v2（新增 `lanes` 与 `tasks[].lane`）；新增多主线（engineering / soft_exam / math2 / cs408） |
 | v2.1 | 2026-07-06 | 将新增 Round 流程、进度系统职责和 Web UI 打开方式同步为当前 `progress_server.py` + Web UI + 生成脚本模型 |
+| v2.2 | 2026-07-18 | 收敛为 `linux-foundations` 单课程；移除非 Linux 正式 Round 与考试计划；进度 lane 仅保留 linux-foundations |

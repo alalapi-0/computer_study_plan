@@ -6,7 +6,7 @@ from __future__ import annotations
 import collections
 import sys
 
-from progress_lib import list_status, mark_task, repo_root, task_metadata_map
+from progress_lib import ACTIVE_COURSE_ID, list_status, mark_task, repo_root, task_metadata_map
 
 DEFAULT_STATUS_LIMIT = 8
 
@@ -25,9 +25,9 @@ def task_label(task_id: str, meta_by_task: dict[str, dict]) -> str:
 
 def print_usage() -> None:
     print("用法：")
-    print("  bash mark_done.sh                         # 简洁查看：每条主线前 8 个未完成任务")
-    print("  bash mark_done.sh --lane soft_exam        # 只看某条主线")
-    print("  bash mark_done.sh --limit 20              # 调整每条主线显示数量")
+    print("  bash mark_done.sh                         # 简洁查看：课程内前 8 个未完成任务")
+    print("  bash mark_done.sh --lane linux-foundations # 只看 Linux 课程")
+    print("  bash mark_done.sh --limit 20              # 调整课程显示数量")
     print("  bash mark_done.sh --all                   # 查看全部任务")
     print("  bash mark_done.sh <task-id>               # 记录完成")
     print("  bash mark_done.sh <task-id> --undo        # 取消完成")
@@ -44,7 +44,7 @@ def parse_status_args(args: list[str]) -> tuple[bool, str | None, int] | None:
             show_all = True
         elif arg == "--lane":
             if i + 1 >= len(args):
-                print("❌ --lane 需要提供 lane code，例如 soft_exam")
+                print("❌ --lane 需要提供 lane code，例如 linux-foundations")
                 return None
             lane_filter = args[i + 1]
             i += 1
@@ -85,7 +85,7 @@ def print_status(show_all: bool = False, lane_filter: str | None = None, limit: 
     meta_by_task = task_metadata_map(root)
     by_lane: dict[str, list[tuple[str, dict]]] = collections.defaultdict(list)
     for tid, info in tasks.items():
-        by_lane[info.get("lane", "engineering")].append((tid, info))
+        by_lane[info.get("lane", ACTIVE_COURSE_ID)].append((tid, info))
 
     print(f"📊 总进度：{data['done_count']}/{data['total']}\n")
     ordered = list(lanes.keys()) + [k for k in by_lane if k not in lanes]
@@ -94,7 +94,7 @@ def print_status(show_all: bool = False, lane_filter: str | None = None, limit: 
         print("   已知 lane：" + ", ".join(ordered))
         return 1
     if not show_all:
-        print(f"默认只显示每条主线前 {limit} 个未完成任务；查看全部用：bash mark_done.sh --all\n")
+        print(f"默认只显示课程内前 {limit} 个未完成任务；查看全部用：bash mark_done.sh --all\n")
     for lane_key in ordered:
         if lane_filter and lane_key != lane_filter:
             continue

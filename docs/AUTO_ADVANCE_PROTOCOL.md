@@ -8,11 +8,14 @@
 
 - 已读取 `AGENTS.md`
 - 已读取 `docs/WORKSPACE.md`
+- 已读取 `docs/PRODUCT_VISION.md`
+- 已读取 `docs/ROADMAP.md`
 - 已读取 `docs/MASTER_STUDY_ROADMAP.md`
 - 已读取 `docs/STAGE_PLAN.md`
 - 已读取 `docs/CODEX_LONG_TERM_PLAN.md`
 - 已读取 `docs/PROJECT_STATE.md`
 - 已读取 `docs/NEXT_ACTIONS.md`
+- 确认当前正式课程仍为唯一的 `linux-foundations`
 - 当前 git 工作区没有用户未提交修改
 - 当前任务边界清楚，且只对应一个 `TASK-XXX`
 - 该任务不要求删除或不可逆迁移已有学习记录

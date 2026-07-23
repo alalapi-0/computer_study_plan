@@ -1,172 +1,38 @@
-# Progress Rules · 进度规则（v1.1）
+# Progress Rules · 进度规则（v2.0）
 
-> 本文档规定本仓库进度系统在**四条主线（lanes）下的统一操作规则**。
-> 进度完成状态由 `progress.json` 单一事实源持有；`mark_done.sh` 与 Web UI 本地 API 写入；`progress_data.js` 是前端镜像；`rounds_data.js` 提供任务展示元数据；`progress.html` + `progress_ui.js` + `scripts/progress_server.py` 组成本地 Web UI 学习工作区。
-> Web UI 的动作记录写入 `records/action_logs/events.jsonl`，任务反馈由 `records/feedback/task_feedback.json` 生成。
-> 详细数据结构与脚本规范见 `CONVERSION_PROTOCOL.md` Section 8。
+> 更新日期：2026-07-18
+> 单课程阶段：只有 `linux-foundations` 一条正式进度 lane。
 
----
+## 1. 唯一正式课程 / lane
 
-## 1. 四条主线（lanes）
-
-| lane code | 中文名 | 主要内容 |
+| lane / course_id | 中文名 | 主要内容 |
 |---|---|---|
-| `engineering` | 工程实操线 | Linux / Shell / Git / Python / 工程化 / 服务化 / AI 工程 / VPS |
-| `soft_exam` | 软考中级线 | 软件设计师（默认）+ 备选方向 |
-| `math2` | 数学二线 | 高等数学 + 线性代数 |
-| `cs408` | 408/0854 线 | 数据结构 + 计组 + 操作系统 + 网络 |
+| `linux-foundations` | Linux 基础与工程实践 | 终端、文件系统、Shell、自动化、远程实操 |
 
-每条 lane 在 `progress.json` 顶层的 `lanes` 对象中有一个条目，每个任务通过 `tasks.<id>.lane` 字段归属。
+进度完成状态由 `progress.json` 持有；Web UI / `mark_done.sh` 写入；`progress_data.js` 是前端镜像；`rounds_data.js` 提供任务展示元数据。
 
----
+## 2. 完成与撤销
 
-## 2. 状态模型
+- Web UI：「记录并完成」必须填写本次记录后保存
+- CLI：`bash mark_done.sh <task-id>` / `--undo`
+- 完成与撤销都会更新进度、镜像、动作日志和任务反馈
 
-### 2.1 当前阶段使用的最小状态集
+## 3. 动作日志与反馈
 
-`progress.json` 顶层包含 `version`、`lanes` 和 `tasks`；下表描述 `tasks[task_id]` 的最小字段。
+- 动作日志：`records/action_logs/events.jsonl`
+- 任务反馈：`records/feedback/task_feedback.json`（生成器维护，不手工编辑）
+- 当前反馈仍是最小实现，不是完整规则引擎
 
-| 字段 | 含义 | 取值 |
-|---|---|---|
-| `done` | 是否完成 | `true` / `false` |
-| `done_at` | 完成时间戳 | `YYYY-MM-DD HH:MM` 或 `null` |
-| `lane` | 所属主线 | `engineering` / `soft_exam` / `math2` / `cs408` |
+## 4. 生成关系
 
-### 2.2 v2 暂未启用的扩展字段（保留命名空间，**不在本轮实现**）
-
-> 这些字段在未来增强时启用；当前 `mark_done.sh` 不写入也不读取。
-
-| 字段 | 含义 |
+| 命令 | 输出 |
 |---|---|
-| `status` | `not_started` / `in_progress` / `done` / `review` / `weak` |
-| `review_required` | 是否需要复习 |
-| `attempts` | 累计尝试次数 |
-| `last_action_at` | 最近一次动作时间 |
-| `notes` | 备注 |
+| `npm run build:rounds` | `rounds_data.js` + 合并/裁剪 `progress.json` + 同步镜像 |
+| `npm run sync:progress` | `progress_data.js` |
+| `python3 scripts/generate_task_feedback.py` | `task_feedback.json` |
 
-### 2.3 完成记录规则（当前阶段）
+## 5. 禁止事项
 
-| 行为 | 表现 |
-|---|---|
-| **Web UI 记录并完成** | 点击 `记录并完成` → 填写本次记录 → `done=true`、`done_at=now`，写回 `progress.json` / `progress_data.js`，并追加动作日志 |
-| **CLI 记录完成** | `bash mark_done.sh <task-id>` → `done=true`、`done_at=now`，写回 `progress.json` / `progress_data.js`，并追加动作日志 |
-| **撤销** | Web UI 撤销或 `bash mark_done.sh <task-id> --undo` → `done=false`、`done_at=null`，并追加动作日志 |
-| **复习中** | （当前阶段）暂无字段；用 `records/weekly_reviews/` 与 `records/error_notes/` 表达 |
-| **薄弱项** | （当前阶段）暂无字段；写在周复盘的"高频错题模块"段 |
-
----
-
-## 3. 任务 ID 命名
-
-| 用途 | 规则 | 例子 |
-|---|---|---|
-| Round 00 旧任务 | 保留简写（不改） | `w1-read`、`w1-ex1`、`fin-comp` |
-| Round 01+ 新任务 | `rXX-wN-taskShort` | `r01-w1-read` |
-| 阶段性支线 | `<scope>-XX-taskShort` 或 `<scope>-<module>-start` | `vps-05-first-readonly-check`、`soft_exam-os-start` |
-| 软考章节自定任务 | `soft_exam-<module>-<short>` | `soft_exam-os-pv-1` |
-| 数学二章节自定任务 | `math2-<module>-<short>` | `math2-calc-limit-1` |
-| 408 章节自定任务 | `cs408-<module>-<short>` | `cs408-ds-tree-1` |
-
-任务 ID **全局唯一**。所有任务必须有 `lane` 字段。
-
----
-
-## 4. 错题与复习的进度表达（当前阶段非状态字段）
-
-由于 v2 不引入 `status` 字段，错题与复盘的进度通过文件位置和命名表达：
-
-| 行为 | 沉淀位置 |
-|---|---|
-| 记录错题 | `records/error_notes/<lane>/<module>/YYYY-MM-DD-shortid.md` |
-| 周复盘 | `records/weekly_reviews/YYYY-WW.md` |
-| 完成的练习快照 | `records/completed_tasks/<lane>/...`（可选） |
-| 高频错题导致计划调整 | 写入对应 `plans/<lane>/...` 中的"调整记录"段 |
-
-> 这种方式不依赖 progress.json 扩展字段，符合 ADR-0001 "继续使用 JSON 简单结构"的约束。
-
----
-
-## 5. 进度回流机制
-
-进度数据不是"记录完成后就忘"。每周复盘后应回流：
-
-1. **记录完成 ≠ 真懂**：完成 `done=true` 后仍可在错题本里出现该模块的错题。
-2. **薄弱项识别**：在周复盘里识别出薄弱模块后，对应 `plans/<lane>/<module>.md` 头部添加"⚠ YYYY-WW 复盘 → 本模块需回炉"标注。
-3. **优先级回写**：若 4 周内连续出现高频错题，应在 `docs/KNOWLEDGE_MAPPING.md` 把该模块优先级提升到 P0。
-
----
-
-## 6. progress.html / Web UI 展示规则
-
-当前 `progress.html` 必须展示：
-
-1. **学习工作区**（当前任务、内联教程、任务动作、记录并完成入口）
-2. **工程任务终端**（仅工程任务显示，自动映射到对应 `~/cli-lab/roundN`）
-3. **练习脚本运行入口**（仅允许白名单脚本，通过本地 API 执行）
-4. **四主线总进度条**（按 lane 聚合）
-5. **每条 lane 内的任务分组进度**（工程 Round 与计划入口共用 `rounds_data.js` 展示结构）
-6. **本周任务配置**（不依赖后端，纯前端从用户输入并保存到 localStorage）
-7. **考试日期 / 倒计时配置**（软考考试日 + 考研日，可由用户在前端编辑后写入 localStorage，不写入 progress.json）
-8. **当前关注项板块**（从 progress.json 中识别刚启动的小主线和已开始但完成率 < 30% 的薄弱 lane，**非强制**）
-9. **动作日志与任务反馈**（读取 `records/action_logs/events.jsonl` 与 `records/feedback/task_feedback.json` 的本地镜像）
-
-> 倒计时与关注项**不写入 progress.json**，避免污染状态层。
-
----
-
-## 7. 进度数据完整性约束
-
-下面这些约束写在脚本/校验工具未来要做的检查中：
-
-- `progress.json` 必须是合法 JSON。
-- 每个 `tasks.<id>` 必须包含 `done`（布尔）、`done_at`（字符串或 null）、`lane`（字符串）。
-- `lane` 必须是 `lanes` 中已注册的 key。
-- 同一 `task_id` 只允许出现一次。
-- 不允许手动编辑 `progress_data.js`。
-- 不允许手动编辑 `rounds_data.js` 和 `records/feedback/task_feedback.json`，应通过生成脚本更新。
-
----
-
-## 8. 不破坏 Round 00 的硬约束
-
-- 旧任务 ID（`w1-read`、`w1-ex1`、`fin-comp` 等）必须保留原名。
-- 旧任务的 `done` / `done_at` 在升级时如已是 true 必须保留。
-- `mark_done.sh` 在升级到 lanes 后仍能无参数运行并按 lane 分组展示。
-
----
-
-## 9. 周复盘进度行为
-
-每周复盘是进度系统的"事件入口"：
-
-- 写完周复盘 → 必须更新对应 lane 的"本周完成数 / 本周新增错题数"统计（手动写入复盘文件即可）
-- 不要求把这些统计写进 progress.json
-- 若希望聚合，未来用脚本扫 `records/weekly_reviews/` 生成报表（**未实现**）
-
----
-
-## 10. 标记示例
-
-```bash
-bash mark_done.sh w1-read                       # 记录 Round 00 阅读完成（lane=engineering）
-bash mark_done.sh r04-w1-ex1                    # 记录 Round 04 第 1 周练习 1 完成（如已注册）
-bash mark_done.sh soft_exam-os-start            # 记录软考 OS 模块启动阅读完成
-bash mark_done.sh w1-read --undo                # 撤销
-bash mark_done.sh                               # 查看所有任务（按 lane 分组）
-```
-
----
-
-## 11. FAQ
-
-**Q：我做错题应该 mark_done 吗？**
-A：不需要。错题用 `records/error_notes/` 文件表达。`progress.json` 只跟踪"任务是否完成"。
-
-**Q：我读完一章不想注册成任务，怎么计入进度？**
-A：在 `records/weekly_reviews/` 的周复盘里写一笔即可。`progress.json` 是"显式注册的任务清单"，不是"读书量统计"。
-
-**Q：我可以把 `engineering` 改成 `linux` 之类的吗？**
-A：不建议。lane 名是仓库内多份文档共享的硬约定，改名要全仓库同步。
-
-**Q：旧 Round 00 任务 lane 是什么？**
-A：`engineering`。升级脚本会自动补 `lane: "engineering"`。
+- 不手工编辑 `progress_data.js` / `rounds_data.js` / `task_feedback.json`
+- 不重新引入 soft_exam / math2 / cs408 作为正式 lane
+- 不把“打开页面”当成任务完成

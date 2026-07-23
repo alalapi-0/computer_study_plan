@@ -1,58 +1,32 @@
-# plans/linux/ · 工程实操线下的 Linux 专项
+# plans/linux/ · linux-foundations 学习路径
 
-> 所属 lane：`engineering`
-> 关联 Stage：Stage 1（Linux + Git + Shell + 网络基础）
+> 所属 course / lane：`linux-foundations`
+> 课程注册表：[`content/courses/linux-foundations/course.json`](../../content/courses/linux-foundations/course.json)
 
----
+## 1. 角色
 
-## 1. 这条线的角色
+把仓库内已有 Linux 材料串成一条可执行路径，服务单课程验证阶段。
 
-- 服务于"工程实操 + 软考广度入门 + 长期 AI 工程素养"
-- 在仓库中**已经存在大量素材**：Round 00–02、Round 06、VPS 支线
-- 本目录不复制那些内容，而是把它们**串成一条可执行的学习路径**
-
----
-
-## 2. 关联资产清单
+## 2. 关联资产
 
 | 资产 | 位置 | 角色 |
 |---|---|---|
-| Round 00 完整闭环 | `rounds/round_00/` | 入门：终端 + pwd/ls/cd/mkdir/cat/man |
-| Round 01 概览 | `round_01.md` | 文件系统与基本命令 |
-| Round 02 Web UI 实操目录 | [`rounds/round_02/`](../../rounds/round_02/README.md) | Shell + 管道 + Git |
-| Round 06 Web UI 实操目录 | [`rounds/round_06/`](../../rounds/round_06/README.md) | Linux 进阶与自动化 |
-| VPS 远程实操支线 | `rounds/stage_03_vps_remote_ops/` | 远程操作 13 篇 Round 文档 |
+| 课程注册 | `content/courses/linux-foundations/` | 唯一正式课程索引 |
+| Module 00 | `rounds/round_00/` | 终端初见 |
+| Module 01 | `rounds/round_01/` | 文件系统 |
+| Module 02 | `rounds/round_02/` | Shell / 管道 / Git |
+| Module 03 | `rounds/round_06/` | Linux 进阶与自动化 |
+| Module 04 | `rounds/stage_03_vps_remote_ops/` | 远程实操（只读优先） |
 
----
+## 3. 推荐顺序
 
-## 3. 推进顺序建议
+1. Round 00 → `http://127.0.0.1:8777/progress.html?round=round_00`
+2. Round 01 → `?round=round_01`
+3. Round 02 → `?round=round_02`
+4. Round 06 → `?round=round_06`
+5. VPS 支线：先 VPS-03/04（权限与 SSH）→ VPS-05（首次只读）→ 按需推进
 
-1. **Round 00**（如未完成）→ `rounds/round_00/week1/`
-2. **Round 02 Git / Shell 基础** → [`rounds/round_02/`](../../rounds/round_02/README.md)，Web UI 入口：`http://127.0.0.1:8777/progress.html?round=round_02`
-3. **Round 06 Linux 进阶** → [`rounds/round_06/`](../../rounds/round_06/README.md)，Web UI 入口：`http://127.0.0.1:8777/progress.html?round=round_06`
-4. VPS 支线：先 VPS-04（SSH 文档）→ VPS-05（首次只读）→ 按需推进
+## 4. 非目标
 
----
-
-## 4. 软考广度对照（按需补）
-
-| Linux 知识 | 软考相关模块 | 笔记位置 |
-|---|---|---|
-| 文件系统、权限 | 操作系统模块（概念广度） | `plans/soft_exam/os.md` |
-| 进程管理（ps/kill/jobs） | 操作系统模块（进程） | `plans/soft_exam/os.md` |
-| 网络命令（ping/curl/ss） | 计算机网络模块 | [`plans/soft_exam/network.md`](../soft_exam/network.md) |
-
----
-
-## 5. 笔记骨架（按需建）
-
-按节奏建立以下笔记，每份按 `docs/CONVERSION_PROTOCOL.md` 的 md 写作风格（清晰、不啰嗦、有命令示例）：
-
-- `cli_basics.md`：命令行基础（合并 Round 00 学到的命令小抄）
-- `shell_scripting.md`：Shell 编程
-- `git_workflow.md`：Git 工作流
-- `linux_admin.md`：Linux 用户 / 进程 / 服务管理
-- `networking.md`：网络命令与排查
-- `vps_practice.md`：VPS 实操经验沉淀（对接 `rounds/stage_03_vps_remote_ops/`）
-
-> 这些文件**当前都不预先创建**。按真实学习节奏在需要时新建即可。
+- 不在此路径中插入软考 / 考研 / 独立 Python/AI 课程
+- 真实远程写操作必须单独授权

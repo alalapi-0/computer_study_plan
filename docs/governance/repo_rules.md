@@ -5,12 +5,12 @@
 
 ## 1. 仓库定位
 
-`computer_study_plan` 是**长期计算机学习总控仓库**，不是工具仓库、不是项目代码仓库、不是文档站。
+`computer_study_plan` 是**以 Linux 为唯一正式课程的本地学习产品原型仓库**，不是工具仓库、不是项目代码仓库、不是文档站。
 
 它的真实承载内容：
 
-- 长期学习路线（Round 00–21 工程/服务/AI 主线）
-- VPS 实操训练支线（stage_03_vps_remote_ops 等）
+- 唯一正式课程 `linux-foundations`（Round 00 / 01 / 02 / 06 与课程注册）
+- VPS 远程实操支线（`stage_03_vps_remote_ops`）
 - 学习进度数据、Web UI 学习工作区与本地 API（`progress.json`、`rounds_data.js`、`progress.html`、`progress_ui.js`、`scripts/progress_server.py`）
 - 用于 Codex / Cursor / 本地编程 AI 协作的总控文档
 
@@ -56,11 +56,12 @@
 | 学习模块总纲 | `docs/modules/` | 每个独立学习模块的主文档 |
 | Checklist | `docs/checklists/` | 可勾选的检查清单 |
 | 确认模板 | `docs/templates/` | 高风险操作前的确认模板 |
-| Round 概览（主线） | `round_00.md` ~ `round_21.md` | 已建立的工程/服务/AI 主线轮次概览 |
-| Round 实操（主线） | `rounds/round_XX/` | 主线轮次的可执行展开 |
-| 学习计划专题 | `plans/<scope>/` | 软考 / 数学二 / 408 / Linux 等独立学习计划目录 |
-| 学习记录 | `records/<scope>/` | 周复盘 / 错题 / 完成任务等用户真实学习记录 |
-| Round 实操（支线） | `rounds/stage_*/round_*.md` | 阶段性支线（如 VPS 远程实操） |
+| 课程注册 | `content/courses/linux-foundations/` | 唯一正式课程与模块索引 |
+| Round 概览（Linux） | `round_00.md` / `01` / `02` / `06` | Linux 课程兼容概览 |
+| Round 实操（Linux） | `rounds/round_00|01|02|06/` | Linux 可执行练习真源 |
+| 学习计划专题 | `plans/linux/` | Linux 课程路径说明 |
+| 学习记录 | `records/` | 周复盘 / 问题复盘 / 动作日志 / 反馈 / 存档 |
+| Round 实操（支线） | `rounds/stage_*/round_*.md` | VPS 远程实操等 Linux 支线 |
 | 进度系统 | `progress.json`、`progress_data.js`、`rounds_data.js`、`progress.html`、`progress_ui.js`、`scripts/progress_server.py`、`mark_done.sh`、`records/action_logs/`、`records/feedback/` | 任务状态、展示、Web UI 写入、动作记录与任务反馈 |
 | IDE/系统副产物 | `.idea/`、`.DS_Store` | 不属本仓库内容范围，不主动改 |
 

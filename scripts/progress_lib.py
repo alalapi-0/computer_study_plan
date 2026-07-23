@@ -15,22 +15,13 @@ import uuid
 from pathlib import Path
 from typing import Any
 
+ACTIVE_COURSE_ID = "linux-foundations"
+
 DEFAULT_LANES: dict[str, dict[str, str]] = {
-    "engineering": {
-        "title": "工程实操线",
-        "description": "Linux/Shell/Git/Python/工程化/服务化/AI 工程/VPS",
-    },
-    "soft_exam": {
-        "title": "软考中级线",
-        "description": "默认软件设计师，高分/满分导向",
-    },
-    "math2": {
-        "title": "数学二线",
-        "description": "高等数学 + 线性代数（长期低强度）",
-    },
-    "cs408": {
-        "title": "408/0854 线",
-        "description": "数据结构 + 计组 + 操作系统 + 计算机网络",
+    ACTIVE_COURSE_ID: {
+        "title": "Linux 基础与工程实践",
+        "description": "当前唯一正式课程：终端、文件系统、Shell、自动化与远程实操",
+        "course_id": ACTIVE_COURSE_ID,
     },
 }
 
@@ -76,13 +67,13 @@ def load_progress(root: Path | None = None) -> dict[str, Any]:
 
 def normalize_progress(data: dict[str, Any]) -> dict[str, Any]:
     data["version"] = 2
-    lanes = data.setdefault("lanes", {})
-    for key, meta in DEFAULT_LANES.items():
-        lanes.setdefault(key, dict(meta))
+    data["active_course_id"] = ACTIVE_COURSE_ID
+    # Single-course stage: drop legacy multi-lane metadata if present.
+    data["lanes"] = {key: dict(meta) for key, meta in DEFAULT_LANES.items()}
     tasks = data.setdefault("tasks", {})
     for info in tasks.values():
-        if isinstance(info, dict) and "lane" not in info:
-            info["lane"] = "engineering"
+        if isinstance(info, dict):
+            info["lane"] = ACTIVE_COURSE_ID
     return data
 
 
@@ -122,12 +113,10 @@ def resolve_round_id(task_id: str) -> str:
         return "round_00"
     if task_id.startswith("r") and len(task_id) >= 4 and task_id[1:3].isdigit():
         return f"round_{int(task_id[1:3]):02d}"
-    if task_id.startswith("soft_exam-"):
-        return "soft_exam"
-    if task_id.startswith("math2-"):
-        return "math2"
-    if task_id.startswith("cs408-"):
-        return "cs408"
+    if task_id.startswith(("linux-", "linux_")):
+        return "linux"
+    if task_id.startswith("vps-"):
+        return "vps"
     return "unknown"
 
 
@@ -342,7 +331,7 @@ def run_task_script(task_id: str, root: Path | None = None) -> dict[str, Any]:
     note = f"Web UI 执行练习脚本：{plan['file']}；结果：{result}"
     action_id = append_action_event(
         task_id,
-        task.get("lane", "engineering"),
+        task.get("lane", ACTIVE_COURSE_ID),
         "run_exercise",
         result,
         root=root,
@@ -718,13 +707,9 @@ def build_feedback_payload(progress: dict[str, Any], events: list[dict[str, Any]
     grouped = events_by_task(events)
 
     def not_started_suggestion(lane: str) -> str:
-        if lane == "soft_exam":
-            return "先读资料，整理 3 个易混点，或补一张概念地图。"
-        if lane == "math2":
-            return "先读资料，完成 1 道例题整理，或记录一个易错点。"
-        if lane == "cs408":
-            return "先读资料，写下 1 个推导点，或记录与软考层级的差异。"
-        return "先阅读资料，或完成一条最小终端练习。"
+        if lane == ACTIVE_COURSE_ID:
+            return "先阅读 Linux 资料，或完成一条最小终端练习。"
+        return "先阅读资料，或完成一条最小练习。"
 
     feedback_items: dict[str, dict[str, Any]] = {}
     for task_id, info in tasks.items():
@@ -732,7 +717,7 @@ def build_feedback_payload(progress: dict[str, Any], events: list[dict[str, Any]
         action_count = len(task_events)
         last_event = task_events[-1] if task_events else {}
         done = bool(info.get("done"))
-        lane = info.get("lane", "engineering")
+        lane = info.get("lane", ACTIVE_COURSE_ID)
 
         if done:
             feedback_type = "completed"
@@ -956,7 +941,7 @@ def mark_task(
 
     task = tasks[task_id]
     if "lane" not in task:
-        task["lane"] = "engineering"
+        task["lane"] = ACTIVE_COURSE_ID
 
     action_type = "undo_done" if undo else "mark_done"
     result = "ok"
@@ -978,7 +963,7 @@ def mark_task(
     sync_progress_data_js(data, root)
     action_id = append_action_event(
         task_id,
-        task.get("lane", "engineering"),
+        task.get("lane", ACTIVE_COURSE_ID),
         action_type,
         result,
         root=root,
@@ -994,7 +979,7 @@ def mark_task(
         "task_id": task_id,
         "done": task.get("done", False),
         "done_at": task.get("done_at"),
-        "lane": task.get("lane", "engineering"),
+        "lane": task.get("lane", ACTIVE_COURSE_ID),
         "result": result,
         "message": message,
         "action_id": action_id,
