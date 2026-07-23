@@ -9,26 +9,148 @@
 - 用户当轮直接指定任务时，以用户指令优先
 - 不新增第二门课程
 - 涉及真实 VPS 写操作时，必须先取得明确授权
-- 大范围重构在独立分支完成；不直接假设可推 main
+- 大范围重构优先独立分支；是否合入 `main` 以用户当轮授权为准
 
-## TASK-LINUX-ONLY-BASELINE-20260718：Linux 单课程化基线重构
+## Phase 0：Linux 单课程化基线重构
 
-- 状态：**候选待验收**（revision `r2`；非 done / 非 DELIVERED）
-- 分支：`codex/linux-single-course-refactor`
+- 状态：**done / DELIVERED**
+- 提交：`41daa9c`（已在 `origin/main`）
 - 备份标签：`pre-linux-only-refactor-20260718-1029`
-- 下一步治理路径：**Root VERIFY → 独立 Judge → Governor APPROVE → DELIVER**
-- 浏览器冒烟：`UI_SMOKE_DEFERRED_FOR_ROOT`
-- 当前候选摘要（待独立核验，非最终结论）：
-  - `CONTENT_AUDIT` / `REMOVAL_MANIFEST` 齐全且删除分类一致
-  - 非 Linux 正式课程目录已从工作树移除；进度收敛为 `linux-foundations`
-  - `content/courses/linux-foundations/` 已注册（course.json + 5 模块 overview + README）
-  - 本轮不做 UI 视觉重设计 / XP / 后端；不推 main
+- 说明：非 Linux 正式课程已删除；`linux-foundations` 已注册；文档与进度已收敛
 
-## 下一轮候选（仅在本任务 DELIVER 之后）
+## 近期任务队列
 
-1. Phase 1：Course/Module/Lesson/Task 数据模型与 Round 物理迁移
-2. Phase 6 准备：UI/UX 重设计研究（需真实浏览器 before/after）
-3. Phase 2：Attempt / Action Event 细化
+### 1. 完成单课程化内容审计与删除
+
+- 状态：done
+- 背景：仓库曾混入多条非 Linux 路线
+- 目标：审计分类并删除 `REMOVE_NON_LINUX`
+- 要修改：审计清单、删除清单、非 Linux 内容路径
+- 不要修改：Round 00 闭环与平台基础设施
+- 验收标准：工作树无非 Linux 正式课程；可用备份标签恢复
+- 风险：误删邻接内容
+- 是否需要用户介入：否（已完成）
+
+### 2. 固定 Linux Course / Module / Lesson / Task 数据模型
+
+- 状态：todo（Phase 1）
+- 背景：现有 `course.json` + 模块 overview 仅为索引；任务真源仍在 `rounds/` / `progress.json`
+- 目标：统一 Course/Module/Lesson/Task schema，且只注册 `linux-foundations`
+- 要修改：`content/courses/linux-foundations/`、相关校验脚本、文档
+- 不要修改：Round 00 运行入口与用户 Linux 完成记录
+- 验收标准：任务系统可按统一模型识别 Linux 任务；兼容层仍可用
+- 风险：迁移破坏进度同步
+- 是否需要用户介入：否
+
+### 3. 将 Round 00 注册为第一个 Linux Module
+
+- 状态：partial（overview 已有；任务尚未物理迁入）
+- 背景：`module-00-terminal` 已建 overview，练习仍在 `rounds/round_00/`
+- 目标：Round 00 成为第一个可引用 Module，同时保留兼容路径
+- 要修改：课程内容模型、引用链接、构建脚本（如需）
+- 不要修改：强制搬迁导致脚本失效的路径（除非兼容包装就绪）
+- 验收标准：Round 00 可经课程模型定位；现有 Web/CLI 仍可跑
+- 风险：双真源漂移
+- 是否需要用户介入：否
+
+### 4. 设计 Attempt / Action Event 模型
+
+- 状态：todo（Phase 2）
+- 背景：现有动作日志偏完成/撤销，不足以表达每次尝试
+- 目标：定义 Attempt / ActionEvent 字段与存储位置
+- 要修改：`docs/ARCHITECTURE.md`、可选 schema / 示例数据
+- 不要修改：引入数据库或云服务
+- 验收标准：模型可记录尝试次数、结果、时间、备注
+- 风险：过度设计
+- 是否需要用户介入：否
+
+### 5. 实现 Round 00 动作记录原型
+
+- 状态：todo（Phase 2）
+- 背景：需要能查看任务操作历史
+- 目标：Round 00 至少一个任务写入 Attempt/ActionEvent
+- 要修改：本地服务 API、前端最小接入、records
+- 不要修改：UI 视觉大改、第二门课程
+- 验收标准：可查看该任务操作历史
+- 风险：破坏现有 mark_done 闭环
+- 是否需要用户介入：否
+
+### 6. 实现规则驱动反馈原型
+
+- 状态：todo（Phase 3）
+- 背景：现有反馈多为静态/完成态，非动作级规则引擎
+- 目标：对正确/错误/重试/提示给出建设性反馈与下一步建议
+- 要修改：反馈规则、服务端/本地脚本、Round 00 接入点
+- 不要修改：宣称完整 AI 评分已实现
+- 验收标准：每个有效动作有明确反馈
+- 风险：规则噪音过高
+- 是否需要用户介入：否
+
+### 7. 实现 XP / Mastery 最小模型
+
+- 状态：todo（Phase 4）
+- 背景：游戏化成长尚未落地
+- 目标：最小 XP + 技能 Mastery + Module 通关条件，绑定真实学习证据
+- 要修改：进度/奖励数据结构、Round 00 结算逻辑
+- 不要修改：虚假刷分路径、第二门课程奖励
+- 验收标准：完成真实任务可获得 XP/Mastery 更新
+- 风险：奖励与学习脱钩
+- 是否需要用户介入：否
+
+### 8. 编写下一轮 UI/UX 重设计方案
+
+- 状态：todo（Phase 6 准备）
+- 背景：本轮明确不做视觉重设计
+- 目标：产出信息架构、视觉方向、游戏化反馈表现方案（文档级）
+- 要修改：设计文档 / 方案页（新建）
+- 不要修改：直接用设计稿覆盖 `progress.html`
+- 验收标准：方案可指导下一轮实施；含 before 现状说明
+- 风险：方案脱离现有闭环
+- 是否需要用户介入：建议评审视觉方向
+
+### 9. 实现 Round 00 网页垂直切片
+
+- 状态：todo（Phase 5；部分能力已存在）
+- 背景：当前已有教程/终端/记录完成；尚缺完整 Action→反馈→XP→通关闭环
+- 目标：网页完成 Round 00 全闭环
+- 要修改：Web UI 交互切片、API、进度结算
+- 不要修改：引入 React/Vue 等框架（除非另立契约）
+- 验收标准：展示任务、提交动作、记录、反馈、更新进度/XP、最终挑战通关
+- 风险：范围膨胀
+- 是否需要用户介入：UI 验收需要真实浏览器
+
+### 10. 加入 Round 00 最终挑战和第一个成就
+
+- 状态：todo（Phase 4/5）
+- 背景：现有综合练习未绑定成就系统
+- 目标：最终挑战 + 第一个 Achievement，奖励绑定真实证据
+- 要修改：挑战定义、成就数据、结算逻辑
+- 不要修改：批量生成无关成就
+- 验收标准：完成挑战可获得成就；可复查证据
+- 风险：成就通胀
+- 是否需要用户介入：否
+
+### 11. 验证完整学习闭环
+
+- 状态：todo
+- 背景：需端到端证明单课程验证假设
+- 目标：从选任务到通关的完整路径可重复验证
+- 要修改：测试清单、必要时修复缺陷
+- 不要修改：借机加入第二门课程
+- 验收标准：脚本/浏览器证据齐全；agent_gate 通过
+- 风险：环境依赖（终端沙盒）
+- 是否需要用户介入：否
+
+### 12. 再继续完善其他 Linux 模块
+
+- 状态：blocked_until（依赖 2–11 的垂直切片成立）
+- 背景：Round 01/02/06 与 VPS 支线已保留，但未完成游戏化闭环
+- 目标：按模块补齐任务、验证、反馈、通关挑战
+- 要修改：Linux 模块内容与任务注册
+- 不要修改：非 Linux 课程重新入库
+- 验收标准：每模块具备任务/验证/反馈/通关
+- 风险：内容扩张快于机制验证
+- 是否需要用户介入：内容优先级可协商
 
 ## 已退出正式队列
 

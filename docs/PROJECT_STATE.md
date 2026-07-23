@@ -32,12 +32,14 @@
 
 - 工作树已删除软考 / 数学二 / 408 计划目录，以及 Round 03–05、07–21 非 Linux 课程内容（备份标签可恢复）。
 - 保留 Linux 课程材料：Round 00 / 01 / 02 / 06、VPS 支线、`plans/linux/`。
-- 已建立 `content/courses/linux-foundations/` 课程与模块索引。
-- 进度系统收敛为单一 lane / course：`linux-foundations`。
+- 已建立 `content/courses/linux-foundations/` 课程与模块索引（canonical 注册；Round 真源仍兼容保留在 `rounds/`）。
+- 进度系统收敛为单一 lane / course：`linux-foundations`（80 任务）。
 - Web UI 仍支持：当前任务、内联教程、浏览器终端、练习脚本、记录完成/撤销、动作日志、反馈、存档读档。
+- Round 00 闭环可运行（教程加载 + 终端绑定 `~/cli-lab/round0` 已验证）。
 - 仍使用 JSON / JSONL，无数据库、账号系统或云同步。
 - XP / Mastery / 成就 / 完整反馈引擎：**未实现**。
 - UI/UX 系统重设计：**未开始**（ROADMAP Phase 6；本轮不做视觉重设计）。
+- `progress.html` 仍有历史 soft_exam/math2 等 CSS/倒计时 DOM 残留（非正式课程注册；known leftover）。
 
 ## 4. 保护边界
 
@@ -60,10 +62,10 @@
 ## 6. 本轮重构元数据（治理状态）
 
 - 契约：`TASK-LINUX-ONLY-BASELINE-20260718` / revision `r2`
-- 分支：`codex/linux-single-course-refactor`
-- 备份标签：`pre-linux-only-refactor-20260718-1029`
+- 备份标签：`pre-linux-only-refactor-20260718-1029` → `d244177`
+- 交付提交：`41daa9c`（已 fast-forward 并推送到 `origin/main`）
 - 审计：`docs/CONTENT_AUDIT.md`
 - 删除清单：`docs/REMOVAL_MANIFEST.md`
-- 治理阶段：**候选已准备，待 Root VERIFY → 独立 Judge → Governor APPROVE → DELIVER**
-- 浏览器冒烟：`UI_SMOKE_DEFERRED_FOR_ROOT`（本轮 Repair 处于 Multitask/后台，未做真实浏览器检查）
-- Git：变更仍在工作分支工作树；**未 commit / 未 push / 未改 main**（由 Root DELIVER 处理）
+- 治理阶段：**DELIVERED**（Judge PASS → Governor APPROVE → 本地提交 → 用户授权后合入并推送 `main`）
+- 浏览器冒烟：已完成（Round 00 教程 + 终端 `pwd`；无 JS error）
+- 状态同步：本文件与 `NEXT_ACTIONS` 于 2026-07-23 按交付结果修正
