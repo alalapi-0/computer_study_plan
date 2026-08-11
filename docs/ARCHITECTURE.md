@@ -1,6 +1,6 @@
 # Architecture
 
-> 更新日期：2026-07-18
+> 更新日期：2026-08-11
 > 原则：当前只有一个 active course；底层模型保持 course-agnostic；不为不存在的多课程需求过度设计。
 
 ## 1. 当前架构立场
@@ -8,14 +8,14 @@
 - **Active course**：仅 `linux-foundations`
 - **平台层**：任务进度、动作日志、本地 Web UI、CLI、生成与校验脚本
 - **内容层**：Linux 课程模块与练习材料
-- **本轮不做**：UI 视觉重构、XP 引擎、数据库、账号系统、云同步
+- **当前未实现**：XP 引擎、自然语言学习编排、数据库、账号系统、云同步
 
 ## 2. 逻辑分层
 
 ```text
 content/          课程内容（当前仅 linux-foundations）
 platform data/    progress.json / events / feedback（现状仍在仓库根与 records/）
-web UI            progress.html + progress_ui.js
+web UI            progress.html + progress_ui.js + progress_ui.css
 local service     scripts/progress_server.py
 CLI               mark_done.sh
 docs/             愿景、路线、架构、状态
@@ -42,6 +42,7 @@ computer_study_plan/
 ├─ records/                # 动作日志、反馈、存档、终端历史
 ├─ progress.html
 ├─ progress_ui.js
+├─ progress_ui.css
 ├─ progress.json
 ├─ docs/
 ├─ README.md
@@ -69,6 +70,7 @@ computer_study_plan/
 | Action Event | 更细粒度学习动作 |
 | XP / Mastery | 成长与通关 |
 | Reward | 绑定真实学习证据 |
+| Learning Plan Proposal | 将未来自然语言目标转换为可检查、可修改、需确认的结构化方案 |
 
 ## 4. 运行时链路
 
@@ -104,13 +106,31 @@ Phase 1：
 - 逐步降低对根目录 `round_XX.md` 散落结构的依赖
 - 保持旧入口兼容直到迁移完成
 
-## 6. 明确非目标
+## 6. 未来自然语言编排边界
+
+自然语言入口属于 Linux 单课程闭环稳定后的候选编排层，不属于当前运行时。若后续实施，应遵守：
+
+```text
+自然语言目标
+  → 澄清约束
+  → 生成结构化 Learning Plan Proposal
+  → 用户检查、修改并确认
+  → 映射到 Course / Module / Task
+  → 通过 Attempt / Action Event 留下真实证据
+```
+
+- 编排层只生成提案，不直接写入 `progress.json`
+- 未经用户确认，不创建或替换正式课程任务
+- 未经任务证据验证，不得标记完成、授予 XP / Mastery 或生成成就
+- 当前仍只允许 `linux-foundations` 成为 active course
+
+## 7. 明确非目标
 
 - 不为“将来可能有很多课”提前引入复杂多租户架构
 - 不在本阶段引入前端框架或数据库
 - 不把平台实现用的 Python/JavaScript 误当成课程内容删除
-- UI/UX 系统重设计放到 Phase 6
+- 不把自然语言建议当作学习完成证据
 
-## 7. 相关决策
+## 8. 相关决策
 
 见 `docs/DECISIONS.md`（JSON 存储、原生 Web UI、CLI 兼容、单课程 active course）。

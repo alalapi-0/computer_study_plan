@@ -1,6 +1,6 @@
 # Project State
 
-> 更新日期：2026-07-23
+> 更新日期：2026-08-11
 > 本文件只记录当前事实。
 
 ## 1. 当前定位
@@ -35,11 +35,15 @@
 - 已建立 `content/courses/linux-foundations/` 课程与模块索引（canonical 注册；Round 真源仍兼容保留在 `rounds/`）。
 - 进度系统收敛为单一 lane / course：`linux-foundations`（80 任务）。
 - Web UI 仍支持：当前任务、内联教程、浏览器终端、练习脚本、记录完成/撤销、动作日志、反馈、存档读档。
+- Web UI 已重构为“今日、学习、路线、复习、手册、成长”六个核心视图，并包含独立阶段结算页；Desktop / Mobile 共用同一原生 HTML/JavaScript 实现。
+- 首页视觉依据为 Figma 文件 `WtmY7TC867Wdp0qXY2b5uz` 中当前唯一可访问的 `00｜Reference & Calibration` 页面：暖铜/冷紫光场、半透明暗部卡片、实体按钮与有限空间交互。该文件当前没有可读取的 Desktop / Mini Program / Components / Motion 页面或 Motion 数据。
+- 新 UI 保留既有任务、教程、受限终端、脚本运行、记录、反馈、存档与深链契约；阅读型任务不再无条件显示终端入口，工程练习仍可绑定 `~/cli-lab` 沙盒。
 - Round 00 闭环可运行（教程加载 + 终端绑定 `~/cli-lab/round0` 已验证）。
 - 仍使用 JSON / JSONL，无数据库、账号系统或云同步。
 - XP / Mastery / 成就 / 完整反馈引擎：**未实现**。
-- UI/UX 系统重设计：**未开始**（ROADMAP Phase 6；本轮不做视觉重设计）。
-- `progress.html` 仍有历史 soft_exam/math2 等 CSS/倒计时 DOM 残留（非正式课程注册；known leftover）。
+- 自然语言学习编排与第二门课程：**未实现**；长期通用学习平台方向已写入 `PRODUCT_VISION` 与 `ROADMAP`，当前仍坚持 Linux 单课程验证。
+- UI/UX 系统重设计：**已完成本地实现、项目质量门与真实浏览器回归；精确候选仍由当前任务的独立 Judge 结论约束**。
+- 本地目标日期仍保留历史 `softExamDate/math2Date/cs408Date` 内部 ID 与 `csp_exam_dates_v1` 存储键，用于兼容已有 localStorage / 存档；可见语义已是 Linux Module 02 / 03 / VPS。
 
 ## 4. 保护边界
 
@@ -56,7 +60,8 @@
 
 - Phase 1：把 Round 内容进一步迁入统一 Course/Module/Task 模型
 - Phase 2+：Attempt、规则反馈、XP/通关
-- Phase 6：UI/UX 重新设计
+- Phase 6：2026-08-11 UI/UX 重设计已完成本地实现与浏览器回归；若 Figma 后续补齐产品屏或 Motion 数据，再做逐屏对齐审计
+- Phase 8+：补充可重复的自动化 UI / E2E 测试入口，降低仅靠人工浏览器回归的成本
 - 历史多课程文档若仍出现在 git history 或旧报告中，不代表当前正式范围
 
 ## 6. 本轮重构元数据（治理状态）

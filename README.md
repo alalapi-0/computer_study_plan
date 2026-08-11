@@ -23,15 +23,15 @@
 ```bash
 cd ~/PycharmProjects/computer_study_plan
 python3 scripts/progress_server.py
-open http://127.0.0.1:8777/progress.html?round=round_00
+open http://127.0.0.1:8777/progress.html
 ```
 
 打开后：
 
-1. 左侧确认当前 Linux 任务
-2. 中间读教程
-3. 在右侧终端或练习脚本中完成最小验证
-4. 点击「记录并完成」，填写本次记录后保存
+1. 在「今日」页确认唯一当前任务
+2. 进入「学习」页阅读教程；工程练习会显示受限终端
+3. 完成最小验证或运行白名单练习脚本
+4. 点击「记录并完成」，填写本次记录后保存；路线、复习、手册和成长页按需打开
 
 ---
 
@@ -81,9 +81,9 @@ npm run check:mcp
 
 | 阶段 | 目标 |
 |---|---|
-| **当前** | 用 `linux-foundations` 验证持续学习、记录、反馈、通关感与网页体验 |
-| **后续** | Attempt、规则反馈、XP/Mastery、Round 00 垂直切片、UI/UX 重设计 |
-| **更后** | Linux 模块完善 → 工程质量 → 可选服务化 → 再评估第二门课 |
+| **当前** | 用已重构的多视图 Web UI 验证 `linux-foundations` 的持续学习、记录、反馈、通关感与网页体验 |
+| **后续** | Course/Module/Task 统一模型、Attempt、规则反馈、XP/Mastery、Round 00 垂直切片 |
+| **更后** | Linux 模块完善 → 工程质量 → 可选服务化 → 自然语言学习编排评估 → 再评估第二门课 |
 
 ---
 
@@ -106,9 +106,11 @@ npm run check:mcp
 
 ## 4. 当前阶段
 
-- 进行中（候选待验收）：Phase 0 单课程化基线重构；待 VERIFY → Judge → APPROVE → DELIVER
+- 已交付：Phase 0 单课程化基线重构
+- 当前 Web UI：今日、学习、路线、复习、手册、成长六个核心视图，以及独立阶段结算
 - 工作树已删除：软考、数学二、408 计划，以及 Round 03–05、07–21 非 Linux 课程内容
-- 本轮明确未做：完整 XP 引擎、UI 视觉重设计、第二门课程、真实浏览器冒烟（`UI_SMOKE_DEFERRED_FOR_ROOT`）
+- 当前仍未实现：完整 Attempt / 规则反馈 / XP / Mastery / 成就引擎、自然语言学习编排、第二门课程
+- Figma 事实边界：当前文件只暴露视觉校准页，没有可读取的产品屏、组件页或 Motion 节点
 
 状态见 [`docs/PROJECT_STATE.md`](docs/PROJECT_STATE.md)。
 
@@ -122,7 +124,7 @@ computer_study_plan/
 ├─ rounds/round_00|01|02|06/           ← Linux 可执行练习（兼容真源）
 ├─ rounds/stage_03_vps_remote_ops/     ← 远程 Linux 支线
 ├─ plans/linux/                        ← 课程学习路径
-├─ progress.html / progress_ui.js      ← Web UI
+├─ progress.html / progress_ui.js / progress_ui.css  ← Web UI、交互与视觉系统
 ├─ progress.json / progress_data.js / rounds_data.js
 ├─ scripts/                            ← 本地服务与生成/校验
 ├─ records/                            ← 动作日志、反馈、存档

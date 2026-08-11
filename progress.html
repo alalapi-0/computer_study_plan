@@ -1680,283 +1680,289 @@
       }
     }
   </style>
+  <link rel="stylesheet" href="progress_ui.css?v=20260811a" />
 </head>
 
 <body>
+<a class="skip-link" href="#appMain">跳到主要内容</a>
 
-<div class="app-shell">
-<aside class="side-rail" aria-label="学习工作台导航">
-  <div class="rail-brand">
-    <div class="rail-mark">CSP</div>
-    <div>
-      <div class="rail-title">学习工作区</div>
-      <div class="rail-subtitle">Linux 单课程 · Web UI</div>
+<div class="app-shell" data-app-ready="false">
+  <aside class="side-rail" aria-label="学习平台主导航">
+    <a class="rail-brand" href="#home" data-view-target="home" aria-label="返回今日学习">
+      <span class="rail-mark" aria-hidden="true">L<span>/</span>F</span>
+      <span>
+        <strong class="rail-title">学习光场</strong>
+        <small class="rail-subtitle">Linux 基础与工程实践</small>
+      </span>
+    </a>
+    <nav class="side-nav" aria-label="核心页面">
+      <a class="nav-item active" href="#home" data-view-target="home"><span>01</span>今日</a>
+      <a class="nav-item" href="#learn" data-view-target="learn"><span>02</span>学习</a>
+      <a class="nav-item" href="#route" data-view-target="route"><span>03</span>路线</a>
+      <a class="nav-item" href="#review" data-view-target="review"><span>04</span>复习</a>
+      <a class="nav-item" href="#knowledge" data-view-target="knowledge"><span>05</span>手册</a>
+      <a class="nav-item" href="#growth" data-view-target="growth"><span>06</span>成长</a>
+    </nav>
+    <div class="rail-progress" aria-label="课程进度">
+      <div class="rail-progress-row"><span>课程进度</span><strong id="railProgressPct">0%</strong></div>
+      <div class="route-track"><span id="railProgressBar"></span></div>
+      <p id="railProgressMeta">0 / 80 个任务</p>
     </div>
+    <div class="rail-note">
+      <span class="rail-note-label">当前原则</span>
+      <p>一次只推进一个可验证动作。奖励来自真实学习证据。</p>
+    </div>
+  </aside>
+
+  <div class="container workspace">
+    <header class="top-bar" id="today">
+      <div>
+        <span class="eyebrow" id="pageEyebrow">LINUX FOUNDATIONS</span>
+        <h1 id="pageTitle">今日学习</h1>
+      </div>
+      <div class="top-status">
+        <span class="api-dot" id="apiStatusDot" aria-hidden="true"></span>
+        <span id="lastUpdated">正在加载…</span>
+        <button class="refresh-btn" onclick="loadProgress()" id="refreshBtn" type="button">同步</button>
+      </div>
+    </header>
+
+    <div class="banner" id="apiBanner" style="display:none"></div>
+    <div class="banner error" id="errorBanner"></div>
+
+    <main id="appMain" tabindex="-1">
+      <section class="app-view home-view" id="view-home" data-view="home" aria-labelledby="homeHeading">
+        <div class="home-shell">
+          <div class="home-copy">
+            <span class="section-kicker">ONE SIGNAL / ONE ACTION</span>
+            <h2 id="homeHeading">不要浏览。<br />只向前一步。</h2>
+            <p>首页只呈现当前可验证任务；路线、手册和数据在需要时再展开。</p>
+          </div>
+
+          <div class="spatial-stage" id="spatialStage" aria-label="当前任务空间卡片">
+            <span class="spatial-glow warm" aria-hidden="true"></span>
+            <span class="spatial-glow cool" aria-hidden="true"></span>
+            <span class="spatial-block block-1" aria-hidden="true"></span>
+            <span class="spatial-block block-2" aria-hidden="true"></span>
+            <span class="spatial-block block-3" aria-hidden="true"></span>
+            <span class="spatial-block block-4" aria-hidden="true"></span>
+            <span class="spatial-block block-5" aria-hidden="true"></span>
+            <span class="spatial-block block-6" aria-hidden="true"></span>
+            <article class="home-task-stack" id="homeTaskCard">
+              <div class="home-task-card">
+                <span class="task-kicker" id="homeTaskKicker">CURRENT / 01</span>
+                <strong class="home-task-verb" id="homeTaskVerb">准备</strong>
+                <h3 id="homeTaskTitle">正在寻找下一条任务…</h3>
+                <p id="homeTaskMeta">读取课程数据</p>
+              </div>
+            </article>
+            <button class="physical-button home-primary-action" type="button" data-view-target="learn">
+              <span>进入当前任务</span><span aria-hidden="true">→</span>
+            </button>
+          </div>
+
+          <aside class="home-signals" aria-label="今日学习信号">
+            <div class="signal-block">
+              <span class="section-kicker cool">复盘线索</span>
+              <strong id="homeReviewValue">暂无</strong>
+              <p id="homeReviewMeta">完成任务后可回看动作记录</p>
+              <button class="text-action" type="button" data-view-target="review">查看记录 →</button>
+            </div>
+            <div class="signal-block module-signal">
+              <span class="section-kicker">当前模块</span>
+              <strong id="homeModuleValue">0 / 21</strong>
+              <div class="route-track"><span id="homeModuleBar"></span></div>
+              <button class="text-action" type="button" data-view-target="route">查看路线 →</button>
+            </div>
+          </aside>
+
+          <div class="home-route-signal">
+            <div><span>COURSE ROUTE</span><strong id="homeRoutePct">0%</strong></div>
+            <div class="route-track"><span id="homeRouteBar"></span></div>
+          </div>
+          <p class="home-footnote">CURRENT TASK IS THE HORIZON</p>
+        </div>
+      </section>
+
+      <section class="app-view" id="view-learn" data-view="learn" aria-labelledby="learnHeading" hidden>
+        <header class="view-heading">
+          <div><span class="section-kicker">FOCUS WORKSPACE</span><h2 id="learnHeading">完成一个真实动作</h2></div>
+          <p>教程、练习和记录保持在同一个上下文里。</p>
+        </header>
+        <div class="workspace-surface" id="learnWorkspace">
+          <div class="workspace-head">
+            <div>
+              <h2>学习工作区</h2>
+              <div class="card-sub">当前任务决定教程与沙盒；切换时不会丢失学习上下文。</div>
+            </div>
+            <div class="workflow-steps" aria-label="推荐学习顺序">
+              <span>1 读教程</span><span>2 做练习 / 写要点</span><span>3 记录并完成</span>
+            </div>
+          </div>
+          <div class="workspace-jumpbar" aria-label="工作区快速切换">
+            <a href="#continueCard">当前任务</a><a href="#inlineReaderPanel">教程</a><a href="#terminal">终端</a>
+          </div>
+          <div class="learning-grid">
+            <section class="workspace-panel task-focus-panel" id="continueCard">
+              <div class="empty-state">正在寻找下一条任务…</div>
+            </section>
+            <section class="workspace-panel inline-reader-panel" id="inlineReaderPanel" aria-label="当前教程">
+              <div class="workspace-panel-head">
+                <div><h3 id="inlineReaderTitle">当前教程</h3><div class="inline-reader-meta" id="inlineReaderMeta">选择任务后会在这里显示资料。</div></div>
+                <div class="workspace-panel-actions">
+                  <a class="task-btn terminal workspace-link-btn" href="#terminal">去终端</a>
+                  <button class="task-btn read" type="button" id="inlineReaderPopout" disabled>专注阅读</button>
+                </div>
+              </div>
+              <div class="inline-reader-body" id="inlineReaderBody"><div class="inline-reader-empty">选择任务后，资料会在这里展开。</div></div>
+            </section>
+            <section class="workspace-panel terminal-panel" id="terminal">
+              <div class="workspace-panel-head">
+                <div><h3>终端练习</h3><div class="card-sub">受限终端仅在 <code>~/cli-lab</code> 学习沙盒内执行允许的命令。</div></div>
+                <div class="workspace-panel-actions"><a class="task-btn read workspace-link-btn" href="#inlineReaderPanel">回到教程</a></div>
+              </div>
+              <div class="terminal-workspace">
+                <div class="terminal-side-panel">
+                  <div><div class="terminal-panel-title">当前任务</div><div class="terminal-context" id="terminalContext"><div class="terminal-context-title">未绑定任务</div><div class="terminal-context-meta">打开 Linux 任务后会自动进入对应 Round 沙盒。</div></div></div>
+                  <div class="terminal-state-list">
+                    <div class="terminal-state-item"><span>工作目录</span><code id="terminalCwd">~</code></div>
+                    <div class="terminal-state-item"><span>允许命令</span><code id="terminalAllowed">等待连接</code></div>
+                  </div>
+                  <div><div class="terminal-panel-title">快捷命令</div><div class="terminal-quick" id="terminalQuickCommands"></div></div>
+                </div>
+                <div>
+                  <div class="terminal-box">
+                    <div class="terminal-output" id="terminalOutput" role="log" aria-label="终端输出" aria-live="polite" aria-relevant="additions text" aria-atomic="false" tabindex="0"><div class="terminal-line muted">正在连接终端练习…</div></div>
+                    <div class="terminal-input-row"><span class="terminal-prompt" id="terminalPrompt">~ $</span><input id="terminalInput" class="terminal-input" spellcheck="false" autocomplete="off" aria-label="终端命令" placeholder="输入命令，例如：pwd" /><button class="task-btn run" type="button" id="terminalRun">执行</button></div>
+                  </div>
+                  <div class="terminal-tools"><button class="btn" type="button" id="terminalReset">回到 ~/cli-lab</button><button class="btn" type="button" id="terminalClear">清屏</button></div>
+                </div>
+              </div>
+            </section>
+          </div>
+        </div>
+      </section>
+
+      <section class="app-view" id="view-route" data-view="route" aria-labelledby="routeHeading" hidden>
+        <header class="view-heading route-heading">
+          <div><span class="section-kicker">LINUX FOUNDATIONS</span><h2 id="routeHeading">学习路线与课程</h2></div>
+          <p>按能力顺序展开模块；当前阶段只有这一门正式课程。</p>
+        </header>
+        <div class="route-overview">
+          <article class="card course-identity">
+            <span class="section-kicker">ACTIVE COURSE</span><h2>Linux 基础与工程实践</h2>
+            <p>从终端初见到 Shell、自动化与远程实操，用真实任务形成可验证能力。</p>
+            <div class="course-tags"><span>5 个能力模块</span><span>1 组课程导览</span><span>真实 Shell</span></div>
+          </article>
+          <article class="card" id="progress">
+            <span class="section-kicker cool">COURSE PROGRESS</span><div class="global-progress"><span class="label">已完成任务</span><div class="bar-wrap"><div class="bar-fill" id="globalBar" style="width:0%"></div></div><span class="percent" id="globalPct">—</span></div>
+          </article>
+        </div>
+        <div class="card" id="lanes"><div class="card-heading-row"><div><h2>课程状态</h2><div class="card-sub">完成率来自 progress.json，不展示虚构 XP 或掌握度。</div></div></div><div class="lane-grid" id="laneGrid"></div></div>
+        <div class="card" id="rounds">
+          <div class="card-heading-row"><div><h2>模块、导览与任务</h2><div class="card-sub">五个能力模块之外，课程导览作为独立资料组显示；教程、脚本与记录入口保持可用。</div></div><div class="actions"><button class="btn" onclick="expandAll()" type="button">展开全部</button><button class="btn" onclick="collapseAll()" type="button">折叠全部</button></div></div>
+          <div class="lane-tabs" id="laneTabs"></div><div class="round-tabs" id="roundTabs"></div><div id="panels"></div>
+        </div>
+      </section>
+
+      <section class="app-view" id="view-review" data-view="review" aria-labelledby="reviewHeading" hidden>
+        <header class="view-heading"><div><span class="section-kicker cool">REVIEW SIGNALS</span><h2 id="reviewHeading">复习与反馈</h2></div><p>复习信号只来自真实动作记录；没有记录时明确显示空状态。</p></header>
+        <div class="metric-strip" id="reviewMetrics">
+          <article><span>可复盘任务</span><strong id="reviewDueCount">0</strong><small>有历史动作的任务</small></article>
+          <article><span>学习记录</span><strong id="reviewEventCount">0</strong><small>动作日志总数</small></article>
+          <article><span>已完成</span><strong id="reviewDoneCount">0</strong><small>真实完成任务</small></article>
+        </div>
+        <div class="review-grid">
+          <article class="card review-queue-card"><div class="card-heading-row"><div><span class="section-kicker">ACTION HISTORY</span><h2>可复盘任务</h2></div></div><div id="reviewQueue" class="review-queue"></div></article>
+          <article class="card"><span class="section-kicker cool">ACTION FEEDBACK</span><h2>最近反馈</h2><div id="feedbackOverview" class="feedback-overview"></div></article>
+          <article class="card review-timeline-card"><span class="section-kicker">ACTION LOG</span><h2>动作时间线</h2><div id="actionTimeline" class="action-timeline"></div></article>
+          <article class="card"><span class="section-kicker cool">CURRENT FOCUS</span><h2>当前关注项</h2><div class="weak-list" id="weakList"></div></article>
+        </div>
+      </section>
+
+      <section class="app-view" id="view-knowledge" data-view="knowledge" aria-labelledby="knowledgeHeading" hidden>
+        <header class="view-heading"><div><span class="section-kicker">FIELD MANUAL</span><h2 id="knowledgeHeading">知识与手册</h2></div><p>把课程真源整理为可随时回看的现场手册，不复制出第二份内容。</p></header>
+        <div class="knowledge-layout">
+          <nav class="knowledge-catalog card" aria-label="知识手册目录">
+            <button class="knowledge-item active" type="button" data-knowledge-file="rounds/round_00/final/command_cheatsheet.md" data-knowledge-title="Terminal 命令小抄"><span>01</span><strong>Terminal 命令小抄</strong><small>pwd / ls / cd</small></button>
+            <button class="knowledge-item" type="button" data-knowledge-file="rounds/round_01/final/command_cheatsheet.md" data-knowledge-title="文件系统小抄"><span>02</span><strong>文件系统小抄</strong><small>路径与基础命令</small></button>
+            <button class="knowledge-item" type="button" data-knowledge-file="rounds/round_02/final/command_cheatsheet.md" data-knowledge-title="Shell 与 Git 小抄"><span>03</span><strong>Shell 与 Git 小抄</strong><small>管道 / 脚本 / Git</small></button>
+            <button class="knowledge-item" type="button" data-knowledge-file="rounds/round_06/final/linux_automation_cheatsheet.md" data-knowledge-title="Linux 自动化小抄"><span>04</span><strong>Linux 自动化小抄</strong><small>进程 / 同步 / cron</small></button>
+            <button class="knowledge-item" type="button" data-knowledge-file="plans/linux/README.md" data-knowledge-title="Linux 课程路径"><span>05</span><strong>课程路径</strong><small>模块关系与边界</small></button>
+          </nav>
+          <article class="knowledge-reader card" aria-live="polite">
+            <div class="knowledge-reader-head"><div><span class="section-kicker cool">OPEN MANUAL</span><h2 id="knowledgeReaderTitle">Terminal 命令小抄</h2></div><button class="task-btn read" id="knowledgeReaderPopout" type="button">专注阅读</button></div>
+            <div class="knowledge-reader-body" id="knowledgeReaderBody"><p class="reader-loading">正在加载手册…</p></div>
+          </article>
+        </div>
+      </section>
+
+      <section class="app-view" id="view-growth" data-view="growth" aria-labelledby="growthHeading" hidden>
+        <header class="view-heading"><div><span class="section-kicker cool">EVIDENCE OF GROWTH</span><h2 id="growthHeading">成长与进度</h2></div><p>只展示已有证据：完成任务、动作记录、阶段状态与本地存档。</p></header>
+        <div class="metric-strip growth-metrics">
+          <article><span>完成任务</span><strong id="growthDoneValue">0</strong><small id="growthDoneMeta">共 80 项</small></article>
+          <article><span>动作证据</span><strong id="growthEvidenceValue">0</strong><small>来自 action log</small></article>
+          <article><span>当前模块</span><strong id="growthModuleValue">00</strong><small id="growthModuleMeta">Terminal 初见</small></article>
+        </div>
+        <div class="growth-grid">
+          <article class="card" id="stages"><div class="card-heading-row"><div><span class="section-kicker">STAGE MAP</span><h2>阶段状态</h2><div class="card-sub">Stage 0 是已交付治理基线；带课程任务的阶段按注册任务完成率汇总，路线状态不等同正式验收。</div></div><button class="btn" type="button" data-view-target="completion">查看阶段结算</button></div><div class="stage-list" id="stageList"></div></article>
+          <details class="secondary-tools" id="secondaryTools" open>
+            <summary><span>计划、存档与本地设置</span><span class="card-sub">这些信息只服务当前学习闭环。</span></summary>
+            <div class="secondary-tools-body">
+              <div class="card" id="config">
+                <h2>本周计划与目标日期</h2><div class="card-sub">保存在浏览器 localStorage，不写入 progress.json。</div>
+                <div class="config-grid">
+                  <div class="config-card"><h3>本周任务</h3><textarea id="weekTasks" aria-label="本周任务" placeholder="一行一条；例如：&#10;- Round 00 week1 终端练习&#10;- Round 01 路径感复盘"></textarea><div class="hint">写完保存，下次打开会自动加载。</div><button class="save-btn" onclick="saveWeekTasks()" type="button">保存本周任务</button><span id="weekSavedHint" class="saved-hint">已保存 ✓</span></div>
+                  <div class="config-card"><h3>目标日期</h3><div class="countdown-row"><label for="softExamDate">Module 02</label><input type="date" id="softExamDate" /><span class="days" id="softExamDays">—</span></div><div class="countdown-row"><label for="math2Date">Module 03</label><input type="date" id="math2Date" /><span class="days" id="math2Days">—</span></div><div class="countdown-row"><label for="cs408Date">VPS 支线</label><input type="date" id="cs408Date" /><span class="days" id="cs408Days">—</span></div><div class="hint">只作为个人学习提醒。</div><button class="save-btn" onclick="saveExamDates()" type="button">保存日期</button><span id="dateSavedHint" class="saved-hint">已保存 ✓</span></div>
+                </div>
+              </div>
+              <div class="card" id="saves"><h2>存档与读档</h2><div class="card-sub">存档包含进度、记录、反馈、终端历史和本地计划；读档前自动创建恢复点。</div><div class="save-toolbar"><input class="save-label-input" id="saveLabel" aria-label="存档备注" placeholder="存档备注，例如：Round 00 通关前" /><button class="btn" type="button" onclick="createSave()">创建存档</button><button class="btn" type="button" onclick="loadSaves()">刷新列表</button></div><div class="save-list" id="saveList"><div class="save-empty">正在读取存档列表…</div></div></div>
+            </div>
+          </details>
+        </div>
+      </section>
+
+      <section class="app-view completion-view" id="view-completion" data-view="completion" aria-labelledby="completionHeading" hidden>
+        <button class="back-action" type="button" data-view-target="growth">← 返回成长</button>
+        <div class="completion-shell" id="completionState">
+          <span class="completion-halo" aria-hidden="true"></span>
+          <div class="completion-copy"><span class="section-kicker">STAGE CHECKPOINT</span><h2 id="completionHeading">阶段结算</h2><p>正在核对当前阶段的真实任务状态…</p></div>
+        </div>
+      </section>
+    </main>
   </div>
-  <nav class="side-nav">
-    <a class="nav-item active" href="#today">今日学习</a>
-    <a class="nav-item" href="#learnWorkspace">学习工作区</a>
-    <a class="nav-item" href="#rounds">任务清单</a>
-    <a class="nav-item" href="#secondaryTools">进度设置</a>
+
+  <nav class="mobile-nav" aria-label="移动端主导航">
+    <a class="active" href="#home" data-view-target="home"><span>01</span>今日</a><a href="#learn" data-view-target="learn"><span>02</span>学习</a><a href="#route" data-view-target="route"><span>03</span>路线</a><a href="#review" data-view-target="review"><span>04</span>复习</a><a href="#knowledge" data-view-target="knowledge"><span>05</span>手册</a><a href="#growth" data-view-target="growth"><span>06</span>成长</a>
   </nav>
-  <div class="rail-note">
-    <span class="rail-note-label">使用路径</span>
-    <p>先读当前资料，再按任务做练习或写要点；Linux 任务会自动联动终端。</p>
-  </div>
-</aside>
-
-<div class="container workspace">
-
-<div class="top-bar" id="today">
-<header>
-  <div class="eyebrow">Linux 单课程学习系统</div>
-  <h1>今日学习</h1>
-  <p>先在学习工作区完成一个小动作；需要总览、存档或配置时再展开管理信息。</p>
-</header>
-<div class="last-updated" style="margin-top:0.75rem;margin-bottom:0">
-  <span id="lastUpdated">正在加载…</span>
-  <button class="refresh-btn" onclick="loadProgress()" id="refreshBtn">刷新</button>
 </div>
-</div>
-
-<!-- Banner -->
-<div class="banner" id="apiBanner" style="display:none"></div>
-<div class="banner error" id="errorBanner"></div>
-
-<!-- ── Block 0: 学习工作区 ── -->
-<div class="workspace-surface" id="learnWorkspace">
-  <div class="workspace-head">
-    <div>
-      <h2>学习工作区</h2>
-      <div class="card-sub">把当前任务、教程和记录入口放在同一屏；Linux 任务会额外联动终端。</div>
-    </div>
-    <div class="workflow-steps" aria-label="推荐学习顺序">
-      <span>1 读教程</span>
-      <span>2 做练习 / 写要点</span>
-      <span>3 记录并完成</span>
-    </div>
-  </div>
-  <div class="workspace-jumpbar" aria-label="工作区快速切换">
-    <a href="#continueCard">当前任务</a>
-    <a href="#inlineReaderPanel">教程</a>
-    <a href="#terminal">终端</a>
-  </div>
-  <div class="learning-grid">
-    <section class="workspace-panel task-focus-panel" id="continueCard">
-      <div class="empty-state">正在寻找下一条任务…</div>
-    </section>
-    <section class="workspace-panel inline-reader-panel" id="inlineReaderPanel" aria-label="当前教程">
-      <div class="workspace-panel-head">
-        <div>
-          <h3 id="inlineReaderTitle">当前教程</h3>
-          <div class="inline-reader-meta" id="inlineReaderMeta">选择任务后会在这里显示资料，不打断当前工作区。</div>
-        </div>
-        <div class="workspace-panel-actions">
-          <a class="task-btn terminal workspace-link-btn" href="#terminal">去终端</a>
-          <button class="task-btn read" type="button" id="inlineReaderPopout" disabled>弹窗查看</button>
-        </div>
-      </div>
-      <div class="inline-reader-body" id="inlineReaderBody">
-        <div class="inline-reader-empty">点击任务里的“读教程”，资料会显示在这里；Linux 任务会自动联动终端。</div>
-      </div>
-    </section>
-    <section class="workspace-panel terminal-panel" id="terminal">
-      <div class="workspace-panel-head">
-        <div>
-          <h3>终端练习</h3>
-          <div class="card-sub">Linux 任务会自动映射到本机 <code>~/cli-lab</code> 沙盒；点击“终端练习”可切换或重新聚焦。</div>
-        </div>
-        <div class="workspace-panel-actions">
-          <a class="task-btn read workspace-link-btn" href="#inlineReaderPanel">回到教程</a>
-        </div>
-      </div>
-      <div class="terminal-workspace">
-        <div class="terminal-side-panel">
-          <div>
-            <div class="terminal-panel-title">当前任务</div>
-            <div class="terminal-context" id="terminalContext">
-              <div class="terminal-context-title">未绑定任务</div>
-              <div class="terminal-context-meta">切到 Linux 课程任务后，这里会自动进入对应 Round 的沙盒目录。</div>
-            </div>
-          </div>
-          <div class="terminal-state-list">
-            <div class="terminal-state-item">
-              <span>工作目录</span>
-              <code id="terminalCwd">~</code>
-            </div>
-            <div class="terminal-state-item">
-              <span>允许命令</span>
-              <code id="terminalAllowed">等待连接</code>
-            </div>
-          </div>
-          <div>
-            <div class="terminal-panel-title">任务快捷命令</div>
-            <div class="terminal-quick" id="terminalQuickCommands"></div>
-          </div>
-        </div>
-        <div>
-          <div class="terminal-box">
-            <div class="terminal-output" id="terminalOutput">
-              <div class="terminal-line muted">正在连接终端练习…</div>
-            </div>
-            <div class="terminal-input-row">
-              <span class="terminal-prompt" id="terminalPrompt">~ $</span>
-              <input id="terminalInput" class="terminal-input" spellcheck="false" autocomplete="off" placeholder="输入命令后按 Enter，例如：pwd" />
-              <button class="task-btn run" type="button" id="terminalRun">执行</button>
-            </div>
-          </div>
-          <div class="terminal-tools">
-            <button class="btn" type="button" id="terminalReset">回到 ~/cli-lab</button>
-            <button class="btn" type="button" id="terminalClear">清屏</button>
-          </div>
-        </div>
-      </div>
-    </section>
-  </div>
-</div>
-
-<!-- ── Block 1: 总进度 ── -->
-<div class="card" id="progress">
-  <h2>总进度</h2>
-  <div class="global-progress">
-    <span class="label">全部任务</span>
-    <div class="bar-wrap"><div class="bar-fill" id="globalBar" style="width:0%"></div></div>
-    <span class="percent" id="globalPct">—</span>
-  </div>
-</div>
-
-<!-- ── Block 2: 课程进度 ── -->
-<div class="card" id="lanes">
-  <h2>课程进度</h2>
-  <div class="card-sub">当前正式课程 linux-foundations 的任务完成率。刚启动显示为“待启动”，已开始但完成率低于 30% 时显示为“薄弱项”。</div>
-  <div class="lane-grid" id="laneGrid"></div>
-</div>
-
-<details class="secondary-tools" id="secondaryTools">
-  <summary>
-    <span>进度、配置、存档与复盘信息</span>
-    <span class="card-sub">默认收起，避免干扰当前学习。</span>
-  </summary>
-  <div class="secondary-tools-body">
-
-<!-- ── Block 3: 个人配置（本周任务 + 倒计时） ── -->
-<div class="card" id="config">
-  <h2>本周与倒计时（本地保存）</h2>
-  <div class="card-sub">本周任务与目标日期保存在浏览器 localStorage，不写入 progress.json。</div>
-  <div class="config-grid">
-    <div class="config-card">
-      <h3>本周任务</h3>
-      <textarea id="weekTasks" placeholder="一行一条；例如：
-- Round 00 week1 终端练习
-- Round 01 路径感复盘
-- VPS-04 SSH 文档阅读
-"></textarea>
-      <div class="hint">写完点保存。下次打开 Web UI 会自动加载。</div>
-      <button class="save-btn" onclick="saveWeekTasks()">保存本周任务</button>
-      <span id="weekSavedHint" style="margin-left:0.6rem;font-size:0.72rem;color:var(--green);display:none;">已保存 ✓</span>
-    </div>
-    <div class="config-card">
-      <h3>目标倒计时</h3>
-      <div class="countdown-row">
-        <label>Module 02</label>
-        <input type="date" id="softExamDate" />
-        <span class="days" id="softExamDays">—</span>
-      </div>
-      <div class="countdown-row">
-        <label>Module 03</label>
-        <input type="date" id="math2Date" />
-        <span class="days" id="math2Days">—</span>
-      </div>
-      <div class="countdown-row">
-        <label>VPS 支线</label>
-        <input type="date" id="cs408Date" />
-        <span class="days" id="cs408Days">—</span>
-      </div>
-      <div class="hint">个人学习目标日期，仅本地参考；当前正式课程只有 Linux。</div>
-      <button class="save-btn" onclick="saveExamDates()">保存日期</button>
-      <span id="dateSavedHint" style="margin-left:0.6rem;font-size:0.72rem;color:var(--green);display:none;">已保存 ✓</span>
-    </div>
-  </div>
-</div>
-
-<!-- ── Block 5: 存档与读档 ── -->
-<div class="card" id="saves">
-  <h2>存档与读档</h2>
-  <div class="card-sub">存档会保存进度、动作记录、任务反馈、终端历史、本周任务和倒计时。读档前会自动创建恢复点，防止误操作。</div>
-  <div class="save-toolbar">
-    <input class="save-label-input" id="saveLabel" placeholder="存档备注，例如：Round 00 通关前" />
-    <button class="btn" type="button" onclick="createSave()">创建存档</button>
-    <button class="btn" type="button" onclick="loadSaves()">刷新列表</button>
-  </div>
-  <div class="save-list" id="saveList">
-    <div class="save-empty">正在读取存档列表…</div>
-  </div>
-</div>
-
-<!-- ── Block 5: 阶段参考（Stage 0–5） ── -->
-<div class="card" id="stages">
-  <h2>阶段参考（Stage 0–5）</h2>
-  <div class="card-sub">这里是导航参考：Stage 0 是单课程基线治理；其他 Stage 按 linux-foundations 进度近似，不代表阶段验收已完成。详见 <code style="background:rgba(255,255,255,0.08);padding:0.05em 0.35em;border-radius:4px;font-family:monospace">docs/STAGE_PLAN.md</code>。</div>
-  <div class="stage-list" id="stageList"></div>
-</div>
-
-<!-- ── Block 6: 当前关注项 ── -->
-<div class="card">
-  <h2>当前关注项</h2>
-  <div class="card-sub">按课程完成率自动识别：刚启动提示“启动中”，已开始但低于 30% 才提示“薄弱项”。</div>
-  <div class="weak-list" id="weakList"></div>
-</div>
-
-  </div>
-</details>
-
-<!-- ── Block 7: 按课程查看任务 ── -->
-<div class="card" id="rounds">
-  <h2>按课程查看任务</h2>
-  <div class="card-sub">按 Linux 课程模块查看 Round 与 VPS 支线任务。点击「读教程」可在页内打开 notes / 计划文档。</div>
-  <div class="lane-tabs" id="laneTabs"></div>
-  <div class="round-tabs" id="roundTabs"></div>
-  <div id="panels"></div>
-</div>
-
-<!-- Actions -->
-<div class="actions">
-  <button class="btn" onclick="expandAll()">展开全部</button>
-  <button class="btn" onclick="collapseAll()">折叠全部</button>
-</div>
-
-</div> <!-- /container -->
-</div> <!-- /app-shell -->
 
 <div class="modal-overlay" id="readerModal" aria-hidden="true">
-  <div class="modal-panel" role="dialog" aria-labelledby="readerTitle">
-    <div class="modal-head">
-      <h3 id="readerTitle">阅读</h3>
-      <button type="button" class="modal-close" id="readerClose">关闭</button>
-    </div>
-    <div id="readerBody"></div>
+  <div class="modal-panel" role="dialog" aria-modal="true" aria-labelledby="readerTitle">
+    <div class="modal-head"><h3 id="readerTitle">阅读</h3><button type="button" class="modal-close" id="readerClose">关闭</button></div>
+    <div id="readerBody" role="document" tabindex="0"></div>
   </div>
 </div>
+<div id="toast" class="toast" role="status" aria-live="polite" aria-atomic="true"></div>
 
-<script src="progress_data.js?v=20260706l"></script>
-<script src="rounds_data.js?v=20260706l"></script>
-<script src="progress_ui.js?v=20260706l"></script>
+<script src="progress_data.js?v=20260811a"></script>
+<script src="rounds_data.js?v=20260811a"></script>
+<script src="progress_ui.js?v=20260811a"></script>
 <script>
 const ROUNDS = window.ROUNDS_DATA || [];
 
 
 // ============================================================
-// Stage 与 lane 的映射（基于 docs/STAGE_PLAN.md）
-// 进度算法：取该 Stage 的"主 lane"的完成率作为近似值。
-// 这是当前阶段的最小实现；后续若有 stage→具体 task 列表，可替换。
+// Stage 与课程任务组的映射（基于 docs/STAGE_PLAN.md）。
+// 带 round_ids 的阶段只汇总这些任务组；路线性状态不会冒充任务完成率。
 // ============================================================
 const STAGES = [
-  { id: "stage_0", name: "Stage 0 · 单课程基线", lane: null, pct: 90, status: "候选待验收", note: "Linux 单课程化清理与重新定位；待 VERIFY→Judge→APPROVE→DELIVER" },
-  { id: "stage_1", name: "Stage 1 · Terminal / 文件系统", lane: "linux-foundations" },
-  { id: "stage_2", name: "Stage 2 · Shell / 管道 / Git", lane: "linux-foundations" },
-  { id: "stage_3", name: "Stage 3 · Linux 进阶与自动化", lane: "linux-foundations" },
-  { id: "stage_4", name: "Stage 4 · 远程 VPS 实操", lane: "linux-foundations" },
-  { id: "stage_5", name: "Stage 5 · 游戏化反馈验证", lane: "linux-foundations", note: "后续阶段；当前未实现 XP/通关引擎" },
+  { id: "stage_0", name: "Stage 0 · 单课程基线", pct: 100, status: "已交付", note: "Linux 单课程化清理与重新定位已交付" },
+  { id: "stage_1", name: "Stage 1 · 课程导览 / Terminal / 文件系统", round_ids: ["plan_linux", "round_00", "round_01"], note: "课程任务进度参考" },
+  { id: "stage_2", name: "Stage 2 · Shell / 管道 / Git", round_ids: ["round_02"], note: "课程任务进度参考" },
+  { id: "stage_3", name: "Stage 3 · Linux 进阶与自动化", round_ids: ["round_06"], note: "课程任务进度参考" },
+  { id: "stage_4", name: "Stage 4 · 远程 VPS 实操", round_ids: ["plan_vps"], note: "课程任务进度参考；真实写操作仍需授权" },
+  { id: "stage_5", name: "Stage 5 · 游戏化反馈验证", pct: null, status: "进行中", note: "多视图 UI 已具备；XP / Mastery 尚未实现" },
 ];
 
 // ============================================================
@@ -2047,7 +2053,7 @@ async function loadProgress() {
       errEl.innerHTML = `
         <strong>无法读取进度数据</strong><br>
         请确认 <code>progress_data.js</code> 与 <code>progress.html</code> 在同一目录。<br>
-        运行一次 <code>bash mark_done.sh &lt;任意任务&gt;</code> 可重新生成该文件。
+        在仓库根运行 <code>npm run sync:progress</code> 可重新生成进度镜像。
       `;
       errEl.style.display = "block";
       return;
@@ -2088,6 +2094,7 @@ function laneStats(laneKey) {
 // ============================================================
 function render() {
   syncActiveViewToCurrentTask();
+  renderHome();
   renderContinue();
   renderGlobal();
   renderLanes();
@@ -2095,6 +2102,9 @@ function render() {
   renderWeak();
   renderLaneTabs();
   renderRoundsForLane(activeLane);
+  renderReview();
+  renderGrowth();
+  renderCompletion();
   renderTerminal();
 }
 
@@ -2120,7 +2130,7 @@ function firstTaskInRound(roundId, preferOpen = true) {
       if (preferOpen && !isTaskDone(task.id)) return { round, week, task };
     }
   }
-  return first;
+  return preferOpen ? null : first;
 }
 
 function findGlobalNextTask() {
@@ -2142,11 +2152,13 @@ function findGlobalNextTask() {
 function findNextTask() {
   if (workspaceTaskId) {
     const focused = taskMeta(workspaceTaskId);
-    if (focused) return focused;
+    if (focused && !isTaskDone(workspaceTaskId)) return focused;
+    workspaceTaskId = "";
   }
   if (routeFocusedRound && activeRound) {
     const roundTask = firstTaskInRound(activeRound, true);
     if (roundTask) return roundTask;
+    routeFocusedRound = false;
   }
   return findGlobalNextTask();
 }
@@ -2214,14 +2226,14 @@ function renderGlobal() {
   const allIds = Object.keys(progressData);
   const done = allIds.filter(id => isTaskDone(id)).length;
   const pct = allIds.length ? Math.round(done / allIds.length * 100) : 0;
-  document.getElementById("globalBar").style.width = pct + "%";
-  document.getElementById("globalPct").textContent = pct + "%";
+  setProgressElement("globalBar", pct, "全部课程任务进度");
+  setElementText("globalPct", pct + "%");
 }
 
 function laneAttention(key, stats) {
   if (!stats.total || stats.pct >= 30) return null;
   if (stats.done > 0) {
-    return { kind: "weak", label: "薄弱项", action: "建议本周主推该 lane" };
+    return { kind: "starting", label: "推进中", action: "继续完成当前课程任务" };
   }
   if (stats.total < 5) {
     return { kind: "starting", label: "启动中", action: "先完成一个最小启动任务" };
@@ -2244,7 +2256,7 @@ function renderLanes() {
       <div class="lane-title">${meta.title || key}</div>
       <div class="lane-meta">${meta.description || ""}</div>
       <div class="lane-row">
-        <div class="bar-wrap" style="flex:1"><div class="bar-fill" style="width:${s.pct}%"></div></div>
+        <div class="bar-wrap" style="flex:1" role="progressbar" aria-label="${escapeHtml(meta.title || key)}进度" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${s.pct}"><div class="bar-fill" style="width:${s.pct}%"></div></div>
         <span class="lane-pct">${s.done}/${s.total}</span>
       </div>
       <div class="lane-meta attention" style="margin-top:0.35rem;">${s.pct}%${attention ? " · " + attention.label : ""}</div>
@@ -2257,21 +2269,24 @@ function renderStages() {
   const el = document.getElementById("stageList");
   el.innerHTML = "";
   STAGES.forEach(stage => {
-    let pct = stage.pct || 0;
+    let pct = Number.isFinite(stage.pct) ? stage.pct : 0;
     const note = stage.note || "";
     let label = stage.status || "";
-    if (stage.lane) {
-      const s = laneStats(stage.lane);
-      pct = s.pct;
-      label = pct + "%";
+    let evidenceLabel = "";
+    if (stage.round_ids?.length) {
+      const tasks = ROUNDS.filter(round => stage.round_ids.includes(round.id)).flatMap(round => round.weeks || []).flatMap(week => week.tasks || []);
+      const done = tasks.filter(task => isTaskDone(task.id)).length;
+      pct = tasks.length ? Math.round(done / tasks.length * 100) : 0;
+      label = `${pct}%`;
+      evidenceLabel = `${done}/${tasks.length} 个课程任务`;
     }
     const item = document.createElement("div");
     item.className = "stage-item";
     item.innerHTML = `
       <div class="stage-name">${stage.name}</div>
-      <div class="stage-lane">${stage.lane ? "近似参考: " + stage.lane + " lane" + (note ? " · " + note : "") : note}</div>
-      <div class="bar-wrap"><div class="bar-fill" style="width:${pct}%"></div></div>
-      <div class="stage-pct">${stage.lane ? label + " 近似" : (label || "不计入")}</div>
+      <div class="stage-lane">${evidenceLabel}${evidenceLabel && note ? " · " : ""}${note}</div>
+      <div class="bar-wrap" role="progressbar" aria-label="${escapeHtml(stage.name)}进度" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${pct}"><div class="bar-fill" style="width:${pct}%"></div></div>
+      <div class="stage-pct">${label || "不计入课程完成率"}</div>
     `;
     el.appendChild(item);
   });
@@ -2309,9 +2324,14 @@ function renderWeak() {
 function renderLaneTabs() {
   const el = document.getElementById("laneTabs");
   el.innerHTML = "";
+  el.setAttribute("role", "group");
+  el.setAttribute("aria-label", "课程选择");
   Object.entries(lanesData).forEach(([key, meta]) => {
     const s = laneStats(key);
     const btn = document.createElement("button");
+    btn.type = "button";
+    btn.id = `lane-button-${key}`;
+    btn.setAttribute("aria-pressed", key === activeLane ? "true" : "false");
     btn.className = "lane-tab" + (key === activeLane ? " active" : "");
     btn.textContent = `${meta.title || key}（${s.done}/${s.total}）`;
     btn.addEventListener("click", () => {
@@ -2322,6 +2342,7 @@ function renderLaneTabs() {
       workspaceTaskId = "";
       routeFocusedRound = true;
       render();
+      requestAnimationFrame(() => document.getElementById(`lane-button-${key}`)?.focus({ preventScroll: true }));
     });
     el.appendChild(btn);
   });
@@ -2332,6 +2353,9 @@ function renderRoundsForLane(laneKey) {
   const panelsEl = document.getElementById("panels");
   tabsEl.innerHTML   = "";
   panelsEl.innerHTML = "";
+  tabsEl.setAttribute("role", "tablist");
+  tabsEl.setAttribute("aria-label", "课程模块、导览与任务组选择");
+  tabsEl.setAttribute("aria-orientation", "horizontal");
 
   const laneRounds = ROUNDS.filter(r => r.lane === laneKey);
   if (!laneRounds.length) {
@@ -2341,26 +2365,52 @@ function renderRoundsForLane(laneKey) {
 
   const col = getCollapsed();
 
-  laneRounds.forEach(round => {
+  const activateRoundTab = (round, focus = false) => {
+    activeRound = round.id;
+    workspaceTaskId = "";
+    routeFocusedRound = true;
+    render();
+    requestAnimationFrame(() => {
+      const activeTab = document.getElementById(`round-tab-${round.id}`);
+      if (focus) activeTab?.focus({ preventScroll: true });
+      document.getElementById(`round-panel-${round.id}`)?.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    });
+  };
+
+  laneRounds.forEach((round, roundIndex) => {
     const allTasks  = round.weeks.flatMap(w => w.tasks);
     const doneTasks = allTasks.filter(t => isTaskDone(t.id));
     const allDone   = doneTasks.length === allTasks.length && allTasks.length > 0;
     const pct = allTasks.length ? Math.round(doneTasks.length / allTasks.length * 100) : 0;
 
     const tab = document.createElement("button");
+    tab.type = "button";
+    tab.setAttribute("role", "tab");
+    tab.id = `round-tab-${round.id}`;
+    tab.setAttribute("aria-controls", `round-panel-${round.id}`);
+    tab.setAttribute("aria-selected", round.id === activeRound ? "true" : "false");
+    tab.tabIndex = round.id === activeRound ? 0 : -1;
     tab.className = "tab-btn" + (allDone ? " done" : "") + (round.id === activeRound ? " active" : "");
     tab.textContent = round.title;
-    tab.addEventListener("click", () => {
-      activeRound = round.id;
-      workspaceTaskId = "";
-      routeFocusedRound = true;
-      render();
-      document.getElementById("learnWorkspace")?.scrollIntoView({ behavior: "smooth", block: "start" });
+    tab.addEventListener("click", () => activateRoundTab(round, true));
+    tab.addEventListener("keydown", (event) => {
+      let targetIndex = roundIndex;
+      if (["ArrowRight", "ArrowDown"].includes(event.key)) targetIndex = (roundIndex + 1) % laneRounds.length;
+      else if (["ArrowLeft", "ArrowUp"].includes(event.key)) targetIndex = (roundIndex - 1 + laneRounds.length) % laneRounds.length;
+      else if (event.key === "Home") targetIndex = 0;
+      else if (event.key === "End") targetIndex = laneRounds.length - 1;
+      else return;
+      event.preventDefault();
+      activateRoundTab(laneRounds[targetIndex], true);
     });
     tabsEl.appendChild(tab);
 
     const panel = document.createElement("div");
     panel.className = "round-panel" + (round.id === activeRound ? " active" : "");
+    panel.id = `round-panel-${round.id}`;
+    panel.setAttribute("role", "tabpanel");
+    panel.setAttribute("aria-labelledby", `round-tab-${round.id}`);
+    panel.hidden = round.id !== activeRound;
 
     panel.innerHTML = `
       <div class="round-header">
@@ -2373,7 +2423,7 @@ function renderRoundsForLane(laneKey) {
         </div>
       </div>
       <div class="round-progress-bar">
-        <div class="bar-wrap" style="flex:1"><div class="bar-fill" style="width:${pct}%"></div></div>
+        <div class="bar-wrap" style="flex:1" role="progressbar" aria-label="${escapeHtml(round.title)}任务进度" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${pct}"><div class="bar-fill" style="width:${pct}%"></div></div>
         <span class="rp-text">${pct}%</span>
       </div>
     `;
@@ -2382,12 +2432,17 @@ function renderRoundsForLane(laneKey) {
       const weekDone  = week.tasks.filter(t => isTaskDone(t.id)).length;
       const weekTotal = week.tasks.length;
       const weekAllDone  = weekDone === weekTotal && weekTotal > 0;
-      const isCollapsed  = !!col[week.id];
+      const collapseKey = `${round.id}:${week.id}`;
+      const isCollapsed = !!(col[collapseKey] ?? col[week.id]);
 
       const weekEl = document.createElement("div");
       weekEl.className = "week-section";
 
-      const titleEl = document.createElement("div");
+      const titleEl = document.createElement("button");
+      titleEl.type = "button";
+      titleEl.id = `week-toggle-${round.id}-${week.id}`;
+      titleEl.setAttribute("aria-expanded", isCollapsed ? "false" : "true");
+      titleEl.setAttribute("aria-controls", `task-list-${round.id}-${week.id}`);
       titleEl.className = "week-title" + (weekAllDone ? " completed" : "") + (isCollapsed ? " collapsed" : "");
       titleEl.innerHTML = `
         <span class="week-dot"></span>
@@ -2397,13 +2452,16 @@ function renderRoundsForLane(laneKey) {
       `;
       titleEl.addEventListener("click", () => {
         const c = getCollapsed();
-        c[week.id] = !isCollapsed;
+        c[collapseKey] = !isCollapsed;
         setCollapsed(c);
         render();
+        requestAnimationFrame(() => document.getElementById(`week-toggle-${round.id}-${week.id}`)?.focus({ preventScroll: true }));
       });
 
       const listEl = document.createElement("div");
+      listEl.id = `task-list-${round.id}-${week.id}`;
       listEl.className = "task-list" + (isCollapsed ? " collapsed" : "");
+      listEl.hidden = isCollapsed;
 
       week.tasks.forEach(task => {
         const done   = isTaskDone(task.id);
@@ -2661,12 +2719,12 @@ async function loadSave(saveId, label) {
 // ============================================================
 function expandAll() {
   const c = getCollapsed();
-  ROUNDS.forEach(r => r.weeks.forEach(w => { c[w.id] = false; }));
+  ROUNDS.forEach(r => r.weeks.forEach(w => { c[`${r.id}:${w.id}`] = false; }));
   setCollapsed(c); render();
 }
 function collapseAll() {
   const c = getCollapsed();
-  ROUNDS.forEach(r => r.weeks.forEach(w => { c[w.id] = true; }));
+  ROUNDS.forEach(r => r.weeks.forEach(w => { c[`${r.id}:${w.id}`] = true; }));
   setCollapsed(c); render();
 }
 
@@ -2674,7 +2732,10 @@ function collapseAll() {
 // Boot
 // ============================================================
 if (window.location.protocol !== "file:") {
-  setInterval(loadProgress, 30000);
+  setInterval(async () => {
+    await Promise.all([loadFeedbackData(), loadEventData()]);
+    await loadProgress();
+  }, 30000);
 }
 if (window.location.protocol === "file:") {
   document.addEventListener("DOMContentLoaded", () => {
@@ -2691,6 +2752,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   await loadProgress();
   await loadTerminalState();
   await loadSaves();
+  focusInitialLegacyAnchor();
 });
 </script>
 </body>

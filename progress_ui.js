@@ -13,25 +13,189 @@ let inlineReaderTaskId = "";
 let inlineReaderFile = "";
 let routeFocusedRound = false;
 let autoBindingTerminalTaskId = "";
+let activeView = "home";
+let currentKnowledgeFile = "rounds/round_00/final/command_cheatsheet.md";
+let currentKnowledgeTitle = "Terminal 命令小抄";
+let lastModalFocus = null;
+let lastModalFocusTaskId = "";
+let viewTransitionTimer = 0;
+let inlineReaderRequestId = 0;
+let modalReaderRequestId = 0;
+let knowledgeRequestId = 0;
+let initialLegacyAnchorId = "";
+let forceTerminalVisible = false;
 
-const TERMINAL_QUICK_COMMANDS = [
-  "pwd",
-  "ls",
-  "ls -la",
-  "find . -maxdepth 2 -type f",
-];
+const VIEW_META = {
+  home: { title: "今日学习", eyebrow: "LINUX FOUNDATIONS" },
+  learn: { title: "学习工作区", eyebrow: "FOCUS WORKSPACE" },
+  route: { title: "学习路线", eyebrow: "COURSE ROUTE" },
+  review: { title: "复习与反馈", eyebrow: "REVIEW SIGNALS" },
+  knowledge: { title: "知识手册", eyebrow: "FIELD MANUAL" },
+  growth: { title: "成长与进度", eyebrow: "EVIDENCE OF GROWTH" },
+  completion: { title: "阶段结算", eyebrow: "STAGE CHECKPOINT" },
+};
+
+function setElementText(id, value) {
+  const element = document.getElementById(id);
+  if (element) element.textContent = value;
+}
+
+function setProgressElement(id, pct, label = "") {
+  const element = document.getElementById(id);
+  if (!element) return;
+  const value = Math.max(0, Math.min(100, Number(pct) || 0));
+  element.style.width = `${value}%`;
+  const container = element.parentElement;
+  if (container) {
+    container.setAttribute("role", "progressbar");
+    container.setAttribute("aria-valuemin", "0");
+    container.setAttribute("aria-valuemax", "100");
+    container.setAttribute("aria-valuenow", String(value));
+    if (label) container.setAttribute("aria-label", label);
+  }
+}
+
+function normalizedViewName(value) {
+  const key = String(value || "").replace(/^#/, "");
+  const legacy = {
+    today: "home",
+    learnWorkspace: "learn",
+    continueCard: "learn",
+    inlineReaderPanel: "learn",
+    terminal: "learn",
+    rounds: "route",
+    progress: "route",
+    lanes: "route",
+    secondaryTools: "growth",
+    stages: "growth",
+    config: "growth",
+    saves: "growth",
+  };
+  const normalized = legacy[key] || key;
+  return VIEW_META[normalized] ? normalized : "";
+}
+
+function focusLegacyAnchor(anchorId, behavior = "auto") {
+  const anchor = document.getElementById(anchorId);
+  const disclosure = anchor?.closest("details");
+  if (disclosure) disclosure.open = true;
+  anchor?.scrollIntoView({ behavior, block: "start" });
+  if (anchor) {
+    anchor.setAttribute("tabindex", "-1");
+    anchor.focus({ preventScroll: true });
+  }
+}
+
+function focusInitialLegacyAnchor() {
+  if (!initialLegacyAnchorId) return;
+  const anchorId = initialLegacyAnchorId;
+  initialLegacyAnchorId = "";
+  focusLegacyAnchor(anchorId);
+}
+
+function updateViewChrome(viewName) {
+  const meta = VIEW_META[viewName] || VIEW_META.home;
+  setElementText("pageTitle", meta.title);
+  setElementText("pageEyebrow", meta.eyebrow);
+  document.title = `${meta.title} · Linux 基础与工程实践`;
+  document.querySelectorAll("[data-view-target]").forEach((item) => {
+    const selected = item.dataset.viewTarget === viewName;
+    item.classList.toggle("active", selected);
+    if (item.matches("a[data-view-target]")) {
+      if (selected) item.setAttribute("aria-current", "page");
+      else item.removeAttribute("aria-current");
+    } else {
+      item.removeAttribute("aria-current");
+    }
+  });
+}
+
+function showView(requestedView, options = {}) {
+  const viewName = normalizedViewName(requestedView) || "home";
+  const target = document.querySelector(`[data-view="${viewName}"]`);
+  if (!target) return;
+  const current = document.querySelector(".app-view[data-view]:not([hidden])");
+  const reducedMotion = window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches;
+  const commit = () => {
+    clearTimeout(viewTransitionTimer);
+    document.querySelectorAll(".app-view[data-view]").forEach((view) => {
+      const selected = view === target;
+      view.hidden = !selected;
+      view.setAttribute("aria-hidden", selected ? "false" : "true");
+      view.classList.remove("is-leaving");
+      view.classList.toggle("is-entering", selected);
+    });
+    activeView = viewName;
+    updateViewChrome(viewName);
+    if (options.scroll !== false) window.scrollTo({ top: 0, behavior: "auto" });
+    if (options.focus) {
+      target.setAttribute("tabindex", "-1");
+      target.focus({ preventScroll: true });
+    }
+  };
+  if (current && current !== target && !reducedMotion && options.animate !== false) {
+    clearTimeout(viewTransitionTimer);
+    current.classList.add("is-leaving");
+    viewTransitionTimer = window.setTimeout(commit, 135);
+  } else {
+    commit();
+  }
+  if (options.updateHash !== false && window.location.hash !== `#${viewName}`) {
+    history.pushState({ view: viewName }, "", `#${viewName}`);
+  }
+  if (viewName === "knowledge" && !document.getElementById("knowledgeReaderBody")?.dataset.loaded) {
+    void openKnowledgeDoc(currentKnowledgeFile, currentKnowledgeTitle);
+  }
+}
+
+function setupViewNavigation() {
+  document.querySelectorAll("[data-view-target]").forEach((item) => {
+    item.addEventListener("click", (event) => {
+      event.preventDefault();
+      initialLegacyAnchorId = "";
+      forceTerminalVisible = false;
+      showView(item.dataset.viewTarget, { updateHash: true, focus: true });
+    });
+  });
+  const handleHistory = () => {
+    initialLegacyAnchorId = "";
+    const rawHash = String(window.location.hash || "").replace(/^#/, "");
+    const fromHash = normalizedViewName(window.location.hash);
+    if (!fromHash) return;
+    forceTerminalVisible = rawHash === "terminal";
+    const isViewHash = !!VIEW_META[rawHash] || ["today", "learnWorkspace", "rounds", "secondaryTools"].includes(rawHash);
+    showView(fromHash, { updateHash: false, scroll: isViewHash, focus: isViewHash });
+    if (rawHash === "terminal") renderTerminal();
+    if (!isViewHash) {
+      window.setTimeout(() => focusLegacyAnchor(rawHash, "smooth"), 170);
+    }
+  };
+  window.addEventListener("popstate", handleHistory);
+  window.addEventListener("hashchange", handleHistory);
+  const query = new URLSearchParams(window.location.search || "");
+  const deepLinkedRound = query.has("round") || query.has("activeRound") || [...query.keys()].some((key) => /^round_?\d{1,2}$/i.test(key));
+  const initialView = normalizedViewName(window.location.hash) || (deepLinkedRound ? "route" : "home");
+  showView(initialView, { updateHash: false, scroll: false, animate: false });
+  const initialHash = String(window.location.hash || "").replace(/^#/, "");
+  forceTerminalVisible = initialHash === "terminal";
+  if (initialHash && !VIEW_META[initialHash] && !["today", "learnWorkspace", "rounds", "secondaryTools"].includes(initialHash)) {
+    initialLegacyAnchorId = initialHash;
+  }
+}
 
 async function detectApi() {
   if (window.location.protocol === "file:") {
     apiReady = false;
-    return;
+  } else {
+    try {
+      const res = await fetch("/api/health?_=" + Date.now());
+      apiReady = res.ok;
+    } catch (_) {
+      apiReady = false;
+    }
   }
-  try {
-    const res = await fetch("/api/health?_=" + Date.now());
-    apiReady = res.ok;
-  } catch (_) {
-    apiReady = false;
-  }
+  document.getElementById("apiStatusDot")?.classList.toggle("online", apiReady);
+  document.querySelector(".app-shell")?.setAttribute("data-app-ready", "true");
   const banner = document.getElementById("apiBanner");
   if (!banner) return;
   if (apiReady) {
@@ -77,27 +241,37 @@ async function postTaskAction(taskId, undo, payload) {
     return null;
   }
   const action = undo ? "undo" : "done";
-  const res = await fetch(`/api/tasks/${encodeURIComponent(taskId)}/${action}`, {
-    method: "POST",
-    headers: {
-      "Accept": "application/json",
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(payload || {}),
-  });
-  const data = await res.json();
-  if (!res.ok) {
-    showToast(data.error || "操作失败", "error");
+  try {
+    const res = await fetch(`/api/tasks/${encodeURIComponent(taskId)}/${action}`, {
+      method: "POST",
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(payload || {}),
+    });
+    const data = await res.json();
+    if (!res.ok) {
+      showToast(data.error || "操作失败", "error");
+      return null;
+    }
+    progressData = data.tasks || progressData;
+    lanesData = data.lanes || lanesData;
+    feedbackMap = data.feedback || feedbackMap;
+    await loadFeedbackData();
+    await loadEventData();
+    if (!undo && workspaceTaskId === taskId) {
+      workspaceTaskId = "";
+      inlineReaderTaskId = "";
+      activeTerminalTaskId = "";
+    }
+    showToast(undo ? "已撤销完成" : "已保存记录并完成", "ok");
+    render();
+    return data;
+  } catch (error) {
+    showToast(error.message || "网络连接中断，请重试", "error");
     return null;
   }
-  progressData = data.tasks || progressData;
-  lanesData = data.lanes || lanesData;
-  feedbackMap = data.feedback || feedbackMap;
-  await loadFeedbackData();
-  await loadEventData();
-  showToast(undo ? "已撤销完成" : "已保存记录并完成", "ok");
-  render();
-  return data;
 }
 
 function showToast(msg, kind) {
@@ -105,13 +279,26 @@ function showToast(msg, kind) {
   if (!el) {
     el = document.createElement("div");
     el.id = "toast";
+    el.setAttribute("role", "status");
+    el.setAttribute("aria-live", "polite");
     document.body.appendChild(el);
   }
-  el.className = "toast " + (kind || "");
+  el.className = `toast ${kind || ""} is-visible`;
   el.textContent = msg;
-  el.style.opacity = "1";
   clearTimeout(el._t);
-  el._t = setTimeout(() => { el.style.opacity = "0"; }, 2200);
+  el._t = setTimeout(() => { el.classList.remove("is-visible"); }, 2600);
+  if (kind === "ok" || kind === "error" || kind === "warn") {
+    showFeedbackPulse(kind);
+  }
+}
+
+function showFeedbackPulse(kind) {
+  if (window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches) return;
+  const pulse = document.createElement("span");
+  pulse.className = `feedback-flash ${kind}`;
+  pulse.setAttribute("aria-hidden", "true");
+  document.body.appendChild(pulse);
+  pulse.addEventListener("animationend", () => pulse.remove(), { once: true });
 }
 
 function terminalPrompt(cwdDisplay) {
@@ -143,7 +330,11 @@ function taskUsesTerminal(task) {
   if (!task) return false;
   const meta = taskMeta(task.id);
   if (meta?.round?.lane !== "linux-foundations") return false;
-  return ["reading", "exercise", "test", "output"].includes(task.type);
+  if (task.type === "exercise") return true;
+  if (["test", "output"].includes(task.type)) {
+    return /round_(?:00|01|02|06)/.test(meta?.round?.id || "");
+  }
+  return /\.(?:sh|py)$/i.test(task.file || "");
 }
 
 function terminalQuickCommands() {
@@ -166,7 +357,10 @@ function scrollWorkspacePanel(panelId) {
   const workspace = document.getElementById("learnWorkspace");
   const mobile = window.matchMedia?.("(max-width: 760px)")?.matches;
   const target = mobile && panel ? panel : workspace;
-  target?.scrollIntoView({ behavior: "smooth", block: "start" });
+  // Contextual task jumps need the workspace to exist before we calculate the
+  // scroll position, so skip the decorative page-exit delay here.
+  showView("learn", { updateHash: true, scroll: false, animate: false });
+  requestAnimationFrame(() => target?.scrollIntoView({ behavior: "smooth", block: "start" }));
 }
 
 async function autoBindTerminalForTask(taskId) {
@@ -251,7 +445,7 @@ function renderTerminal() {
   const prompt = document.getElementById("terminalPrompt");
   if (!output || !prompt) return;
   const current = currentWorkspaceTask();
-  const idleForCurrentTask = !activeTerminalTaskId && current && !taskUsesTerminal(current.task);
+  const idleForCurrentTask = !forceTerminalVisible && !activeTerminalTaskId && current && !taskUsesTerminal(current.task);
   document.getElementById("terminal")?.classList.toggle("terminal-idle", !!idleForCurrentTask);
   document.getElementById("learnWorkspace")?.classList.toggle("no-terminal-task", !!idleForCurrentTask);
   prompt.textContent = terminalPrompt(terminalCwdDisplay || "~");
@@ -325,6 +519,7 @@ async function openTaskTerminal(taskId) {
   }
   const meta = taskMeta(taskId);
   if (!meta) return;
+  forceTerminalVisible = false;
   workspaceTaskId = taskId;
   activeTerminalTaskId = taskId;
   try {
@@ -429,6 +624,315 @@ function eventsFor(taskId) {
   return eventMap[taskId] || [];
 }
 
+function allCourseTasks() {
+  const rows = [];
+  for (const round of ROUNDS || []) {
+    for (const week of round.weeks || []) {
+      for (const task of week.tasks || []) rows.push({ round, week, task });
+    }
+  }
+  return rows;
+}
+
+function taskVerb(task) {
+  return {
+    reading: "阅读",
+    exercise: "练习",
+    test: "验收",
+    output: "产出",
+  }[task?.type] || "学习";
+}
+
+function reviewCandidates() {
+  return allCourseTasks().map((entry) => {
+    const events = eventsFor(entry.task.id);
+    const feedback = feedbackFor(entry.task.id);
+    const lastEvent = events[events.length - 1] || null;
+    return { ...entry, events, feedback, lastEvent };
+  }).filter((entry) => entry.events.length > 0).sort((a, b) => {
+    return String(b.lastEvent?.timestamp || "").localeCompare(String(a.lastEvent?.timestamp || ""));
+  });
+}
+
+function renderHome() {
+  if (typeof findNextTask !== "function") return;
+  const allIds = Object.keys(progressData || {});
+  const doneCount = allIds.filter((id) => isTaskDone(id)).length;
+  const routePct = allIds.length ? Math.round(doneCount / allIds.length * 100) : 0;
+  const next = findNextTask();
+  const reviews = reviewCandidates();
+
+  setElementText("railProgressPct", `${routePct}%`);
+  setElementText("railProgressMeta", `${doneCount} / ${allIds.length || 0} 个任务`);
+  setProgressElement("railProgressBar", routePct, "课程总进度");
+  setElementText("homeRoutePct", `${routePct}%`);
+  setProgressElement("homeRouteBar", routePct, "课程路线进度");
+  const homeAction = document.querySelector(".home-primary-action");
+  const homeActionLabel = homeAction?.querySelector("span");
+
+  if (!next) {
+    const courseComplete = allIds.length > 0 && doneCount === allIds.length;
+    setElementText("homeTaskKicker", courseComplete ? "COURSE / COMPLETE" : "COURSE / UNAVAILABLE");
+    setElementText("homeTaskVerb", courseComplete ? "完成" : "等待");
+    setElementText("homeTaskTitle", courseComplete ? "所有已注册任务均已完成" : "课程任务尚未载入");
+    setElementText("homeTaskMeta", courseComplete ? "进入成长页查看阶段结算" : "请先同步课程数据");
+    setElementText("homeModuleValue", courseComplete ? "完成" : "—");
+    setProgressElement("homeModuleBar", courseComplete ? 100 : 0, "当前模块进度");
+    if (homeAction) homeAction.dataset.viewTarget = courseComplete ? "growth" : "route";
+    if (homeActionLabel) homeActionLabel.textContent = courseComplete ? "查看成长与结算" : "查看课程状态";
+  } else {
+    const roundTasks = (next.round.weeks || []).flatMap((week) => week.tasks || []);
+    const roundDone = roundTasks.filter((task) => isTaskDone(task.id)).length;
+    const roundPct = roundTasks.length ? Math.round(roundDone / roundTasks.length * 100) : 0;
+    const taskIndex = Math.max(0, roundTasks.findIndex((task) => task.id === next.task.id));
+    setElementText("homeTaskKicker", `CURRENT / ${String(taskIndex + 1).padStart(2, "0")}`);
+    setElementText("homeTaskVerb", taskVerb(next.task));
+    setElementText("homeTaskTitle", next.task.title);
+    setElementText("homeTaskMeta", `${next.round.title} · ${next.week.title}`);
+    setElementText("homeModuleValue", `${roundDone} / ${roundTasks.length}`);
+    setProgressElement("homeModuleBar", roundPct, "当前模块进度");
+    if (homeAction) homeAction.dataset.viewTarget = "learn";
+    if (homeActionLabel) homeActionLabel.textContent = "进入当前任务";
+  }
+
+  if (reviews.length) {
+    setElementText("homeReviewValue", reviews[0].task.title);
+    setElementText("homeReviewMeta", `${reviews[0].events.length} 条动作记录 · 可复盘`);
+  } else {
+    setElementText("homeReviewValue", "暂无");
+    setElementText("homeReviewMeta", "完成任务后可回看动作记录");
+  }
+}
+
+function renderReview() {
+  const queue = document.getElementById("reviewQueue");
+  const feedbackEl = document.getElementById("feedbackOverview");
+  const timeline = document.getElementById("actionTimeline");
+  if (!queue || !feedbackEl || !timeline) return;
+
+  const candidates = reviewCandidates();
+  const timelineEvents = Object.entries(eventMap || {}).flatMap(([taskId, events]) => (
+    (events || []).map((event) => ({ ...event, taskId }))
+  )).sort((a, b) => String(b.timestamp || "").localeCompare(String(a.timestamp || "")));
+  const doneCount = Object.keys(progressData || {}).filter((id) => isTaskDone(id)).length;
+  setElementText("reviewDueCount", String(candidates.length));
+  setElementText("reviewEventCount", String(timelineEvents.length));
+  setElementText("reviewDoneCount", String(doneCount));
+
+  if (!candidates.length) {
+    queue.innerHTML = '<div class="empty-state">还没有可复盘的动作记录。先完成一个真实任务，系统会把反馈与记录带回这里。</div>';
+  } else {
+    queue.innerHTML = candidates.slice(0, 6).map((entry) => `
+      <div class="review-item">
+        <div><strong>${escapeHtml(entry.task.title)}</strong><p>${escapeHtml(entry.round.title)} · ${entry.events.length} 条记录</p></div>
+        <button class="task-btn record task-record-open" type="button" data-task="${escapeHtml(entry.task.id)}">复盘</button>
+      </div>
+    `).join("");
+    bindTaskActions(queue);
+  }
+
+  const feedbackRows = candidates.filter((entry) => entry.feedback).slice(0, 5);
+  feedbackEl.innerHTML = feedbackRows.length ? feedbackRows.map((entry) => `
+    <div class="feedback-item">
+      <span class="feedback-kind">${escapeHtml(entry.feedback.feedback_type || "feedback")}</span>
+      <strong>${escapeHtml(entry.task.title)}</strong>
+      <p>${escapeHtml(entry.feedback.next_suggestion || entry.feedback.message || "暂无下一步建议")}</p>
+    </div>
+  `).join("") : '<div class="empty-state">尚无动作级反馈。这里不会用虚构数据填满空白。</div>';
+
+  timeline.innerHTML = timelineEvents.length ? timelineEvents.slice(0, 10).map((event) => {
+    const meta = taskMeta(event.taskId);
+    return `
+      <div class="timeline-item">
+        <time>${escapeHtml(event.timestamp || "时间待同步")}</time>
+        <strong>${escapeHtml(meta?.task?.title || event.taskId)}</strong>
+        <p>${escapeHtml(actionLabel(event.action_type))}${event.note ? ` · ${escapeHtml(event.note)}` : ""}</p>
+      </div>
+    `;
+  }).join("") : '<div class="empty-state">动作时间线为空。运行练习或记录完成后会在这里出现。</div>';
+}
+
+function moduleDisplayCode(roundId) {
+  return {
+    round_00: "00",
+    round_01: "01",
+    round_02: "02",
+    round_06: "03",
+    plan_vps: "04",
+    plan_linux: "导览",
+  }[roundId] || "—";
+}
+
+function roundHasOpenTasks(round) {
+  return !!round && (round.weeks || []).some((week) => (week.tasks || []).some((task) => !isTaskDone(task.id)));
+}
+
+function nextOpenRoundAfter(roundIds) {
+  const rounds = ROUNDS || [];
+  const currentScope = new Set(roundIds || []);
+  return rounds.find((round) => !currentScope.has(round.id) && roundHasOpenTasks(round)) || null;
+}
+
+function renderGrowth() {
+  const tasks = Object.keys(progressData || {});
+  const doneCount = tasks.filter((id) => isTaskDone(id)).length;
+  const evidenceCount = Object.values(eventMap || {}).reduce((sum, events) => sum + (events?.length || 0), 0);
+  const next = typeof findNextTask === "function" ? findNextTask() : null;
+  setElementText("growthDoneValue", String(doneCount));
+  setElementText("growthDoneMeta", `共 ${tasks.length} 项`);
+  setElementText("growthEvidenceValue", String(evidenceCount));
+  setElementText("growthModuleValue", next ? moduleDisplayCode(next.round.id) : "完成");
+  setElementText("growthModuleMeta", next?.round?.title || "全部完成");
+}
+
+function renderCompletion() {
+  const shell = document.getElementById("completionState");
+  if (!shell) return;
+  const round = (ROUNDS || []).find((item) => item.id === activeRound) || (typeof findNextTask === "function" ? findNextTask()?.round : null) || (ROUNDS || [])[0];
+  if (!round) {
+    shell.classList.remove("is-complete");
+    shell.innerHTML = '<span class="completion-halo" aria-hidden="true"></span><div class="completion-copy"><span class="section-kicker">STAGE CHECKPOINT</span><h2 id="completionHeading">暂无阶段</h2><p>课程数据尚未载入。</p></div>';
+    return;
+  }
+  const stage = typeof STAGES !== "undefined"
+    ? STAGES.find((item) => item.round_ids?.includes(round.id))
+    : null;
+  const scopeRoundIds = stage?.round_ids?.length ? stage.round_ids : [round.id];
+  const scopeRounds = (ROUNDS || []).filter((item) => scopeRoundIds.includes(item.id));
+  const tasks = scopeRounds.flatMap((item) => (item.weeks || []).flatMap((week) => week.tasks || []));
+  const doneCount = tasks.filter((task) => isTaskDone(task.id)).length;
+  const pct = tasks.length ? Math.round(doneCount / tasks.length * 100) : 0;
+  const complete = tasks.length > 0 && doneCount === tasks.length;
+  const nextRound = complete ? nextOpenRoundAfter(scopeRoundIds) : null;
+  const scopeTitle = stage?.name || round.title;
+  const scopeKind = stage ? "阶段" : "资料组";
+  const actionTarget = complete ? "route" : "learn";
+  const actionLabel = complete ? (nextRound ? "继续未完成模块" : "返回学习路线") : "继续当前任务";
+  shell.classList.toggle("is-complete", complete);
+  shell.innerHTML = `
+    <span class="completion-halo" aria-hidden="true"></span>
+    <div class="completion-copy">
+      <span class="section-kicker">${complete ? "STAGE COMPLETE" : "STAGE CHECKPOINT"}</span>
+      <h2 id="completionHeading">${complete ? `${scopeKind}完成` : "继续推进"}</h2>
+      <p>${escapeHtml(scopeTitle)} · ${complete ? `全部 ${tasks.length} 个任务已标记完成。` : `还有 ${Math.max(0, tasks.length - doneCount)} 个任务等待完成。`}</p>
+      <div class="completion-progress"><strong>${doneCount} / ${tasks.length} · ${pct}%</strong><div class="route-track" role="progressbar" aria-label="${escapeHtml(scopeTitle)}进度" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${pct}"><span style="width:${pct}%"></span></div></div>
+      <div class="completion-actions"><button class="physical-button" type="button" data-view-target="${actionTarget}"${nextRound ? ` data-round-target="${escapeHtml(nextRound.id)}"` : ""}><span>${actionLabel}</span><span aria-hidden="true">→</span></button></div>
+    </div>
+  `;
+  shell.querySelectorAll("[data-view-target]").forEach((button) => {
+    button.addEventListener("click", () => {
+      const targetRound = (ROUNDS || []).find((item) => item.id === button.dataset.roundTarget);
+      if (targetRound) {
+        activeLane = targetRound.lane || activeLane;
+        activeRound = targetRound.id;
+        workspaceTaskId = "";
+        routeFocusedRound = true;
+        render();
+      }
+      showView(button.dataset.viewTarget, { updateHash: true, focus: true });
+    });
+  });
+}
+
+async function openKnowledgeDoc(filePath, title) {
+  const body = document.getElementById("knowledgeReaderBody");
+  const heading = document.getElementById("knowledgeReaderTitle");
+  if (!body || !heading || !filePath) return;
+  const requestId = ++knowledgeRequestId;
+  currentKnowledgeFile = filePath;
+  currentKnowledgeTitle = title || filePath;
+  heading.textContent = currentKnowledgeTitle;
+  body.innerHTML = '<p class="reader-loading">正在加载手册…</p>';
+  document.querySelectorAll(".knowledge-item").forEach((item) => {
+    item.classList.toggle("active", item.dataset.knowledgeFile === filePath);
+  });
+  try {
+    const resourcePath = "/" + filePath.replace(/^\//, "");
+    const res = await fetch(`${resourcePath}?_=${Date.now()}`, { cache: "no-store" });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const text = await res.text();
+    if (requestId !== knowledgeRequestId) return;
+    body.innerHTML = /\.(sh|py|js|json)$/i.test(filePath)
+      ? renderCodeDocument(text, filePath)
+      : renderMarkdown(text, filePath);
+    body.dataset.loaded = "true";
+    body.querySelectorAll(".inline-doc-link").forEach((link) => {
+      link.addEventListener("click", (event) => {
+        event.preventDefault();
+        const linkedFile = link.dataset.file || "";
+        if (linkedFile) void openKnowledgeDoc(linkedFile, link.dataset.title || linkedFile);
+      });
+    });
+  } catch (error) {
+    if (requestId !== knowledgeRequestId) return;
+    body.innerHTML = `<p class="reader-error">无法加载 ${escapeHtml(filePath)}：${escapeHtml(error.message)}</p>`;
+  }
+}
+
+function setupKnowledge() {
+  document.querySelectorAll(".knowledge-item").forEach((item) => {
+    item.addEventListener("click", () => void openKnowledgeDoc(item.dataset.knowledgeFile || "", item.dataset.knowledgeTitle || item.textContent.trim()));
+  });
+  document.getElementById("knowledgeReaderPopout")?.addEventListener("click", () => {
+    openMarkdownViewer(currentKnowledgeFile, currentKnowledgeTitle);
+  });
+}
+
+function setupSpatialInteraction() {
+  const stage = document.getElementById("spatialStage");
+  if (!stage) return;
+  const blocks = [...stage.querySelectorAll(".spatial-block")];
+  const depths = [-13, -8, -3, 5, 9, 14];
+  const reduced = window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches;
+  const setParallax = (x, y) => {
+    if (reduced) return;
+    stage.style.setProperty("--warm-x", `${x * -10}px`);
+    stage.style.setProperty("--warm-y", `${y * -6}px`);
+    stage.style.setProperty("--cool-x", `${x * 9}px`);
+    stage.style.setProperty("--cool-y", `${y * 6}px`);
+    stage.style.setProperty("--card-x", `${x * 7}px`);
+    stage.style.setProperty("--card-y", `${y * 5}px`);
+    stage.style.setProperty("--card-tilt-x", `${y * -2}deg`);
+    stage.style.setProperty("--card-tilt-y", `${x * 3}deg`);
+    blocks.forEach((block, index) => {
+      block.style.setProperty("--parallax-x", `${x * depths[index]}px`);
+      block.style.setProperty("--parallax-y", `${y * depths[index] * 0.52}px`);
+    });
+  };
+  stage.addEventListener("pointermove", (event) => {
+    if (event.pointerType === "touch") return;
+    const rect = stage.getBoundingClientRect();
+    setParallax((event.clientX - rect.left) / rect.width - 0.5, (event.clientY - rect.top) / rect.height - 0.5);
+  });
+  stage.addEventListener("pointerleave", () => setParallax(0, 0));
+
+  blocks.forEach((block) => {
+    let drag = null;
+    block.addEventListener("pointerdown", (event) => {
+      drag = { x: event.clientX, y: event.clientY };
+      block.classList.add("is-dragging");
+      block.setPointerCapture?.(event.pointerId);
+    });
+    block.addEventListener("pointermove", (event) => {
+      if (!drag) return;
+      const dx = Math.max(-34, Math.min(34, event.clientX - drag.x));
+      const dy = Math.max(-26, Math.min(26, event.clientY - drag.y));
+      block.style.setProperty("--drag-x", `${dx}px`);
+      block.style.setProperty("--drag-y", `${dy}px`);
+    });
+    const release = () => {
+      if (!drag) return;
+      drag = null;
+      block.classList.remove("is-dragging");
+      block.style.setProperty("--drag-x", "0px");
+      block.style.setProperty("--drag-y", "0px");
+    };
+    block.addEventListener("pointerup", release);
+    block.addEventListener("pointercancel", release);
+    block.addEventListener("lostpointercapture", release);
+  });
+}
+
 function renderFeedbackHint(taskId) {
   const fb = feedbackFor(taskId);
   if (!fb || fb.feedback_type === "completed") return "";
@@ -499,30 +1003,38 @@ async function postTaskRun(taskId) {
     `将在本地沙盒执行白名单练习脚本：\n${file}\n\n工作目录：${sandbox}\n脚本可能写入沙盒、调用完成记录脚本并追加动作记录。继续？`
   );
   if (!ok) return null;
-
-  const res = await fetch(`/api/tasks/${encodeURIComponent(taskId)}/run`, {
-    method: "POST",
-    headers: {
-      "Accept": "application/json",
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({}),
-  });
-  const data = await res.json();
-  if (!res.ok) {
-    showToast(data.error || "运行失败", "error");
+  try {
+    const res = await fetch(`/api/tasks/${encodeURIComponent(taskId)}/run`, {
+      method: "POST",
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({}),
+    });
+    const data = await res.json();
+    if (!res.ok) {
+      showToast(data.error || "运行失败", "error");
+      return null;
+    }
+    progressData = data.tasks || progressData;
+    lanesData = data.lanes || lanesData;
+    feedbackMap = data.feedback || feedbackMap;
+    await loadFeedbackData();
+    await loadEventData();
+    if (isTaskDone(taskId)) {
+      if (workspaceTaskId === taskId) workspaceTaskId = "";
+      if (activeTerminalTaskId === taskId) activeTerminalTaskId = "";
+    }
+    render();
+    openExecutionResult(title, data.execution || {});
+    const result = data.execution?.result || "";
+    showToast(result === "ok" ? "练习脚本运行完成" : "练习脚本已结束，请查看输出", result === "ok" ? "ok" : "warn");
+    return data;
+  } catch (error) {
+    showToast(error.message || "练习脚本请求失败", "error");
     return null;
   }
-  progressData = data.tasks || progressData;
-  lanesData = data.lanes || lanesData;
-  feedbackMap = data.feedback || feedbackMap;
-  await loadFeedbackData();
-  await loadEventData();
-  render();
-  openExecutionResult(title, data.execution || {});
-  const result = data.execution?.result || "";
-  showToast(result === "ok" ? "练习脚本运行完成" : "练习脚本已结束，请查看输出", result === "ok" ? "ok" : "warn");
-  return data;
 }
 
 function bindTaskActions(container) {
@@ -532,19 +1044,22 @@ function bindTaskActions(container) {
       const id = btn.getAttribute("data-task");
       const undo = btn.getAttribute("data-action") === "undo";
       btn.disabled = true;
-      await postTaskAction(id, undo);
-      btn.disabled = false;
+      try { await postTaskAction(id, undo); } finally { btn.disabled = false; }
     });
   });
   container.querySelectorAll(".task-record-open").forEach((btn) => {
     btn.addEventListener("click", (e) => {
       e.stopPropagation();
+      lastModalFocus = btn;
+      lastModalFocusTaskId = btn.getAttribute("data-task") || "";
       openRecordViewer(btn.getAttribute("data-task"));
     });
   });
   container.querySelectorAll(".task-complete-open").forEach((btn) => {
     btn.addEventListener("click", (e) => {
       e.stopPropagation();
+      lastModalFocus = btn;
+      lastModalFocusTaskId = btn.getAttribute("data-task") || "";
       openRecordViewer(btn.getAttribute("data-task"), { requireNote: true });
     });
   });
@@ -553,16 +1068,14 @@ function bindTaskActions(container) {
       e.stopPropagation();
       const id = btn.getAttribute("data-task");
       btn.disabled = true;
-      await postTaskRun(id);
-      btn.disabled = false;
+      try { await postTaskRun(id); } finally { btn.disabled = false; }
     });
   });
   container.querySelectorAll(".task-terminal").forEach((btn) => {
     btn.addEventListener("click", async (e) => {
       e.stopPropagation();
       btn.disabled = true;
-      await openTaskTerminal(btn.getAttribute("data-task"));
-      btn.disabled = false;
+      try { await openTaskTerminal(btn.getAttribute("data-task")); } finally { btn.disabled = false; }
     });
   });
   container.querySelectorAll(".task-open").forEach((btn) => {
@@ -579,6 +1092,7 @@ function bindTaskActions(container) {
 
 async function openInlineReader(filePath, title, taskId, options) {
   if (!filePath) return;
+  const requestId = ++inlineReaderRequestId;
   const body = document.getElementById("inlineReaderBody");
   const heading = document.getElementById("inlineReaderTitle");
   const metaEl = document.getElementById("inlineReaderMeta");
@@ -587,7 +1101,17 @@ async function openInlineReader(filePath, title, taskId, options) {
     openMarkdownViewer(filePath, title);
     return;
   }
-  if (taskId) workspaceTaskId = taskId;
+  if (taskId) {
+    if (!options?.silent) forceTerminalVisible = false;
+    workspaceTaskId = taskId;
+    routeFocusedRound = false;
+    const meta = taskMeta(taskId);
+    if (meta) {
+      activeLane = meta.round.lane || activeLane;
+      activeRound = meta.round.id || activeRound;
+    }
+    if (activeTerminalTaskId && activeTerminalTaskId !== taskId) activeTerminalTaskId = "";
+  }
   inlineReaderTaskId = taskId || inlineReaderTaskId;
   inlineReaderFile = filePath;
   heading.textContent = title || filePath;
@@ -598,6 +1122,10 @@ async function openInlineReader(filePath, title, taskId, options) {
     popout.dataset.title = title || filePath;
   }
   body.innerHTML = "<p class='reader-loading'>加载中…</p>";
+  if (taskId) {
+    renderContinue();
+    renderTerminal();
+  }
   if (!options?.silent) {
     scrollWorkspacePanel("inlineReaderPanel");
   }
@@ -607,31 +1135,34 @@ async function openInlineReader(filePath, title, taskId, options) {
     const res = await fetch(`${resourcePath}${separator}_=${Date.now()}`, { cache: "no-store" });
     if (!res.ok) throw new Error("HTTP " + res.status);
     const text = await res.text();
+    if (requestId !== inlineReaderRequestId) return;
     body.innerHTML = /\.(sh|py|js|json)$/i.test(filePath)
       ? renderCodeDocument(text, filePath)
       : renderMarkdown(text, filePath);
     bindReaderDocumentLinks(body);
   } catch (err) {
+    if (requestId !== inlineReaderRequestId) return;
     body.innerHTML = `<p class='reader-error'>无法加载 ${escapeHtml(filePath)}：${escapeHtml(err.message)}</p>`;
   }
 }
 
 async function openMarkdownViewer(filePath, title) {
   if (!filePath) return;
+  const requestId = ++modalReaderRequestId;
   const modal = document.getElementById("readerModal");
   const body = document.getElementById("readerBody");
   const heading = document.getElementById("readerTitle");
   if (!modal || !body) return;
   heading.textContent = title || filePath;
   body.innerHTML = "<p class='reader-loading'>加载中…</p>";
-  modal.classList.add("open");
-  modal.setAttribute("aria-hidden", "false");
+  revealReaderModal();
   try {
     const resourcePath = "/" + filePath.replace(/^\//, "");
     const separator = resourcePath.includes("?") ? "&" : "?";
     const res = await fetch(`${resourcePath}${separator}_=${Date.now()}`, { cache: "no-store" });
     if (!res.ok) throw new Error("HTTP " + res.status);
     const text = await res.text();
+    if (requestId !== modalReaderRequestId) return;
     if (/\.(sh|py|js|json)$/i.test(filePath)) {
       body.innerHTML = renderCodeDocument(text, filePath);
     } else {
@@ -639,6 +1170,7 @@ async function openMarkdownViewer(filePath, title) {
     }
     bindReaderDocumentLinks(body);
   } catch (err) {
+    if (requestId !== modalReaderRequestId) return;
     body.innerHTML = `<p class='reader-error'>无法加载 ${escapeHtml(filePath)}：${escapeHtml(err.message)}</p>`;
   }
 }
@@ -654,6 +1186,7 @@ function taskMeta(taskId) {
 }
 
 function openRecordViewer(taskId, options = {}) {
+  modalReaderRequestId += 1;
   const modal = document.getElementById("readerModal");
   const body = document.getElementById("readerBody");
   const heading = document.getElementById("readerTitle");
@@ -667,8 +1200,7 @@ function openRecordViewer(taskId, options = {}) {
 
   heading.textContent = `学习记录 · ${title}`;
   body.innerHTML = renderRecordBody(taskId, done, fb, events, options, meta);
-  modal.classList.add("open");
-  modal.setAttribute("aria-hidden", "false");
+  revealReaderModal();
 
   const saveBtn = body.querySelector("#recordSaveDone");
   const undoBtn = body.querySelector("#recordUndoDone");
@@ -682,8 +1214,12 @@ function openRecordViewer(taskId, options = {}) {
       return;
     }
     if (btn) btn.disabled = true;
-    await postTaskAction(taskId, undo, { note, evidence_path: evidencePath });
-    closeMarkdownViewer();
+    try {
+      const result = await postTaskAction(taskId, undo, { note, evidence_path: evidencePath });
+      if (result) closeMarkdownViewer();
+    } finally {
+      if (btn?.isConnected) btn.disabled = false;
+    }
   };
   if (saveBtn) saveBtn.addEventListener("click", () => action(false));
   if (undoBtn) undoBtn.addEventListener("click", () => action(true));
@@ -713,6 +1249,7 @@ function exampleText(text) {
 function renderRecordBody(taskId, done, fb, events, options = {}, meta = null) {
   const placeholders = recordPlaceholders(meta, taskId);
   const suggestion = fb?.next_suggestion || "";
+  const noteRequired = options.requireNote || !done;
   const eventRows = events.length
     ? events.slice(0, 12).map((event) => `
         <li>
@@ -734,9 +1271,9 @@ function renderRecordBody(taskId, done, fb, events, options = {}, meta = null) {
         <p>${escapeHtml(exampleText(placeholders.note))}</p>
         <p>证据示例：<code>${escapeHtml(exampleText(placeholders.evidence))}</code></p>
       </div>
-      <label class="record-label">本次记录${done && !options.requireNote ? "（建议填写）" : "（必填）"}</label>
-      <textarea id="recordNote" class="record-input" placeholder="${escapeHtml(placeholders.note)}"></textarea>
-      <label class="record-label">证据路径（可选）</label>
+      <label class="record-label" for="recordNote">本次记录${noteRequired ? "（必填）" : "（建议填写）"}</label>
+      <textarea id="recordNote" class="record-input"${noteRequired ? ' required aria-required="true"' : ""} placeholder="${escapeHtml(placeholders.note)}"></textarea>
+      <label class="record-label" for="recordEvidence">证据路径（可选）</label>
       <input id="recordEvidence" class="record-input" placeholder="${escapeHtml(placeholders.evidence)}" />
       <div class="record-actions">
         <button type="button" class="task-btn done" id="recordSaveDone">${done ? "保存记录并保持完成" : "记录并完成"}</button>
@@ -756,14 +1293,14 @@ function actionLabel(actionType) {
 }
 
 function openExecutionResult(title, execution) {
+  modalReaderRequestId += 1;
   const modal = document.getElementById("readerModal");
   const body = document.getElementById("readerBody");
   const heading = document.getElementById("readerTitle");
   if (!modal || !body || !heading) return;
   heading.textContent = `运行结果 · ${title}`;
   body.innerHTML = renderExecutionResult(execution);
-  modal.classList.add("open");
-  modal.setAttribute("aria-hidden", "false");
+  revealReaderModal();
 }
 
 function renderExecutionResult(execution) {
@@ -793,11 +1330,48 @@ function renderExecutionResult(execution) {
   `;
 }
 
+function revealReaderModal() {
+  const modal = document.getElementById("readerModal");
+  if (!modal) return;
+  if (!lastModalFocus?.isConnected) {
+    lastModalFocus = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+  }
+  modal.classList.add("open");
+  modal.setAttribute("aria-hidden", "false");
+  document.body.classList.add("modal-open");
+  document.querySelector(".app-shell")?.setAttribute("inert", "");
+  requestAnimationFrame(() => document.getElementById("readerClose")?.focus({ preventScroll: true }));
+}
+
 function closeMarkdownViewer() {
   const modal = document.getElementById("readerModal");
   if (!modal) return;
+  modalReaderRequestId += 1;
+  const visibleTaskTarget = lastModalFocusTaskId
+    ? [...document.querySelectorAll(`[data-task="${CSS.escape(lastModalFocusTaskId)}"]`)].find((element) => element instanceof HTMLElement && element.offsetParent !== null)
+    : null;
+  const focusTarget = lastModalFocus?.isConnected
+    ? lastModalFocus
+    : visibleTaskTarget || document.querySelector(".app-view:not([hidden])");
   modal.classList.remove("open");
   modal.setAttribute("aria-hidden", "true");
+  document.body.classList.remove("modal-open");
+  document.querySelector(".app-shell")?.removeAttribute("inert");
+  if (focusTarget) {
+    if (!focusTarget.hasAttribute("tabindex") && !focusTarget.matches("button, a, input, textarea, select, summary")) {
+      focusTarget.setAttribute("tabindex", "-1");
+    }
+    focusTarget.focus({ preventScroll: true });
+    // Keep keyboard dismissal deterministic after the browser finishes
+    // dispatching Escape and applies its own default focus behavior.
+    requestAnimationFrame(() => {
+      if (focusTarget.isConnected && !modal.classList.contains("open")) {
+        focusTarget.focus({ preventScroll: true });
+      }
+    });
+  }
+  lastModalFocus = null;
+  lastModalFocusTaskId = "";
 }
 
 function resolveReaderLink(href, baseFilePath) {
@@ -973,6 +1547,9 @@ function bindReaderDocumentLinks(container) {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
+  setupViewNavigation();
+  setupKnowledge();
+  setupSpatialInteraction();
   const closeBtn = document.getElementById("readerClose");
   const modal = document.getElementById("readerModal");
   const terminalInput = document.getElementById("terminalInput");
@@ -991,6 +1568,21 @@ document.addEventListener("DOMContentLoaded", () => {
   document.addEventListener("keydown", (e) => {
     if (e.key === "Escape" && modal && modal.classList.contains("open")) {
       closeMarkdownViewer();
+      return;
+    }
+    if (e.key === "Tab" && modal?.classList.contains("open")) {
+      const focusable = [...modal.querySelectorAll('button:not([disabled]), a[href], input:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])')]
+        .filter((element) => element instanceof HTMLElement && element.offsetParent !== null);
+      if (!focusable.length) return;
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
     }
   });
   if (terminalInput) {
