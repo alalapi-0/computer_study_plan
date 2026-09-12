@@ -73,6 +73,8 @@ python3 scripts/generate_task_feedback.py
 
 UI 变更必须做真实浏览器 before/after，并检查 console / network。
 
+UI Python 依赖由 `scripts/external-ui-python` 固定入口管理。首次建立运行时执行 `scripts/external-ui-python --bootstrap`；日常 UI 回归只执行 `npm run test:ui`。不得再创建、激活或直接调用仓库内 `.venv-ui`，也不得绕过该入口安装浏览器；外盘缺失或身份错误时必须 fail closed。
+
 ## 5. 关键路径
 
 | 路径 | 用途 |

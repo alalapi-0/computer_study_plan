@@ -13,6 +13,8 @@ from pathlib import Path
 from urllib.parse import parse_qs, urlparse
 
 from progress_lib import (
+    RunInProgressError,
+    RunOutcomeUncertainError,
     create_progress_save,
     events_by_task,
     list_progress_saves,
@@ -21,16 +23,21 @@ from progress_lib import (
     load_progress,
     load_progress_save,
     mark_task,
+    progress_write_lock,
+    read_feedback_payload,
+    recover_pending_operations,
     repo_root,
     run_task_script,
     run_terminal_command,
-    sync_progress_data_js,
+    sync_progress_state,
     terminal_state,
 )
 
-TASK_API = re.compile(r"^/api/tasks/([^/]+)/(done|undo)$")
-TASK_RUN_API = re.compile(r"^/api/tasks/([^/]+)/run$")
+TASK_ID_PATTERN = r"[A-Za-z0-9._-]+"
+TASK_API = re.compile(rf"^/api/tasks/({TASK_ID_PATTERN})/(done|undo)$")
+TASK_RUN_API = re.compile(rf"^/api/tasks/({TASK_ID_PATTERN})/run$")
 SAVE_LOAD_API = re.compile(r"^/api/saves/([A-Za-z0-9._-]+)/load$")
+MAX_JSON_BODY_BYTES = 16 * 1024
 
 
 class ProgressRequestHandler(SimpleHTTPRequestHandler):
@@ -57,10 +64,21 @@ class ProgressRequestHandler(SimpleHTTPRequestHandler):
     def do_GET(self) -> None:
         path = urlparse(self.path).path
         if path == "/api/progress":
-            self.end_json(HTTPStatus.OK, list_status(self.repo_root))
+            with progress_write_lock(self.repo_root):
+                recover_pending_operations(self.repo_root)
+                payload = list_status(self.repo_root)
+            self.end_json(HTTPStatus.OK, payload)
+            return
+        if path == "/progress.json":
+            with progress_write_lock(self.repo_root):
+                recover_pending_operations(self.repo_root)
+                payload = load_progress(self.repo_root)
+            self.end_json(HTTPStatus.OK, payload)
             return
         if path == "/api/events":
-            events = load_action_events(self.repo_root)
+            with progress_write_lock(self.repo_root):
+                recover_pending_operations(self.repo_root)
+                events = load_action_events(self.repo_root)
             self.end_json(
                 HTTPStatus.OK,
                 {
@@ -71,11 +89,9 @@ class ProgressRequestHandler(SimpleHTTPRequestHandler):
             )
             return
         if path == "/api/feedback":
-            fb_path = self.repo_root / "records/feedback/task_feedback.json"
-            if fb_path.exists():
-                payload = json.loads(fb_path.read_text(encoding="utf-8"))
-            else:
-                payload = {"version": 1, "feedback": {}}
+            with progress_write_lock(self.repo_root):
+                recover_pending_operations(self.repo_root)
+                payload = read_feedback_payload(self.repo_root)
             self.end_json(HTTPStatus.OK, payload)
             return
         if path == "/api/saves":
@@ -103,17 +119,30 @@ class ProgressRequestHandler(SimpleHTTPRequestHandler):
     def do_POST(self) -> None:
         path = urlparse(self.path).path
         payload = {}
-        length = int(self.headers.get("Content-Length") or 0)
+        try:
+            length = int(self.headers.get("Content-Length") or 0)
+        except ValueError:
+            self.end_json(HTTPStatus.BAD_REQUEST, {"ok": False, "error": "invalid_content_length"})
+            return
+        if length < 0:
+            self.end_json(HTTPStatus.BAD_REQUEST, {"ok": False, "error": "invalid_content_length"})
+            return
+        if length > MAX_JSON_BODY_BYTES:
+            self.close_connection = True
+            self.end_json(HTTPStatus.REQUEST_ENTITY_TOO_LARGE, {"ok": False, "error": "payload_too_large"})
+            return
         if length:
             try:
                 payload = json.loads(self.rfile.read(length).decode("utf-8"))
-            except json.JSONDecodeError:
+            except (UnicodeDecodeError, json.JSONDecodeError):
                 self.end_json(HTTPStatus.BAD_REQUEST, {"ok": False, "error": "invalid_json"})
                 return
+        if not isinstance(payload, dict):
+            self.end_json(HTTPStatus.BAD_REQUEST, {"ok": False, "error": "invalid_payload"})
+            return
 
         if path == "/api/sync":
-            data = load_progress(self.repo_root)
-            sync_progress_data_js(data, self.repo_root)
+            data = sync_progress_state(self.repo_root)
             self.end_json(HTTPStatus.OK, {"ok": True, "tasks": len(data.get("tasks", {}))})
             return
         if path == "/api/saves":
@@ -164,6 +193,7 @@ class ProgressRequestHandler(SimpleHTTPRequestHandler):
                         "tasks": result.get("tasks", {}),
                         "lanes": result.get("lanes", {}),
                         "feedback": result.get("feedback", {}),
+                        "revision": result.get("revision", 0),
                         "saves": list_progress_saves(self.repo_root),
                     },
                 )
@@ -175,22 +205,31 @@ class ProgressRequestHandler(SimpleHTTPRequestHandler):
 
         run_match = TASK_RUN_API.match(path)
         if run_match:
+            if set(payload) != {"operation_id"}:
+                self.end_json(HTTPStatus.BAD_REQUEST, {"ok": False, "error": "invalid_run_payload"})
+                return
+            operation_id = payload.get("operation_id")
+            if not isinstance(operation_id, str):
+                self.end_json(HTTPStatus.BAD_REQUEST, {"ok": False, "error": "invalid_operation_id_type"})
+                return
+            if not operation_id:
+                self.end_json(HTTPStatus.BAD_REQUEST, {"ok": False, "error": "missing_operation_id"})
+                return
             try:
-                execution = run_task_script(run_match.group(1), root=self.repo_root)
-                self.end_json(
-                    HTTPStatus.OK,
-                    {
-                        "ok": True,
-                        "execution": execution,
-                        "tasks": execution.get("tasks", {}),
-                        "lanes": execution.get("lanes", {}),
-                        "feedback": execution.get("feedback", {}),
-                    },
+                result = run_task_script(
+                    run_match.group(1),
+                    root=self.repo_root,
+                    operation_id=operation_id,
                 )
+                self.end_json(HTTPStatus.OK, result)
             except KeyError:
                 self.end_json(HTTPStatus.NOT_FOUND, {"ok": False, "error": f"unknown task: {run_match.group(1)}"})
             except FileNotFoundError:
                 self.end_json(HTTPStatus.NOT_FOUND, {"ok": False, "error": "script_not_found"})
+            except RunInProgressError as exc:
+                self.end_json(HTTPStatus.CONFLICT, {"ok": False, "error": str(exc)})
+            except RunOutcomeUncertainError as exc:
+                self.end_json(HTTPStatus.CONFLICT, {"ok": False, "error": str(exc)})
             except ValueError as exc:
                 self.end_json(HTTPStatus.BAD_REQUEST, {"ok": False, "error": str(exc)})
             except Exception as exc:  # pragma: no cover - safety net for local server
@@ -204,17 +243,32 @@ class ProgressRequestHandler(SimpleHTTPRequestHandler):
 
         task_id = match.group(1)
         action = match.group(2)
+        operation_id = payload.get("operation_id", "")
+        if not isinstance(operation_id, str):
+            self.end_json(HTTPStatus.BAD_REQUEST, {"ok": False, "error": "invalid_operation_id_type"})
+            return
+        if not operation_id:
+            self.end_json(HTTPStatus.BAD_REQUEST, {"ok": False, "error": "missing_operation_id"})
+            return
+        note = payload.get("note", "")
+        evidence_path = payload.get("evidence_path", "")
+        if not isinstance(note, str) or not isinstance(evidence_path, str):
+            self.end_json(HTTPStatus.BAD_REQUEST, {"ok": False, "error": "invalid_task_action_text"})
+            return
         try:
             result = mark_task(
                 task_id,
                 undo=(action == "undo"),
                 root=self.repo_root,
-                note=str(payload.get("note", ""))[:500],
-                evidence_path=str(payload.get("evidence_path", ""))[:500],
+                note=note,
+                evidence_path=evidence_path,
+                operation_id=operation_id,
             )
             self.end_json(HTTPStatus.OK, result)
         except KeyError:
             self.end_json(HTTPStatus.NOT_FOUND, {"ok": False, "error": f"unknown task: {task_id}"})
+        except ValueError as exc:
+            self.end_json(HTTPStatus.BAD_REQUEST, {"ok": False, "error": str(exc)})
         except Exception as exc:  # pragma: no cover - safety net for local server
             self.end_json(HTTPStatus.INTERNAL_SERVER_ERROR, {"ok": False, "error": str(exc)})
 
@@ -226,8 +280,7 @@ def main() -> int:
     args = parser.parse_args()
 
     root = repo_root()
-    data = load_progress(root)
-    sync_progress_data_js(data, root)
+    sync_progress_state(root)
 
     server = ThreadingHTTPServer((args.host, args.port), ProgressRequestHandler)
     url = f"http://{args.host}:{args.port}/progress.html"

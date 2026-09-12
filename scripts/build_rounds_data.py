@@ -10,6 +10,8 @@ from pathlib import Path
 from progress_lib import (
     ACTIVE_COURSE_ID,
     load_progress,
+    progress_write_lock,
+    recover_pending_operations,
     repo_root,
     save_progress,
     sync_progress_data_js,
@@ -486,11 +488,13 @@ def main() -> int:
             rounds.append(item)
     rounds.extend(build_plan_rounds(root))
 
-    write_rounds_js(root, rounds)
-    data = load_progress(root)
-    added, removed = merge_and_prune_tasks(data, rounds)
-    save_progress(data, root)
-    sync_progress_data_js(data, root)
+    with progress_write_lock(root):
+        recover_pending_operations(root)
+        write_rounds_js(root, rounds)
+        data = load_progress(root)
+        added, removed = merge_and_prune_tasks(data, rounds)
+        save_progress(data, root)
+        sync_progress_data_js(data, root)
     print(f"Built rounds_data.js ({len(rounds)} rounds)")
     print(f"Merged {added} new tasks; pruned {removed} obsolete tasks (total {len(data['tasks'])})")
     return 0

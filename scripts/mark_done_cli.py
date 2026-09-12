@@ -4,11 +4,90 @@
 from __future__ import annotations
 
 import collections
+import json
+import os
+import stat
 import sys
+from pathlib import Path
+from uuid import UUID
 
-from progress_lib import ACTIVE_COURSE_ID, list_status, mark_task, repo_root, task_metadata_map
+from progress_lib import (
+    ACTIVE_COURSE_ID,
+    list_status,
+    mark_task,
+    progress_write_lock,
+    recover_pending_operations,
+    repo_root,
+    task_metadata_map,
+)
 
 DEFAULT_STATUS_LIMIT = 8
+
+
+def record_ui_run_receipt(task_id: str, undo: bool, root: Path) -> int | None:
+    """Record a trusted validation checkpoint without mutating learning state."""
+    if os.environ.get("PROGRESS_UI_RUN") != "1":
+        return None
+    requested_task = os.environ.get("PROGRESS_UI_RUN_TASK_ID", "")
+    script_path = os.environ.get("PROGRESS_UI_RUN_SCRIPT", "")
+    receipt_value = os.environ.get("PROGRESS_UI_RUN_RECEIPT", "")
+    token = os.environ.get("PROGRESS_UI_RUN_TOKEN", "")
+    try:
+        canonical_token = str(UUID(token))
+    except (ValueError, AttributeError):
+        canonical_token = ""
+    meta = task_metadata_map(root).get(task_id) or {}
+    task = meta.get("task") or {}
+    if undo:
+        print("❌ Web 脚本运行不允许撤销任务状态")
+        return 1
+    if task.get("type") != "exercise":
+        print(f"❌ Web 脚本不能自动验收非 exercise 任务：{task_id}")
+        return 1
+    if task_id != requested_task:
+        print(f"↪️  非本次请求任务，已跳过完成记录：{task_id}")
+        return 0
+    if not script_path or task.get("file") != script_path:
+        print(f"❌ 任务与当前白名单脚本不匹配：{task_id}")
+        return 1
+    if not receipt_value or canonical_token != token:
+        print("❌ Web 脚本验证凭据无效")
+        return 1
+    receipt = Path(receipt_value)
+    try:
+        resolved = receipt.resolve(strict=True)
+        allowed_root = (Path.home() / "cli-lab").resolve()
+        info = receipt.lstat()
+        if (
+            allowed_root not in resolved.parents
+            or receipt.is_symlink()
+            or not stat.S_ISREG(info.st_mode)
+            or info.st_uid != os.getuid()
+            or info.st_size > 4096
+        ):
+            raise ValueError("invalid_run_receipt")
+        flags = os.O_WRONLY | os.O_APPEND
+        if hasattr(os, "O_NOFOLLOW"):
+            flags |= os.O_NOFOLLOW
+        fd = os.open(receipt, flags)
+        try:
+            current = os.fstat(fd)
+            if current.st_ino != info.st_ino or current.st_dev != info.st_dev:
+                raise ValueError("invalid_run_receipt")
+            body = json.dumps(
+                {"token": token, "task_id": task_id, "script_path": script_path},
+                ensure_ascii=False,
+                separators=(",", ":"),
+            ) + "\n"
+            os.write(fd, body.encode("utf-8"))
+            os.fsync(fd)
+        finally:
+            os.close(fd)
+    except (OSError, ValueError):
+        print("❌ Web 脚本验证凭据无效")
+        return 1
+    print(f"🧪 已记录本次脚本验证点：{task_id}")
+    return 0
 
 
 def task_label(task_id: str, meta_by_task: dict[str, dict]) -> str:
@@ -79,7 +158,9 @@ def parse_status_args(args: list[str]) -> tuple[bool, str | None, int] | None:
 
 def print_status(show_all: bool = False, lane_filter: str | None = None, limit: int = DEFAULT_STATUS_LIMIT) -> int:
     root = repo_root()
-    data = list_status()
+    with progress_write_lock(root):
+        recover_pending_operations(root)
+        data = list_status(root)
     lanes = data["lanes"]
     tasks = data["tasks"]
     meta_by_task = task_metadata_map(root)
@@ -136,6 +217,9 @@ def main(argv: list[str]) -> int:
 
     task_id = argv[1]
     undo = len(argv) > 2 and argv[2] == "--undo"
+    receipt_result = record_ui_run_receipt(task_id, undo, repo_root())
+    if receipt_result is not None:
+        return receipt_result
     try:
         result = mark_task(task_id, undo=undo, root=repo_root())
     except KeyError:
@@ -153,7 +237,9 @@ def main(argv: list[str]) -> int:
 
     meta = task_metadata_map(repo_root()).get(task_id) or {}
     label = task_label(task_id, {task_id: meta})
-    if undo:
+    if undo and result["result"] == "noop_already_undone":
+        print(f"↩️  已是未完成状态，无需重复撤销：{label}")
+    elif undo:
         print(f"↩️  已取消完成：{label}")
     elif result["result"] == "noop_already_done":
         print(f"✅ 已是完成状态（{result['done_at']}），无需重复标记")

@@ -1,6 +1,6 @@
 # Architecture
 
-> 更新日期：2026-07-18
+> 更新日期：2026-08-14
 > 原则：当前只有一个 active course；底层模型保持 course-agnostic；不为不存在的多课程需求过度设计。
 
 ## 1. 当前架构立场
@@ -8,14 +8,14 @@
 - **Active course**：仅 `linux-foundations`
 - **平台层**：任务进度、动作日志、本地 Web UI、CLI、生成与校验脚本
 - **内容层**：Linux 课程模块与练习材料
-- **本轮不做**：UI 视觉重构、XP 引擎、数据库、账号系统、云同步
+- **当前未实现**：XP 引擎、自然语言学习编排、数据库、账号系统、云同步
 
 ## 2. 逻辑分层
 
 ```text
 content/          课程内容（当前仅 linux-foundations）
 platform data/    progress.json / events / feedback（现状仍在仓库根与 records/）
-web UI            progress.html + progress_ui.js
+web UI            progress.html + progress_ui.js + progress_ui.css
 local service     scripts/progress_server.py
 CLI               mark_done.sh
 docs/             愿景、路线、架构、状态
@@ -42,6 +42,7 @@ computer_study_plan/
 ├─ records/                # 动作日志、反馈、存档、终端历史
 ├─ progress.html
 ├─ progress_ui.js
+├─ progress_ui.css
 ├─ progress.json
 ├─ docs/
 ├─ README.md
@@ -59,6 +60,7 @@ computer_study_plan/
 | Round metadata | `rounds_data.js` | 由 `build_rounds_data.py` 生成 |
 | Action events | `records/action_logs/events.jsonl` | mark_done / undo / run_exercise |
 | Task feedback | `records/feedback/task_feedback.json` | 生成器输出 |
+| Task operation ledger | `records/action_logs/task_operations.json`（Git ignored） | Web 完成/撤销的本地幂等与中断恢复，不属于学习记录或存档内容 |
 
 ### 后续目标（未完整实现）
 
@@ -69,6 +71,7 @@ computer_study_plan/
 | Action Event | 更细粒度学习动作 |
 | XP / Mastery | 成长与通关 |
 | Reward | 绑定真实学习证据 |
+| Learning Plan Proposal | 将未来自然语言目标转换为可检查、可修改、需确认的结构化方案 |
 
 ## 4. 运行时链路
 
@@ -90,6 +93,8 @@ bash mark_done.sh <task-id>
   → progress_lib.py
 ```
 
+完成/撤销由 Web 与 CLI 共用本地文件锁。Web 请求先校验任务、动作及不超过 500 个 Unicode 字符的备注/证据，再以 `operation_id`、精确输入指纹和目标 `revision` 写入操作账本；随后原子替换进度镜像、动作日志和反馈，最后标记 committed。`progress_data.js` 携带与 `progress.json` 相同的 revision；每个任务的 `done / done_at` 必须成对一致。前端只有在完整校验任务、课程、反馈、计数、版本及本次已持久化动作事件后，才一次提交响应状态和局部反馈。可捕获异常恢复精确写前内容；进程中断时，恢复器先核对账本 key、输入指纹、基准/目标任务状态、revision 与事件事实，损坏记录零写入拒绝，合法 pending 才在下一次服务/CLI 访问时前滚。读档保留账本的 ID 占用，但若对应 event 已不在恢复后的当前动作历史中，旧请求只会明确失败，不能从账本返回幽灵 event；前端收到这类确定性 4xx 后丢弃本地旧 ID，同一输入的下一次提交会生成新 ID。该机制面向当前单机本地服务，不是数据库事务或跨设备同步。
+
 ## 5. 内容与兼容策略
 
 Phase 0：
@@ -104,13 +109,31 @@ Phase 1：
 - 逐步降低对根目录 `round_XX.md` 散落结构的依赖
 - 保持旧入口兼容直到迁移完成
 
-## 6. 明确非目标
+## 6. 未来自然语言编排边界
+
+自然语言入口属于 Linux 单课程闭环稳定后的候选编排层，不属于当前运行时。若后续实施，应遵守：
+
+```text
+自然语言目标
+  → 澄清约束
+  → 生成结构化 Learning Plan Proposal
+  → 用户检查、修改并确认
+  → 映射到 Course / Module / Task
+  → 通过 Attempt / Action Event 留下真实证据
+```
+
+- 编排层只生成提案，不直接写入 `progress.json`
+- 未经用户确认，不创建或替换正式课程任务
+- 未经任务证据验证，不得标记完成、授予 XP / Mastery 或生成成就
+- 当前仍只允许 `linux-foundations` 成为 active course
+
+## 7. 明确非目标
 
 - 不为“将来可能有很多课”提前引入复杂多租户架构
 - 不在本阶段引入前端框架或数据库
 - 不把平台实现用的 Python/JavaScript 误当成课程内容删除
-- UI/UX 系统重设计放到 Phase 6
+- 不把自然语言建议当作学习完成证据
 
-## 7. 相关决策
+## 8. 相关决策
 
 见 `docs/DECISIONS.md`（JSON 存储、原生 Web UI、CLI 兼容、单课程 active course）。

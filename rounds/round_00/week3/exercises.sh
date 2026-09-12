@@ -100,9 +100,9 @@ echo "请在终端里独立完成（不看上面的提示）："
 echo "  1. 打开 man ls，找到这页在讲什么命令，然后退出"
 echo "  2. 打开 man mkdir，然后退出"
 echo ""
-echo "完成后按回车确认，进度将自动记录..."
+echo "完成后按回车确认；自测仍需在 Web UI 记录证据后完成。"
 read
-mark w3-self
+echo "第3周自测不会由练习脚本自动验收。"
 
 echo ""
 echo "🎉 Week 3 所有练习完成！"

@@ -2,7 +2,7 @@
 
 > **定位**：本地优先的网页交互式学习产品原型。
 > **当前唯一正式课程**：Linux 基础与工程实践（`linux-foundations`）。
-> **长期方向**：用这一门课验证游戏化、强正反馈、可坚持的学习体验。
+> **长期方向**：成为可扩展的通用学习平台；当前先用 Linux 验证真实动作、证据、反馈与持续学习闭环。
 
 ---
 
@@ -23,15 +23,15 @@
 ```bash
 cd ~/PycharmProjects/computer_study_plan
 python3 scripts/progress_server.py
-open http://127.0.0.1:8777/progress.html?round=round_00
+open http://127.0.0.1:8777/progress.html
 ```
 
 打开后：
 
-1. 左侧确认当前 Linux 任务
-2. 中间读教程
-3. 在右侧终端或练习脚本中完成最小验证
-4. 点击「记录并完成」，填写本次记录后保存
+1. 在「今日」页确认唯一当前任务
+2. 进入「学习」页阅读教程；工程练习会显示受限终端
+3. 完成最小验证或运行白名单练习脚本
+4. 点击「记录并完成」，填写本次记录后保存；路线、复习、手册和成长页按需打开
 
 ---
 
@@ -81,9 +81,9 @@ npm run check:mcp
 
 | 阶段 | 目标 |
 |---|---|
-| **当前** | 用 `linux-foundations` 验证持续学习、记录、反馈、通关感与网页体验 |
-| **后续** | Attempt、规则反馈、XP/Mastery、Round 00 垂直切片、UI/UX 重设计 |
-| **更后** | Linux 模块完善 → 工程质量 → 可选服务化 → 再评估第二门课 |
+| **当前** | 用已重构的多视图 Web UI 验证 `linux-foundations` 的持续学习、记录、反馈、通关感与网页体验 |
+| **后续** | Course/Module/Task 统一模型、Attempt、规则反馈、XP/Mastery、Round 00 垂直切片 |
+| **更后** | Linux 模块完善 → 工程质量 → 可选服务化 → 自然语言学习编排评估 → 再评估第二门课 |
 
 ---
 
@@ -106,9 +106,12 @@ npm run check:mcp
 
 ## 4. 当前阶段
 
-- 进行中（候选待验收）：Phase 0 单课程化基线重构；待 VERIFY → Judge → APPROVE → DELIVER
+- 已交付：Phase 0 单课程化基线重构
+- 当前 Web UI：今日、学习、路线、复习、手册、成长六个核心视图，以及独立模块检查点
+- 已验证设计切片：首页；路线地图与模块总览；聚焦学习与真实反馈；复习记录；五份课程真源驱动的只读命令手册；成长记录与模块检查点。跨屏显式任务由课程注册 ID、Learn URL 与 history 稳定持有，Home 继续只表示真实全局下一项；H04 Home → Learn 共享任务关系、原子降级和 390–920px 移动触控已有浏览器回归。完成/撤销另有隔离内存浏览器测试与临时仓库事务测试，验证 pending、错误恢复、幂等、revision、并发与中断前滚，不写正式进度。以上不把完成标记或设计示例冒充能力验收
 - 工作树已删除：软考、数学二、408 计划，以及 Round 03–05、07–21 非 Linux 课程内容
-- 本轮明确未做：完整 XP 引擎、UI 视觉重设计、第二门课程、真实浏览器冒烟（`UI_SMOKE_DEFERRED_FOR_ROOT`）
+- 当前仍未实现：完整 Attempt / 规则反馈 / XP / Mastery / 成就引擎、自然语言学习编排、第二门课程
+- Figma 设计底板：`WtmY7TC867Wdp0qXY2b5uz` 当前包含校准页、10 个 Desktop 屏、10 个 Mobile/Mini Program 屏、3 组核心组件和 6 个 Motion/Codex Handoff 页面；2026-08-11 的校准版 UI 只是重构基线，不是完整对齐终态
 
 状态见 [`docs/PROJECT_STATE.md`](docs/PROJECT_STATE.md)。
 
@@ -122,9 +125,10 @@ computer_study_plan/
 ├─ rounds/round_00|01|02|06/           ← Linux 可执行练习（兼容真源）
 ├─ rounds/stage_03_vps_remote_ops/     ← 远程 Linux 支线
 ├─ plans/linux/                        ← 课程学习路径
-├─ progress.html / progress_ui.js      ← Web UI
+├─ progress.html / progress_ui.js / progress_ui.css  ← Web UI、交互与视觉系统
 ├─ progress.json / progress_data.js / rounds_data.js
 ├─ scripts/                            ← 本地服务与生成/校验
+├─ tests/ui/ + tests/test_progress_transactions.py  ← 只读/隔离内存浏览器与临时仓库事务回归
 ├─ records/                            ← 动作日志、反馈、存档
 ├─ docs/PRODUCT_VISION.md
 ├─ docs/ROADMAP.md
@@ -165,7 +169,13 @@ python3 scripts/generate_task_feedback.py
 
 ---
 
-## 8. 恢复非 Linux 旧内容
+## 8. 外盘 UI 运行环境
+
+`npm run test:ui` 通过 `scripts/external-ui-python` 使用 `/Volumes/AI_WORK_SSD/Runtimes/computer-study-plan/ui-venv`、同级 `browsers/chromium_headless_shell-1223` 和外盘 `Temp/computer-study-plan`。运行前先用 `scripts/external-ui-python --check`；缺盘、错盘、浏览器路径漂移或临时目录不可用时明确退出，不用内盘缓存回退，不自动下载。
+
+本项目浏览器副本由既有本地缓存离线复制；原 `~/Library/Caches/ms-playwright` 是多消费者共享目录，未被本项目清理。源码、Git、正式学习记录和练习沙盒仍在原位。普通服务器和 CLI 会持久化学习状态，不能当成只读存储验证；隔离 UI 回归不写正式进度。
+
+## 9. 恢复非 Linux 旧内容
 
 本轮删除可通过备份标签恢复，见 [`docs/REMOVAL_MANIFEST.md`](docs/REMOVAL_MANIFEST.md)：
 
