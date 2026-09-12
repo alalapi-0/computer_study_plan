@@ -1,0 +1,36 @@
+schema_version: '2.0'
+project_id: computer-study-plan
+source_refs:
+- id: state
+  path: docs/PROJECT_STATE.md
+  format: markdown
+  role: current_state
+metric_export:
+  entry: scripts/export_hub_metric_snapshot.py
+  snapshot: .hub/status.json
+mapping: {}
+unknown_fields:
+  current_work.objective: PROJECT_STATE.md is a narrative facts page, not one typed current-work objective.
+  current_work.phase: Phase headings are prose and do not publish one typed phase field.
+  current_work.round: Round names in the narrative are not one typed current-round field.
+  current_work.status: UI-in-progress notes are not a typed Hub lifecycle status.
+  current_work.completed: Slice checkmarks are not a typed whole-project completion boolean.
+  current_work.accepted: Design-slice language is not a typed acceptance boolean.
+  current_work.next_action: Later-phase bullets are not one typed next-action field.
+  current_work.owner_role: PROJECT_STATE.md publishes no typed owner-role field.
+  progress.completed: Task-done counts belong to study metric rows, not one lifecycle numerator.
+  progress.total: The registered 80-task course size is not a Hub completion denominator.
+  progress.counting_basis: Counting bases remain attached to each metric row.
+  progress.milestones: Phase lists have no typed milestone identity or acceptance fields.
+  blockers: The problems section is prose, not a typed blocker list.
+  verification.status: UI regression notes are not one typed verification status.
+  verification.evidence_refs: Evidence belongs to the study metric rows.
+  verification.accepted_basis: There is no typed accepted basis.
+  delivery.status: PROJECT_STATE.md publishes no typed delivery status.
+  delivery.remote: No typed delivery remote is published in the current-state page.
+  delivery.branch: No typed delivery branch is published in the current-state page.
+  delivery.commit: No typed delivery commit is published in the current-state page.
+  delivery.receipt_ref: No publication receipt is published in the current-state page.
+validation_entry:
+- python3 -B -m unittest test_hub_metric_snapshot_entry.py
+max_read_age_seconds: 604800

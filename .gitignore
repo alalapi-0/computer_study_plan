@@ -62,3 +62,6 @@ scratch/
 # Generated local learning snapshots / terminal history
 records/saves/*.json
 records/terminal/commands.jsonl
+
+# Hub local snapshot
+.hub/
