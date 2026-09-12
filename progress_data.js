@@ -2,10 +2,11 @@
 // Source of truth: progress.json
 window.PROGRESS_DATA = {
   "version": 2,
+  "revision": 0,
   "lanes": {
     "linux-foundations": {
       "title": "Linux 基础与工程实践",
-      "description": "当前唯一正式课程：终端、文件系统、Shell、自动化与远程实操",
+      "description": "当前唯一正式课程 linux-foundations：终端、文件系统、Shell、自动化与远程实操",
       "course_id": "linux-foundations"
     }
   },

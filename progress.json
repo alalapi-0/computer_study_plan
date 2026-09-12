@@ -409,5 +409,6 @@
       "lane": "linux-foundations"
     }
   },
-  "active_course_id": "linux-foundations"
+  "active_course_id": "linux-foundations",
+  "revision": 0
 }

@@ -124,9 +124,9 @@ echo "  3. 用 cat 查看其中一个文件"
 echo "  4. 在 notes/commands.txt 里写下今天学会的命令"
 echo "     提示：echo 'mkdir: 创建目录' >> ~/cli-lab/round0/notes/commands.txt"
 echo ""
-echo "完成后按回车确认，进度将自动记录..."
+echo "完成后按回车确认；自测仍需在 Web UI 记录证据后完成。"
 read
-mark w2-self
+echo "第2周自测不会由练习脚本自动验收。"
 
 echo ""
 echo "🎉 Week 2 所有练习完成！"

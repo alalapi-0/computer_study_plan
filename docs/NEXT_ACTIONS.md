@@ -1,6 +1,6 @@
 # Next Actions
 
-> 更新日期：2026-08-11
+> 更新日期：2026-08-14
 > 只保留当前可执行任务队列。
 
 ## 当前推进规则
@@ -19,9 +19,23 @@
 - 备份标签：`pre-linux-only-refactor-20260718-1029`
 - 说明：非 Linux 正式课程已删除；`linux-foundations` 已注册；文档与进度已收敛
 
+存储维护使用 `scripts/external-ui-python --check` 和 `npm run test:ui`；本项目 UI 依赖、浏览器、临时目录已外置。下列产品任务顺序不因存储治理改变。
+
 ## 近期任务队列说明
 
 以下条目按出现顺序构成自动推进队列；用户当轮明确目标仍优先。
+
+## TASK-UI-01：按完整 Figma 底板持续重构 UI/UX
+
+- 状态：**in_progress**（Phase 6；当前长期目标的最高优先级）
+- 背景：2026-08-11 版本只依据校准页；当前 Figma 已确认包含 10 个 Desktop 屏、10 个 Mobile/Mini Program 屏、3 组核心组件和 6 个 Motion/Codex Handoff 页面
+- 目标：让现有真实学习闭环、双端信息架构、组件状态和交互反馈逐步与设计底板收敛；项目命名与内容以仓库事实为准
+- 当前检查点：六个双端屏幕切片均已实现并完成浏览器验证；跨屏显式任务只接受课程注册 ID，并由 Learn URL / history 持有。Components / Motion 已收敛直接操控、动态 reduced-motion、原子视图语义、终端焦点/忙碌态，以及 H04 Home → Learn 的 520ms 共享任务卡关系与原子降级。D05/D06/M05/M06 完成/撤销反馈已具备局部 pending/error/success、单请求互斥、精确输入指纹幂等、单调 revision、可恢复本地 WAL、读档兼容，以及完成事实、动作事件和完整快照的提交前校验；损坏 WAL 在任何恢复写入前拒绝，读档移除旧 event 后也不会由账本返回幽灵记录。390 / 430 / 720 / 920px 的首页主行动、Learn 单面板和核心 44px 触控已验证；自动化现有 5 项只读 Home → Learn 浏览器、5 项隔离 fixture API 契约、18 项隔离浏览器任务动作和 14 项临时仓库事务测试。正式数据保持 0/80、0 条动作记录
+- 下一轮：在重新核对当轮状态后，优先把 `run_exercise` 收敛为独立的 revisioned run operation：脚本执行前先零写入核对现有 WAL，执行过程不持 progress lock，结束后以新 revision 原子提交 run event / feedback / snapshot，并处理响应丢失、并发、timeout 后代进程及中断恢复；同时禁止脚本把 test/output 任务误当作可自动验收的 exercise。该切片不得顺带扩张为终端 OS 隔离、Attempt、XP 或第二课程
+- 不要修改：用户学习记录、本地 API 契约、Linux 单课程边界；不得展示尚未实现的 XP、Mastery、成就或复习数据
+- 验收标准：真实数据驱动；Desktop/Mobile 与关键状态可用；核心学习闭环不回退；console/network、响应式、无障碍和项目质量门通过
+- 风险：设计示例与现有数据能力不同；脚本返回 0 不等于任务验收；Motion 页面是静态交接规范而非编码动画轨道，必须依约实现且不得虚构持续动画
+- 是否需要用户介入：**否**，除非出现产品决策、不可逆风险或关键外部条件缺失
 
 ## TASK-LNX-01：完成单课程化内容审计与删除
 
@@ -98,17 +112,6 @@
 - 不要修改：虚假刷分路径、第二门课程奖励
 - 验收标准：完成真实任务可获得 XP/Mastery 更新
 - 风险：奖励与学习脱钩
-- 是否需要用户介入：**否**
-
-## TASK-UI-01：完成 Figma 校准的 UI/UX 系统重构
-
-- 状态：**done**（Phase 6）
-- 背景：原长页面信息密度、移动端溢出与状态层级已不适合持续学习
-- 目标：以可访问的 Figma 校准页为视觉依据，落地今日、学习、路线、复习、手册、成长与阶段结算
-- 已修改：`progress.html`、`progress_ui.js`、`progress_ui.css` 与现行状态文档
-- 没有修改：课程数据、用户完成记录、本地 API 协议与 Linux 单课程边界
-- 验收标准：Desktop / Mobile、关键动效、真实学习闭环、console / HTTP 资源与项目质量门通过
-- 风险：Figma 文件当前没有产品屏和 Motion 节点；实现只能遵循可读取的视觉校准板
 - 是否需要用户介入：**否**
 
 ## TASK-LNX-08：实现 Round 00 网页垂直切片

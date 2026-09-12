@@ -25,6 +25,7 @@ REQUIRED_PATHS = [
     "docs/REMOVAL_MANIFEST.md",
     "content/courses/linux-foundations/course.json",
     "progress.json",
+    "progress_data.js",
     "progress.html",
     "mark_done.sh",
     "rounds/round_00/final/comprehensive_exercise.sh",
@@ -56,6 +57,33 @@ def check_progress_schema(repo_root: Path) -> list[str]:
         errors.append("progress.json must contain an object field: tasks")
     elif not tasks:
         errors.append("progress.json.tasks must not be empty")
+
+    mirror_path = repo_root / "progress_data.js"
+    try:
+        mirror_text = mirror_path.read_text(encoding="utf-8")
+        assignment = "window.PROGRESS_DATA = "
+        if assignment not in mirror_text:
+            raise ValueError("missing window.PROGRESS_DATA assignment")
+        mirror = json.loads(mirror_text.split(assignment, 1)[1].strip().removesuffix(";"))
+    except FileNotFoundError:
+        errors.append("progress_data.js not found")
+        return errors
+    except (json.JSONDecodeError, ValueError) as exc:
+        errors.append(f"progress_data.js invalid mirror: {exc}")
+        return errors
+
+    progress_revision = data.get("revision")
+    if not isinstance(progress_revision, int) or isinstance(progress_revision, bool) or progress_revision < 0:
+        errors.append("progress.json revision must be a non-negative integer when present")
+    mirror_revision = mirror.get("revision")
+    if not isinstance(mirror_revision, int) or isinstance(mirror_revision, bool) or mirror_revision < 0:
+        errors.append("progress_data.js revision must be a non-negative integer")
+    if mirror.get("revision") != progress_revision:
+        errors.append("progress_data.js revision must match progress.json")
+    if mirror.get("tasks") != data.get("tasks"):
+        errors.append("progress_data.js tasks must match progress.json")
+    if mirror.get("lanes") != data.get("lanes"):
+        errors.append("progress_data.js lanes must match progress.json")
     return errors
 
 

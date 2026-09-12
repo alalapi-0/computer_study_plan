@@ -5,13 +5,12 @@ from __future__ import annotations
 
 import sys
 
-from progress_lib import load_progress, repo_root, sync_progress_data_js
+from progress_lib import repo_root, sync_progress_state
 
 
 def main() -> int:
     root = repo_root()
-    data = load_progress(root)
-    sync_progress_data_js(data, root)
+    data = sync_progress_state(root)
     task_count = len(data.get("tasks", {}))
     print(f"Synced progress_data.js from progress.json ({task_count} tasks)")
     return 0

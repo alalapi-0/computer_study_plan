@@ -6,6 +6,8 @@
     "check:mcp": "node scripts/check_mcp_config.js",
     "check:cursor-mcp": "bash scripts/check_cursor_mcp_status.sh",
     "serve": "python3 scripts/progress_server.py",
+    "test:progress": "python3 -m unittest tests.test_progress_transactions tests.test_run_transactions",
+    "test:ui": "scripts/external-ui-python --ui-test",
     "sync:progress": "python3 scripts/sync_progress_data.py",
     "build:rounds": "python3 scripts/build_rounds_data.py"
   }

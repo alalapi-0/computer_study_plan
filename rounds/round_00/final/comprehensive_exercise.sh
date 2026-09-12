@@ -73,7 +73,7 @@ echo "  文件：$REPO_ROOT/rounds/round_00/final/command_cheatsheet.md"
 echo ""
 echo "填好后按回车确认..."
 read
-mark fin-sheet
+echo "命令小抄需要在 Web UI 记录产出证据后完成。"
 
 echo ""
 echo "最终验收（请逐项确认）："
@@ -81,20 +81,20 @@ echo ""
 echo "验收1：你能解释 Terminal 是应用，Shell 是里面的命令接收程序吗？"
 echo "       确认后按回车..."
 read
-mark fin-acc1
+echo "验收1需要在 Web UI 记录后完成。"
 
 echo ""
 echo "验收2：你能不查笔记地使用 pwd / ls / cd / mkdir / touch / cat / man 吗？"
 echo "       随便用几个试试，然后按回车确认..."
 read
-mark fin-acc2
+echo "验收2需要在 Web UI 记录后完成。"
 
 echo ""
 echo "验收3：~/cli-lab/round0 目录存在，里面有命令小抄吗？"
 ls ~/cli-lab/round0/notes/ 2>/dev/null || echo "(目录不存在，请先完成练习1)"
 echo "       确认后按回车..."
 read
-mark fin-acc3
+echo "验收3需要在 Web UI 记录产出证据后完成。"
 
 echo ""
 echo "🎉🎉 Round 00 综合验收脚本已完成！"

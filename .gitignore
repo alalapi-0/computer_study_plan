@@ -59,6 +59,11 @@ build/
 scratch/
 *.scratch.md
 
+# Hub generated snapshot (rebuildable)
+.hub/
+
 # Generated local learning snapshots / terminal history
 records/saves/*.json
 records/terminal/commands.jsonl
+records/action_logs/task_operations.json
+records/action_logs/run_operations.json

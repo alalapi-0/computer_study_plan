@@ -6,7 +6,13 @@ from __future__ import annotations
 import argparse
 from pathlib import Path
 
-from progress_lib import load_progress, write_feedback_payload
+from progress_lib import (
+    load_action_events,
+    load_progress,
+    progress_write_lock,
+    recover_pending_operations,
+    write_feedback_payload,
+)
 
 
 def main() -> int:
@@ -27,8 +33,11 @@ def main() -> int:
     output_path = repo_root / args.output
     feedback_path = repo_root / "records/feedback/task_feedback.json"
 
-    progress = load_progress(repo_root)
-    write_feedback_payload(progress, repo_root)
+    with progress_write_lock(repo_root):
+        recover_pending_operations(repo_root)
+        progress = load_progress(repo_root)
+        events = load_action_events(repo_root)
+        write_feedback_payload(progress, repo_root, events=events)
     if output_path != feedback_path:
         output_path.parent.mkdir(parents=True, exist_ok=True)
         output_path.write_text(feedback_path.read_text(encoding="utf-8"), encoding="utf-8")

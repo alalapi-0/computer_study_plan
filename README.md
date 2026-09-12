@@ -2,7 +2,7 @@
 
 > **定位**：本地优先的网页交互式学习产品原型。
 > **当前唯一正式课程**：Linux 基础与工程实践（`linux-foundations`）。
-> **长期方向**：用这一门课验证游戏化、强正反馈、可坚持的学习体验。
+> **长期方向**：成为可扩展的通用学习平台；当前先用 Linux 验证真实动作、证据、反馈与持续学习闭环。
 
 ---
 
@@ -107,10 +107,11 @@ npm run check:mcp
 ## 4. 当前阶段
 
 - 已交付：Phase 0 单课程化基线重构
-- 当前 Web UI：今日、学习、路线、复习、手册、成长六个核心视图，以及独立阶段结算
+- 当前 Web UI：今日、学习、路线、复习、手册、成长六个核心视图，以及独立模块检查点
+- 已验证设计切片：首页；路线地图与模块总览；聚焦学习与真实反馈；复习记录；五份课程真源驱动的只读命令手册；成长记录与模块检查点。跨屏显式任务由课程注册 ID、Learn URL 与 history 稳定持有，Home 继续只表示真实全局下一项；H04 Home → Learn 共享任务关系、原子降级和 390–920px 移动触控已有浏览器回归。完成/撤销另有隔离内存浏览器测试与临时仓库事务测试，验证 pending、错误恢复、幂等、revision、并发与中断前滚，不写正式进度。以上不把完成标记或设计示例冒充能力验收
 - 工作树已删除：软考、数学二、408 计划，以及 Round 03–05、07–21 非 Linux 课程内容
 - 当前仍未实现：完整 Attempt / 规则反馈 / XP / Mastery / 成就引擎、自然语言学习编排、第二门课程
-- Figma 事实边界：当前文件只暴露视觉校准页，没有可读取的产品屏、组件页或 Motion 节点
+- Figma 设计底板：`WtmY7TC867Wdp0qXY2b5uz` 当前包含校准页、10 个 Desktop 屏、10 个 Mobile/Mini Program 屏、3 组核心组件和 6 个 Motion/Codex Handoff 页面；2026-08-11 的校准版 UI 只是重构基线，不是完整对齐终态
 
 状态见 [`docs/PROJECT_STATE.md`](docs/PROJECT_STATE.md)。
 
@@ -127,6 +128,7 @@ computer_study_plan/
 ├─ progress.html / progress_ui.js / progress_ui.css  ← Web UI、交互与视觉系统
 ├─ progress.json / progress_data.js / rounds_data.js
 ├─ scripts/                            ← 本地服务与生成/校验
+├─ tests/ui/ + tests/test_progress_transactions.py  ← 只读/隔离内存浏览器与临时仓库事务回归
 ├─ records/                            ← 动作日志、反馈、存档
 ├─ docs/PRODUCT_VISION.md
 ├─ docs/ROADMAP.md
@@ -167,7 +169,13 @@ python3 scripts/generate_task_feedback.py
 
 ---
 
-## 8. 恢复非 Linux 旧内容
+## 8. 外盘 UI 运行环境
+
+`npm run test:ui` 通过 `scripts/external-ui-python` 使用 `/Volumes/AI_WORK_SSD/Runtimes/computer-study-plan/ui-venv`、同级 `browsers/chromium_headless_shell-1223` 和外盘 `Temp/computer-study-plan`。运行前先用 `scripts/external-ui-python --check`；缺盘、错盘、浏览器路径漂移或临时目录不可用时明确退出，不用内盘缓存回退，不自动下载。
+
+本项目浏览器副本由既有本地缓存离线复制；原 `~/Library/Caches/ms-playwright` 是多消费者共享目录，未被本项目清理。源码、Git、正式学习记录和练习沙盒仍在原位。普通服务器和 CLI 会持久化学习状态，不能当成只读存储验证；隔离 UI 回归不写正式进度。
+
+## 9. 恢复非 Linux 旧内容
 
 本轮删除可通过备份标签恢复，见 [`docs/REMOVAL_MANIFEST.md`](docs/REMOVAL_MANIFEST.md)：
 
