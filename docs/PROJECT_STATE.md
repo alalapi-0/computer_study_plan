@@ -1,6 +1,6 @@
 # Project State
 
-> 更新日期：2026-08-14
+> 更新日期：2026-10-01
 > 本文件只记录当前事实。
 
 ## 1. 当前定位
@@ -13,8 +13,8 @@
 
 唯一工作副本：
 
-- `~/PycharmProjects/computer_study_plan`
-- `/Users/alalapi/PycharmProjects/computer_study_plan`
+- `~/Projects/computer-study-plan`
+- `/home/alalapi/Projects/computer-study-plan`
 
 练习沙盒默认在 `~/cli-lab/roundN`，不进入 Git。
 
@@ -59,7 +59,7 @@
 
 ## 存储运行边界（2026-09-03）
 
-UI 回归的 venv、headless Chromium 1223 与临时目录统一使用 `/Volumes/AI_WORK_SSD`，通过 `scripts/external-ui-python --check` / `npm run test:ui` 维护。仓内旧 Python 缓存和旧浏览器控制日志已清理；共享系统浏览器缓存、Git、源码和正式学习记录未迁移或清理。本次存储工作不改变 Linux 单课程范围或 UI 产品进度。
+原 Mac UI 回归入口保留在 `scripts/external-ui-python-macos`。Linux 使用统一入口 `scripts/external-ui-python`：独立Python3.12/Playwright1.60及Chromium1223位于 `/home/alalapi/Runtimes/computer-study-plan`；缓存和临时目录在对应 `Caches`/`Temp` 根。固定UUID、路径、安装来源及完整树守卫先行；UI测试自动隔离网络、系统IPC与正式数据。现有只读/显式内存夹具保留，报告与截图在 `/home/alalapi/Artifacts/computer-study-plan/linux-ui`。真实学习数据、Linux单课程范围、Phase6状态和下列业务队列不因技术迁移改变；完整产品和真机安全区仍未验收。
 
 ## 4. 保护边界
 

@@ -10,8 +10,8 @@
 
 | 用途 | 路径 |
 |---|---|
-| **本仓库 Git 根目录** | `~/PycharmProjects/computer_study_plan` |
-| **本机绝对路径** | `/Users/alalapi/PycharmProjects/computer_study_plan` |
+| **本仓库 Git 根目录** | `~/Projects/computer-study-plan` |
+| **本机绝对路径** | `/home/alalapi/Projects/computer-study-plan` |
 | **Round 00 终端练习沙盒（不进 Git）** | `~/cli-lab/round0` |
 
 完整约定见 [`docs/WORKSPACE.md`](docs/WORKSPACE.md)。
@@ -21,9 +21,9 @@
 ## 快速开始
 
 ```bash
-cd ~/PycharmProjects/computer_study_plan
+cd ~/Projects/computer-study-plan
 python3 scripts/progress_server.py
-open http://127.0.0.1:8777/progress.html
+xdg-open http://127.0.0.1:8777/progress.html
 ```
 
 打开后：
@@ -169,11 +169,11 @@ python3 scripts/generate_task_feedback.py
 
 ---
 
-## 8. 外盘 UI 运行环境
+## 8. UI 回归运行环境
 
-`npm run test:ui` 通过 `scripts/external-ui-python` 使用 `/Volumes/AI_WORK_SSD/Runtimes/computer-study-plan/ui-venv`、同级 `browsers/chromium_headless_shell-1223` 和外盘 `Temp/computer-study-plan`。运行前先用 `scripts/external-ui-python --check`；缺盘、错盘、浏览器路径漂移或临时目录不可用时明确退出，不用内盘缓存回退，不自动下载。
+Linux的 `npm run test:ui` 通过 `scripts/external-ui-python` 使用 `/home/alalapi/Runtimes/computer-study-plan/ui-venv`、同级官方Chromium1223和项目外置缓存/临时目录。首次安装使用 `scripts/external-ui-python --bootstrap`（仅官方依赖下载）；平常 `--check`、`--self-test` 和UI回归保持离线，自动隔离网络、系统IPC与正式数据。原Mac脚本字节原样保存在 `scripts/external-ui-python-macos`；结果以本机报告为准，不把环境安装或服务启动当成整体验收。
 
-本项目浏览器副本由既有本地缓存离线复制；原 `~/Library/Caches/ms-playwright` 是多消费者共享目录，未被本项目清理。源码、Git、正式学习记录和练习沙盒仍在原位。普通服务器和 CLI 会持久化学习状态，不能当成只读存储验证；隔离 UI 回归不写正式进度。
+原 Mac 浏览器副本来自既有本地缓存；原 `~/Library/Caches/ms-playwright` 是多消费者共享目录，未被本项目清理。Linux 正式源码、Git 和学习记录现位于 `~/Projects/computer-study-plan`；练习沙盒仍与仓库分离。普通服务器和 CLI 可能持久化学习状态，不能当成只读存储验证；UI回归使用现有隔离内存数据，不写正式进度；截图与技术结果位于 `/home/alalapi/Artifacts/computer-study-plan/linux-ui`。
 
 ## 9. 恢复非 Linux 旧内容
 

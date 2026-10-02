@@ -19,7 +19,7 @@
 - 备份标签：`pre-linux-only-refactor-20260718-1029`
 - 说明：非 Linux 正式课程已删除；`linux-foundations` 已注册；文档与进度已收敛
 
-存储维护使用 `scripts/external-ui-python --check` 和 `npm run test:ui`；本项目 UI 依赖、浏览器、临时目录已外置。下列产品任务顺序不因存储治理改变。
+Linux存储维护仍用 `scripts/external-ui-python --check`、`--self-test` 与 `npm run test:ui`，使用独立固定环境和隔离内存夹具。Mac原入口另存保留；本机技术回归不代表产品阶段完成。下列业务任务及顺序不因工作站迁移改变。
 
 ## 近期任务队列说明
 

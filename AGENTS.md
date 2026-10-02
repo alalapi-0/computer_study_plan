@@ -4,8 +4,8 @@
 
 仓库根目录：
 
-- `~/PycharmProjects/computer_study_plan`
-- `/Users/alalapi/PycharmProjects/computer_study_plan`
+- `~/Projects/computer-study-plan`
+- `/home/alalapi/Projects/computer-study-plan`
 
 开始工作前必须读取：
 
@@ -73,7 +73,7 @@ python3 scripts/generate_task_feedback.py
 
 UI 变更必须做真实浏览器 before/after，并检查 console / network。
 
-UI Python 依赖由 `scripts/external-ui-python` 固定入口管理。首次建立运行时执行 `scripts/external-ui-python --bootstrap`；日常 UI 回归只执行 `npm run test:ui`。不得再创建、激活或直接调用仓库内 `.venv-ui`，也不得绕过该入口安装浏览器；外盘缺失或身份错误时必须 fail closed。
+Linux UI 回归继续使用 `scripts/external-ui-python` 的固定动作：`--bootstrap`、`--check`、`--ui-test`、`--self-test`。独立 Python3.12 环境与官方 Playwright1.60/Chromium1223 位于 `/home/alalapi/Runtimes/computer-study-plan`；路径、UUID、来源和完整树守卫拒绝回退，仓内不创建 `.venv-ui`。`npm run test:ui` 自动隔离网络、系统IPC和正式数据，只使用现有内存夹具；报告与截图在 `/home/alalapi/Artifacts/computer-study-plan/linux-ui`。历史Mac入口原样保存在 `scripts/external-ui-python-macos`；本机技术回归不代表Phase6或产品整体验收。
 
 ## 5. 关键路径
 

@@ -9,9 +9,9 @@
 
 | 项 | 值 |
 |---|---|
-| **推荐写法（`~`）** | `~/PycharmProjects/computer_study_plan` |
-| **本机绝对路径** | `/Users/alalapi/PycharmProjects/computer_study_plan` |
-| **目录名** | `computer_study_plan` |
+| **推荐写法（`~`）** | `~/Projects/computer-study-plan` |
+| **本机绝对路径** | `/home/alalapi/Projects/computer-study-plan` |
+| **目录名** | `computer-study-plan` |
 | **远程仓库** | `https://github.com/alalapi-0/computer_study_plan`（以 `git remote -v` 为准） |
 
 ### 1.1 如何确认当前就在仓库根
@@ -19,17 +19,17 @@
 在终端执行：
 
 ```bash
-cd ~/PycharmProjects/computer_study_plan
+cd ~/Projects/computer-study-plan
 test -f progress.json && test -f mark_done.sh && echo "OK: 仓库根"
 git rev-parse --show-toplevel
 ```
 
-最后一行应输出：`/Users/alalapi/PycharmProjects/computer_study_plan`。
+最后一行应输出：`/home/alalapi/Projects/computer-study-plan`。
 
 ### 1.2 IDE / Cursor / PyCharm
 
-- **工作区根目录**必须打开上表中的文件夹（不是父级 `PycharmProjects`，也不是子目录 `rounds/`）。
-- Cursor 窗口**左下角显示的路径**即工作区根；正常应为 `…/PycharmProjects/computer_study_plan`。
+- **工作区根目录**必须打开上表中的文件夹（不是父级 `Projects`，也不是子目录 `rounds/`）。
+- Cursor 窗口**左下角显示的路径**即工作区根；正常应为 `…/Projects/computer-study-plan`。
 - 所有 `bash mark_done.sh`、`python3 scripts/progress_server.py`、阅读 `progress.html` 的操作，默认都在该根目录下执行。静态打开页面只用于只读布局 / 进度检查，不具备写 API、练习脚本、动作日志或浏览器终端能力。
 
 ### 1.3 不再使用的路径（避免混淆）
@@ -62,7 +62,7 @@ Round 00 等终端练习在**用户主目录**下的沙盒进行，**不**放在
 
 | 场景 | 应写 |
 |---|---|
-| 进入本仓库、跑进度脚本、打开 Web UI 学习工作区 | `~/PycharmProjects/computer_study_plan` 或「仓库根」 |
+| 进入本仓库、跑进度脚本、打开 Web UI 学习工作区 | `~/Projects/computer-study-plan` 或「仓库根」 |
 | Round 00 手敲命令练习 | `~/cli-lab/round0`（保持现有 round 文档不变） |
 | VPS 支线 clone 示例 | `~/study/<repo_name>`（见 `rounds/stage_03_vps_remote_ops/`） |
 | 泛指「任意机器上的克隆目录」 | `cd <你的 computer_study_plan 仓库根>`，并注明需含 `progress.json` |
@@ -86,3 +86,8 @@ Round 00 等终端练习在**用户主目录**下的沙盒进行，**不**放在
 | 日期 | 说明 |
 |---|---|
 | 2026-05-28 | 建立本文件，统一文档 / IDE / 本机仓库路径为 `~/PycharmProjects/computer_study_plan` |
+| 2026-10-01 | Linux 正式工作副本迁到 `~/Projects/computer-study-plan`；原 APFS 副本只读保留，不作为运行目录。 |
+
+## 6. Linux UI回归运行时
+
+源码与学习数据继续使用§1唯一根；`scripts/external-ui-python` 将UI依赖/浏览器放在 `/home/alalapi/Runtimes/computer-study-plan`，缓存与临时使用对应外置 `Caches`/`Temp` 根。UI回归固定使用隔离内存夹具，不进入学习沙盒或改正式数据。完整树与UUID守卫、固定动作详见 `tests/ui/README.md`；技术报告在 `/home/alalapi/Artifacts/computer-study-plan/linux-ui`。
