@@ -9,7 +9,7 @@ SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 
 if [ ! -f "$SCRIPT_DIR/progress.json" ]; then
   echo "❌ 找不到 progress.json。请在仓库根目录执行（见 docs/WORKSPACE.md）："
-  echo "   cd ~/PycharmProjects/computer_study_plan"
+  echo "   cd ~/Projects/computer-study-plan"
   exit 1
 fi
 

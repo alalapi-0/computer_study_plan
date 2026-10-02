@@ -96,7 +96,7 @@ def write_round(num: int) -> None:
 
 这个目录是 Round {num:02d}（{title}）的最小实操骨架。
 
-> **仓库根**：`~/PycharmProjects/computer_study_plan`  
+> **仓库根**：`~/Projects/computer-study-plan`<br>
 > **练习沙盒**：`~/cli-lab/round{num:02d}`  
 > 路径说明见 [`docs/WORKSPACE.md`](../../docs/WORKSPACE.md)。
 
