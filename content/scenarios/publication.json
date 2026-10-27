@@ -1,0 +1,54 @@
+{
+  "adapter": "bwrap-userland",
+  "gate": {
+    "alternative_scenarios": [
+      "git-preserve-work"
+    ],
+    "cycles": 2,
+    "negative": true
+  },
+  "runtime_versions": {
+    "architecture": "x86_64",
+    "bash": "GNU bash, version 5.3.9(1)-release (x86_64-pc-linux-gnu)",
+    "bubblewrap": "bubblewrap 0.11.1",
+    "git": "git version 2.53.0",
+    "python": "3.14.4",
+    "stat": "stat (uutils coreutils) 0.10.0",
+    "userland": "Ubuntu 26.04.1 LTS"
+  },
+  "scenarios": {
+    "access-permission": {
+      "content_hash": "6d063b3a6a63d2b56f78736357b885aab8d0b5ec2eba122edc20de606e759023",
+      "version": 1
+    },
+    "api-payload-errors": {
+      "content_hash": "b59d7189cb9822b1bc832532aa3431006fd4182e70f3f2a5a912bb7d162ecd86",
+      "version": 1
+    },
+    "git-preserve-work": {
+      "content_hash": "6f4bf20267cb1f118c0b9628ca14113100a8f00db6286e78adac1a4ef800e6e5",
+      "version": 2
+    },
+    "media-wav-quality": {
+      "content_hash": "2b2c59ea84e9b43092b3f124328f4c2d774cd374ebff01c1ece37020d130dad1",
+      "version": 1
+    },
+    "path-cwd-input": {
+      "content_hash": "4702bb6c7a5d78eace989a341dff3dc98cc4191aac0427db54a1af9bc6dd6c19",
+      "version": 1
+    },
+    "persistent-data-restart": {
+      "content_hash": "bfae16f22b1a64df79408684d3f9230e0044b66ffd1397455d124de8e8b78d64",
+      "version": 1
+    },
+    "retry-no-duplicates": {
+      "content_hash": "9aa6b167a9144d0bdd0ceca29985443b7168acacbe03247edcd04a4fb8c83d8c",
+      "version": 1
+    },
+    "script-output": {
+      "content_hash": "30dcd8464dddef7c9c325605542bc3c45918a5e280df39fc38e2b22f817299db",
+      "version": 1
+    }
+  },
+  "schema_version": 1
+}

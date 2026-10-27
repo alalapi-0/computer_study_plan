@@ -58,3 +58,11 @@ unknown_fields:
 validation_entry:
 - python3 -B -m unittest test_hub_metric_snapshot_entry.py
 max_read_age_seconds: 604800
+
+# Local SOURCE action contract: scripts/hub_project_actions.py, study-wav-actions/1.
+# locate: authenticated GET /api/lab/locate?scenario=<id>&attempt=<uuid>; read-only.
+# prepare_wav: authenticated GET /api/lab/attempts/<uuid>/wav; fixed output/tone.wav.
+# export_wav: authenticated POST /api/lab/attempts/<uuid>/export-wav; operation_id + exact binding.
+# download_wav: authenticated GET /api/lab/exports/<receipt_sha256>; bounded registered bytes.
+# normal_route_available: false; original ADAPTER/ROUTES not adopted by this local action contract.
+# No genericShell, native adapter registration, dispatch or formal route receipt.

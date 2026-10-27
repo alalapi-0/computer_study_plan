@@ -1,0 +1,22 @@
+{
+  "id": "access-permission",
+  "version": 1,
+  "title": "配置文件存在但程序无法读写打开",
+  "summary": "在无 sudo 的题内用户态环境中识别并修复缺少所有者写权限的问题。",
+  "tags": ["linux", "permissions", "userland"],
+  "symptom": "配置文件可读，但需要以读写模式打开的程序得到 Permission denied。",
+  "goal": "让当前题内用户以读写模式打开配置并输出 mode=training port=4310。",
+  "constraints": ["配置内容必须原样保留", "最终权限必须为 0600", "不得使用 sudo 或扩大到组/其他用户可读"],
+  "environment": {"adapter": "bwrap-userland", "nodes": ["lab"], "shell": "bash", "required_tools": ["bash", "python3", "stat", "chmod"]},
+  "provenance": {"type": "teaching-adaptation", "source_links": ["https://www.gnu.org/software/coreutils/manual/html_node/Mode-Structure.html"], "adaptations": ["用合成配置文件演示所有者权限", "无宿主账户或真实凭据"]},
+  "hints": [
+    {"node": "lab", "shell": "bash", "command": "stat -c '%a %U %G %n' /workspace/config/app.conf && python3 /workspace/bin/read_config.py", "expected": "权限显示 400，随后读写打开失败。", "explanation": "文件可读不代表需要更新能力的进程具有写权限。", "recovery": "打开失败不改文件；继续只调整题内文件模式。"},
+    {"node": "lab", "shell": "bash", "command": "chmod 600 /workspace/config/app.conf", "expected": "所有者获得读写权限，组和其他用户没有权限。", "explanation": "0600 满足当前程序读取与最小暴露约束。", "recovery": "若误设其他模式，再执行同一命令收敛到 0600。"},
+    {"node": "lab", "shell": "bash", "command": "stat -c '%a' /workspace/config/app.conf && python3 /workspace/bin/read_config.py", "expected": "先输出 600，再输出 mode=training port=4310。", "explanation": "同时验证权限状态和真实程序读取。", "recovery": "若内容错误，请重置；不要重写受保护配置。"}
+  ],
+  "solution": {"steps": [
+    {"node": "lab", "shell": "bash", "command": "stat -c '%a %U %G %n' /workspace/config/app.conf && python3 /workspace/bin/read_config.py", "expected": "确认 400 和读写打开失败。", "explanation": "把读取权和程序实际所需的读写访问分开检查。", "recovery": "失败为题设症状。"},
+    {"node": "lab", "shell": "bash", "command": "chmod 600 /workspace/config/app.conf", "expected": "模式变为 0600。", "explanation": "仅给所有者所需权限。", "recovery": "重复执行可恢复精确模式。"},
+    {"node": "lab", "shell": "bash", "command": "stat -c '%a' /workspace/config/app.conf && python3 /workspace/bin/read_config.py", "expected": "600 与正确配置摘要。", "explanation": "用实际读取验证修复。", "recovery": "内容变化时重置题目。"}
+  ], "explanation": "根因是文件模式 0400 缺少所有者写权限；修复保持内容不变并只授予题内所有者所需的读写权限。"}
+}

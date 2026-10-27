@@ -1,0 +1,22 @@
+{
+  "id": "git-preserve-work",
+  "version": 2,
+  "title": "恢复回归代码，同时保留未提交设置",
+  "summary": "在一次性 Git 仓库中从上一提交恢复单个文件，不丢失另一个文件的未提交工作。",
+  "tags": ["linux", "git", "recovery", "working-tree"],
+  "symptom": "HEAD 中 app.py 把总和算成元素数量；settings.ini 有必须保留的未提交草稿。",
+  "goal": "app.py 再次输出 15，同时 settings.ini 的 violet 与 keep-me 草稿仍未提交。",
+  "constraints": ["不得删除或提交 settings.ini 草稿", "当前 HEAD 与父提交必须保持原对象；本题只恢复工作副本，不新增、删除或替换这两个提交", "允许为原提交增加安全分支或标签名称", "不得重置整个工作树"],
+  "environment": {"adapter": "bwrap-userland", "nodes": ["lab"], "shell": "bash", "required_tools": ["bash", "git", "python3"]},
+  "provenance": {"type": "teaching-adaptation", "source_links": ["https://git-scm.com/docs/git-restore"], "adaptations": ["每次建立无远端的一次性仓库", "用户名和邮箱只写仓库局部配置", "不使用用户真实代码"]},
+  "hints": [
+    {"node": "lab", "shell": "bash", "command": "cd /workspace/repo && git status --short && python3 app.py", "expected": "settings.ini 显示已修改，程序错误输出 3。", "explanation": "先识别需保留的未提交文件与需恢复的另一文件。", "recovery": "命令只读并运行合成程序。"},
+    {"node": "lab", "shell": "bash", "command": "cd /workspace/repo && git diff HEAD^ HEAD -- app.py", "expected": "上一提交使用 sum，当前提交使用 len。", "explanation": "历史比较确认回归只在 app.py。", "recovery": "只读。"},
+    {"node": "lab", "shell": "bash", "command": "cd /workspace/repo && git restore --source=HEAD^ -- app.py && python3 app.py && git status --short", "expected": "程序输出 15；app.py 与 settings.ini 都显示工作树修改，草稿仍在。", "explanation": "只从指定历史版本恢复一个路径，不触碰其他未提交工作或提交历史。", "recovery": "若选错文件，重置场景；不要执行全树 reset。"}
+  ],
+  "solution": {"steps": [
+    {"node": "lab", "shell": "bash", "command": "cd /workspace/repo && git status --short && python3 app.py", "expected": "看到草稿和错误输出。", "explanation": "确认保护对象与症状。", "recovery": "只读状态。"},
+    {"node": "lab", "shell": "bash", "command": "cd /workspace/repo && git diff HEAD^ HEAD -- app.py", "expected": "定位 len 回归。", "explanation": "从历史找出已知良好内容。", "recovery": "只读。"},
+    {"node": "lab", "shell": "bash", "command": "cd /workspace/repo && git restore --source=HEAD^ -- app.py && python3 app.py && git status --short", "expected": "15，且两个路径的修改都保留。", "explanation": "路径级恢复避免覆盖无关草稿。", "recovery": "重置场景可重建一次性仓库。"}
+  ], "explanation": "这道题的保护约束与功能目标同等重要：恢复 app.py 不能牺牲 settings.ini 的未提交工作。"}
+}

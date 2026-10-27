@@ -1,0 +1,22 @@
+{
+  "id": "api-payload-errors",
+  "version": 1,
+  "title": "客户端字段错误却仍显示保存成功",
+  "summary": "通过本地离线程序练习 API 载荷与错误处理的 CLI 契约子集。",
+  "tags": ["linux", "api-contract", "json", "error-handling"],
+  "symptom": "client.py 发送 username 字段；本地 API 返回 422，但客户端始终打印 saved。",
+  "goal": "有效名称输出 saved:Ada 并以 0 退出；空名称输出 API 的错误并以非零退出。",
+  "constraints": ["不得修改 api_program.py", "必须解析实际 JSON 响应与 status", "这是离线 CLI 契约子集，不得宣称实现浏览器或网络 API"],
+  "environment": {"adapter": "bwrap-userland", "nodes": ["lab"], "shell": "bash", "required_tools": ["bash", "python3"]},
+  "provenance": {"type": "teaching-adaptation", "source_links": ["https://www.rfc-editor.org/rfc/rfc8259.html"], "adaptations": ["用 stdin/stdout 本地程序替代网络服务", "保留载荷、状态和错误分支的核心合同"]},
+  "hints": [
+    {"node": "lab", "shell": "bash", "command": "printf '%s' '{\"username\":\"Ada\"}' | python3 /workspace/app/api_program.py && python3 /workspace/app/client.py Ada", "expected": "API 明确返回 status 422，但客户端错误显示 saved:Ada。", "explanation": "要分别检查请求字段与响应状态。", "recovery": "命令不写数据。"},
+    {"node": "lab", "shell": "bash", "command": "python3 - <<'PY'\nfrom pathlib import Path\nPath('/workspace/app/client.py').write_text('''import json\nimport subprocess\nimport sys\n\nname = sys.argv[1] if len(sys.argv) > 1 else \"\"\nrequest = {\"name\": name}\nrun = subprocess.run([sys.executable, \"/workspace/app/api_program.py\"], input=json.dumps(request), text=True, capture_output=True)\nresponse = json.loads(run.stdout)\nif response.get(\"status\") != 201:\n    print(f\"error: {response.get('error', 'request failed')}\")\n    raise SystemExit(2)\nprint(f\"saved:{response['data']['name']}\")\n''')\nPY", "expected": "client.py 改用 name，并只在 status 201 时显示保存成功。", "explanation": "成功文案由已解析响应决定，错误分支保留 API 消息并非零退出。", "recovery": "语法错误时重置并完整复制此步骤。"},
+    {"node": "lab", "shell": "bash", "command": "python3 /workspace/app/client.py Ada; python3 /workspace/app/client.py ''; test $? -eq 2", "expected": "依次输出 saved:Ada 与 error: name is required，整条验证成功。", "explanation": "同时覆盖有效载荷和服务端拒绝。", "recovery": "若退出码不符，检查错误分支是否 raise SystemExit(2)。"}
+  ],
+  "solution": {"steps": [
+    {"node": "lab", "shell": "bash", "command": "printf '%s' '{\"username\":\"Ada\"}' | python3 /workspace/app/api_program.py && python3 /workspace/app/client.py Ada", "expected": "观察 422 与虚假 saved。", "explanation": "复现两个相连缺陷。", "recovery": "只读交互。"},
+    {"node": "lab", "shell": "bash", "command": "python3 - <<'PY'\nfrom pathlib import Path\nPath('/workspace/app/client.py').write_text('''import json\nimport subprocess\nimport sys\n\nname = sys.argv[1] if len(sys.argv) > 1 else \"\"\nrequest = {\"name\": name}\nrun = subprocess.run([sys.executable, \"/workspace/app/api_program.py\"], input=json.dumps(request), text=True, capture_output=True)\nresponse = json.loads(run.stdout)\nif response.get(\"status\") != 201:\n    print(f\"error: {response.get('error', 'request failed')}\")\n    raise SystemExit(2)\nprint(f\"saved:{response['data']['name']}\")\n''')\nPY", "expected": "请求和响应处理符合本地合同。", "explanation": "以实际响应决定成功或错误。", "recovery": "重置后重做。"},
+    {"node": "lab", "shell": "bash", "command": "python3 /workspace/app/client.py Ada; python3 /workspace/app/client.py ''; test $? -eq 2", "expected": "成功和拒绝分支都正确。", "explanation": "验证输出与退出码。", "recovery": "核对错误退出。"}
+  ], "explanation": "该题只验证离线 CLI 合同的字段、状态和错误处理；它没有实现 HTTP、浏览器 fetch 或页面。"}
+}

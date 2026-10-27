@@ -1,0 +1,22 @@
+{
+  "id": "media-wav-quality",
+  "version": 1,
+  "title": "命令成功但 WAV 产物不合格",
+  "summary": "用 Python 标准库检查并修复小型音频产物的采样率与峰值。",
+  "tags": ["linux", "media", "wav", "artifact-quality"],
+  "symptom": "生成器退出 0，但 tone.wav 是 8000 Hz 且峰值接近削波。",
+  "goal": "生成 0.25 秒、16000 Hz、单声道、16-bit、4000 帧且峰值不超过 12100 的 WAV。",
+  "constraints": ["不得修改 input/spec.json", "必须运行 generate_tone.py 生成真实 WAV", "不得使用 GPU、网络或外部媒体包"],
+  "environment": {"adapter": "bwrap-userland", "nodes": ["lab"], "shell": "bash", "required_tools": ["bash", "python3", "sed"]},
+  "provenance": {"type": "teaching-adaptation", "source_links": ["https://docs.python.org/3/library/wave.html"], "adaptations": ["使用 0.25 秒合成正弦波控制成本", "以标准库读取实际 WAV 参数和样本", "不使用真实媒体或 AI 模型"]},
+  "hints": [
+    {"node": "lab", "shell": "bash", "command": "python3 - <<'PY'\nimport struct, wave\np='/workspace/output/tone.wav'\nwith wave.open(p, 'rb') as w:\n    raw=w.readframes(w.getnframes()); values=struct.unpack('<'+'h'*(len(raw)//2), raw)\n    print(w.getnchannels(), w.getsampwidth(), w.getframerate(), w.getnframes(), max(abs(v) for v in values))\nPY", "expected": "看到 1 2 8000 2000 和接近 32767 的峰值。", "explanation": "进程成功不代表格式和电平满足规格。", "recovery": "只读 WAV。"},
+    {"node": "lab", "shell": "bash", "command": "sed -i 's/RATE = 8000/RATE = 16000/; s/AMPLITUDE = 32767/AMPLITUDE = 12000/' /workspace/app/generate_tone.py", "expected": "生成参数与受保护规格一致。", "explanation": "提高采样率并留出峰值余量。", "recovery": "若替换未命中，重置并核对两条常量。"},
+    {"node": "lab", "shell": "bash", "command": "python3 /workspace/app/generate_tone.py && python3 - <<'PY'\nimport struct, wave\np='/workspace/output/tone.wav'\nwith wave.open(p, 'rb') as w:\n    raw=w.readframes(w.getnframes()); values=struct.unpack('<'+'h'*(len(raw)//2), raw)\n    print(w.getnchannels(), w.getsampwidth(), w.getframerate(), w.getnframes(), max(abs(v) for v in values))\nPY", "expected": "生成器报告 4000 frames at 16000 Hz；检查显示 1 2 16000 4000 12000。", "explanation": "重新运行真实生成器并解析实际媒体内容。", "recovery": "若旧参数仍在，确认保存了 generate_tone.py 后再生成。"}
+  ],
+  "solution": {"steps": [
+    {"node": "lab", "shell": "bash", "command": "python3 - <<'PY'\nimport struct, wave\np='/workspace/output/tone.wav'\nwith wave.open(p, 'rb') as w:\n    raw=w.readframes(w.getnframes()); values=struct.unpack('<'+'h'*(len(raw)//2), raw)\n    print(w.getnchannels(), w.getsampwidth(), w.getframerate(), w.getnframes(), max(abs(v) for v in values))\nPY", "expected": "确认 8000 Hz、2000 帧和高峰值。", "explanation": "检查真实文件。", "recovery": "只读。"},
+    {"node": "lab", "shell": "bash", "command": "sed -i 's/RATE = 8000/RATE = 16000/; s/AMPLITUDE = 32767/AMPLITUDE = 12000/' /workspace/app/generate_tone.py", "expected": "常量符合规格。", "explanation": "修复两个质量参数。", "recovery": "重置可恢复。"},
+    {"node": "lab", "shell": "bash", "command": "python3 /workspace/app/generate_tone.py && python3 - <<'PY'\nimport struct, wave\np='/workspace/output/tone.wav'\nwith wave.open(p, 'rb') as w:\n    raw=w.readframes(w.getnframes()); values=struct.unpack('<'+'h'*(len(raw)//2), raw)\n    print(w.getnchannels(), w.getsampwidth(), w.getframerate(), w.getnframes(), max(abs(v) for v in values))\nPY", "expected": "1 2 16000 4000 12000。", "explanation": "按内容而非成功字符串验收。", "recovery": "核对脚本常量。"}
+  ], "explanation": "媒体任务必须解析真实产物；这里用小 WAV 与标准库完成，无 GPU 或外部安装。"}
+}

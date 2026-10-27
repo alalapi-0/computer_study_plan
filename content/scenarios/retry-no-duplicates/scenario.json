@@ -1,0 +1,22 @@
+{
+  "id": "retry-no-duplicates",
+  "version": 1,
+  "title": "任务重试产生重复结果",
+  "summary": "让本地批处理按 request_id 幂等，并清理已有重复结果。",
+  "tags": ["linux", "retry", "idempotency", "data"],
+  "symptom": "同一请求流运行两次后 results.json 出现四条记录。",
+  "goal": "重复运行 worker.py 后，每个 request_id 仍只有一条正确结果。",
+  "constraints": ["不得修改 requests.jsonl", "保留 job-a=8 与 job-b=14", "不能通过跳过全部处理或删除 worker 冒充修复"],
+  "environment": {"adapter": "bwrap-userland", "nodes": ["lab"], "shell": "bash", "required_tools": ["bash", "python3"]},
+  "provenance": {"type": "teaching-adaptation", "source_links": ["https://www.rfc-editor.org/rfc/rfc9110.html#name-idempotent-methods"], "adaptations": ["将网络重试概念缩成离线 JSONL 批处理", "只以合成 request_id 演示去重"]},
+  "hints": [
+    {"node": "lab", "shell": "bash", "command": "python3 -m json.tool /workspace/data/results.json && sed -n '1,30p' /workspace/app/worker.py", "expected": "两个 request_id 各出现两次，worker 每次都 append。", "explanation": "重试没有识别已经完成的业务键。", "recovery": "只读。"},
+    {"node": "lab", "shell": "bash", "command": "python3 - <<'PY'\nimport json\nfrom pathlib import Path\np = Path('/workspace/data/results.json')\nitems = json.loads(p.read_text())\nunique = {item['request_id']: item for item in items}\np.write_text(json.dumps(list(unique.values()), sort_keys=True) + '\\n')\nPY\npython3 - <<'PY'\nfrom pathlib import Path\np = Path('/workspace/app/worker.py')\ns = p.read_text()\ns = s.replace('for line in requests_path.read_text().splitlines():', 'done = {item[\"request_id\"] for item in results}\\nfor line in requests_path.read_text().splitlines():')\ns = s.replace('    results.append({\"request_id\": request[\"id\"], \"result\": request[\"value\"] * 2})', '    if request[\"id\"] in done:\\n        continue\\n    results.append({\"request_id\": request[\"id\"], \"result\": request[\"value\"] * 2})\\n    done.add(request[\"id\"])')\np.write_text(s)\nPY", "expected": "现有结果按 request_id 收敛为两条，worker 在追加前检查已完成 ID。", "explanation": "先修复已有状态，再让后续重试幂等。", "recovery": "若脚本替换未命中或缩进报错，重置后完整重复本步骤。"},
+    {"node": "lab", "shell": "bash", "command": "python3 /workspace/app/worker.py && python3 /workspace/app/worker.py && python3 -m json.tool /workspace/data/results.json", "expected": "两次都报告 results=2，最终只有 job-a=8 与 job-b=14。", "explanation": "重复执行真实工作程序验证结果数量不增长。", "recovery": "若数量增长，检查 done 集合是否在循环前建立且追加后更新。"}
+  ],
+  "solution": {"steps": [
+    {"node": "lab", "shell": "bash", "command": "python3 -m json.tool /workspace/data/results.json && sed -n '1,30p' /workspace/app/worker.py", "expected": "确认重复与无条件 append。", "explanation": "定位业务键缺失。", "recovery": "只读。"},
+    {"node": "lab", "shell": "bash", "command": "python3 - <<'PY'\nimport json\nfrom pathlib import Path\np = Path('/workspace/data/results.json')\nitems = json.loads(p.read_text())\nunique = {item['request_id']: item for item in items}\np.write_text(json.dumps(list(unique.values()), sort_keys=True) + '\\n')\nPY\npython3 - <<'PY'\nfrom pathlib import Path\np = Path('/workspace/app/worker.py')\ns = p.read_text()\ns = s.replace('for line in requests_path.read_text().splitlines():', 'done = {item[\"request_id\"] for item in results}\\nfor line in requests_path.read_text().splitlines():')\ns = s.replace('    results.append({\"request_id\": request[\"id\"], \"result\": request[\"value\"] * 2})', '    if request[\"id\"] in done:\\n        continue\\n    results.append({\"request_id\": request[\"id\"], \"result\": request[\"value\"] * 2})\\n    done.add(request[\"id\"])')\np.write_text(s)\nPY", "expected": "数据与代码都具备 request_id 去重。", "explanation": "现有与未来重复都要处理。", "recovery": "重置后重做。"},
+    {"node": "lab", "shell": "bash", "command": "python3 /workspace/app/worker.py && python3 /workspace/app/worker.py && python3 -m json.tool /workspace/data/results.json", "expected": "始终两条正确记录。", "explanation": "重复运行是关键验收。", "recovery": "核对集合逻辑。"}
+  ], "explanation": "退出成功不代表任务只完成一次；request_id 是这道题的幂等键。"}
+}

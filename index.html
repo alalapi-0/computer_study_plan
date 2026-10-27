@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="description" content="在隔离环境中诊断、修复并验证真实工程问题。">
+  <title>问题练习工作台</title>
+  <link rel="stylesheet" href="vendor/xterm/xterm.css">
+  <link rel="stylesheet" href="practice_ui.css">
+  <script defer src="vendor/xterm/xterm.js"></script>
+  <script defer src="practice_ui.js"></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">跳到练习内容</a>
+  <header class="topbar">
+    <a class="brand" href="/" aria-label="问题练习工作台首页">
+      <span class="brand-mark" aria-hidden="true">&gt;_</span>
+      <span><strong>问题练习工作台</strong><small>观察 · 判断 · 修复 · 取证</small></span>
+    </a>
+    <nav aria-label="辅助入口">
+      <a class="quiet-link" href="progress.html">Linux 历史课程</a>
+      <button class="hint-toggle" id="hintToggle" type="button" aria-pressed="false">提示常关</button>
+    </nav>
+  </header>
+
+  <main id="main" class="shell" tabindex="-1">
+    <aside class="catalog" aria-labelledby="catalogHeading">
+      <div class="section-heading">
+        <div><span class="eyebrow">问题库</span><h1 id="catalogHeading">选择一个现场</h1></div>
+        <span id="catalogCount" class="count" aria-live="polite">载入中</span>
+      </div>
+      <label class="search"><span>搜索题目</span><input id="scenarioSearch" type="search" placeholder="症状、标题或标签" autocomplete="off"></label>
+      <div id="tagFilters" class="tags" aria-label="按标签筛选"></div>
+      <div id="catalogStatus" class="inline-state" role="status">正在读取本机题库…</div>
+      <ol id="scenarioList" class="scenario-list"></ol>
+    </aside>
+
+    <section class="workspace" aria-label="当前问题">
+      <div id="globalError" class="notice error" role="alert" hidden></div>
+      <div id="capabilityNotice" class="notice" role="status" hidden></div>
+
+      <article id="problemPanel" class="problem-panel" aria-labelledby="problemTitle">
+        <div class="problem-head">
+          <div>
+            <span id="scenarioMeta" class="eyebrow">请选择题目</span>
+            <h2 id="problemTitle" tabindex="-1">从问题库开始</h2>
+            <p id="problemSummary" class="lede">每道题都在一次性隔离环境中练习。先观察现象，再做判断。</p>
+          </div>
+          <button id="startButton" class="primary" type="button" disabled>开始这道题</button>
+        </div>
+        <div id="problemFacts" class="facts" hidden>
+          <section><h3>现场症状</h3><p id="problemSymptom"></p></section>
+          <section><h3>修复目标</h3><p id="problemGoal"></p></section>
+          <section><h3>保护约束</h3><ul id="problemConstraints"></ul></section>
+          <section><h3>案例来源</h3><div id="problemProvenance"></div></section>
+          <section><h3>发布验证</h3><div id="problemPublication"></div></section>
+        </div>
+        <aside id="guideCard" class="guide-card problem-guide" aria-label="提示与解答">
+          <div class="card-head"><div><h3>练习辅助</h3><p>开始环境前也可以阅读；偏好不会重置环境</p></div></div>
+          <div id="hintsClosed" class="empty-assist">提示常关。检查失败也不会自动显示步骤。</div>
+          <div id="hintsPanel" hidden><ol id="hintSteps" class="steps"></ol></div>
+          <button id="solutionButton" class="secondary" type="button" disabled aria-expanded="false" aria-controls="solutionPanel">查看完整解答</button>
+          <section id="solutionPanel" class="solution" hidden><h4>完整解答</h4><p id="solutionExplanation"></p><ol id="solutionSteps" class="steps"></ol></section>
+        </aside>
+      </article>
+
+      <section id="labPanel" class="lab-panel" aria-labelledby="labHeading" hidden>
+        <div class="lab-head">
+          <div><span class="eyebrow">当前 Attempt</span><h2 id="labHeading">练习环境</h2></div>
+          <div id="attemptStatus" class="status-pill" role="status">未开始</div>
+        </div>
+        <div id="differentScenarioNotice" class="notice" hidden></div>
+        <dl id="environmentFacts" class="environment-facts"></dl>
+
+        <div id="practiceGrid" class="practice-grid">
+          <section class="terminal-card" aria-labelledby="terminalHeading">
+            <div class="card-head">
+              <div><h3 id="terminalHeading">隔离终端</h3><p id="terminalTarget">尚未连接</p></div>
+              <div class="terminal-actions">
+                <button id="ctrlCButton" type="button" disabled aria-label="向终端发送 Control C">发送 Ctrl+C</button>
+                <button id="reconnectButton" type="button" disabled>重新连接</button>
+              </div>
+            </div>
+            <div id="terminal" class="terminal" aria-label="交互式隔离终端"></div>
+            <p id="terminalMessage" class="terminal-message" aria-live="polite">开始题目后可在这里亲自输入命令。</p>
+          </section>
+
+        </div>
+
+        <div class="lab-controls" aria-label="环境操作">
+          <button id="checkButton" class="primary" type="button" disabled>检查修复结果</button>
+          <button id="stopButton" type="button" disabled>停止环境</button>
+          <button id="resetButton" class="danger" type="button" disabled>重置环境</button>
+        </div>
+        <div id="operationState" class="inline-state" role="status"></div>
+
+        <section class="artifact-card" aria-labelledby="artifactHeading">
+          <h3 id="artifactHeading">WAV 产物</h3>
+          <p id="artifactState" role="status">通过 WAV 检查后可核对并导出；格式检查不代表听觉验收。</p>
+          <button id="exportWavButton" type="button" disabled>核对并导出 tone.wav</button>
+          <button id="downloadWavButton" type="button" disabled>下载 tone.wav</button>
+          <pre id="artifactProvenance" aria-label="产物来源"></pre>
+        </section>
+
+        <section class="evidence" aria-labelledby="evidenceHeading">
+          <div class="card-head"><div><h3 id="evidenceHeading">检查与证据</h3><p>只有检查器证据能证明目标是否成立</p></div></div>
+          <div id="checksEmpty" class="empty-state">尚未执行检查。</div>
+          <ol id="checksList" class="checks"></ol>
+        </section>
+      </section>
+
+      <section class="history-card" aria-labelledby="historyHeading">
+        <div class="card-head"><div><span class="eyebrow">耐久记录</span><h2 id="historyHeading">尝试历史</h2></div><button id="refreshHistory" type="button">刷新</button></div>
+        <p class="history-note">重置只替换一次性工作区，旧 Attempt 与检查证据会保留。</p>
+        <div id="historyStatus" class="inline-state" role="status">正在读取…</div>
+        <ol id="attemptHistory" class="attempt-history"></ol>
+      </section>
+      <section id="rrFeedbackMount" hidden></section>
+    </section>
+  </main>
+
+  <dialog id="resetDialog" aria-labelledby="resetTitle">
+    <form method="dialog">
+      <span class="eyebrow">确认重置</span><h2 id="resetTitle">丢弃这次的一次性工作区？</h2>
+      <p>当前工作区内的修改会被丢弃，并按同一场景版本恢复初始故障。旧 Attempt、检查结果和证据会继续保留。</p>
+      <div class="dialog-actions"><button value="cancel">取消</button><button id="confirmReset" class="danger" value="confirm">重置工作区</button></div>
+    </form>
+  </dialog>
+</body>
+</html>

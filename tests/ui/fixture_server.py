@@ -121,6 +121,17 @@ class FixtureHandler(SimpleHTTPRequestHandler):
         self.send_header("Cache-Control", "no-store")
         super().end_headers()
 
+    def send_head(self):
+        path = urlparse(self.path).path
+        allowed = {"/plans/linux/README.md", "/", "/index.html", "/practice_ui.js", "/practice_ui.css", "/progress.html", "/progress_ui.js", "/progress.css", "/progress_ui.css", "/progress_data.js", "/rounds_data.js", "/vendor/xterm/xterm.js", "/vendor/xterm/xterm.css"}
+        notes = re.fullmatch(r"/rounds/(?:round_00|round_01|round_02|round_06)/[A-Za-z0-9_/-]+\.md", path)
+        # Sixteen declared public read routes; never an arbitrary shell file.
+        script = re.fullmatch(r"/rounds/(?:round_00|round_01|round_02|round_06)/(?:week[123]/exercises\.sh|final/comprehensive_exercise\.sh)", path)
+        target = REPO_ROOT / ("index.html" if path == "/" else path.lstrip("/"))
+        if (path not in allowed and not notes and not script) or ".." in target.parts or any(p.is_symlink() for p in [target, *target.parents]) or not target.is_file():
+            self.send_error(404); return None
+        return super().send_head()
+
     def do_GET(self) -> None:  # noqa: N802 - stdlib handler contract
         self._record("GET")
         parsed = urlparse(self.path)
@@ -167,6 +178,12 @@ class FixtureHandler(SimpleHTTPRequestHandler):
                     plan = self.fixture["progress_plan"].pop(0) if self.fixture["progress_plan"] else None
                 self._json(HTTPStatus.OK, self._apply_response_plan(payload, plan))
                 return
+            # Default fixture serves the already-loaded memory snapshot only.
+            # Never fall through to the repository's static progress file.
+            with self.fixture["lock"]:
+                payload = deepcopy(self.fixture["progress"])
+            self._json(HTTPStatus.OK, payload)
+            return
         super().do_GET()
 
     def do_POST(self) -> None:  # noqa: N802 - stdlib handler contract

@@ -1,0 +1,22 @@
+{
+  "id": "persistent-data-restart",
+  "version": 1,
+  "title": "服务重启后设置消失",
+  "summary": "把状态从模拟运行目录迁到题内持久数据目录，并用真实重启流程验证。",
+  "tags": ["linux", "persistence", "restart", "python"],
+  "symptom": "写入 theme=dark 后执行题内 restart，再读取只得到 MISSING。",
+  "goal": "theme=dark 和检查器写入的状态都能跨题内 restart 保留。",
+  "constraints": ["持久状态只能写入 /workspace/data/state.json", "不得修改 service.py", "不得用打印固定值冒充读取"],
+  "environment": {"adapter": "bwrap-userland", "nodes": ["lab"], "shell": "bash", "required_tools": ["bash", "python3", "sed"]},
+  "provenance": {"type": "teaching-adaptation", "source_links": ["https://docs.python.org/3/library/pathlib.html"], "adaptations": ["用删除 /workspace/run 模拟服务运行目录重建", "不依赖 systemd 或宿主服务"]},
+  "hints": [
+    {"node": "lab", "shell": "bash", "command": "python3 /workspace/app/service.py get theme && cat /workspace/app/config.json", "expected": "theme 为 MISSING，配置指向 /workspace/run/state.json。", "explanation": "restart 会清理运行目录，因此该位置不适合持久数据。", "recovery": "读取不修改数据。"},
+    {"node": "lab", "shell": "bash", "command": "sed -i 's|/workspace/run/state.json|/workspace/data/state.json|' /workspace/app/config.json", "expected": "配置改为题目允许的持久路径。", "explanation": "把生命周期不同的数据与运行目录分离。", "recovery": "若 JSON 损坏，重置题目后重新执行精确替换。"},
+    {"node": "lab", "shell": "bash", "command": "python3 /workspace/app/service.py set theme dark && python3 /workspace/app/service.py restart && python3 /workspace/app/service.py get theme", "expected": "依次输出 stored、restarted、dark。", "explanation": "重新写入后走完整重启路径，验证真实读取。", "recovery": "若得到 MISSING，检查 config.json 是否精确指向 /workspace/data/state.json。"}
+  ],
+  "solution": {"steps": [
+    {"node": "lab", "shell": "bash", "command": "python3 /workspace/app/service.py get theme && cat /workspace/app/config.json", "expected": "复现 MISSING 并看到运行目录路径。", "explanation": "定位数据生命周期错误。", "recovery": "只读。"},
+    {"node": "lab", "shell": "bash", "command": "sed -i 's|/workspace/run/state.json|/workspace/data/state.json|' /workspace/app/config.json", "expected": "状态路径改到 data。", "explanation": "配置是唯一需修复点。", "recovery": "损坏时重置。"},
+    {"node": "lab", "shell": "bash", "command": "python3 /workspace/app/service.py set theme dark && python3 /workspace/app/service.py restart && python3 /workspace/app/service.py get theme", "expected": "最终输出 dark。", "explanation": "重启后的真实读取证明持久化。", "recovery": "核对配置与 state.json。"}
+  ], "explanation": "运行目录在重启时重建，持久数据必须写到生命周期更长且题目明确允许的数据目录。"}
+}

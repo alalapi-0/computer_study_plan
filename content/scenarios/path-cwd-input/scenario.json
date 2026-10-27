@@ -1,0 +1,22 @@
+{
+  "id": "path-cwd-input",
+  "version": 1,
+  "title": "脚本换目录后找不到输入文件",
+  "summary": "诊断相对路径依赖当前工作目录的问题，并让脚本从任意目录稳定读取题内输入。",
+  "tags": ["linux", "path", "cwd", "python"],
+  "symptom": "运行 /workspace/app/run.sh 时 Python 报告 data/input.txt 不存在。",
+  "goal": "运行脚本得到 records=3，并在 /workspace/result.txt 留下同样结果。",
+  "constraints": ["不得修改 /workspace/data/input.txt", "不得创建指向其他位置的符号链接", "只可操作题内 /workspace"],
+  "environment": {"adapter": "bwrap-userland", "nodes": ["lab"], "shell": "bash", "required_tools": ["bash", "python3", "sed"]},
+  "provenance": {"type": "teaching-adaptation", "source_links": ["https://docs.python.org/3/library/pathlib.html"], "adaptations": ["使用合成的三行输入与本地 Python 脚本", "不声称来自用户历史事故"]},
+  "hints": [
+    {"node": "lab", "shell": "bash", "command": "cd /workspace && /workspace/app/run.sh", "expected": "出现 FileNotFoundError，路径是 data/input.txt。", "explanation": "启动脚本会进入 /workspace/app，因此相对路径从该目录解释。", "recovery": "此命令只会失败，不会修改受保护输入；继续检查脚本。"},
+    {"node": "lab", "shell": "bash", "command": "sed -i 's|Path(\"data/input.txt\")|Path(__file__).resolve().parent.parent / \"data/input.txt\"|' /workspace/app/report.py", "expected": "report.py 改为从脚本自身位置推导输入路径。", "explanation": "__file__ 提供稳定锚点，不依赖调用者当前目录。", "recovery": "若替换没有命中，用 sed -n '1,20p' /workspace/app/report.py 核对原行后重置题目。"},
+    {"node": "lab", "shell": "bash", "command": "cd /tmp && /workspace/app/run.sh && cat /workspace/result.txt", "expected": "连续看到两次 records=3。", "explanation": "从另一目录运行仍成功，证明修复消除了 cwd 依赖并产生目标文件。", "recovery": "若仍失败，核对 report.py 的 source 行及 /workspace/data/input.txt 是否保持三行。"}
+  ],
+  "solution": {"steps": [
+    {"node": "lab", "shell": "bash", "command": "cd /workspace && /workspace/app/run.sh", "expected": "复现 data/input.txt 找不到。", "explanation": "先确认故障和当前目录关系。", "recovery": "失败是预期现象。"},
+    {"node": "lab", "shell": "bash", "command": "sed -i 's|Path(\"data/input.txt\")|Path(__file__).resolve().parent.parent / \"data/input.txt\"|' /workspace/app/report.py", "expected": "脚本路径成为输入路径锚点。", "explanation": "只修改路径计算，不改输入数据。", "recovery": "替换不匹配时重置后重试。"},
+    {"node": "lab", "shell": "bash", "command": "cd /tmp && /workspace/app/run.sh && cat /workspace/result.txt", "expected": "records=3。", "explanation": "从不同 cwd 运行验证目标。", "recovery": "检查 source 行与受保护输入。"}
+  ], "explanation": "因果链是调用者 cwd 改变了相对路径含义；以脚本位置为锚点后，输入定位稳定。"}
+}
