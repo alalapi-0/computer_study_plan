@@ -513,5 +513,67 @@ class LegacyExportABITests(unittest.TestCase):
                 self.assertEqual(collector.call_count, 1)
 
 
+class GraphSourceEntryTests(unittest.TestCase):
+    def setUp(self):
+        self.module = load_entry()
+        self.assertEqual(Path(self.module.__file__), ENTRY)
+        self.helper = self.module._load_graph_helper()
+        self.assertEqual(Path(self.helper.__file__), ENTRY.parent / "study_hub_graph.py")
+        self.document = self.helper.native_document(catalog={"scenarios": []}, history={"revision": 0, "attempts": []},
+            environments={}, source01_version="a" * 64, native_code_sha256="b" * 64)
+        self.context = self.helper.make_context(self.document, exporter_sha256=self.module._LOADED_CODE_SHA,
+                                              permission_version="c" * 64, minimum_revision=0)
+
+    def invoke(self, raw):
+        stream = io.TextIOWrapper(io.BytesIO(raw), encoding="utf-8")
+        with tempfile.TemporaryDirectory() as hub, mock.patch.object(self.module.sys, "stdin", stream), contextlib.redirect_stdout(io.StringIO()) as out:
+            code = self.module.main(["--hub-root", hub, "--project-root", str(ENTRY.parent.parent), "--graph-source-only"])
+        return code, json.loads(out.getvalue())
+
+    def test_graph_stdin_uses_exact_helper_despite_module_cache(self):
+        bundle = {"document": self.document, "context": self.context, "observed_at": WHEN}
+        poison = types.ModuleType("study_hub_graph")
+        with mock.patch.dict("sys.modules", {"study_hub_graph": poison, "scripts.study_hub_graph": poison}):
+            code, result = self.invoke(json.dumps(bundle).encode())
+        self.assertEqual(code, 0)
+        self.assertTrue(result["available"])
+        self.assertEqual(result["graph"]["objects"], [])
+        self.assertEqual(result["context"]["helper_sha256"], hashlib.sha256((ENTRY.parent / "study_hub_graph.py").read_bytes()).hexdigest())
+
+    def test_graph_stdin_invalid_private_context_and_limits_rejected(self):
+        bundle = {"document": self.document, "context": self.context, "observed_at": WHEN}
+        bad = copy.deepcopy(bundle)
+        bad["document"]["token"] = "SYNTHETIC_PRIVATE"
+        wrong = copy.deepcopy(bundle)
+        wrong["context"]["exporter_sha256"] = "0" * 64
+        for raw in (b"{", b"\xff", b'{"document":1,"document":2}', b"x" * (self.helper.MAX_DOCUMENT_BYTES + 1),
+                    json.dumps(bad).encode(), json.dumps(wrong).encode()):
+            code, result = self.invoke(raw)
+            self.assertEqual(code, 2)
+            self.assertFalse(result["available"])
+            self.assertNotIn("SYNTHETIC_PRIVATE", json.dumps(result))
+
+    def test_graph_mode_mutually_exclusive_and_requires_both_roots(self):
+        for argv in (["--graph-source-only"], ["--hub-root", str(ENTRY.parent), "--graph-source-only"],
+                     ["--hub-root", str(ENTRY.parent), "--project-root", str(ENTRY.parent.parent), "--graph-source-only", "--source-only"]):
+            with self.assertRaises(SystemExit) as failure:
+                self.module.main(argv)
+            self.assertEqual(failure.exception.code, 2)
+
+    def test_graph_loader_detects_code_drift_and_root_mismatch(self):
+        original = self.module._read
+        def altered(fd, name, **kwargs):
+            raw, identity = original(fd, name, **kwargs)
+            if name == self.module.ENTRY_PATH:
+                raw += b"\n# drift\n"
+            return raw, identity
+        with mock.patch.object(self.module, "_read", side_effect=altered):
+            with self.assertRaises(self.module.SourceUnavailable):
+                self.module._load_graph_helper()
+        with tempfile.TemporaryDirectory() as elsewhere, contextlib.redirect_stdout(io.StringIO()) as out:
+            self.assertEqual(self.module._graph_source_stdin(Path(elsewhere)), 2)
+            self.assertEqual(json.loads(out.getvalue())["error"], "graph_project_root_mismatch")
+
+
 if __name__ == "__main__":
     unittest.main()

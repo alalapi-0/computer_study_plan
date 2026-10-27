@@ -641,11 +641,69 @@ def reduce_event(state, event, *, expected_previous_version, context, expected_s
         return reject(str(exc) if isinstance(exc, SourceUnavailable) else "invalid_event")
 
 
+
+def _load_graph_helper():
+    """Execute exact sibling bytes; sys.path/PYTHONPATH/module cache cannot select it."""
+    import types
+    root = _ENTRY_FILE.parent.parent
+    fd, chain = _root(root)
+    try:
+        first, identity = _read(fd, "scripts/study_hub_graph.py")
+        entry, _ = _read(fd, ENTRY_PATH)
+        second, after = _read(fd, "scripts/study_hub_graph.py")
+        if first != second or identity != after or _sha(entry) != _LOADED_CODE_SHA:
+            raise SourceUnavailable("graph_code_drift")
+        check, current = _root(root)
+        os.close(check)
+        if current != chain:
+            raise SourceUnavailable("graph_root_drift")
+        module = types.ModuleType("_csp_exact_graph_source")
+        module.__file__ = str(root / "scripts/study_hub_graph.py")
+        module._SOURCE_CODE_SHA256 = _sha(second)
+        exec(compile(second, module.__file__, "exec"), module.__dict__)
+        return module
+    finally:
+        os.close(fd)
+
+
+def _graph_source_stdin(project_root):
+    """Explicit bounded sanitized JSON stdin; no source collector or input file."""
+    try:
+        if project_root != _ENTRY_FILE.parent.parent:
+            raise SourceUnavailable("graph_project_root_mismatch")
+        helper = _load_graph_helper()
+        raw = sys.stdin.buffer.read(helper.MAX_DOCUMENT_BYTES + 1)
+        if len(raw) > helper.MAX_DOCUMENT_BYTES:
+            raise SourceUnavailable("graph_stdin_limit")
+        def unique(pairs):
+            result = {}
+            for key, value in pairs:
+                if key in result:
+                    raise SourceUnavailable("duplicate_graph_json_key")
+                result[key] = value
+            return result
+        bundle = json.loads(raw.decode("utf-8", errors="strict"), object_pairs_hook=unique)
+        if type(bundle) is not dict or set(bundle) != {"document", "context", "observed_at"}:
+            raise SourceUnavailable("invalid_graph_stdin_bundle")
+        if type(bundle["context"]) is not dict or bundle["context"].get("exporter_sha256") != _LOADED_CODE_SHA:
+            raise SourceUnavailable("graph_exporter_context_mismatch")
+        result = helper.build_study_graph(bundle["document"], context=bundle["context"], observed_at=bundle["observed_at"])
+        print(json.dumps(result, ensure_ascii=False, sort_keys=True))
+        return 0 if result["available"] else 2
+    except (OSError, ValueError, TypeError, AttributeError, RecursionError, UnicodeError) as exc:
+        reason = str(exc) if isinstance(exc, SourceUnavailable) else "graph_source_unavailable"
+        print(json.dumps({"available": False, "graph": None, "source_version": None,
+                          "error": reason, "scope": "local_source_engineering_only"}))
+        return 2
+
+
 def main(argv=None):
     parser = argparse.ArgumentParser()
     parser.add_argument("--hub-root", type=Path, required=True)
     parser.add_argument("--project-root", type=Path, required=True)
-    parser.add_argument("--source-only", action="store_true")
+    source_modes = parser.add_mutually_exclusive_group()
+    source_modes.add_argument("--source-only", action="store_true")
+    source_modes.add_argument("--graph-source-only", action="store_true")
     args = parser.parse_args(argv)
 
     hub_root = args.hub_root.resolve(strict=True)
@@ -659,6 +717,8 @@ def main(argv=None):
     except (OSError, SourceUnavailable):
         return 2
     project_root = project_root.resolve(strict=True)
+    if args.graph_source_only:
+        return _graph_source_stdin(project_root)
     if args.source_only:
         projection = capture_source(_ENTRY_FILE.parent.parent, project_root,
                                     observed_at=datetime.now(timezone.utc).isoformat())
