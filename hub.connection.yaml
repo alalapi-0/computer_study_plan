@@ -8,15 +8,39 @@ source_refs:
 metric_export:
   entry: scripts/export_hub_metric_snapshot.py
   snapshot: .hub/status.json
-mapping: {}
+mapping:
+  current_work.status:
+    source_ref: state
+    selector:
+      heading: Hub 当前管理映射
+      label: Status
+    value_map: null
+  current_work.objective:
+    source_ref: state
+    selector:
+      heading: Hub 当前管理映射
+      label: Objective
+    value_map: null
+  current_work.phase:
+    source_ref: state
+    selector:
+      heading: Hub 当前管理映射
+      label: Phase
+    value_map: null
+  current_work.next_action:
+    source_ref: state
+    selector:
+      heading: Hub 当前管理映射
+      label: Next action
+    value_map: null
 unknown_fields:
-  current_work.objective: PROJECT_STATE.md is a narrative facts page, not one typed current-work objective.
-  current_work.phase: Phase headings are prose and do not publish one typed phase field.
+  current_work.objective: The Hub 当前管理映射 Objective label is unavailable, missing or ambiguous in the selected State revision.
+  current_work.phase: The Hub 当前管理映射 Phase label is unavailable, missing or ambiguous in the selected State revision.
   current_work.round: Round names in the narrative are not one typed current-round field.
-  current_work.status: UI-in-progress notes are not a typed Hub lifecycle status.
+  current_work.status: The Hub 当前管理映射 Status label is unavailable, missing or ambiguous in the selected State revision.
   current_work.completed: Slice checkmarks are not a typed whole-project completion boolean.
   current_work.accepted: Design-slice language is not a typed acceptance boolean.
-  current_work.next_action: Later-phase bullets are not one typed next-action field.
+  current_work.next_action: The Hub 当前管理映射 Next action label is unavailable, missing or ambiguous in the selected State revision.
   current_work.owner_role: PROJECT_STATE.md publishes no typed owner-role field.
   progress.completed: Task-done counts belong to study metric rows, not one lifecycle numerator.
   progress.total: The registered 80-task course size is not a Hub completion denominator.
