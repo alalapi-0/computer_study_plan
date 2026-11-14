@@ -168,6 +168,8 @@ def run_verify() -> int:
     commands = [
         (["git", "diff", "--check"], False),
         (["node", "--check", "progress_ui.js"], False),
+        (["node", "--check", "practice_ui.js"], False),
+        ([sys.executable, "scripts/validate_scenarios.py"], False),
         ([sys.executable, "scripts/check_protocol_sync.py"], False),
         ([sys.executable, "scripts/validate_learning_data.py"], False),
         (["python3", "-m", "json.tool", "progress.json"], True),

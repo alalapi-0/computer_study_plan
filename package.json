@@ -1,7 +1,7 @@
 {
   "name": "computer_study_plan",
   "private": true,
-  "description": "Learning roadmap and progress control repository",
+  "description": "Local problem-driven engineering practice workbench",
   "scripts": {
     "check:mcp": "node scripts/check_mcp_config.js",
     "check:cursor-mcp": "bash scripts/check_cursor_mcp_status.sh",
@@ -9,6 +9,8 @@
     "test:progress": "python3 -m unittest tests.test_progress_transactions tests.test_run_transactions",
     "test:ui": "python3 scripts/worktree_ui_fixture.py --ui-test",
     "sync:progress": "python3 scripts/sync_progress_data.py",
-    "build:rounds": "python3 scripts/build_rounds_data.py"
+    "build:rounds": "python3 scripts/build_rounds_data.py",
+    "test:labs": "python3 -m unittest tests.test_lab_runtime tests.test_scenarios tests.test_workbench_http",
+    "check:scenarios": "python3 scripts/validate_scenarios.py --runtime"
   }
 }

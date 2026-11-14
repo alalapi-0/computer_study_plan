@@ -1,139 +1,35 @@
-# Architecture
+# Architecture · 问题工作台
 
-> 更新日期：2026-08-14
-> 原则：当前只有一个 active course；底层模型保持 course-agnostic；不为不存在的多课程需求过度设计。
+> 2026-10-13 · 实现/验收状态见PROJECT_STATE。
 
-## 1. 当前架构立场
+## 边界与复用
 
-- **Active course**：仅 `linux-foundations`
-- **平台层**：任务进度、动作日志、本地 Web UI、CLI、生成与校验脚本
-- **内容层**：Linux 课程模块与练习材料
-- **当前未实现**：XP 引擎、自然语言学习编排、数据库、账号系统、云同步
+`index.html` / `practice_ui.js` / `practice_ui.css` 是主问题清单和练习工作区；`progress.html` 及原JS/CSS继续承载历史课程，避免把80任务的done混成独立解决。现有Python服务同时提供受控静态材料、旧进度API和独立 `/api/lab/*`。无数据库、账号、前端框架、云依赖或在线判官。
 
-## 2. 逻辑分层
+`content/scenarios/<id>/scenario.json` 是版本化题面，含id/version、症状/目标/约束、真实环境组合、来源改编、提示步骤与解答；`setup.sh` 和 `check.py` 是可信维护者审查后运行的包。目录名必须匹配稳定id；不允许symlink包。全运行门禁成功后生成 `content/scenarios/publication.json`，绑定包摘要和实际工具版本；缺记录或内容/环境变化时显示待复验并禁止启动。受信维护者可用 `python3 scripts/validate_scenarios.py --runtime --publish`重新发布；不是上传或签名服务。测试与发布验证显式validation_mode，只用临时数据，不作为正常服务绕过入口。运行时保存内容摘要和工具版本，后续包更新不改变历史题目身份。
 
-```text
-content/          课程内容（当前仅 linux-foundations）
-platform data/    progress.json / events / feedback（现状仍在仓库根与 records/）
-web UI            progress.html + progress_ui.js + progress_ui.css
-local service     scripts/progress_server.py
-CLI               mark_done.sh
-docs/             愿景、路线、架构、状态
-```
+## 环境与会话
 
-目标目录结构（分阶段收敛，不是要求本轮一次性搬迁全部文件）：
+`LabManager` 独占本任务state root的文件锁，进程内序列化生命周期；一次一个实验。启动其他题会结束旧环境且保留Attempt。Bubblewrap建立独立user/PID/net/IPC/UTS等namespace，丢弃capability，禁止嵌套userns，只读系统工具、清空继承环境。只有 `/workspace` 可持久写入题目数据，`/tmp`是临时；没有宿主home、仓库、etc、run、socket、密钥或真实设备挂载。只用已有工具，无安装和宿主Shell回退。
 
-```text
-computer_study_plan/
-├─ content/
-│  └─ courses/
-│     └─ linux-foundations/
-│        ├─ course.json
-│        ├─ README.md
-│        └─ modules/
-│           ├─ module-00-terminal/
-│           ├─ module-01-filesystem/
-│           ├─ module-02-shell-git/
-│           ├─ module-03-automation/
-│           └─ module-04-remote-vps/
-├─ rounds/                 # Phase 0/1 兼容执行真源（Round 00 闭环）
-├─ plans/linux/            # 课程学习路径说明
-├─ scripts/                # 平台脚本
-├─ records/                # 动作日志、反馈、存档、终端历史
-├─ progress.html
-├─ progress_ui.js
-├─ progress_ui.css
-├─ progress.json
-├─ docs/
-├─ README.md
-└─ AGENTS.md
-```
+setup在同等隔离中挂载题包；用户Shell不挂载题包/解答/检查器。独立检查namespace挂载可信检查器、只读原工作副本和可丢弃的验证快照，判定目标和保护数据；通过有界no-follow复制保留必要模式，实际代码只在验证快照中运行，不能修改live题目或获得管理端权限。无用户HTML预览服务，因此没有将实验脚本放入管理会话执行的路径。后续预览须分离origin/权限。
 
-## 3. 数据模型（当前 + 目标）
+PTY由系统pseudo-terminal连接真实Bash，用xterm解析终端控制序列；HTTP输入、输出游标、resize、CtrlC和快照不伪造Shell结果。浏览器刷新只获取当前同一live Attempt快照；结束/失效历史只能作为历史，不能当活会话。终端文本/题面/证据用安全文本节点呈现，关闭链接执行。系统VM/macOS/Windows、双节点网络不在此adapter范围。
 
-### 当前已实现
+限制必须按实际语义显示：每进程地址空间/CPU/文件/进程数/FD限制、总会话寿命、输出与工作副本64MiB/10000条目监测；不是完整cgroup总RAM/CPU硬配额，也不保证所有恶意代码绝对安全。面向可信本机学习，不开放公网/多用户。
 
-| 概念 | 存储 | 说明 |
-|---|---|---|
-| Course / Lane | `progress.json.lanes` | 现阶段用 `linux-foundations` 表达唯一课程 |
-| Task progress | `progress.json.tasks` | `done` / `done_at` / `lane` |
-| Round metadata | `rounds_data.js` | 由 `build_rounds_data.py` 生成 |
-| Action events | `records/action_logs/events.jsonl` | mark_done / undo / run_exercise |
-| Task feedback | `records/feedback/task_feedback.json` | 生成器输出 |
-| Task operation ledger | `records/action_logs/task_operations.json`（Git ignored） | Web 完成/撤销的本地幂等与中断恢复，不属于学习记录或存档内容 |
+## 数据与恢复
 
-### 后续目标（未完整实现）
+新Attempt和幂等身份以原子replace+fsync存于Git忽略的 `.lab-runtime/attempts.json`，workspace在该root的owned attempt目录；保留scenario版本/摘要、时间、环境状态、提示/解答使用与检查证据。输入的投递事实不能冒充命令执行成功。生命周期保留操作身份，不确定响应同输入重试，换输入不能复用id。服务重启不能重建旧PTY，原active转lost；reset生成新Attempt并保留旧记录，停止与回收仅处理已核实任务目录/进程。
 
-| 概念 | 用途 |
-|---|---|
-| Course / Module / Lesson / Task | 统一内容模型 |
-| Attempt | 单次尝试细节 |
-| Action Event | 更细粒度学习动作 |
-| XP / Mastery | 成长与通关 |
-| Reward | 绑定真实学习证据 |
-| Learning Plan Proposal | 将未来自然语言目标转换为可检查、可修改、需确认的结构化方案 |
+旧 `progress.json`/镜像、`records/action_logs`/feedback/terminal/saves、revision和CLI继续由原progress_lib维护。启动新服务不自动sync写入旧进度；旧API仍按原事务恢复。旧存档不包含新Attempt，不覆盖其历史。原done不迁成新尝试、检查通过、无提示独立解题或Mastery。生成镜像仅原生成器更新。
 
-## 4. 运行时链路
+## HTTP与浏览器权限
 
-```text
-浏览器 progress.html
-  → 读取 progress_data.js / rounds_data.js
-  → 调用 scripts/progress_server.py API
-  → 读写 progress.json
-  → 追加 events.jsonl
-  → 生成 task_feedback.json
-  → 同步 progress_data.js
-```
+服务只绑定 `127.0.0.1`；Host必须是本端口的127.0.0.1或localhost，Origin精确匹配且拒绝cross-site。写请求必须JSON；实验API使用服务器内存能力token，bootstrap仅同源可读，token不进入URL/磁盘。允许本机可信CLI发无Origin请求，非多用户鉴权方案。静态白名单拒绝遍历、symlink、私有状态/Git/服务代码/题目检查器/实验文件，HEAD同样受限。CSP、nosniff、frame拒绝、无referrer；新页面不需inline脚本。旧页面保留inline脚本的兼容CSP。
 
-CLI 平行链路：
+## 契约与验证
 
-```text
-bash mark_done.sh <task-id>
-  → scripts/mark_done_cli.py
-  → progress_lib.py
-```
+GET `/api/lab/bootstrap` 提供token/capabilities/scenarios；GET history与Attempt cursor；POST start和Attempt input/resize/check/view/stop/reset。JSON严格字段和操作身份，正式API由HTTP安全测试覆盖。场景schema/发布门禁见validate_scenarios；真实环境/PTY/状态见test_lab_runtime；旧进度与运行事务保留；浏览器分别用内存fixture与临时真实runtime验证。既有fixedUI沙箱禁止nested userns，故真实PTY联调单独以守卫核验后的固定Python/Chromium、headless专属context和临时state运行，原UI隔离守卫不变；测试仅请求任务本地服务，不能宣称这条额外联调具有原外层网络namespace隔离。根控制面最终以精确候选摘要绑定Judge与Governor，结果只记入PROJECT_STATE。
 
-完成/撤销由 Web 与 CLI 共用本地文件锁。Web 请求先校验任务、动作及不超过 500 个 Unicode 字符的备注/证据，再以 `operation_id`、精确输入指纹和目标 `revision` 写入操作账本；随后原子替换进度镜像、动作日志和反馈，最后标记 committed。`progress_data.js` 携带与 `progress.json` 相同的 revision；每个任务的 `done / done_at` 必须成对一致。前端只有在完整校验任务、课程、反馈、计数、版本及本次已持久化动作事件后，才一次提交响应状态和局部反馈。可捕获异常恢复精确写前内容；进程中断时，恢复器先核对账本 key、输入指纹、基准/目标任务状态、revision 与事件事实，损坏记录零写入拒绝，合法 pending 才在下一次服务/CLI 访问时前滚。读档保留账本的 ID 占用，但若对应 event 已不在恢复后的当前动作历史中，旧请求只会明确失败，不能从账本返回幽灵 event；前端收到这类确定性 4xx 后丢弃本地旧 ID，同一输入的下一次提交会生成新 ID。该机制面向当前单机本地服务，不是数据库事务或跨设备同步。
-
-## 5. 内容与兼容策略
-
-Phase 0：
-
-- `content/courses/linux-foundations/course.json` 注册唯一课程与模块索引
-- 可执行 notes / exercises 仍在 `rounds/round_00|01|02|06` 与 VPS 目录
-- 目的：不破坏 Round 00 现有可运行闭环
-
-Phase 1：
-
-- 将任务定义迁入统一模型
-- 逐步降低对根目录 `round_XX.md` 散落结构的依赖
-- 保持旧入口兼容直到迁移完成
-
-## 6. 未来自然语言编排边界
-
-自然语言入口属于 Linux 单课程闭环稳定后的候选编排层，不属于当前运行时。若后续实施，应遵守：
-
-```text
-自然语言目标
-  → 澄清约束
-  → 生成结构化 Learning Plan Proposal
-  → 用户检查、修改并确认
-  → 映射到 Course / Module / Task
-  → 通过 Attempt / Action Event 留下真实证据
-```
-
-- 编排层只生成提案，不直接写入 `progress.json`
-- 未经用户确认，不创建或替换正式课程任务
-- 未经任务证据验证，不得标记完成、授予 XP / Mastery 或生成成就
-- 当前仍只允许 `linux-foundations` 成为 active course
-
-## 7. 明确非目标
-
-- 不为“将来可能有很多课”提前引入复杂多租户架构
-- 不在本阶段引入前端框架或数据库
-- 不把平台实现用的 Python/JavaScript 误当成课程内容删除
-- 不把自然语言建议当作学习完成证据
-
-## 8. 相关决策
-
-见 `docs/DECISIONS.md`（JSON 存储、原生 Web UI、CLI 兼容、单课程 active course）。
+选型依据：[Bubblewrap边界说明](https://github.com/containers/bubblewrap)、[Python PTY](https://docs.python.org/3/library/pty.html)、[xterm安全指导](https://xtermjs.org/docs/guides/security/)、[Killercoda题包机制](https://killercoda.com/creators)。组件与Shell/环境分层，实际边界必须本机实测；这些资料不是运行证据。

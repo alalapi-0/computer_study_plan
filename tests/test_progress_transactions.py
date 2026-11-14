@@ -106,6 +106,11 @@ class ProgressTransactionTest(unittest.TestCase):
             handler = object.__new__(ProgressRequestHandler)
             handler.repo_root = root
             handler.path = "/api/progress"
+            from email.message import Message
+            from types import SimpleNamespace
+            handler.server = SimpleNamespace(server_address=("127.0.0.1", 8777))
+            handler.headers = Message()
+            handler.headers["Host"] = "127.0.0.1:8777"
             handler.end_json = Mock()
             handler.do_GET()
             return

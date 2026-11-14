@@ -9,6 +9,7 @@ from pathlib import Path
 
 
 REQUIRED_PATHS = [
+    "index.html", "practice_ui.js", "practice_ui.css", "scripts/lab_runtime.py", "scripts/validate_scenarios.py", "vendor/xterm/provenance.json",
     "AGENTS.md",
     "README.md",
     "CONVERSION_PROTOCOL.md",

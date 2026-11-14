@@ -1,3 +1,5 @@
+> 2026-10-13适用范围：本文保留为历史Linux课程/旧进度协议。当前问题工作台遵循ARCHITECTURE与NEXT_ACTIONS；旧自动课程/游戏化队列不再是当前任务入口。
+
 # Auto Advance Protocol
 
 本文档定义 Codex 后续收到“根据长期规划继续推进下一轮”等短指令时的自动推进流程。长期目标以 `docs/CODEX_LONG_TERM_PLAN.md` 为准。

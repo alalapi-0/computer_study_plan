@@ -1,0 +1,28 @@
+# Candidate only; install later as the Owner user unit computer-study-plan-rr.service.
+# Native project identity, fixed /run directory and sealed-FD provider must exist first.
+[Unit]
+Description=Computer Study Plan local workbench and RR
+After=network.target
+StartLimitIntervalSec=60
+StartLimitBurst=3
+
+[Service]
+Type=simple
+WorkingDirectory=/home/alalapi/Projects/computer-study-plan
+ExecStart=/usr/bin/python3 -B /home/alalapi/Projects/computer-study-plan/scripts/progress_server.py --rr
+UMask=0077
+KillSignal=SIGTERM
+KillMode=control-group
+TimeoutStopSec=30s
+Restart=on-failure
+RestartSec=30s
+RestartPreventExitStatus=78
+MemoryMax=1G
+MemorySwapMax=0
+CPUQuota=100%
+TasksMax=128
+LimitCORE=0
+NoNewPrivileges=yes
+
+[Install]
+WantedBy=default.target

@@ -67,3 +67,15 @@ records/saves/*.json
 records/terminal/commands.jsonl
 records/action_logs/task_operations.json
 records/action_logs/run_operations.json
+
+# Isolated synthetic labs and durable local Attempt history
+.lab-runtime/
+
+/.rr-feedback/
+/.rr-candidates/
+
+# Generated Project-to-Skill research copies; the catalog stays in that project
+/research/p2s-resource-analysis/
+
+# Private real learning history stays in the original workspace only
+/records/external_study/

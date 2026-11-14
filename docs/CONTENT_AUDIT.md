@@ -1,3 +1,20 @@
+# 2026-10-13重构复用审计
+
+|现有单元|现场事实|处理|
+|---|---|---|
+|旧Linux课程/80任务/Round00/CLI|原文件与稳定任务ID仍有消费者|原样保护；历史课程明确入口|
+|progress_lib事务与旧存档|revision、WAL、幂等/恢复已有测试|继续复用；新Attempt不混入旧恢复|
+|旧终端|宿主受限命令，没有PTY/OS隔离|allowlist不变；不扩展自由Shell|
+|progress.html/原JS/CSS|课程视图强耦合任务/history|保留兼容，新问题作为默认主入口|
+|Python本地服务|原来无Host/Origin约束且任意静态文件可读|增量接入Lab API，收敛本地请求与静态范围|
+|现有UI runtime|Python3.12/Playwright1.60/Chromium1223固定完整树|复用，不覆盖bootstrap；临时/内存夹具|
+|系统工具|Bubblewrap0.11.1根less探针成功；Docker/Podman/QEMU未发现|最小用户态adapter；VM/双节点/native OS诚实延期|
+|新题包|纯合成教学改编，无用户事故根因证据|逐题发布门禁，不把建议当交付|
+
+本次不删除旧内容或用户文件，未建立备份副本/第二仓库。原2026-07-18删除审计保留在下方，只描述当时操作，不是当前新增问题的禁止依据。
+
+---
+
 # Content Audit
 
 > 审计日期：2026-07-18

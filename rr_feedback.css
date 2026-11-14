@@ -1,0 +1,17 @@
+/* RR feedback follows the workbench's existing tokens and controls. */
+.rr-feedback{margin:22px 0;padding:22px;border:1px solid var(--border);border-radius:var(--radius);background:var(--card)}
+.rr-feedback h2{margin:.2rem 0}.rr-feedback p{color:var(--muted)}
+.rr-feedback form{display:grid;gap:14px}.rr-feedback label{display:grid;gap:6px}
+.rr-feedback textarea,.rr-feedback input[type=text]{width:100%;padding:10px;border:1px solid var(--border-strong);border-radius:10px;background:var(--bg-deep);color:var(--text);font:inherit}
+.rr-feedback textarea{min-height:85px;resize:vertical}.rr-feedback textarea:focus-visible,.rr-feedback input:focus-visible{outline:0;box-shadow:var(--focus)}
+.rr-feedback .rr-review-check{display:flex;align-items:flex-start;gap:10px}
+.rr-feedback input[type=checkbox]{margin-top:6px;accent-color:var(--accent)}
+.rr-feedback .rr-actions{display:flex;flex-wrap:wrap;gap:10px}
+.rr-feedback output{display:block;margin:14px 0;color:var(--accent-soft);overflow-wrap:anywhere}
+.rr-feedback .rr-query{margin-top:24px;border-top:1px solid var(--border);padding-top:18px}
+.rr-feedback fieldset{min-width:0;border:0;margin:0;padding:0;display:grid;gap:14px}
+.rr-feedback code{overflow-wrap:anywhere}.rr-feedback input[type=file]{max-width:100%}
+.rr-feedback .rr-columns{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:720px){.rr-feedback{padding:16px}.rr-feedback .rr-columns{grid-template-columns:1fr}}
+
+.rr-feedback-link{display:inline-block;min-height:44px;padding:10px 0;color:var(--accent-soft)}

@@ -1,3 +1,5 @@
+> 2026-10-13适用范围：本文保留为历史Linux课程/旧进度协议。当前问题工作台遵循ARCHITECTURE与NEXT_ACTIONS；旧自动课程/游戏化队列不再是当前任务入口。
+
 # Round 文档与进度系统协议 v2.1
 
 > **用途**：本文件规定仓库内"Round 概览文档（`round_XX.md`）"与"Round 实操目录（`rounds/round_XX/`）"的标准结构，以及当前进度系统（`progress.json` / `progress_data.js` / `rounds_data.js` / `progress.html` / `progress_ui.js` / `scripts/progress_server.py` / `mark_done.sh` / 动作日志 / 任务反馈）的维护规则。

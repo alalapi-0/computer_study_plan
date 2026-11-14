@@ -77,7 +77,7 @@ Round 00 等终端练习在**用户主目录**下的沙盒进行，**不**放在
 |---|---|
 | `mark_done.sh` | 必须在含 `progress.json` 的目录执行（即 §1 仓库根） |
 | `rounds/round_00/**/exercises.sh` | `REPO_ROOT="$(cd …/../../.. && pwd)"` 动态解析，不硬编码用户名 |
-| `progress.html` | 日常学习应通过 §1 仓库根启动 `python3 scripts/progress_server.py` 后访问 `http://127.0.0.1:8777/progress.html`；直接打开文件仅用于只读布局 / 进度检查，没有写 API、练习脚本、动作日志或浏览器终端能力 |
+| `progress.html` | 日常学习应通过 §1 仓库根启动 `python3 scripts/progress_server.py` 后访问 `http://127.0.0.1:8777/`；直接打开文件仅用于只读布局 / 进度检查，没有写 API、练习脚本、动作日志或浏览器终端能力 |
 
 ---
 
@@ -91,3 +91,7 @@ Round 00 等终端练习在**用户主目录**下的沙盒进行，**不**放在
 ## 6. Linux UI回归运行时
 
 源码与学习数据继续使用§1唯一根；`scripts/external-ui-python` 将UI依赖/浏览器放在 `/home/alalapi/Runtimes/computer-study-plan`，缓存与临时使用对应外置 `Caches`/`Temp` 根。UI回归固定使用隔离内存夹具，不进入学习沙盒或改正式数据。完整树与UUID守卫、固定动作详见 `tests/ui/README.md`；技术报告在 `/home/alalapi/Artifacts/computer-study-plan/linux-ui`。
+
+## 7. 问题实验（2026-10-13）
+
+当前主入口是 `/`，历史课程入口 `/progress.html` 保留。新LabManager的 `.lab-runtime/` 是本仓库Git忽略的owned数据范围，包含Attempt历史与可丢弃workspace，不写入 `~/cli-lab`。Shell内实际路径始终 `/workspace`；不挂载宿主仓库或用户目录。恢复Attempt记录不等于复活环境。状态仍只有 `docs/PROJECT_STATE.md`；不要建立第二调度器。

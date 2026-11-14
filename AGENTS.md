@@ -1,3 +1,5 @@
+<!-- 当前项目入口：保留业务、权限与验证约束；固定三角色执行链已退役。 -->
+
 # AGENTS.md · 项目级事实与执行契约
 
 本文件适用于仓库根目录及全部子目录。只记录可由当前仓库代码、配置和现行文档核对的事实。
@@ -7,7 +9,7 @@
 - `~/Projects/computer-study-plan`
 - `/home/alalapi/Projects/computer-study-plan`
 
-开始工作前必须读取：
+按本次目标读取下列资料中相关的业务状态、范围、保护条件与验收要求；不再整套强制加载。ROADMAP、STAGE_PLAN、NEXT_ACTIONS、PROJECT_STATE 中的旧角色派发和审批条款不是当前执行指令入口；真实质量门、浏览器验证、保护文件及用户接受要求继续有效：
 
 1. `docs/WORKSPACE.md`
 2. `docs/PRODUCT_VISION.md`
@@ -20,17 +22,20 @@
 
 ## 1. 项目目标
 
-当前阶段是 **Linux 单课程验证**：
+当前阶段是 **Linux 首版问题驱动实操工作台**（2026-10-13用户请求）：
 
-- 唯一正式课程：`linux-foundations`（Linux 基础与工程实践）
-- 用这一门课验证：持续学习、任务记录、动作反馈、掌握度/通关感、网页体验
-- 平台可保留 course-agnostic 结构，但本阶段不新增第二门课程
+- 主单位：版本化Scenario / Environment / Attempt，不是课程章节
+- 首批小问题跨文件、代码、数据、API子集与媒体产物；用户亲自执行
+- `linux-foundations`、80任务、Round00与旧记录保留为历史兼容；不新增其他正式课程
+- 提示常开/常关跨刷新持久，完整解答独立入口；检查目标与保护约束
+- 任意Shell只能在已验证隔离环境；旧终端allowlist不得放宽；环境缺失拒绝回退
+- 原生Windows/macOS、VM/systemd、双节点、真实前端/后台任务/AI能力如实标待实现
 
 长期方向见 `docs/PRODUCT_VISION.md` 与 `docs/ROADMAP.md`。
 
 ## 2. 技术栈
 
-- 浏览器端：静态 HTML/CSS、原生 JavaScript（`progress.html`、`progress_ui.js`）
+- 浏览器端：静态 HTML/CSS、原生 JavaScript（`index.html`、`practice_ui.js`；历史`progress.html`、`progress_ui.js`）
 - 本地服务：Python 3（`scripts/progress_server.py`）
 - CLI：Bash（`mark_done.sh`）
 - 数据：JSON / JSONL / Markdown
@@ -44,7 +49,7 @@ python3 scripts/progress_server.py
 npm run serve
 ```
 
-默认页面：`http://127.0.0.1:8777/progress.html`
+默认页面：`http://127.0.0.1:8777/`；历史课程：`/progress.html`
 
 CLI：
 
@@ -61,7 +66,9 @@ bash mark_done.sh <task-id> --undo
 python3 scripts/agent_gate.py --verify
 ```
 
-顺序覆盖：`git diff --check`、`node --check progress_ui.js`、协议检查、学习数据校验、`progress.json`、`mark_done.sh --limit 5`。
+顺序覆盖：`git diff --check`、`node --check practice_ui.js`、题包静态门禁、`node --check progress_ui.js`、协议检查、学习数据校验、`progress.json`、`mark_done.sh --limit 5`。
+
+新问题/终端变更追加 `python3 scripts/validate_scenarios.py --runtime`、`python3 -m unittest tests.test_lab_runtime tests.test_scenarios tests.test_workbench_http`。保留进度事务测试。
 
 涉及生成数据时追加：
 
@@ -79,11 +86,13 @@ Linux UI 回归继续使用 `scripts/external-ui-python` 的固定动作：`--bo
 
 | 路径 | 用途 |
 |---|---|
-| `content/courses/linux-foundations/` | 唯一正式课程注册 |
+| `content/scenarios/` | 版本化问题真源与发布门禁 |
+| `.lab-runtime/` | Git ignored新Attempt与一次性环境；不随旧存档恢复 |
+| `content/courses/linux-foundations/` | 历史课程注册 |
 | `rounds/round_00|01|02|06/` | Linux 练习兼容真源 |
 | `rounds/stage_03_vps_remote_ops/` | 远程 Linux 支线 |
 | `plans/linux/` | 课程路径说明 |
-| `progress.json` | 进度单一事实源 |
+| `progress.json` | 历史课程进度单一事实源，旧done不迁成独立解决 |
 | `docs/CONTENT_AUDIT.md` / `docs/REMOVAL_MANIFEST.md` | 单课程化审计与删除清单 |
 
 ## 6. 保护与边界
@@ -103,7 +112,7 @@ Linux UI 回归继续使用 `scripts/external-ui-python` 的固定动作：`--bo
 4. `python3 scripts/agent_gate.py --verify` 通过
 5. UI 变更有真实浏览器证据
 6. 未泄露密钥，未破坏保护闭环
-7. 独立 Judge 对精确候选给出 `PASS`
+7. 主代理核对实际候选与上述验收证据，明确未验证项；不要求固定角色审批
 
 ## 8. MCP
 
@@ -114,3 +123,9 @@ npm run check:mcp
 ```
 
 配置通过 ≠ 当前线程工具可用。UI 浏览器任务缺少工具时报告：`BLOCKED: MISSING_FROM_THREAD_TOOL_REGISTRY`。
+
+## PCH 生命周期与公开材料
+
+工作前按本机共享 `~/.agents/pch-project-contract.md` 使用 `pch-project begin --project-id computer-study-plan`；收尾先更新原唯一状态，再带新请求 ID、来源 SHA、context 与原账本 CAS 调用 finish，核对持久终态。登记与状态读取不启动业务 Goal。
+
+原作者工作区的 `docs/PROJECT_STATE.md` 含私人学习过程，仍为原唯一状态；Git 中该文件是经脱敏的公开冻结说明，不是实时状态副本。真实学习日志、原状态及本地恢复历史留在原工作区，不上传其私有提交祖先；克隆不得自行初始化另一套业务状态或恢复旧目标。
